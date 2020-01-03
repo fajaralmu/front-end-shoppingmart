@@ -1,0 +1,1 @@
+export const FETCH_PRODUCT_LIST = "fetch_product_list";
