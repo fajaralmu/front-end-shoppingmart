@@ -96,6 +96,7 @@ class Catalog extends Component {
         this.handleCategoryChange = ( ) => {
             let selectBox = document.getElementById("select-category");
             let value = selectBox.value;
+            this.setState({catalogPage:0})
             if(value != "00")
                 this.setState({requestCategoryId:value});
             else

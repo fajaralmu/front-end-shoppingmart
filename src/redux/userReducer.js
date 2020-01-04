@@ -1,23 +1,24 @@
-// import * as types from './types'
+import * as types from './types'
 
-// export const initState = {
-//     user: {
-//         name : "el-fajr",
-//         status : "logged ini"
-//     }
-// };
+export const initState = {
+    loginKey: null,
+    loginStatus: false,
+    loginFailed: false
+};
 
-// export const reducer = (state = initState, action) => {
-//     switch (action.type) {
-//         case types.ADD_USER:
-//             return { ...state, regStatus: action.payload };
-//         case types.LOG_IN:
-//             return { ...state, logStatus: action.payload };
-//         case types.LOG_OUT:
-//             return { ...state, user: action.payload };
-//         default:
-//             return state;
-//     }
-// }
+export const reducer = (state = initState, action) => {
+    switch (action.type) {
+        case types.DO_LOGIN:
+            let result = {
+                ...state,
+                loginStatus: action.payload.loginStatus,
+                loginKey: action.payload.loginKey,
+                loginFailed: action.payload.loginStatus == false
+            };
+            return result;
+        default:
+            return state;
+    }
+}
 
-// export default reducer;
+export default reducer;

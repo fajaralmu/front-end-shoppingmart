@@ -24,6 +24,12 @@ export  const menus = [
       'name': 'Account',
       'url': 'acccount',
       'active':false
+    },
+    {
+      'code': 'login',
+      'name': 'Login',
+      'url': 'login',
+      'active':false
     }
   ];
   

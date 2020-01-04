@@ -40,3 +40,10 @@ button:hover{
 .clickable:hover{
     cursor: pointer;
 }
+
+.message{
+    text-align: center
+}
+.message-failed{
+     color: indianred
+}

@@ -1,7 +1,21 @@
 import * as types from './types'
 const apiBaseUrl = "http://localhost:8080/universal-good-shop/api/public/"
 const apiEntityBaseUrl = "http://localhost:8080/universal-good-shop/api/entity/"
+const apiLogin ="http://localhost:8080/universal-good-shop/api/account/login"
 
+export const performLogin = (username, password) => {
+    let loginRequest = {
+        type: types.DO_LOGIN,
+        payload: {
+           user: {
+                username: username,
+                password: password
+            }
+        },
+        meta: { type: types.DO_LOGIN,  url: apiLogin  }
+    };
+    return loginRequest;
+}
 
 export const getAllProductCategories = () => ({
     type: types.FETCH_PRODUCT_CATEGORIES_ALL,
@@ -44,7 +58,7 @@ export const getProductList = (request) => {
         }
     };
 
-    if(request.categoryId != null){
+    if (request.categoryId != null) {
         requested.payload.filter.fieldsFilter["category,id[EXACTS]"] = request.categoryId;
     }
 

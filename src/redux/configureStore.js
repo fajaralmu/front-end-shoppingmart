@@ -1,112 +1,160 @@
 import { createStore, applyMiddleware } from 'redux'
 import { initialState, rootReducer } from './reducers'
 import * as actionCreator from './actionCreators';
-import * as types  from './types';
+import * as types from './types';
 
 export const configureStore = () => {
     const store = createStore(
         rootReducer,
         initialState,
         applyMiddleware(
-           getProductListMiddleware,
-           getProductDetailMiddleWare,
-           removeEntityMiddleware,
-           loadMoreSupplierMiddleware,
-           getAllProductCategoriesMiddleware
+            getProductListMiddleware,
+            getProductDetailMiddleWare,
+            removeEntityMiddleware,
+            loadMoreSupplierMiddleware,
+            getAllProductCategoriesMiddleware,
+            performLoginMiddleware
         )
     );
 
     return store;
 }
 
-const getAllProductCategoriesMiddleware = store => next => action => {
-    if (!action.meta || action.meta.type !== types.FETCH_PRODUCT_CATEGORIES_ALL) {
+const performLoginMiddleware = store => next => action => {
+    if (!action.meta || action.meta.type !== types.DO_LOGIN) {
         return next(action);
-    } 
+    }
     fetch(action.meta.url, {
         method: 'POST',
         body: JSON.stringify(action.payload),
         headers: {
             'Content-Type': 'application/json',
-            'requestId':'1234'
+            'requestId': '1234'
         }
     })
-        .then(response => response.json())
-        .then(data => {
-            console.debug("Response:",data);
-            if(data.entities == null ||data.entities.length == 0){
-                alert("Data not found!");
-                return;
+        .then(response => {
+            
+            return Promise.all([response.json(), response]);
+        })
+        .then(([responseJson, response]) => {
+            
+            let loginKey = "";
+            let loginSuccess = false;
+            
+            if (responseJson.code != null && responseJson.code == "00") {
+                for (var pair of response.headers.entries()) { 
+                    if(pair[0] == "loginkey"){
+                        loginKey = pair[1];
+                        break;
+                    }
+                 }
+                
+                console.log("loginKey: ", loginKey);
+                loginSuccess = true;
+                console.log("Response OBJ: ", response);
+                console.log("----- headers: ", response.headers.keys());
             }
             let newAction = Object.assign({}, action, {
-                payload: data 
+                payload: {
+                    loginStatus: loginSuccess,
+                    loginKey: loginKey
+                }
             });
             delete newAction.meta;
             store.dispatch(newAction);
         })
         .catch(err => console.log(err));
-    
+
+}
+
+const getAllProductCategoriesMiddleware = store => next => action => {
+    if (!action.meta || action.meta.type !== types.FETCH_PRODUCT_CATEGORIES_ALL) {
+        return next(action);
+    }
+    fetch(action.meta.url, {
+        method: 'POST',
+        body: JSON.stringify(action.payload),
+        headers: {
+            'Content-Type': 'application/json',
+            'requestId': '1234'
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.debug("Response:", data);
+            if (data.entities == null || data.entities.length == 0) {
+                alert("Data not found!");
+                return;
+            }
+            let newAction = Object.assign({}, action, {
+                payload: data
+            });
+            delete newAction.meta;
+            store.dispatch(newAction);
+        })
+        .catch(err => console.log(err));
+
 }
 
 
 const loadMoreSupplierMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.LOAD_MORE_SUPPLIER) {
         return next(action);
-    } 
+    }
     fetch(action.meta.url, {
         method: 'POST',
         body: JSON.stringify(action.payload),
         headers: {
             'Content-Type': 'application/json',
-            'requestId':'1234'
+            'requestId': '1234'
         }
     })
         .then(response => response.json())
         .then(data => {
-            console.debug("Response:",data);
-            if(data.entities == null ||data.entities.length == 0){
+            console.debug("Response:", data);
+            if (data.entities == null || data.entities.length == 0) {
                 alert("Data not found!");
                 return;
             }
             let newAction = Object.assign({}, action, {
-                payload: data 
+                payload: data
             });
             delete newAction.meta;
             store.dispatch(newAction);
         })
         .catch(err => console.log(err));
-    
+
 }
 
 const removeEntityMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.REMOVE_SHOP_ENTITY) {
         return next(action);
-    } 
+    }
     let newAction = Object.assign({}, action, {
         payload: null
     });
     delete newAction.meta;
     store.dispatch(newAction);
-    
+
 }
 
 const getProductDetailMiddleWare = store => next => action => {
     if (!action.meta || action.meta.type !== types.FETCH_PRODUCT_DETAIL) {
         return next(action);
-    } 
+    }
 
     fetch(action.meta.url, {
         method: 'POST',
         body: JSON.stringify(action.payload),
         headers: {
             'Content-Type': 'application/json',
-            'requestId':'1234'
+            'requestId': '1234'
         }
     })
         .then(response => response.json())
         .then(data => {
-            console.debug("Response:",data);
-            if(data.entities == null ||data.entities.length == 0){
+            console.debug("Response:", data);
+            if (data.entities == null || data.entities.length == 0) {
                 alert("Data not found!");
                 return;
             }
@@ -122,20 +170,20 @@ const getProductDetailMiddleWare = store => next => action => {
 const getProductListMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.FETCH_PRODUCT_LIST) {
         return next(action);
-    } 
+    }
 
     fetch(action.meta.url, {
         method: 'POST',
         body: JSON.stringify(action.payload),
         headers: {
             'Content-Type': 'application/json',
-            'requestId':'1234'
+            'requestId': '1234'
         }
     })
         .then(response => response.json())
         .then(data => {
-            console.debug("Response:",data);
-            if(data.entities == null ||data.entities.length == 0){
+            console.debug("Response:", data);
+            if (data.entities == null || data.entities.length == 0) {
                 alert("Data not found!");
                 return;
             }
@@ -155,7 +203,7 @@ const addUserMiddleware = store => next => action => {
     if (!window.confirm("continue registration?"))
         return false;
     let user = action.meta.user;
-   
+
     fetch(action.meta.url, {
         method: 'POST',
         body: JSON.stringify(user),
@@ -166,10 +214,10 @@ const addUserMiddleware = store => next => action => {
         .then(response => response.json())
         .then(data => {
             let regstatus = false;
-            if(data == 1){
+            if (data == 1) {
                 alert("registration successfull");
                 regstatus = true;
-            }else{
+            } else {
                 alert("registration unsuccessfull");
             }
             let newAction = Object.assign({}, action, {
@@ -205,7 +253,7 @@ const addExamMiddleware = store => next => action => {
         .then(res => {
             if (res == 1) {
                 alert("tambah sukses");
-               // store.dispatch(fetchAllExam());
+                // store.dispatch(fetchAllExam());
             }
         })
         .catch(err => console.log(err));
@@ -228,7 +276,7 @@ const udpateExamMiddleware = store => next => action => {
     }).then(response => response.json()
     ).then(res => {
         if (res == 1) {
-           // store.dispatch(fetchAllExam());
+            // store.dispatch(fetchAllExam());
             alert("update sukses");
         }
     }).catch(err => console.log(err));
