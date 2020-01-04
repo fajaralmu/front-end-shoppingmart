@@ -12,6 +12,8 @@ import * as actions from './redux/actionCreators'
 import * as hardCoded from './utils/HardCodedEntites'
 import Catalog from './components/Catalog'
 import Login from './components/Login';
+import Dashboard from './components/Dashboard';
+import * as menus from './constant/Menus'
 
 class App extends Component {
 
@@ -31,34 +33,66 @@ class App extends Component {
       console.log(">>>>>> MENU: ", code)
       this.setState({ menuCode: code });
     }
+
+    this.handleMenuCLick = (menu) => {
+      switch (menu.code) {
+        case menus.LOGOUT:
+          console.log("handle logout");
+          this.props.performLogout();
+          break;
+
+        default:
+          break;
+      }
+    }
   }
 
   componentDidMount() {
-    this.initMenus();
+
   }
 
-  initMenus() {
-    let additionalMenus = hardCoded.menus;
-    let menus = this.state.menus;
+  setMenus() {
+    let additionalMenus = this.props.menus
+    let menus = new Array();
     for (let i = 0; i < additionalMenus.length; i++) {
-      menus.push(additionalMenus[i]);
+
+      let menu = additionalMenus[i];
+      if (this.props.loginStatus != true && menu.authenticated == true)
+        continue;
+
+      menus.push(menu);
 
     }
-    this.setState({ menus });
+
     console.log("State menus", this.state.menus)
+    return menus;
 
   }
 
   render() {
 
+    let loginComponent = <Login setMenuCode={this.setMenuCode}
+      setDetailMode={this.setDetailMode}
+      detailMode={this.state.detailMode}
+      doLogin={this.props.performLogin}
+      loginFailed={this.props.loginFailed}
+    />;
+
+    if (this.props.loginStatus == true) {
+      loginComponent = <Dashboard setMenuCode={this.setMenuCode} />
+    }
+
+    let menus = this.setMenus();
+
     return (
       <div className="App">
         <Header title="Universal Good Shop" />
+        <p>Login status: {this.props.loginStatus == true ? "true" : "FALSE"}</p>
         <table className="main-layout">
           <tbody>
             <tr valign="top">
               <td>
-                <Menu activeCode={this.state.menuCode} menus={this.state.menus} />
+                <Menu handleMenuCLick={this.handleMenuCLick} activeCode={this.state.menuCode} menus={menus} />
               </td>
               <td>
                 <div>
@@ -81,13 +115,18 @@ class App extends Component {
 
                     }></Route>
                     <Route exact path="/login" render={
+                      (renderProps) => loginComponent
+
+                    }></Route>
+
+                    {/*
+                     =============================
+                     ======== need login =========
+                     =============================
+                     */}
+                    <Route exact path="/dashboard" render={
                       (renderProps) =>
-                        <Login setMenuCode={this.setMenuCode}
-                          setDetailMode={this.setDetailMode}
-                          detailMode={this.state.detailMode}
-                          doLogin = {this.props.performLogin}
-                          loginFailed = {this.props.loginFailed}
-                        />
+                        <Dashboard setMenuCode={this.setMenuCode} />
 
                     }></Route>
 
@@ -113,13 +152,14 @@ const mapStateToProps = state => {
     //user
     loginStatus: state.userState.loginStatus,
     loginKey: state.userState.loginStatus,
-    loginFailed: state.userState.loginFailed
+    loginFailed: state.userState.loginFailed,
+    menus: state.userState.menus
   }
 }
 
 const mapDispatchToProps = dispatch => ({
-  performLogin: (username, password) => dispatch(actions.performLogin(username, password))
-
+  performLogin: (username, password) => dispatch(actions.performLogin(username, password)),
+  performLogout: () => dispatch(actions.performLogout())
   // getProductCatalog: (page) => dispatch(actions.getProductList(page))
 
 })

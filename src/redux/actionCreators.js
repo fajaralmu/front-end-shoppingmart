@@ -1,18 +1,24 @@
 import * as types from './types'
 const apiBaseUrl = "http://localhost:8080/universal-good-shop/api/public/"
 const apiEntityBaseUrl = "http://localhost:8080/universal-good-shop/api/entity/"
-const apiLogin ="http://localhost:8080/universal-good-shop/api/account/login"
+const apiAccount = "http://localhost:8080/universal-good-shop/api/account/"
+
+export const performLogout = () => {
+    let loginRequest = {
+        type: types.DO_LOGOUT,
+        payload: {},
+        meta: { type: types.DO_LOGOUT, url: apiAccount.concat("logout") }
+    };
+    return loginRequest;
+}
 
 export const performLogin = (username, password) => {
     let loginRequest = {
         type: types.DO_LOGIN,
         payload: {
-           user: {
-                username: username,
-                password: password
-            }
+            user: { username: username, password: password }
         },
-        meta: { type: types.DO_LOGIN,  url: apiLogin  }
+        meta: { type: types.DO_LOGIN, url: apiAccount.concat("login") }
     };
     return loginRequest;
 }

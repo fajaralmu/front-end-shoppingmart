@@ -9,22 +9,37 @@ class Menu extends Component {
 
     }
 
+    componentDidUpdate() {
+        console.log("Menus props: ", this.props.menus)
+    }
+
     render() {
+        let renderedMenus = [];
+        if (this.props.menus != null) {
+            renderedMenus = this.props.menus;
+        }
         console.log("Menu props: ", this.props.menus);
         return (
 
-            <div className = "side-menu" >
-            < ul className = "menu-ul " > {
-                this.props.menus.map(
-                    e => {
-                        return ( <li className={this.props.activeCode == e.code ?"active":""} key = { e.name }
-                            id = { e.name } > < Link key = { e.name }
-                            className = "App-link"
-                            to = { e.url } ><div className="fill" >{ e.name } </div></Link></li >
-                        )
-                    }
-                )
-            } </ul>
+            <div className="side-menu" >
+                < ul className="menu-ul " > {
+                    renderedMenus.map(
+                        e => {
+                            if (e.url == "#") {
+                                return (<li onClick={() => this.props.handleMenuCLick(e)} className={this.props.activeCode == e.code ? "active" : ""} key={e.name}
+                                    id={e.name}> <Link key={e.name}
+                                        className="App-link"
+                                        to="#" ><div className="fill" >{e.name} </div></Link></li >
+                                )
+                            }
+                            return (<li className={this.props.activeCode == e.code ? "active" : ""} key={e.name}
+                                id={e.name}> <Link key={e.name}
+                                    className="App-link"
+                                    to={e.url} ><div className="fill" >{e.name} </div></Link></li >
+                            )
+                        }
+                    )
+                } </ul>
 
             </div>
 

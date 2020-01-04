@@ -23,7 +23,8 @@ class Login extends Component {
 
         this.doLogin = () => {
             console.log("u:", this.state.username, ",p:", this.state.password);
-             this.props.doLogin(this.state.username, this.state.password);
+             this.props.doLogin(document.getElementById("username-field").value, 
+             document.getElementById("password-field").value);
         }
     }
 

@@ -13,11 +13,44 @@ export const configureStore = () => {
             removeEntityMiddleware,
             loadMoreSupplierMiddleware,
             getAllProductCategoriesMiddleware,
-            performLoginMiddleware
+
+            //user related
+            performLoginMiddleware,
+            performLogoutMiddleware
         )
     );
 
     return store;
+}
+
+const performLogoutMiddleware = store => next => action => {
+    if (!action.meta || action.meta.type !== types.DO_LOGOUT) {
+        return next(action);
+    }
+
+    console.log("---------perform logout------------");
+    fetch(action.meta.url, {
+        method: 'POST',
+        body: JSON.stringify(action.payload),
+        headers: { 'Content-Type': 'application/json', 'requestId': '1234', 'loginKey':localStorage.getItem("loginKey") }
+    })
+        .then(response => { return Promise.all([response.json(), response]); })
+        .then(([responseJson, response]) => {
+            let logoutSuccess = false;
+            if (responseJson.code == "00") {
+                logoutSuccess = true;
+            }
+
+            let newAction = Object.assign({}, action, {
+                payload: {
+                    loginStatus: !logoutSuccess
+                }
+            });
+            delete newAction.meta;
+            store.dispatch(newAction);
+        })
+        .catch(err => console.log(err));
+
 }
 
 const performLoginMiddleware = store => next => action => {
@@ -33,26 +66,25 @@ const performLoginMiddleware = store => next => action => {
         }
     })
         .then(response => {
-            
+
             return Promise.all([response.json(), response]);
         })
         .then(([responseJson, response]) => {
-            
+
             let loginKey = "";
             let loginSuccess = false;
-            
+
             if (responseJson.code != null && responseJson.code == "00") {
-                for (var pair of response.headers.entries()) { 
-                    if(pair[0] == "loginkey"){
+                for (var pair of response.headers.entries()) {
+                    if (pair[0] == "loginkey") {
                         loginKey = pair[1];
                         break;
                     }
-                 }
-                
+                }
+
                 console.log("loginKey: ", loginKey);
                 loginSuccess = true;
-                console.log("Response OBJ: ", response);
-                console.log("----- headers: ", response.headers.keys());
+                localStorage.setItem("loginKey", loginKey);
             }
             let newAction = Object.assign({}, action, {
                 payload: {
@@ -74,10 +106,7 @@ const getAllProductCategoriesMiddleware = store => next => action => {
     fetch(action.meta.url, {
         method: 'POST',
         body: JSON.stringify(action.payload),
-        headers: {
-            'Content-Type': 'application/json',
-            'requestId': '1234'
-        }
+        headers: {  'Content-Type': 'application/json',  'requestId': '1234' }
     })
         .then(response => response.json())
         .then(data => {
@@ -104,10 +133,7 @@ const loadMoreSupplierMiddleware = store => next => action => {
     fetch(action.meta.url, {
         method: 'POST',
         body: JSON.stringify(action.payload),
-        headers: {
-            'Content-Type': 'application/json',
-            'requestId': '1234'
-        }
+        headers: {  'Content-Type': 'application/json', 'requestId': '1234'   }
     })
         .then(response => response.json())
         .then(data => {
@@ -146,10 +172,7 @@ const getProductDetailMiddleWare = store => next => action => {
     fetch(action.meta.url, {
         method: 'POST',
         body: JSON.stringify(action.payload),
-        headers: {
-            'Content-Type': 'application/json',
-            'requestId': '1234'
-        }
+        headers: {  'Content-Type': 'application/json',   'requestId': '1234'  }
     })
         .then(response => response.json())
         .then(data => {
@@ -175,10 +198,7 @@ const getProductListMiddleware = store => next => action => {
     fetch(action.meta.url, {
         method: 'POST',
         body: JSON.stringify(action.payload),
-        headers: {
-            'Content-Type': 'application/json',
-            'requestId': '1234'
-        }
+        headers: {  'Content-Type': 'application/json', 'requestId': '1234' }
     })
         .then(response => response.json())
         .then(data => {
@@ -195,182 +215,5 @@ const getProductListMiddleware = store => next => action => {
         })
         .catch(err => console.log(err));
 }
-
-const addUserMiddleware = store => next => action => {
-    if (!action.meta || action.meta.type !== 'add_user') {
-        return next(action);
-    }
-    if (!window.confirm("continue registration?"))
-        return false;
-    let user = action.meta.user;
-
-    fetch(action.meta.url, {
-        method: 'POST',
-        body: JSON.stringify(user),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-        .then(response => response.json())
-        .then(data => {
-            let regstatus = false;
-            if (data == 1) {
-                alert("registration successfull");
-                regstatus = true;
-            } else {
-                alert("registration unsuccessfull");
-            }
-            let newAction = Object.assign({}, action, {
-                payload: regstatus
-            });
-            delete newAction.meta;
-            store.dispatch(newAction);
-        })
-        .catch(err => console.log(err));
-}
-
-const loggigMiddleware = store => next => action => {
-    console.log(`Redux Log `, action);
-    next(action);
-}
-
-const addExamMiddleware = store => next => action => {
-    if (!action.meta || action.meta.type !== 'add_exam') {
-        return next(action);
-    }
-    if (!window.confirm("LANJUT?"))
-        return false;
-    let exam = action.meta.exam;
-    console.log("exam to be added ", exam);
-    fetch(action.meta.url, {
-        method: 'POST',
-        body: JSON.stringify(exam),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-        .then(response => response.json())
-        .then(res => {
-            if (res == 1) {
-                alert("tambah sukses");
-                // store.dispatch(fetchAllExam());
-            }
-        })
-        .catch(err => console.log(err));
-}
-
-const udpateExamMiddleware = store => next => action => {
-    if (!action.meta || action.meta.type !== 'update_exam') {
-        return next(action);
-    }
-    if (!window.confirm("LANJUT?"))
-        return false;
-    let exam = action.meta.exam;
-    console.log("exam to be update ", exam);
-    fetch(action.meta.url, {
-        method: 'PUT',
-        body: JSON.stringify(exam),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    }).then(response => response.json()
-    ).then(res => {
-        if (res == 1) {
-            // store.dispatch(fetchAllExam());
-            alert("update sukses");
-        }
-    }).catch(err => console.log(err));
-}
-
-const deleteExamMiddleware = store => next => action => {
-    if (!action.meta || action.meta.type !== 'delete_exam') {
-        return next(action);
-    }
-    if (!window.confirm("DELETE?"))
-        return false;
-    fetch(action.meta.url, {
-        method: 'DELETE'
-    }).then(response => response.json()
-    ).then(res => {
-        if (res == 1) {
-            //store.dispatch(fetchAllExam());
-            alert("delete sukses");
-        }
-    }).catch(err => console.log(err));
-}
-
-const submitExamMiddleware = store => next => action => {
-    if (!action.meta || action.meta.type !== 'submit_exam') {
-        return next(action);
-    }
-    if (!window.confirm("LANJUT?"))
-        return false;
-    let exam = action.meta.exam;
-    console.log("exam to be tested ", exam);
-    fetch(action.meta.url, {
-        method: 'POST',
-        body: JSON.stringify(exam),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-        .then(response => response.json())
-        .then(data => {
-            let newAction = Object.assign({}, action, {
-                payload: data
-            });
-            delete newAction.meta;
-            store.dispatch(newAction);
-        })
-        .catch(err => console.log(err));
-}
-
-const apiMiddleware = store => next => action => {
-    if (!action.meta || action.meta.type !== 'api') {
-        return next(action);
-    }
-    console.log("API Action, ", action);
-    const { url } = action.meta
-    const fetchOption = Object.assign({}, action.meta);
-
-    fetch(url, fetchOption)
-        .then(response => response.json())
-        .then(data => {
-            let exams = data;
-
-            let newAction = Object.assign({}, action, {
-                payload: exams
-            });
-            delete newAction.meta;
-            store.dispatch(newAction);
-        });
-}
-
-const getExamByIdMiddleware = store => next => action => {
-    if (!action.meta || action.meta.type !== 'get_exam_by_id') {
-        return next(action);
-    }
-    console.log("API Action, ", action);
-    const { url } = action.meta
-
-    fetch(url, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    }).then(
-        response => response.json()
-    ).then(
-        data => {
-            let exam = data
-            let newAction = Object.assign({}, action, {
-                payload: exam
-            });
-            delete newAction.meta;
-            store.dispatch(newAction);
-        }
-    ).catch(err => { alert(err); console.log(err); });
-}
-
-
+  
 export default configureStore;
