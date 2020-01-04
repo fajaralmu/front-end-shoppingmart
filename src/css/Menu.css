@@ -1,0 +1,31 @@
+.menu-ul {
+    text-align: left;
+    list-style: none;
+    padding: 0;
+    width: 150px
+}
+
+.menu-ul li {
+    padding: 5px;
+    border-bottom: solid 1px darkcyan
+}
+
+.fill{
+    width: 100%; 
+}
+.fill:hover{
+    color:khaki
+}
+.menu-ul li:hover {
+    cursor: pointer;
+    background-color: darkcyan;
+    
+}
+
+.side-menu {
+    font-family: 'Segoe UI';
+}
+
+a {
+    text-decoration: none
+}

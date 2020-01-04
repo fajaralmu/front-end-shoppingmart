@@ -8,11 +8,54 @@ export const configureStore = () => {
         rootReducer,
         initialState,
         applyMiddleware(
-           getProductListMiddleware
+           getProductListMiddleware,
+           getProductDetailMiddleWare,
+           removeEntityMiddleware
         )
     );
 
     return store;
+}
+
+const removeEntityMiddleware = store => next => action => {
+    if (!action.meta || action.meta.type !== types.REMOVE_SHOP_ENTITY) {
+        return next(action);
+    } 
+    let newAction = Object.assign({}, action, {
+        payload: null
+    });
+    delete newAction.meta;
+    store.dispatch(newAction);
+    
+}
+
+const getProductDetailMiddleWare = store => next => action => {
+    if (!action.meta || action.meta.type !== types.FETCH_PRODUCT_DETAIL) {
+        return next(action);
+    } 
+
+    fetch(action.meta.url, {
+        method: 'POST',
+        body: JSON.stringify(action.payload),
+        headers: {
+            'Content-Type': 'application/json',
+            'requestId':'1234'
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.debug("Response:",data);
+            if(data.entities == null ||data.entities.length == 0){
+                alert("Data not found!");
+                return;
+            }
+            let newAction = Object.assign({}, action, {
+                payload: data
+            });
+            delete newAction.meta;
+            store.dispatch(newAction);
+        })
+        .catch(err => console.log(err));
 }
 
 const getProductListMiddleware = store => next => action => {
@@ -31,6 +74,10 @@ const getProductListMiddleware = store => next => action => {
         .then(response => response.json())
         .then(data => {
             console.debug("Response:",data);
+            if(data.entities == null ||data.entities.length == 0){
+                alert("Data not found!");
+                return;
+            }
             let newAction = Object.assign({}, action, {
                 payload: data
             });

@@ -1,16 +1,21 @@
 import React, { Component } from 'react'
 
-import './CatalogItem.css'
-import '../css/Common.css'
+import '../css/CatalogItem.css'
+import '../css/Common.css' 
+import * as url from '../constant/Url' 
 
 class CatalogItem extends Component {
+
+
+
     constructor(props) {
         super(props);
     }
 
     render() {
         let product = this.props.product;
-
+        let productImageUrl = product.imageUrl;
+        let imageUrl = url.baseImageUrl+productImageUrl.split("~")[0];
         return (
             <div className="main box-shadow ">
                 <div className="panel-title rounded-top">
@@ -18,8 +23,11 @@ class CatalogItem extends Component {
                 </div>
                 <span className="description">{product.description}</span>
             <div className="catalog-item ">
+                <div>
+                    <img className="clickable" onClick={()=>this.props.getProductDetail(product.code)} src={ imageUrl} width="100" height="50"/>
+                </div>
                 <table>
-                    <tbody> 
+                    <tbody>  
                         <tr>
                             <td>
                                 Price

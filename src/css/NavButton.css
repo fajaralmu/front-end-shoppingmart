@@ -1,0 +1,14 @@
+.nav-button{
+    padding: 10px;
+    background-color: khaki;
+    border:none
+}
+
+.nav-button:hover{
+    background-color: darkcyan;
+    cursor: pointer;
+}
+
+.active{
+    background-color: darkcyan
+}

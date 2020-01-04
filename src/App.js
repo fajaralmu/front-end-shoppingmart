@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import Header from './components/Header'
 import Menu from './components/Menu'
 import Home from './components/Home'
+import About from './components/About'
 import { BrowserRouter as Router, Route, Link, Switch , withRouter} from 'react-router-dom'
 import * as actions from './redux/actionCreators'
 import * as hardCoded from './utils/HardCodedEntites'
@@ -16,8 +17,13 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      menus: []
-    } 
+      menus: [],
+      detailMode:false
+    };
+
+    this.setDetailMode=(detailMode)=>{
+      this.setState({detailMode:detailMode});
+    }
   }
 
   componentDidMount(){
@@ -60,12 +66,11 @@ class App extends Component {
                       } />
                     <Route exact  path="/about" render={
                         (renderProps) =>
-                          <Home content="hello, this is about page" />
-
+                         <About />
                       }></Route>
                      <Route exact  path="/catalog" render={
                         (renderProps) =>
-                          <Catalog />
+                          <Catalog setDetailMode={this.setDetailMode} detailMode={this.state.detailMode} />
 
                       }></Route>
 

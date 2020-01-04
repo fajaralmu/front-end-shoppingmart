@@ -1,4 +1,6 @@
 import React, {Component} from 'react'
+import '../css/Home.css'
+import '../css/Common.css'
 
 class Home extends Component{
     constructor(props){
@@ -7,7 +9,7 @@ class Home extends Component{
 
     render(){
         return(
-            <div>
+            <div className="section-container">
                 <h2>Home Page</h2>
                 <p>{this.props.content}</p>
             </div>

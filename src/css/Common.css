@@ -18,3 +18,25 @@
     font-size: 1.1em;
     padding: 3px;
 }
+
+.section-container{
+    margin-left: 50px;
+    text-align: left
+}
+
+button{
+    padding:3px;
+    border:none;
+    background-color: khaki;
+    margin-left:5px
+}
+
+button:hover{
+    cursor: pointer;
+    background-color: darkcyan;
+    color: khaki
+}
+
+.clickable:hover{
+    cursor: pointer;
+}

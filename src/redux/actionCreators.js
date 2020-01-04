@@ -3,22 +3,53 @@ const apiBaseUrl = "http://localhost:8080/universal-good-shop/api/public/"
 
 
 
-export const getProductList = (requestPage) => ({
+export const getProductList = (request) => ({
     type: types.FETCH_PRODUCT_LIST,
     payload: {
         entity: "product",
-       filter: {
-            limit: "10",
-            page: requestPage, 
+        filter: {
+            limit: 10,
+            page: request.page, 
             fieldsFilter: {
-                name: "",
+                name: request.name,
                 withStock: false
-            }
+            },
+            orderBy:request.orderby,
+            orderType:request.ordertype
         }
     },
     meta: {
         type: types.FETCH_PRODUCT_LIST,
         url: apiBaseUrl.concat("get")
+    }
+})
+
+export const getProductDetail = (code) => ({
+    type: types.FETCH_PRODUCT_DETAIL,
+    payload: {
+        entity: "product",
+        filter: {
+            limit: 1,
+            exacts: true,
+            contains: false,
+            fieldsFilter: {
+                code:code,
+                withStock: true,
+                withSupplier: true
+            }
+        }
+    },
+    meta: {
+        type: types.FETCH_PRODUCT_DETAIL,
+        url: apiBaseUrl.concat("get")
+    }
+})
+
+export const removeEntity = ( ) => ({
+    type: types.REMOVE_SHOP_ENTITY,
+    payload: {  },
+    meta: {
+        type: types.REMOVE_SHOP_ENTITY 
     }
 })
 

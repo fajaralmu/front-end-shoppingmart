@@ -1,0 +1,1 @@
+export const baseImageUrl ="http://localhost:8080//universal-good-shop/WebAsset/Shop1/Images/";
