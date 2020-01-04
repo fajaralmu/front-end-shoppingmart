@@ -9,13 +9,13 @@ export const getProductList = (request) => ({
         entity: "product",
         filter: {
             limit: 10,
-            page: request.page, 
+            page: request.page,
             fieldsFilter: {
                 name: request.name,
                 withStock: false
             },
-            orderBy:request.orderby,
-            orderType:request.ordertype
+            orderBy: request.orderby,
+            orderType: request.ordertype
         }
     },
     meta: {
@@ -33,7 +33,7 @@ export const getProductDetail = (code) => ({
             exacts: true,
             contains: false,
             fieldsFilter: {
-                code:code,
+                code: code,
                 withStock: true,
                 withSupplier: true
             }
@@ -45,11 +45,20 @@ export const getProductDetail = (code) => ({
     }
 })
 
-export const removeEntity = ( ) => ({
+export const removeEntity = () => ({
     type: types.REMOVE_SHOP_ENTITY,
-    payload: {  },
+    payload: {},
     meta: {
-        type: types.REMOVE_SHOP_ENTITY 
+        type: types.REMOVE_SHOP_ENTITY
+    }
+})
+
+export const loadMoreSupplier = (page, productId) => ({
+    type: types.LOAD_MORE_SUPPLIER,
+    payload: { "filter": { "page": page, "fieldsFilter": { "productId": productId } } },
+    meta: {
+        type: types.LOAD_MORE_SUPPLIER,
+        url: apiBaseUrl.concat("moresupplier")
     }
 })
 

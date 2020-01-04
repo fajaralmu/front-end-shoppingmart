@@ -11,7 +11,7 @@ class DetailRow extends Component{
         return (
             <tr className="detail-item">
                 <td><img src={url.baseImageUrl+this.props.icon} width="50" height="50"/></td>
-                <td>{this.props.name} <br/><span className="link">{this.props.desc}</span></td>
+                <td>{this.props.id} . {this.props.name} <br/><span className="link">{this.props.desc}</span></td>
             </tr>
         )
     }

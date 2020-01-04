@@ -191,12 +191,7 @@ const mapDispatchToProps = dispatch => ({
     getProductCatalog: (request) => dispatch(actions.getProductList(request)),
     getProductDetail: (code)=>dispatch(actions.getProductDetail(code)),
     removeEntity:()=>dispatch(actions.removeEntity())
-    // getExam: (id) => dispatch(getExamById(id)),
-    // oneExam: () => dispatch(fetchOneExam()),
-    // addExam: (exam) => dispatch(appNewExam(exam)),
-    // deleteExam: (id) => dispatch(deleteExam(id)),
-    // login: () => dispatch(login()),
-    // logout: () => dispatch(logout())
+    
 })
 export default withRouter(connect(
     mapStateToProps,

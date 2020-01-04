@@ -3,13 +3,16 @@ import '../css/Common.css'
 import '../css/ProductDetail.css'
 import DetailRow from './DetailRow'
 import * as url from '../constant/Url'
+import * as actions from '../redux/actionCreators'
+import { connect } from 'react-redux'
 
 
 class ProductDetail extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            supplierShown:false
+            supplierShown:false,
+            supplierPgae : 1
         }
 
         this.goBack = () => {
@@ -19,11 +22,22 @@ class ProductDetail extends Component {
         this.showSupplierList = (mode) => {
             this.setState({supplierShown:mode})
         }
+
+        this.loadMoreSupplier = (page, productId) =>{
+            let requestedPage = page;
+            page++;
+            this.setState({supplierPgae:page})
+            this.props.loadMoreSupplier(this.state.supplierPgae, productId);
+        }
     }
 
     componentDidMount() {
         this.setState({supplierShown:false})
         console.log("State:",this.state)
+    }
+
+    componentDidUpdate(){
+      
     }
 
     render() {
@@ -43,8 +57,23 @@ class ProductDetail extends Component {
                 category: {
                     name: "loading..."
                 }
-            }
+            } 
+           
+        }else{
+           // product.suppliers  = this.props. suppliers;
+            console.log("product suppliers",this.props.product.suppliers);
+            console.log("props supplier", this.props.suppliers)
         }
+        // if(product.suppliers!=null&&  this.props.suppliers != null){
+        //     console.log("WILL ADD MORE SUPPLIER")
+        //     for (let i = 0; i < this.props.suppliers.length; i++) {
+        //         const element = this.props.suppliers[i];
+        //         product.suppliers.push(element);
+        //     } 
+        // }
+
+       
+        
 
         let supplierListPanel =  <button id="btn-show-supplier" onClick={()=>this.showSupplierList(true)}>Show Suppliers</button>;
         let supplierShown = this.state.supplierShown ?true:false;
@@ -56,13 +85,14 @@ class ProductDetail extends Component {
                     {product.suppliers.map(
                         supplier=>{
                             return(
-                                <DetailRow desc={supplier.website} key={supplier.id} icon={supplier.iconUrl} name={supplier.name} />
+                                <DetailRow desc={supplier.website} id={"supp-"+supplier.id}  key={"supp-"+supplier.id} icon={supplier.iconUrl} name={supplier.name} />
                             )
                         }
                     )}   
                     </tbody> 
                 </table>  
-                <button className="show-more" onClick={this.loadMoreSupplier} >Show More</button>  
+                {this.state.supplierPgae}
+                <button className="show-more" onClick={()=>this.loadMoreSupplier(this.state.supplierPgae, product.id)} >Show More</button>  
             </div>
         }
         return (
@@ -83,5 +113,18 @@ class ProductDetail extends Component {
     }
 }
 
+const mapStateToProps = state => {
+    console.log("Catalog State to props: ", state);
+    return {
+        suppliers: state.shopState.suppliers 
+    }
+}
 
-export default ProductDetail;
+const mapDispatchToProps = dispatch => ({
+    loadMoreSupplier: (page, productId) => dispatch(actions.loadMoreSupplier(page, productId))
+    
+})
+export default  (connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(ProductDetail));

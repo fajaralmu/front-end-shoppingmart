@@ -10,11 +10,41 @@ export const configureStore = () => {
         applyMiddleware(
            getProductListMiddleware,
            getProductDetailMiddleWare,
-           removeEntityMiddleware
+           removeEntityMiddleware,
+           loadMoreSupplierMiddleware
         )
     );
 
     return store;
+}
+
+const loadMoreSupplierMiddleware = store => next => action => {
+    if (!action.meta || action.meta.type !== types.LOAD_MORE_SUPPLIER) {
+        return next(action);
+    } 
+    fetch(action.meta.url, {
+        method: 'POST',
+        body: JSON.stringify(action.payload),
+        headers: {
+            'Content-Type': 'application/json',
+            'requestId':'1234'
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.debug("Response:",data);
+            if(data.entities == null ||data.entities.length == 0){
+                alert("Data not found!");
+                return;
+            }
+            let newAction = Object.assign({}, action, {
+                payload: data 
+            });
+            delete newAction.meta;
+            store.dispatch(newAction);
+        })
+        .catch(err => console.log(err));
+    
 }
 
 const removeEntityMiddleware = store => next => action => {
