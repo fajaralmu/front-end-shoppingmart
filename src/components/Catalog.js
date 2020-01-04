@@ -7,6 +7,7 @@ import '../css/bootstrap.min.css'
 import { BrowserRouter as Router, Route, Link, Switch, withRouter } from 'react-router-dom'
 import * as actions from '../redux/actionCreators'
 import ProductDetail from './ProductDetail'
+import * as menus from '../constant/Menus'
 
 class Catalog extends Component {
 
@@ -90,7 +91,9 @@ class Catalog extends Component {
 
     componentWillMount() {
         console.log("=======will mount========")
+        document.title = "Product Catalog";
         this.getProductCatalog(this.state.catalogPage);
+        this.props.setMenuCode(menus.CATALOG);
 
     }
 

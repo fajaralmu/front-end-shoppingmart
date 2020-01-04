@@ -23,8 +23,7 @@ export const reducer = (state = initState, action) => {
             let currentProduct = state.entity;
             let loadedSupplier = action.payload.entities ;
             for (let index = 0; index < loadedSupplier.length; index++) {
-                currentProduct.suppliers.push( loadedSupplier[index]);
-                
+                currentProduct.suppliers.push( loadedSupplier[index]); 
             }
             console.info("additinal suppliers: ",currentProduct.suppliers);
             return { ...state, entity: currentProduct };

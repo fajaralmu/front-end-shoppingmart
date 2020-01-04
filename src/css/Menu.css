@@ -18,8 +18,12 @@
 }
 .menu-ul li:hover {
     cursor: pointer;
-    background-color: darkcyan;
-    
+    background-color: darkcyan; 
+}
+
+.menu-ul li .active { 
+    background-color: darkcyan; 
+    color:khaki;
 }
 
 .side-menu {

@@ -17,7 +17,7 @@ class Menu extends Component {
             < ul className = "menu-ul " > {
                 this.props.menus.map(
                     e => {
-                        return ( < li key = { e.name }
+                        return ( <li className={this.props.activeCode == e.code ?"active":""} key = { e.name }
                             id = { e.name } > < Link key = { e.name }
                             className = "App-link"
                             to = { e.url } ><div className="fill" >{ e.name } </div></Link></li >

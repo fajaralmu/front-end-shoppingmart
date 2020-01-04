@@ -18,11 +18,17 @@ class App extends Component {
     super(props);
     this.state = {
       menus: [],
-      detailMode:false
+      detailMode:false,
+      menuCode:''
     };
 
     this.setDetailMode=(detailMode)=>{
       this.setState({detailMode:detailMode});
+    }
+
+    this.setMenuCode = (code) => {
+      console.log(">>>>>> MENU: ",code)
+      this.setState({menuCode:code});
     }
   }
 
@@ -51,26 +57,26 @@ class App extends Component {
           <tbody>
             <tr valign="top">
               <td>
-                <Menu menus={this.state.menus} />
+                <Menu activeCode={this.state.menuCode} menus={this.state.menus} />
               </td>
               <td> 
                   <div>
                   <Switch>
                   <Route exact  path="/" render={
                         (renderProps) =>
-                          <Home content="hello, this is default page" />
+                          <Home setMenuCode={this.setMenuCode} content="hello, this is default page" />
                       } />
                     <Route exact  path="/home" render={
                         (renderProps) =>
-                          <Home content="hello, this is home page" />
+                          <Home setMenuCode={this.setMenuCode} content="hello, this is home page" />
                       } />
                     <Route exact  path="/about" render={
                         (renderProps) =>
-                         <About />
+                         <About setMenuCode={this.setMenuCode} />
                       }></Route>
                      <Route exact  path="/catalog" render={
                         (renderProps) =>
-                          <Catalog setDetailMode={this.setDetailMode} detailMode={this.state.detailMode} />
+                          <Catalog setMenuCode={this.setMenuCode} setDetailMode={this.setDetailMode} detailMode={this.state.detailMode} />
 
                       }></Route>
 

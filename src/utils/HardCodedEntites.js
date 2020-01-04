@@ -1,19 +1,29 @@
+ 
+
 export  const menus = [
     {
+      'code': 'home',
       'name': 'Home',
-      'url': 'home'
+      'url': 'home',
+      'active':false
     },
     {
+      'code': 'catalog',
       'name': 'Catalog',
-      'url': 'catalog'
+      'url': 'catalog',
+      'active':false
     },
     {
+      'code': 'about',
       'name': 'About',
-      'url': 'about'
+      'url': 'about',
+      'active':false
     },
     {
+      'code': 'acccount',
       'name': 'Account',
-      'url': 'acccount'
+      'url': 'acccount',
+      'active':false
     }
   ];
   
