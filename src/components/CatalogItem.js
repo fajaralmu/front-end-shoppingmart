@@ -4,9 +4,7 @@ import '../css/CatalogItem.css'
 import '../css/Common.css' 
 import * as url from '../constant/Url' 
 
-class CatalogItem extends Component {
-
-
+class CatalogItem extends Component { 
 
     constructor(props) {
         super(props);
@@ -21,7 +19,7 @@ class CatalogItem extends Component {
                 <div className="panel-title rounded-top">
                     {product.name}
                 </div>
-                <span className="description">{product.description}</span>
+                <span className="description">{product.category.name}</span>
             <div className="catalog-item ">
                 <div>
                     <img className="clickable" onClick={()=>this.props.getProductDetail(product.code)} src={ imageUrl} width="100" height="50"/>

@@ -25,7 +25,9 @@ class Catalog extends Component {
             requestOrderBy: null,
             requestOrderType: null,
             requestProductName: "",
+            requestCategoryId:null,
             selectedProduct:null
+            
         };
 
         this.getProductCatalog = (_page) => {
@@ -36,7 +38,8 @@ class Catalog extends Component {
                     page: _page,
                     name: this.state.requestProductName,
                     orderby: this.state.requestOrderBy,
-                    ordertype: this.state.requestOrderType
+                    ordertype: this.state.requestOrderType,
+                    categoryId: this.state.requestCategoryId
                 }
             );
             this.setState({ catalogPage: _page });
@@ -70,6 +73,9 @@ class Catalog extends Component {
             document.getElementById("select-order").value = "00";
             this.setState({ requestOrderBy: null, requestOrderType: null });
 
+            document.getElementById("select-category").value = "00";
+            this.setState({ requestCategoryId: null });
+
             alert("filter has been cleared, please push the search button to take effect")
         }
 
@@ -87,6 +93,15 @@ class Catalog extends Component {
             this.props.removeEntity();
         }
 
+        this.handleCategoryChange = ( ) => {
+            let selectBox = document.getElementById("select-category");
+            let value = selectBox.value;
+            if(value != "00")
+                this.setState({requestCategoryId:value});
+            else
+                this.setState({requestCategoryId:null});
+        }
+
     }
 
     componentWillMount() {
@@ -94,6 +109,7 @@ class Catalog extends Component {
         document.title = "Product Catalog";
         this.getProductCatalog(this.state.catalogPage);
         this.props.setMenuCode(menus.CATALOG);
+        this.props.getAllProductCategories();
 
     }
 
@@ -139,6 +155,18 @@ class Catalog extends Component {
                 <option value="name-desc">Name [Z-A]</option>
                 <option value="price-asc">Price [cheap]</option>
                 <option value="price-desc">Price [expensive]</option>
+            </select>
+            <select defaultValue="00" onChange={this.handleCategoryChange} className="form-control" id="select-category">
+                <option value="00"  >-Select Category-</option>
+                {
+                    this.props.productCategories.map(
+                        category=>{
+                            return (
+                                <option id={"cat-"+category.id} value={category.id}>{category.name}</option>
+                            )
+                        }
+                    )
+                }
             </select>
             <button id="btn-search" onClick={() => this.getProductCatalog(this.state.catalogPage)} className="btn-search"  >Search</button>
             <button id="btn-clear" onClick={this.clearField} className="btn-clear"  >Clear</button>
@@ -186,14 +214,16 @@ const mapStateToProps = state => {
     console.log("Catalog State to props: ", state);
     return {
         catalogData: state.shopState.catalogData,
-        selectedProduct: state.shopState.entity
+        selectedProduct: state.shopState.entity,
+        productCategories: state.shopState.categories
     }
 }
 
 const mapDispatchToProps = dispatch => ({
     getProductCatalog: (request) => dispatch(actions.getProductList(request)),
     getProductDetail: (code)=>dispatch(actions.getProductDetail(code)),
-    removeEntity:()=>dispatch(actions.removeEntity())
+    removeEntity:()=>dispatch(actions.removeEntity()),
+    getAllProductCategories:()=>dispatch(actions.getAllProductCategories())
     
 })
 export default withRouter(connect(

@@ -1,28 +1,56 @@
 import * as types from './types'
 const apiBaseUrl = "http://localhost:8080/universal-good-shop/api/public/"
+const apiEntityBaseUrl = "http://localhost:8080/universal-good-shop/api/entity/"
 
 
-
-export const getProductList = (request) => ({
-    type: types.FETCH_PRODUCT_LIST,
+export const getAllProductCategories = () => ({
+    type: types.FETCH_PRODUCT_CATEGORIES_ALL,
     payload: {
-        entity: "product",
-        filter: {
-            limit: 10,
-            page: request.page,
-            fieldsFilter: {
-                name: request.name,
-                withStock: false
-            },
-            orderBy: request.orderby,
-            orderType: request.ordertype
+        "entity": "category",
+        "filter": {
+            "limit": 0,
+            "page": 0,
+            "orderBy": null,
+            "orderType": null,
+            "fieldsFilter": {}
         }
     },
     meta: {
-        type: types.FETCH_PRODUCT_LIST,
-        url: apiBaseUrl.concat("get")
+        type: types.FETCH_PRODUCT_CATEGORIES_ALL,
+        url: apiEntityBaseUrl.concat("get")
     }
 })
+
+export const getProductList = (request) => {
+
+    let requested = {
+        type: types.FETCH_PRODUCT_LIST,
+        payload: {
+            entity: "product",
+            filter: {
+                limit: 10,
+                page: request.page,
+                fieldsFilter: {
+                    name: request.name,
+                    withStock: false
+                },
+                orderBy: request.orderby,
+                orderType: request.ordertype
+            }
+        },
+        meta: {
+            type: types.FETCH_PRODUCT_LIST,
+            url: apiBaseUrl.concat("get")
+        }
+    };
+
+    if(request.categoryId != null){
+        requested.payload.filter.fieldsFilter["category,id[EXACTS]"] = request.categoryId;
+    }
+
+    return requested;
+}
+
 
 export const getProductDetail = (code) => ({
     type: types.FETCH_PRODUCT_DETAIL,
