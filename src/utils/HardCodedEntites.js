@@ -23,6 +23,13 @@ export const menus = [
     authenticated: false
   } ,
   {
+    code:"supplierlist",
+    name:"Our Supplier",
+    url:"suppliers",
+    active: false,
+    authenticated: false
+  },
+  {
     code:"acccount",
     name:"Account",
     url:"acccount",

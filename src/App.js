@@ -14,6 +14,7 @@ import Catalog from './components/Catalog'
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import * as menus from './constant/Menus'
+import SupplierList from './components/SupplierList';
 
 class App extends Component {
 
@@ -87,8 +88,7 @@ class App extends Component {
 
     return (
       <div className="App">
-        <Header title="Universal Good Shop" />
-        <p>Login status: {this.props.loginStatus == true ? "true" : "FALSE"}</p>
+        <Header title="Universal Good Shop" /> 
         <table className="main-layout">
           <tbody>
             <tr valign="top">
@@ -105,6 +105,10 @@ class App extends Component {
                     <Route exact path="/home" render={
                       (renderProps) =>
                         <Home setMenuCode={this.setMenuCode} content="hello, this is home page" />
+                    } />
+                    <Route exact path="/suppliers" render={
+                      (renderProps) =>
+                        <SupplierList setMenuCode={this.setMenuCode}  />
                     } />
                     <Route exact path="/about" render={
                       (renderProps) =>

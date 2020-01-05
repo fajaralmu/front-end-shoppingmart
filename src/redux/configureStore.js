@@ -3,6 +3,8 @@ import { initialState, rootReducer } from './reducers'
 import * as actionCreator from './actionCreators';
 import * as types from './types';
 
+const commonHeader = {  'Content-Type': 'application/json', 'requestId': '1234' };
+
 export const configureStore = () => {
     const store = createStore(
         rootReducer,
@@ -13,6 +15,7 @@ export const configureStore = () => {
             removeEntityMiddleware,
             loadMoreSupplierMiddleware,
             getAllProductCategoriesMiddleware,
+            getSupplierListMiddleware,
 
             //user related
             performLoginMiddleware,
@@ -21,6 +24,32 @@ export const configureStore = () => {
     );
 
     return store;
+}
+
+const getSupplierListMiddleware = store => next => action => {
+    if (!action.meta || action.meta.type !== types.FETCH_SUPPLIER_LIST) {
+        return next(action);
+    }
+
+    fetch(action.meta.url, {
+        method: 'POST',
+        body: JSON.stringify(action.payload),
+        headers: commonHeader
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.debug("Response:", data);
+            if (data.entities == null || data.entities.length == 0) {
+                alert("Data not found!");
+                return;
+            }
+            let newAction = Object.assign({}, action, {
+                payload: data
+            });
+            delete newAction.meta;
+            store.dispatch(newAction);
+        })
+        .catch(err => console.log(err));
 }
 
 const performLogoutMiddleware = store => next => action => {
@@ -60,10 +89,7 @@ const performLoginMiddleware = store => next => action => {
     fetch(action.meta.url, {
         method: 'POST',
         body: JSON.stringify(action.payload),
-        headers: {
-            'Content-Type': 'application/json',
-            'requestId': '1234'
-        }
+        headers: commonHeader
     })
         .then(response => {
 
@@ -108,7 +134,7 @@ const getAllProductCategoriesMiddleware = store => next => action => {
     fetch(action.meta.url, {
         method: 'POST',
         body: JSON.stringify(action.payload),
-        headers: {  'Content-Type': 'application/json',  'requestId': '1234' }
+        headers: commonHeader
     })
         .then(response => response.json())
         .then(data => {
@@ -126,8 +152,7 @@ const getAllProductCategoriesMiddleware = store => next => action => {
         .catch(err => console.log(err));
 
 }
-
-
+ 
 const loadMoreSupplierMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.LOAD_MORE_SUPPLIER) {
         return next(action);
@@ -135,7 +160,7 @@ const loadMoreSupplierMiddleware = store => next => action => {
     fetch(action.meta.url, {
         method: 'POST',
         body: JSON.stringify(action.payload),
-        headers: {  'Content-Type': 'application/json', 'requestId': '1234'   }
+        headers: commonHeader
     })
         .then(response => response.json())
         .then(data => {
@@ -174,7 +199,7 @@ const getProductDetailMiddleWare = store => next => action => {
     fetch(action.meta.url, {
         method: 'POST',
         body: JSON.stringify(action.payload),
-        headers: {  'Content-Type': 'application/json',   'requestId': '1234'  }
+        headers: commonHeader
     })
         .then(response => response.json())
         .then(data => {
@@ -200,7 +225,7 @@ const getProductListMiddleware = store => next => action => {
     fetch(action.meta.url, {
         method: 'POST',
         body: JSON.stringify(action.payload),
-        headers: {  'Content-Type': 'application/json', 'requestId': '1234' }
+        headers: commonHeader
     })
         .then(response => response.json())
         .then(data => {

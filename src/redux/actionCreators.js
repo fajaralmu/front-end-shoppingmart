@@ -41,6 +41,34 @@ export const getAllProductCategories = () => ({
     }
 })
 
+export const getSupplierList = (request) => {
+    let requested = {
+        type: types.FETCH_SUPPLIER_LIST,
+        payload: {
+            entity: "supplier",
+            filter: {
+                limit: 10,
+                page: request.page,
+                fieldsFilter: {
+                    name: request.name 
+                },
+                orderBy: request.orderby,
+                orderType: request.ordertype
+            }
+        },
+        meta: {
+            type: types.FETCH_SUPPLIER_LIST,
+            url: apiBaseUrl.concat("get")
+        }
+    };
+
+    if (request.categoryId != null) {
+        requested.payload.filter.fieldsFilter["category,id[EXACTS]"] = request.categoryId;
+    }
+
+    return requested;
+}
+
 export const getProductList = (request) => {
 
     let requested = {

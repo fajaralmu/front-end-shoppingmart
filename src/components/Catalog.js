@@ -62,6 +62,7 @@ class Catalog extends Component {
 
         this.handleInputNameChange = () => {
             console.log("==input name changed==");
+            this.setState({catalogPage:0})
             let input = document.getElementById("input-product-name");
             this.setState({ requestProductName: input.value });
         }

@@ -6,7 +6,8 @@ export const initState = {
     entity: {
 
     },
-    categories:[]
+    categories: [],
+    suppliersData: []
 
 };
 
@@ -18,6 +19,8 @@ export const reducer = (state = initState, action) => {
             return { ...state, entity: action.payload.entities[0] };
         case types.REMOVE_SHOP_ENTITY:
             return { ...state, entity: action.payload  /*null*/ };
+        case types.FETCH_SUPPLIER_LIST:
+            return { ...state, suppliersData: action.payload    };
         case types.LOAD_MORE_SUPPLIER:
             let currentProduct = state.entity;
             let loadedSupplier = action.payload.entities;
@@ -27,7 +30,7 @@ export const reducer = (state = initState, action) => {
             console.info("additinal suppliers: ", currentProduct.suppliers);
             return { ...state, entity: currentProduct };
         case types.FETCH_PRODUCT_CATEGORIES_ALL:
-            return { ...state, categories: action.payload.entities/*null*/ };
+            return { ...state, categories: action.payload.entities };
         default:
             return state;
     }

@@ -10,7 +10,8 @@ class Dashboard extends Component {
     }
 
     componentDidMount(){
-        this.props.setMenuCode(menus.DASHBOARD)
+        this.props.setMenuCode(menus.DASHBOARD);
+        document.title = "Dashboard";
     }
 
     render(){
