@@ -80,6 +80,7 @@ class App extends Component {
       detailMode={this.state.detailMode}
       doLogin={this.props.performLogin}
       loginFailed={this.props.loginFailed}
+      loginAttempt={this.props.loginAttempt}
     />;
 
     if (this.props.loginStatus == true) {
@@ -161,7 +162,8 @@ const mapStateToProps = state => {
     loginKey: state.userState.loginStatus,
     loginFailed: state.userState.loginFailed,
     menus: state.userState.menus,
-    loggedUser: state.userState.loggedUser
+    loggedUser: state.userState.loggedUser,
+    loginAttempt: state.userState.loginAttempt
   }
 }
 

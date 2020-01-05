@@ -38,10 +38,16 @@ class Login extends Component {
         document.title = "Login";
     }
 
-    render() {
+    componentDidUpdate(){
+        // if(this.props.loginAttempt == false && this.state.showMessageLoginFailed == false){
+        //     this.setState({showMessageLoginFailed:true})
+        // }
+    }
 
+    render() {
+      
         let message = <p>
-            {this.props.loginFailed ? this.state.showMessageLoginFailed?  <Message endMessage={this.endMessage} type="failed" text="Login Failed" />:"":""}
+            {this.props.loginFailed  ?  <Message endMessage={this.endMessage} type="failed" text="Login Failed" />:""}
         </p>
 
         return (

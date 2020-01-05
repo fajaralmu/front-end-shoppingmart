@@ -8,7 +8,8 @@ export const initState = {
     loginStatus: false,
     loginFailed: false,
     menus: menus.menus,
-    loggedUser: null
+    loggedUser: null,
+    loginAttempt: false
 };
 
 export const reducer = (state = initState, action) => {
@@ -36,6 +37,7 @@ export const reducer = (state = initState, action) => {
         case types.DO_LOGIN:
             let result = {
                 ...state,
+                loginAttempt:true,
                 loginStatus: action.payload.loginStatus,
                 loginKey: action.payload.loginKey,
                 loginFailed: action.payload.loginStatus == false,
