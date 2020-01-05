@@ -129,8 +129,9 @@ export const getProductList = (request) => {
 
 
 export const getProductDetail = (code) => ({ 
+    type: types.FETCH_PRODUCT_DETAIL,
     payload: {
-        type: types.FETCH_PRODUCT_DETAIL,
+        
         entity: "product",
         filter: {
             limit: 1,
