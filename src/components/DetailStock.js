@@ -3,6 +3,7 @@ import '../css/DetailStock.css'
 import Label from './Label';
 import * as url from '../constant/Url'
 import InputField from './InputField';
+import * as stringUtil from '../utils/StringUtil'
 
 class DetailStock extends Component {
     constructor(props) {
@@ -22,10 +23,8 @@ class DetailStock extends Component {
                 productFlow: {
                     product: {
                         name: "Loading...",
-                        unit: {
-                            name: "Loading... "
-                        },
-                        price: "Loading..."
+                        unit: { name: "Loading... " },
+                        price: "000"
                     }
                 }
             }
@@ -35,20 +34,13 @@ class DetailStock extends Component {
 
         return (
             <div className="stock-detail" >
-                <table>
-                    <tbody>
-                        <tr>
-                            <td> <Label text={productFlowStock.productFlow.product.name+"-"+productFlowStock.productFlow.id} />
-                                <Label text={productFlowStock.remainingStock + " " + productFlowStock.productFlow.product.unit.name} />
-                                <Label text={productFlowStock.productFlow.product.price + ",00"} />
-                                <Label text="EXP Date" />
-                                <InputField disabled={true} id="exp-date" type="date" value={productFlowStock.productFlow.expiryDate} /></td>
-                            <td> <div className="img-panel rounded box-shadow"><img src={imageUrl} width="300" height="200" /></div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
+                <table>  <tbody>  <tr> <td> <Label text={productFlowStock.productFlow.product.name + "-" + productFlowStock.productFlow.id} />
+                    <Label text={productFlowStock.remainingStock + " " + productFlowStock.productFlow.product.unit.name} />
+                    <Label text={stringUtil.beautifyNominal(productFlowStock.productFlow.product.price) + ",00"} />
+                    <Label text="EXP Date" />
+                    <InputField disabled={true} id="exp-date" type="date" value={productFlowStock.productFlow.expiryDate} /></td>
+                    <td> <div className="img-panel rounded box-shadow"><img src={imageUrl} width="300" height="200" /></div>
+                    </td> </tr> </tbody>  </table> 
             </div>
         )
     }

@@ -23,7 +23,8 @@ export const configureStore = () => {
 
             //transaction
             getStockInfoMiddleware,
-            submitPurchaseTransactionMiddleware
+            submitPurchaseTransactionMiddleware,
+            resetPurchaseTransactionMiddleware
 
         )
     );
@@ -31,6 +32,13 @@ export const configureStore = () => {
     return store;
 }
 
+const resetPurchaseTransactionMiddleware = store => next => action => {
+    if (!action.meta || action.meta.type !== types.RESET_TRX_PURCHASE) {  return next(action); }
+    let newAction = Object.assign({}, action, {   payload: null });
+    delete newAction.meta;
+    store.dispatch(newAction);
+
+}
 
 const submitPurchaseTransactionMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.SUBMIT_TRX_PURCHASE) {
@@ -50,6 +58,7 @@ const submitPurchaseTransactionMiddleware = store => next => action => {
                 return;
             }
             alert("Transaction Success!")
+            data.transaction.productFlows = action.payload.productFlows;
             let newAction = Object.assign({}, action, {  payload: data  });
             delete newAction.meta;
             store.dispatch(newAction);
@@ -237,12 +246,8 @@ const loadMoreSupplierMiddleware = store => next => action => {
 }
 
 const removeEntityMiddleware = store => next => action => {
-    if (!action.meta || action.meta.type !== types.REMOVE_SHOP_ENTITY) {
-        return next(action);
-    }
-    let newAction = Object.assign({}, action, {
-        payload: null
-    });
+    if (!action.meta || action.meta.type !== types.REMOVE_SHOP_ENTITY) {  return next(action); }
+    let newAction = Object.assign({}, action, {   payload: null });
     delete newAction.meta;
     store.dispatch(newAction);
 

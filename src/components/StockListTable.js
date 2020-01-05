@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import CrudRow from './CrudRow';
 import '../css/Entity.css'
+import * as stringUtil from '../utils/StringUtil'
 
 class StockListTable extends Component {
     constructor(props) {
@@ -10,20 +11,27 @@ class StockListTable extends Component {
     render() {
 
         let headers = [
-            "No", "Flow ID", "Product Name", "Expiry Date", "Quantity", "Price @Item", "Reff Stock ID", "Option"
-        ]
+            "No", "Flow ID", "Product Name", "Expiry Date", "Quantity", "Price @Item", "Total Price", "Reff Stock ID", "Option"
+        ];
+
+        if(this.props.disabled == true){
+            headers = [
+                "No", "Flow ID", "Product Name", "Expiry Date", "Quantity", "Price @Item", "Total Price", "Reff Stock ID" 
+            ];
+        }
 
         let productFlows = this.props.productFlows;
         let i = 1;
         let stockListRow =
             productFlows.map(
-                productFlow  => {
+                productFlow => {
                     let product = productFlow.product ? productFlow.product : {};
+                    let totalPrice = productFlow.count * product.price;
                     let values = [
-                        i, productFlow.id, product.name, productFlow.expiryDate, productFlow.count, product.price, productFlow.flowReferenceId
+                        i, productFlow.id, product.name, productFlow.expiryDate, stringUtil.beautifyNominal(productFlow.count), stringUtil.beautifyNominal(product.price)+",00", stringUtil.beautifyNominal(totalPrice)+",00", productFlow.flowReferenceId
                     ];
                     i++;
-                    return <CrudRow handleDelete={this.props.handleDelete} handleEdit={this.props.handleEdit} key={"product-list-k"+i+"_"+productFlow.id} identifier={productFlow.flowReferenceId} values={values} />
+                    return <CrudRow disabled={this.props.disabled} handleDelete={this.props.handleDelete} handleEdit={this.props.handleEdit} key={"product-list-k" + i + "_" + productFlow.id} identifier={productFlow.flowReferenceId} values={values} />
                 }
             );
 
@@ -33,7 +41,7 @@ class StockListTable extends Component {
                 <table className="entity-list-table">
                     <thead>
                         <tr>
-                            {headers.map( headerValue => <th>{headerValue} </th>)}
+                            {headers.map(headerValue => <th>{headerValue} </th>)}
                         </tr>
                         {stockListRow}
                     </thead>

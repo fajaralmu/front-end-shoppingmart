@@ -4,21 +4,27 @@ const apiEntityBaseUrl = "http://localhost:8080/universal-good-shop/api/entity/"
 const apiAccount = "http://localhost:8080/universal-good-shop/api/account/"
 const apiTransaction = "http://localhost:8080/universal-good-shop/api/transaction/";
 
+
+export const resetPurchaseTransaction = () => ({ 
+    type: types.RESET_TRX_PURCHASE,
+    payload: {},
+    meta: { type: types.RESET_TRX_PURCHASE }
+})
 export const submitPurchaseTransaction = (request) => ({
     type: types.SUBMIT_TRX_PURCHASE,
-    payload:{
+    payload: {
         customer: { id: 3 },
         productFlows: request.productFlows
-    } ,
+    },
     meta: {
         type: types.SUBMIT_TRX_PURCHASE,
         url: apiTransaction.concat("purchase")
     }
 })
 
-export const getStockInfo = (stockId) => ({
+export const getStockInfo = (stockId) => ({ 
     type: types.GET_STOCK_INFO,
-    payload:{productFlow:{id:stockId}} ,
+    payload: { productFlow: { id: stockId } },
     meta: {
         type: types.GET_STOCK_INFO,
         url: apiTransaction.concat("stockinfo")
@@ -35,7 +41,7 @@ export const performLogout = () => {
 }
 
 export const performLogin = (username, password) => {
-    let loginRequest = {
+    let loginRequest = { 
         type: types.DO_LOGIN,
         payload: {
             user: { username: username, password: password }
@@ -45,7 +51,7 @@ export const performLogin = (username, password) => {
     return loginRequest;
 }
 
-export const getAllProductCategories = () => ({
+export const getAllProductCategories = () => ({ 
     type: types.FETCH_PRODUCT_CATEGORIES_ALL,
     payload: {
         "entity": "category",
@@ -64,7 +70,7 @@ export const getAllProductCategories = () => ({
 })
 
 export const getSupplierList = (request) => {
-    let requested = {
+    let requested = { 
         type: types.FETCH_SUPPLIER_LIST,
         payload: {
             entity: "supplier",
@@ -72,7 +78,7 @@ export const getSupplierList = (request) => {
                 limit: 10,
                 page: request.page,
                 fieldsFilter: {
-                    name: request.name 
+                    name: request.name
                 },
                 orderBy: request.orderby,
                 orderType: request.ordertype
@@ -93,7 +99,7 @@ export const getSupplierList = (request) => {
 
 export const getProductList = (request) => {
 
-    let requested = {
+    let requested = { 
         type: types.FETCH_PRODUCT_LIST,
         payload: {
             entity: "product",
@@ -122,9 +128,9 @@ export const getProductList = (request) => {
 }
 
 
-export const getProductDetail = (code) => ({
-    type: types.FETCH_PRODUCT_DETAIL,
+export const getProductDetail = (code) => ({ 
     payload: {
+        type: types.FETCH_PRODUCT_DETAIL,
         entity: "product",
         filter: {
             limit: 1,
@@ -143,15 +149,13 @@ export const getProductDetail = (code) => ({
     }
 })
 
-export const removeEntity = () => ({
+export const removeEntity = () => ({ 
     type: types.REMOVE_SHOP_ENTITY,
     payload: {},
-    meta: {
-        type: types.REMOVE_SHOP_ENTITY
-    }
+    meta: {  type: types.REMOVE_SHOP_ENTITY  }
 })
 
-export const loadMoreSupplier = (page, productId) => ({
+export const loadMoreSupplier = (page, productId) => ({ 
     type: types.LOAD_MORE_SUPPLIER,
     payload: { "filter": { "page": page, "fieldsFilter": { "productId": productId } } },
     meta: {
@@ -160,83 +164,3 @@ export const loadMoreSupplier = (page, productId) => ({
     }
 })
 
-// export const deleteExam = (id) => ({
-//     type: types.DELETE_EXAM,
-//     payload: [],
-//     meta: {
-//         type: 'delete_exam',
-//         url: apiURL + "remove/" + id,
-//         id: id
-//     }
-// })
-
-// export const getExamById = (id) => ({
-//     type: types.FETCH_EXAM_BY_ID,
-//     payload: [],
-//     meta: {
-//         type: 'get_exam_by_id',
-//         url: apiURL + "get/" + id,
-//         id: id
-//     }
-// })
-
-// export const submitExam = (exam) => ({
-//     type: types.SUBMIT_EXAM,
-//     payload: [],
-//     meta: {
-//         type: 'submit_exam',
-//         url: apiURL + "submitexam",
-//         exam: exam
-//     }
-// })
-
-// export const appNewExam = (exam) => ({
-//     type: types.ADD_EXAM,
-//     payload: [],
-//     meta: {
-//         type: 'add_exam',
-//         url: apiURL + "add",
-//         exam: exam
-//     }
-// })
-
-// export const updateExam = (exam) => ({
-//     type: types.UPDATE_EXAM,
-//     payload: [],
-//     meta: {
-//         type: 'update_exam',
-//         url: apiURL + "updateexam",
-//         exam: exam
-//     }
-// })
-
-// export const fetchOneExam = () => ({
-//     type: types.FETCH_ONE_EXAM,
-//     payload: [{
-//         id: 1,
-//         title: "ff",
-//         user: {
-//             name: "suser",
-//             role: "d.role",
-//         },
-//         date: "2019-11-12",
-//         body: "body body body body"
-//     },
-//     ]
-// })
-
-// export const login = () => ({
-//     type: types.LOG_IN,
-//     payload: {
-//         name: "el-fajr",
-//         status: "logged in"
-//     }
-// })
-
-// export const logout = () => ({
-//     type: types.LOG_OUT,
-//     payload: {
-//         name: "el-fajr",
-//         status: "logged out"
-//     }
-// })

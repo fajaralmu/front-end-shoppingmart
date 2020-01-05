@@ -11,12 +11,14 @@ import InputField from './InputField';
 import DetailStock from './DetailStock';
 import StockListTable from './StockListTable'
 import Message from './Message'
+import TransactionReceipt from './TransactionReceipt'
+import * as stringUtil from '../utils/StringUtil'
 
 class TransactionOut extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { productFlowStock: {},  showDetail: false, productFlows: [], messageShow: false, messageType:"" }
+        this.state = { productFlowStock: {}, showDetail: false, productFlows: [], messageShow: false, messageType: "" }
 
         this.getStockInfo = () => {
             let stockId = document.getElementById("input-stock-id").value;
@@ -86,7 +88,7 @@ class TransactionOut extends Component {
             }
 
             this.setState({ productFlows: currentFlows });
-            this.showMessage("Success saving to chart","success");
+            this.showMessage("Success saving to chart", "success");
             this.clearFields();
         }
 
@@ -102,8 +104,8 @@ class TransactionOut extends Component {
         }
 
         this.clearFields = () => {
-            document.getElementById("input-quantity").value = 0;
-            document.getElementById("input-stock-id").value = 0;
+            if (document.getElementById("input-quantity")) document.getElementById("input-quantity").value = 0;
+            if (document.getElementById("input-stock-id")) document.getElementById("input-stock-id").value = 0;
         }
 
         this.handleEdit = (stockId) => {
@@ -144,7 +146,26 @@ class TransactionOut extends Component {
         }
 
         this.showMessage = (text, type) => {
-            this.setState({messageShow:true, messageText:text, messageType:type});
+            this.setState({ messageShow: true, messageText: text, messageType: type });
+        }
+
+        this.reset = () => {
+            this.clearFields();
+            this.setState({ productFlows: [], showDetail: false });
+            this.props.resetPurchaseTransaction();
+        }
+
+        this.calculateTotalPrice = () => {
+            let totalPrice = 0;
+            if(this.state.productFlows){
+                this.state.productFlows.forEach(productFlow => {
+                    totalPrice = totalPrice + productFlow.count*productFlow.product.price;
+                });
+            }
+            
+            let str = stringUtil.beautifyNominal(totalPrice)+(",00");
+            
+            return stringUtil.beautifyNominal(totalPrice)+(",00");
         }
     }
     componentDidMount() {
@@ -153,7 +174,8 @@ class TransactionOut extends Component {
             document.getElementById("input-stock-id").value = this.props.productFlowStock.productFlow.id
     }
     componentDidUpdate() {
-        if (this.props.productFlowStock && this.props.productFlowStock.productFlow) {
+        if (this.props.productFlowStock && this.props.productFlowStock.productFlow
+            && document.getElementById("input-stock-id") != null) {
             document.getElementById("input-stock-id").value = this.props.productFlowStock.productFlow.id
         }
     }
@@ -161,6 +183,8 @@ class TransactionOut extends Component {
     render() {
         let detailStock = "";
         let message = "";
+        let totalPrice = this.calculateTotalPrice();
+        console.log("$$ TOTAL PRICE: ",totalPrice)
 
         if (this.props.productFlowStock != null) {
             detailStock = <div className="form-panel rounded">
@@ -172,50 +196,61 @@ class TransactionOut extends Component {
             message = <Message text={this.state.messageText} endMessage={this.endMessage} type={this.state.messageType} />
         }
 
+        let formComponent = <table>
+            <tbody>
+                <tr> <td>
+                    <div className="form-panel rounded">
+                        <div className="panel-title rounded-top">Payment Form</div>
+                        <Label text="Stock ID" />
+                        <InputField id="input-stock-id" type="number" value="0" />
+                        <ActionButton text="Search" onClick={this.getStockInfo} />
+                        <Label text="Quantity" />
+                        <InputField id="input-quantity" type="number" value="0" />
+                        {this.props.productFlowStock != null ? <ActionButton text="Save" onClick={this.addToCart} /> : ""}
+                    </div>
+                </td> <td> {detailStock} </td> </tr>
+            </tbody>
+        </table>;
+
+        if (this.props.successTransaction) {
+            formComponent = <div>
+                <h2>Transaction Success</h2>
+                <TransactionReceipt transactionData={this.props.transactionData} />
+            </div>
+        }
+
         return (
             <div className="transaction-container">
                 {message}
                 <h2>Costumer Payment</h2>
                 <ActionButton text="Back" onClick={() => this.props.setFeatureCode(null)} />
-                <table>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <div className="form-panel rounded">
-                                    <div className="panel-title rounded-top">Payment Form</div>
-                                    <Label text="Stock ID" />
-                                    <InputField id="input-stock-id" type="number" value="0" />
-                                    <ActionButton text="Search" onClick={this.getStockInfo} />
-                                    <Label text="Quantity" />
-                                    <InputField id="input-quantity" type="number" value="0" />
-                                    {this.props.productFlowStock != null ? <ActionButton text="Save" onClick={this.addToCart} /> : ""}
-                                </div>
-                            </td>
-                            <td>
-                                {detailStock}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <ActionButton text="Back And Reset" onClick={() => { this.props.setFeatureCode(null); this.reset() }} />
+                {formComponent}
                 <div>
                     <ActionButton text="Submit Transaction" onClick={this.submitTransaction} />
+                    <ActionButton text="Reset" onClick={this.reset} />
                 </div>
                 {/* ======= product list ======== */}
                 <h3>Product List</h3>
-                <StockListTable handleEdit={this.handleEdit} handleDelete={this.handleDelete} productFlows={this.state.productFlows} />
+                <StockListTable disabled={this.props.successTransaction} handleEdit={this.handleEdit} handleDelete={this.handleDelete} productFlows={this.state.productFlows} />
+                <Label text={"Total Price: IDR "+totalPrice} />  
+               
             </div >
         )
     }
 }
 const mapStateToProps = state => {
     return {
-        productFlowStock: state.transactionState.productFlowStock
+        productFlowStock: state.transactionState.productFlowStock,
+        transactionData: state.transactionState.transactionData,
+        successTransaction: state.transactionState.successTransaction
     }
 }
 
 const mapDispatchToProps = dispatch => ({
     getStockInfo: (stockId) => dispatch(actions.getStockInfo(stockId)),
-    submitPurchaseTransaction: (request) => dispatch(actions.submitPurchaseTransaction(request))
+    submitPurchaseTransaction: (request) => dispatch(actions.submitPurchaseTransaction(request)),
+    resetPurchaseTransaction: () => dispatch(actions.resetPurchaseTransaction())
 })
 export default (connect(
     mapStateToProps,
