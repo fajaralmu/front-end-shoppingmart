@@ -85,11 +85,13 @@ const performLoginMiddleware = store => next => action => {
                 console.log("loginKey: ", loginKey);
                 loginSuccess = true;
                 localStorage.setItem("loginKey", loginKey);
+                
             }
             let newAction = Object.assign({}, action, {
                 payload: {
                     loginStatus: loginSuccess,
-                    loginKey: loginKey
+                    loginKey: loginKey,
+                    loggedUser: responseJson.entity
                 }
             });
             delete newAction.meta;

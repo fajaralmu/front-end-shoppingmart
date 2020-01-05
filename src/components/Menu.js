@@ -14,6 +14,13 @@ class Menu extends Component {
     }
 
     render() {
+        let userLink = "";
+        if (this.props.loggedUser != null) {
+            userLink = <li id="user-link">
+                <div className="fill" >Welcome, {this.props.loggedUser.displayName} </div>
+            </li>
+        }
+
         let renderedMenus = [];
         if (this.props.menus != null) {
             renderedMenus = this.props.menus;
@@ -22,24 +29,26 @@ class Menu extends Component {
         return (
 
             <div className="side-menu" >
-                < ul className="menu-ul " > {
-                    renderedMenus.map(
-                        e => {
-                            if (e.url == "#") {
-                                return (<li onClick={() => this.props.handleMenuCLick(e)} className={this.props.activeCode == e.code ? "active" : ""} key={e.name}
+                < ul className="menu-ul " >
+                    {userLink}
+                    {
+                        renderedMenus.map(
+                            e => {
+                                if (e.url == "#") {
+                                    return (<li onClick={() => this.props.handleMenuCLick(e)} className={this.props.activeCode == e.code ? "active" : ""} key={e.name}
+                                        id={e.name}> <Link key={e.name}
+                                            className="App-link"
+                                            to="#" ><div className="fill" >{e.name} </div></Link></li >
+                                    )
+                                }
+                                return (<li className={this.props.activeCode == e.code ? "active" : ""} key={e.name}
                                     id={e.name}> <Link key={e.name}
                                         className="App-link"
-                                        to="#" ><div className="fill" >{e.name} </div></Link></li >
+                                        to={e.url} ><div className="fill" >{e.name} </div></Link></li >
                                 )
                             }
-                            return (<li className={this.props.activeCode == e.code ? "active" : ""} key={e.name}
-                                id={e.name}> <Link key={e.name}
-                                    className="App-link"
-                                    to={e.url} ><div className="fill" >{e.name} </div></Link></li >
-                            )
-                        }
-                    )
-                } </ul>
+                        )
+                    } </ul>
 
             </div>
 

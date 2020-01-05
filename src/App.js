@@ -71,6 +71,7 @@ class App extends Component {
 
   render() {
 
+    
     let loginComponent = <Login setMenuCode={this.setMenuCode}
       setDetailMode={this.setDetailMode}
       detailMode={this.state.detailMode}
@@ -92,7 +93,7 @@ class App extends Component {
           <tbody>
             <tr valign="top">
               <td>
-                <Menu handleMenuCLick={this.handleMenuCLick} activeCode={this.state.menuCode} menus={menus} />
+                <Menu loggedUser={this.props.loggedUser} handleMenuCLick={this.handleMenuCLick} activeCode={this.state.menuCode} menus={menus} />
               </td>
               <td>
                 <div>
@@ -153,7 +154,8 @@ const mapStateToProps = state => {
     loginStatus: state.userState.loginStatus,
     loginKey: state.userState.loginStatus,
     loginFailed: state.userState.loginFailed,
-    menus: state.userState.menus
+    menus: state.userState.menus,
+    loggedUser: state.userState.loggedUser
   }
 }
 

@@ -7,7 +7,8 @@ export const initState = {
     loginKey: null,
     loginStatus: false,
     loginFailed: false,
-    menus: menus.menus
+    menus: menus.menus,
+    loggedUser: null
 };
 
 export const reducer = (state = initState, action) => {
@@ -38,15 +39,18 @@ export const reducer = (state = initState, action) => {
                 loginStatus: action.payload.loginStatus,
                 loginKey: action.payload.loginKey,
                 loginFailed: action.payload.loginStatus == false,
-                menus: updatedMenus
-            }; 
+                menus: updatedMenus,
+                loggedUser: action.payload.loggedUser
+            };
+            console.log("logged user: ",result.loggedUser);
             return result;
         case types.DO_LOGOUT:
             result = {
                 ...state,
-                loginStatus: action.payload.loginStatus, 
-                menus: updatedMenus
-            }; 
+                loginStatus: action.payload.loginStatus,
+                menus: updatedMenus,
+                loggedUser: null
+            };
             return result;
         default:
             if (action.payload && action.payload.loginStatus != null)
