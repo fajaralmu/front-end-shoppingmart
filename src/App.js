@@ -37,8 +37,10 @@ class App extends Component {
 
     this.handleMenuCLick = (menu) => {
       switch (menu.code) {
-        case menus.LOGOUT:
-          console.log("handle logout");
+        case menus.LOGOUT: 
+          if(!window.confirm("Are you sure want to logout?")){
+            return;
+          }
           this.props.performLogout();
           break;
 
@@ -92,7 +94,7 @@ class App extends Component {
         <table className="main-layout">
           <tbody>
             <tr valign="top">
-              <td>
+              <td className="td-menu">
                 <Menu loggedUser={this.props.loggedUser} handleMenuCLick={this.handleMenuCLick} activeCode={this.state.menuCode} menus={menus} />
               </td>
               <td>

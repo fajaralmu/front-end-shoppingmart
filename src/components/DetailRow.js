@@ -1,7 +1,9 @@
 import React, {Component} from 'react'
 import * as url from '../constant/Url'
 import '../css/DetailRow.css'
-
+/**
+ * used when showing list with icon and name and desc (exp: supplier list)
+ */
 class DetailRow extends Component{
 
     constructor(props){

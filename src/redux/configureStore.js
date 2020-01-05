@@ -3,7 +3,7 @@ import { initialState, rootReducer } from './reducers'
 import * as actionCreator from './actionCreators';
 import * as types from './types';
 
-const commonHeader = {  'Content-Type': 'application/json', 'requestId': '1234' };
+const commonHeader = { 'Content-Type': 'application/json', 'requestId': '1234' };
 
 export const configureStore = () => {
     const store = createStore(
@@ -19,11 +19,68 @@ export const configureStore = () => {
 
             //user related
             performLoginMiddleware,
-            performLogoutMiddleware
+            performLogoutMiddleware,
+
+            //transaction
+            getStockInfoMiddleware,
+            submitPurchaseTransactionMiddleware
+
         )
     );
 
     return store;
+}
+
+
+const submitPurchaseTransactionMiddleware = store => next => action => {
+    if (!action.meta || action.meta.type !== types.SUBMIT_TRX_PURCHASE) {
+        return next(action);
+    }
+
+    fetch(action.meta.url, {
+        method: 'POST',
+        body: JSON.stringify(action.payload),
+        headers: { 'Content-Type': 'application/json', 'requestId': '1234', 'loginKey': localStorage.getItem("loginKey") }
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.debug("Response:", data);
+            if (data.code!= "00") {
+                alert("Transaction Failed!");
+                return;
+            }
+            alert("Transaction Success!")
+            let newAction = Object.assign({}, action, {  payload: data  });
+            delete newAction.meta;
+            store.dispatch(newAction);
+        })
+        .catch(err => console.log(err));
+}
+
+const getStockInfoMiddleware = store => next => action => {
+    if (!action.meta || action.meta.type !== types.GET_STOCK_INFO) {
+        return next(action);
+    }
+
+    fetch(action.meta.url, {
+        method: 'POST',
+        body: JSON.stringify(action.payload),
+        headers: { 'Content-Type': 'application/json', 'requestId': '1234', 'loginKey': localStorage.getItem("loginKey") }
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.debug("Response:", data);
+            if (data.productFlowStock == null) {
+                alert("Data not found!");
+                return;
+            }
+            let newAction = Object.assign({}, action, {
+                payload: data.productFlowStock
+            });
+            delete newAction.meta;
+            store.dispatch(newAction);
+        })
+        .catch(err => console.log(err));
 }
 
 const getSupplierListMiddleware = store => next => action => {
@@ -61,7 +118,7 @@ const performLogoutMiddleware = store => next => action => {
     fetch(action.meta.url, {
         method: 'POST',
         body: JSON.stringify(action.payload),
-        headers: { 'Content-Type': 'application/json', 'requestId': '1234', 'loginKey':localStorage.getItem("loginKey") }
+        headers: { 'Content-Type': 'application/json', 'requestId': '1234', 'loginKey': localStorage.getItem("loginKey") }
     })
         .then(response => { return Promise.all([response.json(), response]); })
         .then(([responseJson, response]) => {
@@ -111,7 +168,7 @@ const performLoginMiddleware = store => next => action => {
                 console.log("loginKey: ", loginKey);
                 loginSuccess = true;
                 localStorage.setItem("loginKey", loginKey);
-                
+
             }
             let newAction = Object.assign({}, action, {
                 payload: {
@@ -152,7 +209,7 @@ const getAllProductCategoriesMiddleware = store => next => action => {
         .catch(err => console.log(err));
 
 }
- 
+
 const loadMoreSupplierMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.LOAD_MORE_SUPPLIER) {
         return next(action);
@@ -242,5 +299,5 @@ const getProductListMiddleware = store => next => action => {
         })
         .catch(err => console.log(err));
 }
-  
+
 export default configureStore;

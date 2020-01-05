@@ -1,0 +1,22 @@
+.entity-list {
+    margin :5px;
+
+}
+
+.entity-list-table{
+    table-layout: fixed; 
+  
+}
+
+.entity-list-table  tr{
+    padding:3px;
+    border-bottom: solid 1px darkcyan;
+}
+.entity-list-table  th {
+   min-width: 100px;
+   text-align: center
+}
+.entity-list-table   td{
+    min-width: 100px;
+    text-align: center
+ }

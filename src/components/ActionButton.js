@@ -5,12 +5,18 @@ import '../css/Input.css'
 class ActionButton extends Component {
     constructor(props) {
         super(props);
+
+        this.onClick = () => {
+            if(this.props.onClick){
+                this.props.onClick();
+            }
+        }
     }
 
     render() {
         return (
-            <div className="action-button">
-                <button id={this.props.id} onClick={this.props.onClick}>{this.props.text}</button>
+            <div className="action-button rounded">
+                <button id={this.props.id} onClick={this.onClick}>{this.props.text}</button>
             </div>
         )
     }

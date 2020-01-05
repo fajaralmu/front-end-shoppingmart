@@ -30,6 +30,21 @@
     font-family: 'Segoe UI';
 }
 
+/* ============= dashboard menus ================ */
+.dashboard-menu-item{
+    text-align: center; 
+    margin:5px;
+    float: left;
+    height:100px;
+    width:100px;
+    color:bisque;
+    background-color: darkslateblue
+}
+
+.dashboard-menu-item:hover{
+    background-color: darkslategray
+}
+
 a {
     text-decoration: none
 }

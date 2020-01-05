@@ -1,0 +1,11 @@
+.message{
+    text-align: center;
+}
+.message-failed{
+     color: indianred;
+     background-color: coral
+}
+.message-success{
+    color: darkolivegreen;
+    background-color:lawngreen
+}

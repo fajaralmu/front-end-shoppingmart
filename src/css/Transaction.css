@@ -1,0 +1,11 @@
+.form-panel{
+    
+    margin: 5px;
+    background-color: khaki;
+    min-width: 40%;
+    padding:5px
+}
+
+.transaction-container{
+    width:90%
+}

@@ -6,3 +6,5 @@ export const LOAD_MORE_SUPPLIER = "load_more_supplier";
 export const FETCH_PRODUCT_CATEGORIES_ALL = "all_product_categories";
 export const DO_LOGIN = "do_login";
 export const DO_LOGOUT = "do_logout";
+export const GET_STOCK_INFO = "get_stock_info";
+export const SUBMIT_TRX_PURCHASE = "submit_payment";

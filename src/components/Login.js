@@ -12,7 +12,8 @@ class Login extends Component {
 
         this.state = {
             username: null,
-            password: null
+            password: null,
+            showMessageLoginFailed:false
         }
         this.handleUsername = (value) => {
             this.setState({ username: value });
@@ -26,6 +27,10 @@ class Login extends Component {
             this.props.doLogin(document.getElementById("username-field").value, 
             document.getElementById("password-field").value);
         }
+
+        this.endMessage = () => {
+            this.setState({showMessageLoginFailed:false})
+        }
     }
 
     componentDidMount() {
@@ -36,7 +41,7 @@ class Login extends Component {
     render() {
 
         let message = <p>
-            {this.props.loginFailed ?  <Message type="failed" text="Login Failed" />:""}
+            {this.props.loginFailed ? this.state.showMessageLoginFailed?  <Message endMessage={this.endMessage} type="failed" text="Login Failed" />:"":""}
         </p>
 
         return (

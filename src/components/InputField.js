@@ -6,7 +6,15 @@ class InputField extends Component {
     constructor(props) {
         super(props); 
         this.handleKeyup = () => {
-            this.props.onKeyUp(document.getElementById(this.props.id).value);
+            if(this.props.onKeyUp)
+                this.props.onKeyUp(document.getElementById(this.props.id).value);
+        } 
+        
+    }
+
+    componentDidMount(){
+        if(this.props.value){
+            document.getElementById(this.props.id).value = this.props.value;
         }
     }
 
@@ -14,7 +22,7 @@ class InputField extends Component {
         let type = this.props.type ? this.props.type : "text"; 
         return (
             <div className="input-field">
-                <input id={this.props.id} type={type} onKeyUp={this.handleKeyup} />
+               {this.props.disabled == true ? <input id={this.props.id} type={type} onKeyUp={this.handleKeyup}  disabled/>: <input id={this.props.id} type={type} onKeyUp={this.handleKeyup} />}
             </div>
         )
     }

@@ -14,7 +14,12 @@
 }
 
 .main-layout{
-  table-layout: fixed
+  table-layout: fixed;
+  width: 100%
+}
+
+.td-menu{
+  width:160px
 }
 
 /* .App-header {

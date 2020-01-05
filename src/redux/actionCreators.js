@@ -2,6 +2,28 @@ import * as types from './types'
 const apiBaseUrl = "http://localhost:8080/universal-good-shop/api/public/"
 const apiEntityBaseUrl = "http://localhost:8080/universal-good-shop/api/entity/"
 const apiAccount = "http://localhost:8080/universal-good-shop/api/account/"
+const apiTransaction = "http://localhost:8080/universal-good-shop/api/transaction/";
+
+export const submitPurchaseTransaction = (request) => ({
+    type: types.SUBMIT_TRX_PURCHASE,
+    payload:{
+        customer: { id: 3 },
+        productFlows: request.productFlows
+    } ,
+    meta: {
+        type: types.SUBMIT_TRX_PURCHASE,
+        url: apiTransaction.concat("purchase")
+    }
+})
+
+export const getStockInfo = (stockId) => ({
+    type: types.GET_STOCK_INFO,
+    payload:{productFlow:{id:stockId}} ,
+    meta: {
+        type: types.GET_STOCK_INFO,
+        url: apiTransaction.concat("stockinfo")
+    }
+})
 
 export const performLogout = () => {
     let loginRequest = {
