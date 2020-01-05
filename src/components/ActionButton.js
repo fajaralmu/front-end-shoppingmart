@@ -15,8 +15,8 @@ class ActionButton extends Component {
 
     render() {
         return (
-            <div className="action-button rounded">
-                <button id={this.props.id} onClick={this.onClick}>{this.props.text}</button>
+            <div className="action-button-wrapper"  >
+                <button className="action-button rounded" id={this.props.id} onClick={this.onClick}>{this.props.text}</button>
             </div>
         )
     }

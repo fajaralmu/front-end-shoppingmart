@@ -13,6 +13,7 @@ import StockListTable from './StockListTable'
 import Message from './Message'
 import TransactionReceipt from './TransactionReceipt'
 import * as stringUtil from '../utils/StringUtil'
+import ActionButtons from './ActionButtons'
 
 class TransactionOut extends Component {
 
@@ -157,15 +158,15 @@ class TransactionOut extends Component {
 
         this.calculateTotalPrice = () => {
             let totalPrice = 0;
-            if(this.state.productFlows){
+            if (this.state.productFlows) {
                 this.state.productFlows.forEach(productFlow => {
-                    totalPrice = totalPrice + productFlow.count*productFlow.product.price;
+                    totalPrice = totalPrice + productFlow.count * productFlow.product.price;
                 });
             }
-            
-            let str = stringUtil.beautifyNominal(totalPrice)+(",00");
-            
-            return stringUtil.beautifyNominal(totalPrice)+(",00");
+
+            let str = stringUtil.beautifyNominal(totalPrice) + (",00");
+
+            return stringUtil.beautifyNominal(totalPrice) + (",00");
         }
     }
     componentDidMount() {
@@ -184,7 +185,7 @@ class TransactionOut extends Component {
         let detailStock = "";
         let message = "";
         let totalPrice = this.calculateTotalPrice();
-        console.log("$$ TOTAL PRICE: ",totalPrice)
+        console.log("$$ TOTAL PRICE: ", totalPrice)
 
         if (this.props.productFlowStock != null) {
             detailStock = <div className="form-panel rounded">
@@ -223,18 +224,19 @@ class TransactionOut extends Component {
             <div className="transaction-container">
                 {message}
                 <h2>Costumer Payment</h2>
-                <ActionButton text="Back" onClick={() => this.props.setFeatureCode(null)} />
-                <ActionButton text="Back And Reset" onClick={() => { this.props.setFeatureCode(null); this.reset() }} />
                 {formComponent}
                 <div>
-                    <ActionButton text="Submit Transaction" onClick={this.submitTransaction} />
-                    <ActionButton text="Reset" onClick={this.reset} />
+                    <ActionButtons buttonsData={[
+                        { text: "Back", onClick: () => this.props.setFeatureCode(null), id: "btn-back" },
+                        { text: "Back And Reset", onClick: () => { this.props.setFeatureCode(null); this.reset() }, id: "btn-back" },
+                        { id: "btn-submit-trx", text: "Submit Transaction", onClick: this.submitTransaction },
+                        { text: "Reset", id: "btn-reset-trx", onClick: this.reset }]} />
                 </div>
                 {/* ======= product list ======== */}
                 <h3>Product List</h3>
                 <StockListTable disabled={this.props.successTransaction} handleEdit={this.handleEdit} handleDelete={this.handleDelete} productFlows={this.state.productFlows} />
-                <Label text={"Total Price: IDR "+totalPrice} />  
-               
+                <Label text={"Total Price: IDR " + totalPrice} />
+
             </div >
         )
     }
