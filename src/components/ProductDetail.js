@@ -102,11 +102,10 @@ class ProductDetail extends Component {
         }
         return (
             <div className="section-container" >
-                <h2>Product Detail Page</h2>
-
-                {imageComponent}
+                <h2>Product Detail Page</h2> 
                 <InstantTable disabled={true}
                     rows={[
+                        { id: "row-img", values: [imageComponent] ,CS:[2]},
                         { id: "row-name", values: ["Name", product.name] },
                         { id: "row-price", values: ["Price", product.price] },
                         { id: "row-count", values: ["Item(s)", product.count + " " + (product.unit ? product.unit.name : "")] },
@@ -115,12 +114,10 @@ class ProductDetail extends Component {
                     ]} />
 
                 <ActionButtons buttonsData={[{
-                    id: "btn-back",
-                    onClick: this.goBack, text: "Back"
+                    id: "btn-back", onClick: this.goBack, text: "Back"
                 },
                 {
-                    id: "btn-show-supplier",
-                    status: "success",
+                    id: "btn-show-supplier",  status: "success",
                     onClick: () => this.showSupplierList(supplierShown && product.suppliers ? false : true),
                     text: (supplierShown && product.suppliers ? "Hide suppliers" : "Show suppliers")
                 }]} />
