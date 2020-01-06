@@ -2,10 +2,10 @@
     text-align: center;
 }
 .message-failed{
-     color: indianred;
+     color: white;
      background-color: coral
 }
 .message-success{
-    color: darkolivegreen;
+    color: white;
     background-color:lawngreen
 }

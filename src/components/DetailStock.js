@@ -4,6 +4,7 @@ import Label from './Label';
 import * as url from '../constant/Url'
 import InputField from './InputField';
 import * as stringUtil from '../utils/StringUtil'
+import InstantTable from './InstantTable';
 
 class DetailStock extends Component {
     constructor(props) {
@@ -20,13 +21,7 @@ class DetailStock extends Component {
         if (this.props.productFlowStock == null || this.props.productFlowStock.productFlow == null || this.props.productFlowStock.productFlow.product == null) {
             productFlowStock = {
                 remainingStock: "Loading...",
-                productFlow: {
-                    product: {
-                        name: "Loading...",
-                        unit: { name: "Loading... " },
-                        price: "000"
-                    }
-                }
+                productFlow: { product: { name: "Loading...", unit: { name: "Loading... " }, price: "000" } }
             }
         }
 
@@ -34,13 +29,32 @@ class DetailStock extends Component {
 
         return (
             <div className="stock-detail" >
-                <table>  <tbody>  <tr> <td> <Label text={productFlowStock.productFlow.product.name + "-" + productFlowStock.productFlow.id} />
-                    <Label text={productFlowStock.remainingStock + " " + productFlowStock.productFlow.product.unit.name} />
-                    <Label text={stringUtil.beautifyNominal(productFlowStock.productFlow.product.price) + ",00"} />
-                    <Label text="EXP Date" />
-                    <InputField disabled={true} id="exp-date" type="date" value={productFlowStock.productFlow.expiryDate} /></td>
+
+                <table>  <tbody>  <tr valign="top">
+                    <td>
+                        <InstantTable disabled={true}
+                            rows={[
+                                {
+                                    values: ["Name",
+                                        productFlowStock.productFlow.product.name + "-" + productFlowStock.productFlow.id]
+                                },
+                                {
+                                    values: ["Remaining",
+                                        productFlowStock.remainingStock + " " + productFlowStock.productFlow.product.unit.name]
+                                },
+                                {
+                                    values: ["Price",
+                                        stringUtil.beautifyNominal(productFlowStock.productFlow.product.price) + ",00"]
+                                },
+                                {
+                                    values: ["Exp Date",
+                                        productFlowStock.productFlow.expiryDate
+                                    ]
+                                }
+                            ]} />
+                    </td>
                     <td> <div className="img-panel rounded box-shadow"><img src={imageUrl} width="300" height="200" /></div>
-                    </td> </tr> </tbody>  </table> 
+                    </td> </tr> </tbody>  </table>
             </div>
         )
     }

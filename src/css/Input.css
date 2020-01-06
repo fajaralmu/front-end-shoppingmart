@@ -1,7 +1,8 @@
 .action-button, .input-field{
-    margin : 5px;
-    
+    margin : 5px; 
 }
+
+ 
 
 .input-field input, .input-field select{
     border-color:dimgray;
@@ -11,6 +12,10 @@
     padding-left:7px;
     padding-top:5px;
     padding-bottom:5px;
+}
+
+.input-field select{
+    margin-right: 5px
 }
 
  button{ 

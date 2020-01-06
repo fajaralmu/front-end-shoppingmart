@@ -10,6 +10,7 @@ import * as menus from '../constant/Menus'
 import ActionButtons from './ActionButtons'
 import InputField from './InputField'
 import ComboBox from './ComboBox'
+import ComboBoxes from './ComboBoxes'
 
 class Catalog extends Component {
 
@@ -150,26 +151,34 @@ class Catalog extends Component {
         let categories = [];
 
         this.props.productCategories.map(category => {
-            categories.push({ value: category.id, text: category.name }); 
+            categories.push({ value: category.id, text: category.name });
         })
 
 
         let filterBox = <div className="filter-box">
             <InputField placeholder="search by product name" onKeyUp={this.handleInputNameChange} type="search" id="input-product-name" />
 
-            <ComboBox defaultValue="00" onChange={this.handleOrderChange}
-                options={[
-                    { value: "00", text: "-Select Order-" },
-                    { value: "name-asc", text: "Name [A-Z]" },
-                    { value: "name-desc", text: "Name [Z-A]" },
-                    { value: "price-asc", text: "Price [cheap]" },
-                    { value: "price-desc", text: "Price [expensive]" }
-                ]}  id="select-order" /> 
+            <ComboBoxes
+                values={[
+                    {
+                        defaultValue: "00", onChange: this.handleOrderChange,
+                        options: [
+                            { value: "00", text: "-Select Order-" },
+                            { value: "name-asc", text: "Name [A-Z]" },
+                            { value: "name-desc", text: "Name [Z-A]" },
+                            { value: "price-asc", text: "Price [cheap]" },
+                            { value: "price-desc", text: "Price [expensive]" }
+                        ],
+                        id: "select-order"
+                    },
+                    {
+                        defaultValue: "00",
+                        onChange: this.handleOrderChange,
+                        id: "select-category",
+                        options: categories
+                    }]}
 
-            <ComboBox defaultValue="00" onChange={this.handleOrderChange} id="select-category"
-                options={categories}
-
-            /> 
+            />
             <ActionButtons buttonsData={[{
                 text: "Search", status: "success", onClick: () => this.getProductCatalog(this.state.catalogPage), id: "btn-search"
             }, {

@@ -2,18 +2,21 @@ import React, { Component } from 'react'
 import '../css/Common.css'
 import '../css/Input.css'
 
+/**
+ * JUST FOR INPUT !!!
+ */
 class InputField extends Component {
     constructor(props) {
         super(props); 
         this.handleKeyup = () => {
-            if(this.props.onKeyUp)
+            if(this.props.onKeyUp && this.props.id)
                 this.props.onKeyUp(document.getElementById(this.props.id).value);
         } 
         
     }
 
     componentDidMount(){
-        if(this.props.value){
+        if(this.props.value && this.props.id){
             document.getElementById(this.props.id).value = this.props.value;
         }
     }

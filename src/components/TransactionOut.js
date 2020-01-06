@@ -185,9 +185,10 @@ class TransactionOut extends Component {
         let detailStock = "";
         let message = "";
         let totalPrice = this.calculateTotalPrice();
-        console.log("$$ TOTAL PRICE: ", totalPrice)
+        
 
         if (this.props.productFlowStock != null) {
+            
             detailStock = <div className="form-panel rounded">
                 <div className="panel-title rounded-top">Product Detail</div>
                 <DetailStock productFlowStock={this.props.productFlowStock} />
@@ -199,7 +200,7 @@ class TransactionOut extends Component {
 
         let formComponent = <table>
             <tbody>
-                <tr> <td>
+                <tr valign="top"> <td>
                     <div className="form-panel rounded">
                         <div className="panel-title rounded-top">Payment Form</div>
                         <Label text="Stock ID" />
@@ -228,7 +229,7 @@ class TransactionOut extends Component {
                 <div>
                     <ActionButtons buttonsData={[
                         { text: "Back", onClick: () => this.props.setFeatureCode(null), id: "btn-back" },
-                        { text: "Back And Reset", onClick: () => { this.props.setFeatureCode(null); this.reset() }, id: "btn-back" },
+                        { text: "Back And Reset", status:"warning", onClick: () => { this.props.setFeatureCode(null); this.reset() }, id: "btn-back" },
                         { id: "btn-submit-trx", status:'submit', text: "Submit Transaction", onClick: this.submitTransaction },
                         { text: "Reset", status:'danger', id: "btn-reset-trx", onClick: this.reset }]} />
                 </div>

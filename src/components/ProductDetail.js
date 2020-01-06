@@ -5,6 +5,9 @@ import DetailRow from './DetailRow'
 import * as url from '../constant/Url'
 import * as actions from '../redux/actionCreators'
 import { connect } from 'react-redux'
+import ActionButtons from './ActionButtons'
+import ActionButton from './ActionButton'
+import InstantTable from './InstantTable'
 
 
 
@@ -36,11 +39,11 @@ class ProductDetail extends Component {
 
     componentDidMount() {
         this.setState({ supplierShown: false })
-        
+
     }
 
     componentDidUpdate() {
-         
+
     }
 
     render() {
@@ -51,7 +54,7 @@ class ProductDetail extends Component {
             imageComponent = <div className="img-panel rounded box-shadow"><img src={imageUrl} width="300" height="200" /></div>;
         }
 
-        if (product == null  ) {
+        if (product == null) {
             product = {
                 name: "loading...",
                 price: "loading...",
@@ -64,7 +67,7 @@ class ProductDetail extends Component {
 
         } else {
             // product.suppliers  = this.props. suppliers;
-          //  console.log("product suppliers", this.props.product.suppliers);
+            //  console.log("product suppliers", this.props.product.suppliers);
         }
         // if(product.suppliers!=null&&  this.props.suppliers != null){
         //     console.log("WILL ADD MORE SUPPLIER")
@@ -74,11 +77,11 @@ class ProductDetail extends Component {
         //     } 
         // } 
 
-        let supplierListPanel = <button id="btn-show-supplier" onClick={() => this.showSupplierList(true)}>Show Suppliers</button>;
+        let supplierListPanel = <p></p>
         let supplierShown = this.state.supplierShown ? true : false;
         if (supplierShown && product.suppliers) {
             supplierListPanel = <div className="detail-container">
-                <button id="btn-show-supplier" onClick={() => this.showSupplierList(false)}>Hide Suppliers</button>
+
                 <table className="suppllier-container">
                     <tbody>
                         {product.suppliers.map(
@@ -91,20 +94,36 @@ class ProductDetail extends Component {
                     </tbody>
                 </table>
                 {this.state.supplierPage}
-                <button className="show-more" onClick={() => this.loadMoreSupplier(this.state.supplierPage, product.id)} >Show More</button>
+                <ActionButton
+                    id="btn-show-more"
+                    onClick={() => this.loadMoreSupplier(this.state.supplierPage, product.id)}
+                    text="Show More" />
             </div>
         }
         return (
             <div className="section-container" >
                 <h2>Product Detail Page</h2>
-                <button className="clickable" onClick={this.goBack}> Back</button>
-                {imageComponent}
-                <p>Name: {product.name}</p>
-                <p>Price: {product.price}</p>
-                <p>Item(s): {product.count} {product.unit ? product.unit.name : ""}</p>
-                <p>Category: {product.category.name}</p>
-                <p>description: {product.description}</p>
 
+                {imageComponent}
+                <InstantTable disabled={true}
+                    rows={[
+                        { id: "row-name", values: ["Name", product.name] },
+                        { id: "row-price", values: ["Price", product.price] },
+                        { id: "row-count", values: ["Item(s)", product.count + " " + (product.unit ? product.unit.name : "")] },
+                        { id: "row-cat", values: ["Category", product.category.name] },
+                        { id: "row-desc", values: ["Name", product.description] }
+                    ]} />
+
+                <ActionButtons buttonsData={[{
+                    id: "btn-back",
+                    onClick: this.goBack, text: "Back"
+                },
+                {
+                    id: "btn-show-supplier",
+                    status: "success",
+                    onClick: () => this.showSupplierList(supplierShown && product.suppliers ? false : true),
+                    text: (supplierShown && product.suppliers ? "Hide suppliers" : "Show suppliers")
+                }]} />
 
                 {supplierListPanel}
             </div>

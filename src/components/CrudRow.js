@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import ActionButton from './ActionButton';
+import ActionButtons from './ActionButtons';
 
 class CrudRow extends Component {
     constructor(props) {
@@ -24,14 +25,26 @@ class CrudRow extends Component {
             values = new Array();
         }
         let actionButton = <td>
-            <ActionButton key={"k-btn-edit-" + this.props.identifier} id={"btn-edit-" + this.props.identifier} onClick={this.handleEdit} text="Edit" />
-            <ActionButton key={"k-btn-delete-" + this.props.identifier} id={"btn-delete-" + this.props.identifier} onClick={this.handleDelete} text="Delete" />
+            <ActionButtons buttonsData={[
+                {
+                    id: "k-btn-edit-" + this.props.identifier,
+                    status: 'warning',
+                    onClick: this.handleEdit,
+                    text: "Edit"
+                },
+                {
+                    id: "k-btn-dlt-" + this.props.identifier,
+                    status: 'danger',
+                    onClick: this.handleDelete,
+                    text: "Delete"
+                }
+            ]} />
         </td>;
         if (this.props.disabled == true) {
             actionButton = "";
         }
         return (
-            <tr>
+            <tr valign="top">
                 {values.map(
                     value => {
                         return (
