@@ -2,11 +2,14 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import CatalogItem from './CatalogItem'
 import NavButton from './NavButton'
-import '../css/Catalog.css' 
+import '../css/Catalog.css'
 import { BrowserRouter as Router, Route, Link, Switch, withRouter } from 'react-router-dom'
 import * as actions from '../redux/actionCreators'
 import ProductDetail from './ProductDetail'
 import * as menus from '../constant/Menus'
+import ActionButtons from './ActionButtons'
+import InputField from './InputField'
+import ComboBox from './ComboBox'
 
 class Catalog extends Component {
 
@@ -24,9 +27,9 @@ class Catalog extends Component {
             requestOrderBy: null,
             requestOrderType: null,
             requestProductName: "",
-            requestCategoryId:null,
-            selectedProduct:null
-            
+            requestCategoryId: null,
+            selectedProduct: null
+
         };
 
         this.getProductCatalog = (_page) => {
@@ -61,7 +64,7 @@ class Catalog extends Component {
 
         this.handleInputNameChange = () => {
             console.log("==input name changed==");
-            this.setState({catalogPage:0})
+            this.setState({ catalogPage: 0 })
             let input = document.getElementById("input-product-name");
             this.setState({ requestProductName: input.value });
         }
@@ -79,8 +82,8 @@ class Catalog extends Component {
             alert("filter has been cleared, please push the search button to take effect")
         }
 
-        this.getProductDetail= (code) => {
-            console.log("Detail of: ",code);
+        this.getProductDetail = (code) => {
+            console.log("Detail of: ", code);
             //remove selected product if any
             this.props.removeEntity();
 
@@ -93,14 +96,14 @@ class Catalog extends Component {
             this.props.removeEntity();
         }
 
-        this.handleCategoryChange = ( ) => {
+        this.handleCategoryChange = () => {
             let selectBox = document.getElementById("select-category");
             let value = selectBox.value;
-            this.setState({catalogPage:0})
-            if(value != "00")
-                this.setState({requestCategoryId:value});
+            this.setState({ catalogPage: 0 })
+            if (value != "00")
+                this.setState({ requestCategoryId: value });
             else
-                this.setState({requestCategoryId:null});
+                this.setState({ requestCategoryId: null });
         }
 
     }
@@ -115,7 +118,7 @@ class Catalog extends Component {
     }
 
     componentDidUpdate() {
-        console.log("Entity:",this.props.selectedProduct);
+        console.log("Entity:", this.props.selectedProduct);
         if (this.state.firstLoad) {
             if (this.props.catalogData.filter != null) {
                 this.setState({ limit: this.props.catalogData.filter.limit });
@@ -144,33 +147,35 @@ class Catalog extends Component {
         if (products.length > 0)
             buttonData = this.createNavButtons(this.props.catalogData.totalData / this.state.limit);
 
-        let filterBox = <div className="filter-box">
-            <input className="form-control" id="input-product-name"
-                placeholder="search by product name"
-                onKeyUp={this.handleInputNameChange}
-                type="search" />
+        let categories = [];
 
-            <select defaultValue="00" onChange={this.handleOrderChange} className="form-control" id="select-order">
-                <option value="00"  >-Select Order-</option>
-                <option value="name-asc">Name [A-Z]</option>
-                <option value="name-desc">Name [Z-A]</option>
-                <option value="price-asc">Price [cheap]</option>
-                <option value="price-desc">Price [expensive]</option>
-            </select>
-            <select defaultValue="00" onChange={this.handleCategoryChange} className="form-control" id="select-category">
-                <option value="00"  >-Select Category-</option>
-                {
-                    this.props.productCategories.map(
-                        category=>{
-                            return (
-                                <option id={"cat-"+category.id} value={category.id}>{category.name}</option>
-                            )
-                        }
-                    )
-                }
-            </select>
-            <button id="btn-search" onClick={() => this.getProductCatalog(this.state.catalogPage)} className="btn-search"  >Search</button>
-            <button id="btn-clear" onClick={this.clearField} className="btn-clear"  >Clear</button>
+        this.props.productCategories.map(category => {
+            categories.push({ value: category.id, text: category.name }); 
+        })
+
+
+        let filterBox = <div className="filter-box">
+            <InputField placeholder="search by product name" onKeyUp={this.handleInputNameChange} type="search" id="input-product-name" />
+
+            <ComboBox defaultValue="00" onChange={this.handleOrderChange}
+                options={[
+                    { value: "00", text: "-Select Order-" },
+                    { value: "name-asc", text: "Name [A-Z]" },
+                    { value: "name-desc", text: "Name [Z-A]" },
+                    { value: "price-asc", text: "Price [cheap]" },
+                    { value: "price-desc", text: "Price [expensive]" }
+                ]}  id="select-order" /> 
+
+            <ComboBox defaultValue="00" onChange={this.handleOrderChange} id="select-category"
+                options={categories}
+
+            /> 
+            <ActionButtons buttonsData={[{
+                text: "Search", status: "success", onClick: () => this.getProductCatalog(this.state.catalogPage), id: "btn-search"
+            }, {
+                text: "Clear", status: 'warning', onClick: this.clearField, id: "Clear"
+            }]} />
+
             <p></p>
         </div>;
 
@@ -178,12 +183,10 @@ class Catalog extends Component {
             <h2>Catalog Page</h2>
             <p>Choose your favourite products</p>
             <div className="nav-containter">
-                {
-                    buttonData.map(b => {
-                        let active = (b.value == this.state.catalogPage)
-                        return <NavButton active={active} buttonClick={this.getProductCatalog} key={b.value} value={b.value} text={b.text} />
-                    })
-                }
+                {buttonData.map(b => {
+                    let active = (b.value == this.state.catalogPage)
+                    return <NavButton active={active} buttonClick={() => this.getProductCatalog(b.value)} key={b.value} text={b.text} />
+                })}
                 <br />
                 <span>Total item(s) : {this.props.catalogData.totalData}</span>
                 {filterBox}
@@ -199,14 +202,14 @@ class Catalog extends Component {
 
         let rendered = productCatalog;
 
-        if(this.props.detailMode){
+        if (this.props.detailMode) {
 
             let productDetail = <ProductDetail setDetailMode={this.setDetailMode} product={this.props.selectedProduct} />
             rendered = productDetail;
         }
-        
-        return ( 
-            rendered 
+
+        return (
+            rendered
         )
     }
 }
@@ -222,10 +225,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
     getProductCatalog: (request) => dispatch(actions.getProductList(request)),
-    getProductDetail: (code)=>dispatch(actions.getProductDetail(code)),
-    removeEntity:()=>dispatch(actions.removeEntity()),
-    getAllProductCategories:()=>dispatch(actions.getAllProductCategories())
-    
+    getProductDetail: (code) => dispatch(actions.getProductDetail(code)),
+    removeEntity: () => dispatch(actions.removeEntity()),
+    getAllProductCategories: () => dispatch(actions.getAllProductCategories())
+
 })
 export default withRouter(connect(
     mapStateToProps,

@@ -21,7 +21,7 @@
     background-color: darkcyan; 
 }
 
-.menu-ul li .active { 
+.menu-active { 
     background-color: darkcyan; 
     color:khaki;
 }

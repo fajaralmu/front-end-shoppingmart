@@ -1,3 +1,41 @@
 .action-button, .input-field{
     margin : 5px;
+    
 }
+
+.input-field input, .input-field select{
+    border-color:dimgray;
+    border-width: 2px;
+    background-color: white;
+    padding-right:7px;
+    padding-left:7px;
+    padding-top:5px;
+    padding-bottom:5px;
+}
+
+ button{ 
+    padding-right:7px;
+    padding-left:7px;
+    padding-top:5px;
+    padding-bottom:5px;
+    border-color: dimgray;
+    border-width : 2px ;
+    background-color: white; 
+}
+
+ button:hover{
+    cursor: pointer;
+    background-color: dimgray;
+    color: khaki
+}
+.danger{ border-color:  red; color:red }
+.danger:hover{  background-color:  red; }
+
+.warning{  border-color:  orange; color:orange}
+.warning:hover{  background-color:  orange; }
+
+.success{  border-color: darkolivegreen  ; color:darkolivegreen}
+.success:hover{  background-color:  darkolivegreen; }
+
+.submit{  border-color:  royalblue; color: royalblue}
+.submit:hover{  background-color:  royalblue; }

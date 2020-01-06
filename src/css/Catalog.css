@@ -6,7 +6,8 @@
     text-align: left
 }
 .nav-containter{
-    text-align: left
+    text-align: left;
+    margin:5px;
 }
 .filter-box{
     width: 30%;

@@ -36,14 +36,12 @@ class Menu extends Component {
                             e => {
                                 if (e.url == "#") {
                                     return (<li onClick={() => this.props.handleMenuCLick(e)} className={this.props.activeCode == e.code ? "active" : ""} key={e.name}
-                                        id={e.name}> <Link key={e.name}
-                                            className="App-link"
+                                        id={e.name}> <Link key={e.name}  className="App-link"
                                             to="#" ><div className="fill" >{e.name} </div></Link></li >
                                     )
                                 }
-                                return (<li className={this.props.activeCode == e.code ? "active" : ""} key={e.name}
-                                    id={e.name}> <Link key={e.name}
-                                        className="App-link"
+                                return (<li className={this.props.activeCode == e.code ? "menu-active" : ""} key={e.name}
+                                    id={e.name}> <Link key={e.name} className="App-link"
                                         to={e.url} ><div className="fill" >{e.name} </div></Link></li >
                                 )
                             }

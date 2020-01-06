@@ -3,11 +3,13 @@ import { connect } from 'react-redux'
 import CatalogItem from './CatalogItem'
 import NavButton from './NavButton'
 import '../css/Catalog.css'
-import '../css/bootstrap.min.css'
 import { BrowserRouter as Router, Route, Link, Switch, withRouter } from 'react-router-dom'
 import * as actions from '../redux/actionCreators'
 import * as menus from '../constant/Menus'
 import CatalogItemSupplier from './CatalogItemSupplier'
+import ActionButtons from './ActionButtons'
+import InputField from './InputField'
+import ComboBox from './ComboBox'
 
 class SupplierList extends Component {
 
@@ -60,7 +62,7 @@ class SupplierList extends Component {
         this.handleInputNameChange = () => {
             console.log("==input name changed==");
             let input = document.getElementById("input-supplier-name");
-            this.setState({catalogPage:0})
+            this.setState({ catalogPage: 0 })
             this.setState({ requestSupplierName: input.value });
         }
 
@@ -115,19 +117,21 @@ class SupplierList extends Component {
             buttonData = this.createNavButtons(this.props.suppliersData.totalData / this.state.limit);
 
         let filterBox = <div className="filter-box">
-            <input className="form-control" id="input-supplier-name"
-                placeholder="search by supplier name"
-                onKeyUp={this.handleInputNameChange}
-                type="search" />
+            <InputField placeholder="search by supplier name" onKeyUp={this.handleInputNameChange} type="search"
+                id="input-supplier-name" />
+            <ComboBox defaultValue="00" onChange={this.handleOrderChange}
+                options={[
+                    { value: "00", text: "-Select Order-" },
+                    { value: "name-asc", text: "Name [A-Z]" },
+                    { value: "name-desc", text: "Name [Z-A]" }
+                ]} id="select-order" />
 
-            <select defaultValue="00" onChange={this.handleOrderChange} className="form-control" id="select-order">
-                <option value="00"  >-Select Order-</option>
-                <option value="name-asc">Name [A-Z]</option>
-                <option value="name-desc">Name [Z-A]</option>
-            </select>
+            <ActionButtons buttonsData={[{
+                text: "Search", status: "success", onClick: () => this.getSupplierList(this.state.supplierPage), id: "btn-search"
+            }, {
+                text: "Clear", status: 'warning', onClick: this.clearField, id: "Clear"
+            }]} />
 
-            <button id="btn-search" onClick={() => this.getSupplierList(this.state.supplierPage)} className="btn-search"  >Search</button>
-            <button id="btn-clear" onClick={this.clearField} className="btn-clear"  >Clear</button>
             <p></p>
         </div>;
 
@@ -138,7 +142,7 @@ class SupplierList extends Component {
                 {
                     buttonData.map(b => {
                         let active = (b.value == this.state.supplierPage)
-                        return <NavButton active={active} buttonClick={this.getSupplierList} key={b.value} value={b.value} text={b.text} />
+                        return <NavButton active={active} buttonClick={() => this.getSupplierList(b.value)} value={b.value} text={b.text} />
                     })
                 }
                 <br />

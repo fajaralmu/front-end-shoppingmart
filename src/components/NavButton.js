@@ -15,7 +15,7 @@ class NavButton extends Component{
             className = className+" active";
         }
         return(
-            <button id={"btn-"+this.props.value} className={className} onClick={()=>this.props.buttonClick(this.props.value)}>{this.props.text }</button>
+            <button id={"btn-"+this.props.value} className={className} onClick={this.props.buttonClick}>{this.props.text }</button>
         )
     }
 

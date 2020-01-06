@@ -9,8 +9,12 @@ class ActionButtons extends Component {
         return (
             <div className="action-button-wrapper"  >
                 {this.props.buttonsData.map(buttonData => {
+                     let className = "action-button rounded";
+                     if(buttonData.status!= null ){
+                         className=className.concat(" ").concat(buttonData.status);
+                     }
                     return(
-                        <button className="action-button rounded" id={buttonData.id} onClick={buttonData.onClick}>{buttonData.text}</button>
+                        <button className={className} id={buttonData.id} onClick={buttonData.onClick}>{buttonData.text}</button>
                     )
                 })}
             </div>);

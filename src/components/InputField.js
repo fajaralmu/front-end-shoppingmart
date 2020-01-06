@@ -20,9 +20,12 @@ class InputField extends Component {
 
     render() {
         let type = this.props.type ? this.props.type : "text"; 
+        let placeholder = this.props.placeholder? this.props.placeholder:"";
         return (
-            <div className="input-field">
-               {this.props.disabled == true ? <input id={this.props.id} type={type} onKeyUp={this.handleKeyup}  disabled/>: <input id={this.props.id} type={type} onKeyUp={this.handleKeyup} />}
+            <div className="input-field ">
+               {this.props.disabled == true ? 
+               <input className="rounded" id={this.props.id} type={type} onKeyUp={this.handleKeyup} placeholder={placeholder} disabled/>
+               : <input  id={this.props.id} type={type} onKeyUp={this.handleKeyup} placeholder={placeholder} />}
             </div>
         )
     }

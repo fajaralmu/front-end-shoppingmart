@@ -229,8 +229,8 @@ class TransactionOut extends Component {
                     <ActionButtons buttonsData={[
                         { text: "Back", onClick: () => this.props.setFeatureCode(null), id: "btn-back" },
                         { text: "Back And Reset", onClick: () => { this.props.setFeatureCode(null); this.reset() }, id: "btn-back" },
-                        { id: "btn-submit-trx", text: "Submit Transaction", onClick: this.submitTransaction },
-                        { text: "Reset", id: "btn-reset-trx", onClick: this.reset }]} />
+                        { id: "btn-submit-trx", status:'submit', text: "Submit Transaction", onClick: this.submitTransaction },
+                        { text: "Reset", status:'danger', id: "btn-reset-trx", onClick: this.reset }]} />
                 </div>
                 {/* ======= product list ======== */}
                 <h3>Product List</h3>
