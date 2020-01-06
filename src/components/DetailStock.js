@@ -39,12 +39,19 @@ class DetailStock extends Component {
                                         productFlowStock.productFlow.product.name + "-" + productFlowStock.productFlow.id]
                                 },
                                 {
+                                    values:["----------------------------------"],  CS:[2]
+                                },
+                                {
                                     values: ["Remaining",
                                         productFlowStock.remainingStock + " " + productFlowStock.productFlow.product.unit.name]
+                                },{
+                                    values:["----------------------------------"],  CS:[2]
                                 },
                                 {
                                     values: ["Price",
                                         stringUtil.beautifyNominal(productFlowStock.productFlow.product.price) + ",00"]
+                                },{
+                                    values:["----------------------------------"],  CS:[2]
                                 },
                                 {
                                     values: ["Exp Date",

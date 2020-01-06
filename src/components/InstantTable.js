@@ -12,7 +12,12 @@ class InstantTable extends Component {
         return (
             <table> <tbody>
                 {rows.map(row => {
-                    return (<CrudRow values={row.values ? row.values : []}
+                    console.log("--row:",row)
+                    let colspan = null;
+                    if(row.CS!=null){
+                        colspan = row.CS;
+                    }
+                    return (<CrudRow CS={colspan} values={row.values ? row.values : []}
                         key={row.id} disabled={this.props.disabled}></CrudRow>
                     )
                 })}

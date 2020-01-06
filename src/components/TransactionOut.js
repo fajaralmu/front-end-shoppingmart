@@ -171,12 +171,13 @@ class TransactionOut extends Component {
     }
     componentDidMount() {
         document.title = "Transaction::Out";
-        if (this.props.productFlowStock && this.props.productFlowStock.productFlow)
+        if (this.props.productFlowStock && this.props.productFlowStock.productFlow
+            && document.getElementById("input-stock-id"))
             document.getElementById("input-stock-id").value = this.props.productFlowStock.productFlow.id
     }
     componentDidUpdate() {
         if (this.props.productFlowStock && this.props.productFlowStock.productFlow
-            && document.getElementById("input-stock-id") != null) {
+            && document.getElementById("input-stock-id")) {
             document.getElementById("input-stock-id").value = this.props.productFlowStock.productFlow.id
         }
     }
@@ -185,10 +186,10 @@ class TransactionOut extends Component {
         let detailStock = "";
         let message = "";
         let totalPrice = this.calculateTotalPrice();
-        
+
 
         if (this.props.productFlowStock != null) {
-            
+
             detailStock = <div className="form-panel rounded">
                 <div className="panel-title rounded-top">Product Detail</div>
                 <DetailStock productFlowStock={this.props.productFlowStock} />
@@ -229,9 +230,9 @@ class TransactionOut extends Component {
                 <div>
                     <ActionButtons buttonsData={[
                         { text: "Back", onClick: () => this.props.setFeatureCode(null), id: "btn-back" },
-                        { text: "Back And Reset", status:"warning", onClick: () => { this.props.setFeatureCode(null); this.reset() }, id: "btn-back" },
-                        { id: "btn-submit-trx", status:'submit', text: "Submit Transaction", onClick: this.submitTransaction },
-                        { text: "Reset", status:'danger', id: "btn-reset-trx", onClick: this.reset }]} />
+                        { text: "Back And Reset", status: "warning", onClick: () => { this.props.setFeatureCode(null); this.reset() }, id: "btn-back" },
+                        { id: "btn-submit-trx", status: 'submit', text: "Submit Transaction", onClick: this.submitTransaction },
+                        { text: "Reset", status: 'danger', id: "btn-reset-trx", onClick: this.reset }]} />
                 </div>
                 {/* ======= product list ======== */}
                 <h3>Product List</h3>
