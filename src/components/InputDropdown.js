@@ -9,7 +9,7 @@ class InputDropdown extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            focus:true
+            focus: true
         }
 
         this.handleKeyup = () => {
@@ -19,11 +19,15 @@ class InputDropdown extends Component {
 
         this.onBlur = () => {
             console.log("blur");
+            this.setState({ focus: false })
         }
 
-        this.onSelect = (dataValue) => {
+        this.onSelect = (dataValue, text) => {
             console.log("select value:", dataValue);
             if (this.props.onSelect) { this.props.onSelect(dataValue); }
+            if (this.props.id) {
+                document.getElementById(this.props.id).value = text;
+            }
         }
     }
 
@@ -41,16 +45,15 @@ class InputDropdown extends Component {
             dropdownComponent = <div className="dropdown">
                 {dropdownList.map(
                     data => {
-                        return (<div onClick={() => this.onSelect(data.value)} className="dropdown-item clickable">{data.text}</div>)
+                        return (<div onClick={() => this.onSelect(data.value, data.text)} className="dropdown-item clickable">{data.text}</div>)
                     })}
             </div>
         }
-        let type = this.props.type ? this.props.type : "text";
-        let placeholder = this.props.placeholder ? this.props.placeholder : "";
 
+        let placeholder = this.props.placeholder ? this.props.placeholder : "";
         return (
-            <div onBlur={this.onBlur} className="dropdown-wrapper input-field">
-                <input onFocus={()=>this.setState({focus:true})} id={this.props.id} type={type} onKeyUp={this.handleKeyup} placeholder={placeholder} />
+            <div onMouseOver={() => this.setState({ focus: true })} onMouseLeave={this.onBlur} className="dropdown-wrapper input-field">
+                <input onFocus={() => this.setState({ focus: true })} id={this.props.id} type="text" onKeyUp={this.handleKeyup} placeholder={placeholder} />
                 {dropdownComponent}
             </div>
         )

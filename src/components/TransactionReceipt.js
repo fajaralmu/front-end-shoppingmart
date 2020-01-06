@@ -18,6 +18,7 @@ class TransactionReceipt extends Component {
             let transaction = this.props.transactionData;
             transactionReceiptComponent = 
                 <InstantTable disabled={true} rows={[ 
+                    {values:[line], CS:[2]},
                     { id: "trx_code", values: ["Code", transaction.code] },
                     {values:[line], CS:[2]},
                     { id: "trx_date", values: ["Date", new String(new Date(transaction.transactionDate))] },
@@ -25,6 +26,7 @@ class TransactionReceipt extends Component {
                     { id: "trx_type", values: ["Type", transaction.type] },
                     {values:[line], CS:[2]},
                     { id: "trx_customer", values: ["Customer", transaction.customer.name] },
+                    {values:[line], CS:[2]},
                 ]} />;
         }
 

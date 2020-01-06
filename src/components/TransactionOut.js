@@ -227,6 +227,7 @@ class TransactionOut extends Component {
         }
 
         let customerList = [];
+      
         if (this.props.customersData != null) {
             for (let index = 0; index < this.props.customersData.length; index++) {
                 const customer = this.props.customersData[index];
