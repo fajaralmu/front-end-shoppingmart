@@ -4,6 +4,7 @@ import '../css/Dashboard.css'
 import * as menus from '../constant/Menus'
 import DashboardMenu from './DashboardMenu';
 import TransactionOut from './TransactionOut';
+import ErrorPage from './ErrorPage';
 
 class Dashboard extends Component {
 
@@ -37,13 +38,16 @@ class Dashboard extends Component {
                     break;
             }
         }
-        return (
-            <div className="section-container">
-                <h2>Welcome to Universal Shop App!</h2>
-                <p>Happy shop keeping</p>
-                {mainComponent}
-            </div>
-        )
+        if (this.props.loginStatus == true)
+            return (
+                <div className="section-container">
+                    <h2>Welcome to Universal Shop App!</h2>
+                    <p>Happy shop keeping</p>
+                    {mainComponent}
+                </div>
+            )
+        else
+            return <ErrorPage message="OOPS! Page not found" />
     }
 
 }

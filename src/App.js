@@ -84,7 +84,7 @@ class App extends Component {
     />;
 
     if (this.props.loginStatus == true) {
-      loginComponent = <Dashboard setMenuCode={this.setMenuCode} />
+      loginComponent = <Dashboard loginStatus={this.props.loginStatus} setMenuCode={this.setMenuCode} />
     }
 
     let menus = this.setMenus();
@@ -92,6 +92,7 @@ class App extends Component {
     return (
       <div className="App">
         <Header title="Universal Good Shop" /> 
+        {/*this.props.loginStatus == true?"Logged In":"Un Logged"*/ }
         <table className="main-layout">
           <tbody>
             <tr valign="top">
@@ -134,7 +135,7 @@ class App extends Component {
                      */}
                     <Route exact path="/dashboard" render={
                       (renderProps) =>
-                        <Dashboard setMenuCode={this.setMenuCode} />
+                        <Dashboard loginStatus={this.props.loginStatus } setMenuCode={this.setMenuCode} />
 
                     }></Route>
 

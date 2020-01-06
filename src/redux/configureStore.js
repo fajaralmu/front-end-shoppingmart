@@ -208,6 +208,7 @@ const performLoginMiddleware = store => next => action => {
                 console.log("loginKey: ", loginKey);
                 loginSuccess = true;
                 localStorage.setItem("loginKey", loginKey);
+                alert("Login Success!");
 
             }
             let newAction = Object.assign({}, action, {
