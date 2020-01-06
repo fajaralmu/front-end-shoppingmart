@@ -44,3 +44,20 @@
 
 .submit{  border-color:  royalblue; color: royalblue}
 .submit:hover{  background-color:  royalblue; }
+
+.dropdown{
+    background-color: ivory;
+    position:   absolute;
+    width: auto; 
+    width:100%; 
+    overflow: scroll;
+}
+.dropdown-wrapper{
+    position: relative;
+}
+.dropdown-item{
+    margin : 10px;  
+}
+.dropdown-item:hover{
+    color:green
+}

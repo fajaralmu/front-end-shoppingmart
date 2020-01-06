@@ -24,7 +24,8 @@ export const configureStore = () => {
             //transaction
             getStockInfoMiddleware,
             submitPurchaseTransactionMiddleware,
-            resetPurchaseTransactionMiddleware
+            resetPurchaseTransactionMiddleware,
+            getCustomerListMiddleware
 
         )
     );
@@ -32,9 +33,41 @@ export const configureStore = () => {
     return store;
 }
 
+const getCustomerListMiddleware = store => next => action => {
+    if (!action.meta || action.meta.type !== types.FETCH_CUSTOMER_LIST) { return next(action); }
+
+    if (action.payload.filter.fieldsFilter.name == null || action.payload.filter.fieldsFilter.name.trim() == "") {
+        let newAction = Object.assign({}, action, {
+            payload: {entities:[]}
+        });
+        delete newAction.meta;
+        store.dispatch(newAction);
+    } else
+        fetch(action.meta.url, {
+            method: 'POST',
+            body: JSON.stringify(action.payload),
+            headers: commonHeader
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.debug("Response:", data);
+                if (data.entities == null || data.entities.length == 0) {
+                    alert("Data not found!");
+                    return;
+                }
+                let newAction = Object.assign({}, action, {
+                    payload: data
+                });
+                delete newAction.meta;
+                store.dispatch(newAction);
+            })
+            .catch(err => console.log(err));
+}
+
+
 const resetPurchaseTransactionMiddleware = store => next => action => {
-    if (!action.meta || action.meta.type !== types.RESET_TRX_PURCHASE) {  return next(action); }
-    let newAction = Object.assign({}, action, {   payload: null });
+    if (!action.meta || action.meta.type !== types.RESET_TRX_PURCHASE) { return next(action); }
+    let newAction = Object.assign({}, action, { payload: null });
     delete newAction.meta;
     store.dispatch(newAction);
 
@@ -53,13 +86,13 @@ const submitPurchaseTransactionMiddleware = store => next => action => {
         .then(response => response.json())
         .then(data => {
             console.debug("Response:", data);
-            if (data.code!= "00") {
+            if (data.code != "00") {
                 alert("Transaction Failed!");
                 return;
             }
             alert("Transaction Success!")
             data.transaction.productFlows = action.payload.productFlows;
-            let newAction = Object.assign({}, action, {  payload: data  });
+            let newAction = Object.assign({}, action, { payload: data });
             delete newAction.meta;
             store.dispatch(newAction);
         })
@@ -93,9 +126,7 @@ const getStockInfoMiddleware = store => next => action => {
 }
 
 const getSupplierListMiddleware = store => next => action => {
-    if (!action.meta || action.meta.type !== types.FETCH_SUPPLIER_LIST) {
-        return next(action);
-    }
+    if (!action.meta || action.meta.type !== types.FETCH_SUPPLIER_LIST) { return next(action); }
 
     fetch(action.meta.url, {
         method: 'POST',
@@ -246,8 +277,8 @@ const loadMoreSupplierMiddleware = store => next => action => {
 }
 
 const removeEntityMiddleware = store => next => action => {
-    if (!action.meta || action.meta.type !== types.REMOVE_SHOP_ENTITY) {  return next(action); }
-    let newAction = Object.assign({}, action, {   payload: null });
+    if (!action.meta || action.meta.type !== types.REMOVE_SHOP_ENTITY) { return next(action); }
+    let newAction = Object.assign({}, action, { payload: null });
     delete newAction.meta;
     store.dispatch(newAction);
 

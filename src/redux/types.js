@@ -9,3 +9,4 @@ export const DO_LOGOUT = "do_logout";
 export const GET_STOCK_INFO = "get_stock_info";
 export const SUBMIT_TRX_PURCHASE = "submit_payment";
 export const RESET_TRX_PURCHASE = "reset_purchase";
+export const FETCH_CUSTOMER_LIST = "fetch_cust_list";

@@ -4,8 +4,18 @@ const apiEntityBaseUrl = "http://localhost:8080/universal-good-shop/api/entity/"
 const apiAccount = "http://localhost:8080/universal-good-shop/api/account/"
 const apiTransaction = "http://localhost:8080/universal-good-shop/api/transaction/";
 
+export const getCustomerList = (name) => ({
+    type: types.FETCH_CUSTOMER_LIST,
+    payload: {
+        "entity": "customer", "filter": { "page": 0, "limit": 10, "fieldsFilter": { "name": name } }
+    },
+    meta: {
+        type: types.FETCH_CUSTOMER_LIST,
+        url: apiEntityBaseUrl.concat("get")
+    }
+})
 
-export const resetPurchaseTransaction = () => ({ 
+export const resetPurchaseTransaction = () => ({
     type: types.RESET_TRX_PURCHASE,
     payload: {},
     meta: { type: types.RESET_TRX_PURCHASE }
@@ -13,7 +23,7 @@ export const resetPurchaseTransaction = () => ({
 export const submitPurchaseTransaction = (request) => ({
     type: types.SUBMIT_TRX_PURCHASE,
     payload: {
-        customer: { id: 3 },
+        customer: request.customer,
         productFlows: request.productFlows
     },
     meta: {
@@ -22,7 +32,7 @@ export const submitPurchaseTransaction = (request) => ({
     }
 })
 
-export const getStockInfo = (stockId) => ({ 
+export const getStockInfo = (stockId) => ({
     type: types.GET_STOCK_INFO,
     payload: { productFlow: { id: stockId } },
     meta: {
@@ -41,7 +51,7 @@ export const performLogout = () => {
 }
 
 export const performLogin = (username, password) => {
-    let loginRequest = { 
+    let loginRequest = {
         type: types.DO_LOGIN,
         payload: {
             user: { username: username, password: password }
@@ -51,7 +61,7 @@ export const performLogin = (username, password) => {
     return loginRequest;
 }
 
-export const getAllProductCategories = () => ({ 
+export const getAllProductCategories = () => ({
     type: types.FETCH_PRODUCT_CATEGORIES_ALL,
     payload: {
         "entity": "category",
@@ -70,7 +80,7 @@ export const getAllProductCategories = () => ({
 })
 
 export const getSupplierList = (request) => {
-    let requested = { 
+    let requested = {
         type: types.FETCH_SUPPLIER_LIST,
         payload: {
             entity: "supplier",
@@ -99,7 +109,7 @@ export const getSupplierList = (request) => {
 
 export const getProductList = (request) => {
 
-    let requested = { 
+    let requested = {
         type: types.FETCH_PRODUCT_LIST,
         payload: {
             entity: "product",
@@ -128,10 +138,10 @@ export const getProductList = (request) => {
 }
 
 
-export const getProductDetail = (code) => ({ 
+export const getProductDetail = (code) => ({
     type: types.FETCH_PRODUCT_DETAIL,
     payload: {
-        
+
         entity: "product",
         filter: {
             limit: 1,
@@ -150,13 +160,13 @@ export const getProductDetail = (code) => ({
     }
 })
 
-export const removeEntity = () => ({ 
+export const removeEntity = () => ({
     type: types.REMOVE_SHOP_ENTITY,
     payload: {},
-    meta: {  type: types.REMOVE_SHOP_ENTITY  }
+    meta: { type: types.REMOVE_SHOP_ENTITY }
 })
 
-export const loadMoreSupplier = (page, productId) => ({ 
+export const loadMoreSupplier = (page, productId) => ({
     type: types.LOAD_MORE_SUPPLIER,
     payload: { "filter": { "page": page, "fieldsFilter": { "productId": productId } } },
     meta: {
