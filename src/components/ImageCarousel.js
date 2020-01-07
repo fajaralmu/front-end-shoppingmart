@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import '../css/Common.css'
 import '../css/ImageCarousel.css'
 import ActionButtons from './ActionButtons';
+import InstantTable from './InstantTable';
+import Label from './Label';
+import ActionButton from './ActionButton';
 
 class ImageCarousel extends Component {
     constructor(props) {
@@ -43,10 +46,15 @@ class ImageCarousel extends Component {
             <div className="carousel rounded">
 
                 {image}
-                <ActionButtons buttonsData={[
-                    { text: "<", id: "btn-prev", onClick: this.prev },
-                    { text: ">", id: "btn-next", onClick: this.next }
-                ]} />
+                <InstantTable className="carousel-navigation" rows={[{
+                    values: [
+                        <ActionButton text="<" id="btn-prev" onClick={this.prev} />,
+                        <Label text={this.state.index + 1 + "/" + (this.props.imageUrls ? this.props.imageUrls.length : 1)} />,
+                        <ActionButton text=">" id="btn-next" onClick={this.next} />
+                    ]
+                }]} />
+
+
             </div>
         )
     }

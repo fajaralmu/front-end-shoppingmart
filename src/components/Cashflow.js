@@ -86,7 +86,7 @@ class Cashflow
             { status: "success", id: "btn-get-cashflow-detail", text: "Search", onClick: this.getCashflowDetail }]}
         />;
 
-        const filterBox = <div className="filter-box" >
+        const filterBox = <div className="filter-box rounded" >
             <InstantTable valign="bottom" rows={[{ values: [filterDateFrom, filterDateTo, filterButtons] }]} />
 
         </div>
@@ -120,6 +120,7 @@ class Cashflow
             <div className="cashflow-container">
                 <h2>Cashflow Page</h2>
                 {filterBox}
+                <div><p></p></div>
                 {cashflowListComponent}
             </div>
         )

@@ -9,8 +9,12 @@ class InstantTable extends Component {
     render() {
         let rows = [];
         if (this.props.rows) { rows = this.props.rows; }
+        let className = "table";
+        if(this.props.className){
+            className+=" "+this.props.className;
+        }
         return (
-            <table> <tbody>
+            <table className={className}> <tbody>
                 {rows.map(row => {
                     
                     let colspan = null;
