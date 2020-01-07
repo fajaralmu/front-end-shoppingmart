@@ -24,6 +24,7 @@ export const configureStore = () => {
             //transaction
             getStockInfoMiddleware,
             submitPurchaseTransactionMiddleware,
+            submitSupplyTransactionMiddleware,
             resetPurchaseTransactionMiddleware,
             getCustomerListMiddleware,
             getProductListTrxMiddleware
@@ -100,6 +101,33 @@ const resetPurchaseTransactionMiddleware = store => next => action => {
     store.dispatch(newAction);
 
 }
+
+const submitSupplyTransactionMiddleware = store => next => action => {
+    if (!action.meta || action.meta.type !== types.SUBMIT_TRX_SUPPLY) {
+        return next(action);
+    }
+
+    fetch(action.meta.url, {
+        method: 'POST',
+        body: JSON.stringify(action.payload),
+        headers: { 'Content-Type': 'application/json', 'requestId': '1234', 'loginKey': localStorage.getItem("loginKey") }
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.debug("Response:", data);
+            if (data.code != "00") {
+                alert("Transaction Failed!");
+                return;
+            }
+            alert("Transaction Success!")
+            data.transaction.productFlows = action.payload.productFlows;
+            let newAction = Object.assign({}, action, { payload: data });
+            delete newAction.meta;
+            store.dispatch(newAction);
+        })
+        .catch(err => console.log(err));
+}
+
 
 const submitPurchaseTransactionMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.SUBMIT_TRX_PURCHASE) {

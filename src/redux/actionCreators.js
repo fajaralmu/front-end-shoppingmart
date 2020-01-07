@@ -7,16 +7,16 @@ const apiTransaction = "http://localhost:8080/universal-good-shop/api/transactio
 export const getProductListTrx = (name) => ({
     type: types.FETCH_PRODUCT_LIST_TRX,
     payload: {
-        entity : "product", filter : { page: 0, limit: 10, fieldsFilter: { name: name } }
+        entity: "product", filter: { page: 0, limit: 10, fieldsFilter: { name: name } }
     },
     meta: {
-        type: types.FETCH_PRODUCT_LIST,  url: apiEntityBaseUrl.concat("get")
+        type: types.FETCH_PRODUCT_LIST, url: apiEntityBaseUrl.concat("get")
     }
 })
 export const getCustomerList = (name) => ({
     type: types.FETCH_CUSTOMER_LIST,
     payload: {
-        entity : "customer", filter : { page: 0, limit: 10, fieldsFilter: { name: name } }
+        entity: "customer", filter: { page: 0, limit: 10, fieldsFilter: { name: name } }
     },
     meta: {
         type: types.FETCH_CUSTOMER_LIST, url: apiEntityBaseUrl.concat("get")
@@ -28,16 +28,34 @@ export const resetPurchaseTransaction = () => ({
     payload: {},
     meta: { type: types.RESET_TRX_PURCHASE }
 })
-export const submitPurchaseTransaction = (request) => ({
-    type: types.SUBMIT_TRX_PURCHASE,
-    payload: {
-        customer: request.customer,
-        productFlows: request.productFlows
-    },
-    meta: {
-        type: types.SUBMIT_TRX_PURCHASE, url: apiTransaction.concat("purchase")
-    }
-})
+export const submitPurchaseTransaction = (request) => {
+    console.log("Submit Supply Purchase...")
+    let requested = {
+        type: types.SUBMIT_TRX_PURCHASE,
+        payload: {
+            customer: request.customer,
+            productFlows: request.productFlows
+        },
+        meta: {
+            type: types.SUBMIT_TRX_PURCHASE, url: apiTransaction.concat("purchase")
+        }
+    };
+    return requested;
+}
+export const submitSupplyTrx = (request) => {
+    console.log("Submit Supply Trx...")
+    let requested = {
+        type: types.SUBMIT_TRX_SUPPLY,
+        payload: {
+            supplier: request.supplier,
+            productFlows: request.productFlows
+        },
+        meta: {
+            type: types.SUBMIT_TRX_SUPPLY, url: apiTransaction.concat("supply")
+        }
+    };
+    return requested;
+}
 
 export const getStockInfo = (stockId) => ({
     type: types.GET_STOCK_INFO,
@@ -70,7 +88,7 @@ export const performLogin = (username, password) => {
 export const getAllProductCategories = () => ({
     type: types.FETCH_PRODUCT_CATEGORIES_ALL,
     payload: {
-        entity:"category",
+        entity: "category",
         filter: {
             limit: 0,
             page: 0,

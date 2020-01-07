@@ -22,7 +22,7 @@ class TransactionIn
 
     constructor(props) {
         super(props);
-        this.state = { selectedProduct: {}, supplier: {}, showDetail: false, productFlows: [], messageShow: false, messageType: "" }
+        this.state = { product: null, supplier: {}, showDetail: false, productFlows: [], messageShow: false, messageType: "" }
 
         this.getProductList = () => {
             let productName = document.getElementById("input-product-name").value;
@@ -30,9 +30,9 @@ class TransactionIn
             this.setState({ showDetail: true })
         }
 
-        this.isExistInTheChart = (flowId) => {
+        this.isExistInTheChart = (productId) => {
             if (this.state.productFlows == null) return false;
-            return this.getProductFlow(flowId) != null;
+            return this.getProductFlow(productId) != null;
         }
 
         this.addToCart = () => {
@@ -40,20 +40,22 @@ class TransactionIn
                 alert("Please provide valid quantity!"); return;
             }
             let quantity = document.getElementById("input-quantity").value;
-            let selectedProduct = this.props.selectedProduct;
-            if (quantity > selectedProduct.remainingStock) {
-                alert("Stock unavailable!"); return;
-            }
-
-            let productFlow = selectedProduct.productFlow;
-            if (this.isExistInTheChart(productFlow.id))
+            let price = document.getElementById("input-product-price").value;
+            let expDate = document.getElementById("input-product-exp-date").value;
+            let product = this.state.product 
+ 
+            if (this.isExistInTheChart(product.id))
                 if (!window.confirm("The product already exist in the chart, do you want to override it?"))
                     return;
 
             let ID = Math.floor(Math.random() * 1000);
             let newProductFlow = {
-                "id": ID, "product": productFlow.product, "price": productFlow.product.price,
-                "count": quantity, "expiryDate": productFlow.expiryDate, "flowReferenceId": productFlow.id
+                "id": ID,
+                "product":  product, 
+                "price": price,
+                "count": quantity, 
+                "expiryDate": expDate,
+                flowReferenceId: product.id
             };
 
             //update list in the state
@@ -63,9 +65,10 @@ class TransactionIn
         this.addProductFlow = (productFlow) => {
             let currentFlows = this.state.productFlows;
             //update
-            if (this.getProductFlow(productFlow.flowReferenceId) != null) {
+            if (this.getProductFlow(productFlow.product.id) != null) {
                 for (let index = 0; index < this.state.productFlows.length; index++)
-                    if (this.state.productFlows[index].flowReferenceId == productFlow.flowReferenceId) currentFlows[index] = productFlow;
+                    if (this.state.productFlows[index].product.id == productFlow.product.id) 
+                        currentFlows[index] = productFlow;
 
             } else
                 currentFlows.push(productFlow); //add new
@@ -75,10 +78,18 @@ class TransactionIn
             this.clearFields("input-supplier-name");
         }
 
-        this.getProductFlow = (flowId) => {
+        this.getProductFlow = (productId) => {
             if (this.state.productFlows == null) return null;
-            for (let index = 0; index < this.state.productFlows.length; index++) {
-                if (this.state.productFlows[index].flowReferenceId == flowId) return this.state.productFlows[index];
+            for (let i = 0; i < this.state.productFlows.length; i++) {
+                if (this.state.productFlows[i].product.id == productId) return this.state.productFlows[i];
+            }
+            return null;
+        }
+
+        this.getProduct = (id) => {
+            if (this.state.products == null) return null;
+            for (let index = 0; index < this.state.products.length; index++) {
+                if (this.state.products[index].id == id) return this.state.products[id];
             }
             return null;
         }
@@ -96,10 +107,18 @@ class TransactionIn
             }
         }
 
-        this.handleEdit = (productName) => {
-            alert("will Edit: " + productName);
-            this.props.getProductList(productName);
-            document.getElementById("input-quantity").value = this.getProductFlow(productName).count;
+        this.handleEdit = (productId) => {
+            alert("will Edit: " + productId);
+            let productFlow = this.getProductFlow(productId);
+            if(null == productFlow){
+                alert("Data not found");
+                return;
+            }
+            document.getElementById("input-quantity").value = productFlow.count;
+            document.getElementById("input-product-price").value = productFlow.price;
+            document.getElementById("input-product-name").value = productFlow.product.name;
+            document.getElementById("input-product-exp-date").value = productFlow.expiryDate;
+            this.setState({product:productFlow.product})
         }
 
         this.handleDelete = (id) => {
@@ -129,7 +148,7 @@ class TransactionIn
             if (!window.confirm("Are you sure want to proceed?"))
                 return;
             let request = { productFlows: this.state.productFlows, supplier: this.state.supplier };
-            this.props.submitPurchaseTransaction(request);
+            this.props.submitSupplyTransaction(request);
         }
 
         this.endMessage = () => { this.setState({ messageShow: false }) }
@@ -242,7 +261,7 @@ class TransactionIn
                             { values: [<InputField id="input-product-exp-date" type="date" placeholder="input product exp date" />] }
                         ]}
                     />
-                    {this.props.selectedProduct != null ? <ActionButton text="Save" onClick={this.addToCart} /> : ""}
+                    {this.state.product != null ? <ActionButton text="Save" onClick={this.addToCart} /> : ""}
                 </div>
             </td><td> {detailStock} </td></tr>
         </tbody></table>;
@@ -287,7 +306,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
     getProductList: (productName) => dispatch(actions.getProductListTrx(productName)),
-    submitPurchaseTransaction: (request) => dispatch(actions.submitPurchaseTransaction(request)),
+    submitSupplyTransaction: (request) => dispatch(actions.submitSupplyTrx(request)),
     resetPurchaseTransaction: () => dispatch(actions.resetPurchaseTransaction()),
     getSupplierList: (name) => dispatch(actions.getSupplierList({ name: name, page: 0 }))
 })
