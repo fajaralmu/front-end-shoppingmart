@@ -4,14 +4,22 @@ const apiEntityBaseUrl = "http://localhost:8080/universal-good-shop/api/entity/"
 const apiAccount = "http://localhost:8080/universal-good-shop/api/account/"
 const apiTransaction = "http://localhost:8080/universal-good-shop/api/transaction/";
 
+export const getProductListTrx = (name) => ({
+    type: types.FETCH_PRODUCT_LIST_TRX,
+    payload: {
+        entity : "product", filter : { page: 0, limit: 10, fieldsFilter: { name: name } }
+    },
+    meta: {
+        type: types.FETCH_PRODUCT_LIST,  url: apiEntityBaseUrl.concat("get")
+    }
+})
 export const getCustomerList = (name) => ({
     type: types.FETCH_CUSTOMER_LIST,
     payload: {
-        "entity": "customer", "filter": { "page": 0, "limit": 10, "fieldsFilter": { "name": name } }
+        entity : "customer", filter : { page: 0, limit: 10, fieldsFilter: { name: name } }
     },
     meta: {
-        type: types.FETCH_CUSTOMER_LIST,
-        url: apiEntityBaseUrl.concat("get")
+        type: types.FETCH_CUSTOMER_LIST, url: apiEntityBaseUrl.concat("get")
     }
 })
 
@@ -27,8 +35,7 @@ export const submitPurchaseTransaction = (request) => ({
         productFlows: request.productFlows
     },
     meta: {
-        type: types.SUBMIT_TRX_PURCHASE,
-        url: apiTransaction.concat("purchase")
+        type: types.SUBMIT_TRX_PURCHASE, url: apiTransaction.concat("purchase")
     }
 })
 
@@ -36,8 +43,7 @@ export const getStockInfo = (stockId) => ({
     type: types.GET_STOCK_INFO,
     payload: { productFlow: { id: stockId } },
     meta: {
-        type: types.GET_STOCK_INFO,
-        url: apiTransaction.concat("stockinfo")
+        type: types.GET_STOCK_INFO, url: apiTransaction.concat("stockinfo")
     }
 })
 
@@ -64,13 +70,13 @@ export const performLogin = (username, password) => {
 export const getAllProductCategories = () => ({
     type: types.FETCH_PRODUCT_CATEGORIES_ALL,
     payload: {
-        "entity": "category",
-        "filter": {
-            "limit": 0,
-            "page": 0,
-            "orderBy": null,
-            "orderType": null,
-            "fieldsFilter": {}
+        entity:"category",
+        filter: {
+            limit: 0,
+            page: 0,
+            orderBy: null,
+            orderType: null,
+            fieldsFilter: {}
         }
     },
     meta: {
@@ -168,7 +174,7 @@ export const removeEntity = () => ({
 
 export const loadMoreSupplier = (page, productId) => ({
     type: types.LOAD_MORE_SUPPLIER,
-    payload: { "filter": { "page": page, "fieldsFilter": { "productId": productId } } },
+    payload: { filter: { page: page, fieldsFilter: { "productId": productId } } },
     meta: {
         type: types.LOAD_MORE_SUPPLIER,
         url: apiBaseUrl.concat("moresupplier")

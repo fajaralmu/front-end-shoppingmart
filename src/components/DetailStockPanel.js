@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
-import '../css/DetailStock.css'
+import '../css/DetailProductPanel.css'
 import Label from './Label';
 import * as url from '../constant/Url'
 import InputField from './InputField';
 import * as stringUtil from '../utils/StringUtil'
 import InstantTable from './InstantTable';
 
-class DetailStock extends Component {
+class DetailStockPanel extends Component {
     constructor(props) {
         super(props)
     }
@@ -16,7 +16,6 @@ class DetailStock extends Component {
     }
 
     render() {
-
         let productFlowStock = this.props.productFlowStock;
         if (this.props.productFlowStock == null || this.props.productFlowStock.productFlow == null || this.props.productFlowStock.productFlow.product == null) {
             productFlowStock = {
@@ -68,4 +67,4 @@ class DetailStock extends Component {
 
 }
 
-export default DetailStock;
+export default DetailStockPanel;

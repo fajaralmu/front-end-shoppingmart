@@ -12,7 +12,7 @@ class InstantTable extends Component {
         return (
             <table> <tbody>
                 {rows.map(row => {
-                    console.log("--row:",row)
+                    
                     let colspan = null;
                     if(row.CS!=null){
                         colspan = row.CS;

@@ -4,17 +4,22 @@ import * as menus from '../constant/Menus'
 import InputField from './InputField';
 import ActionButton from './ActionButton'
 import Label from './Label';
-import  Message from './Message'
+import Message from './Message'
+import { withRouter } from 'react-router';
 
 class Login extends Component {
+
     constructor(props) {
         super(props);
 
         this.state = {
             username: null,
             password: null,
-            showMessageLoginFailed:false
+            showMessageLoginFailed: false
         }
+
+
+
         this.handleUsername = (value) => {
             this.setState({ username: value });
         }
@@ -24,37 +29,45 @@ class Login extends Component {
 
         this.doLogin = () => {
             console.log("u:", this.state.username, ",p:", this.state.password);
-            this.props.doLogin(document.getElementById("username-field").value, 
-            document.getElementById("password-field").value);
+            this.props.doLogin(document.getElementById("username-field").value,
+                document.getElementById("password-field").value);
         }
 
         this.endMessage = () => {
-            this.setState({showMessageLoginFailed:false})
+            this.setState({ showMessageLoginFailed: false })
+        }
+
+        this.validateLoginStatus = () => {
+            if (this.props.loginStatus == true) this.props.history.push("/dashboard");
         }
     }
 
+
     componentDidMount() {
+        this.validateLoginStatus();
         this.props.setMenuCode(menus.LOGIN);
         document.title = "Login";
+
     }
 
-    componentDidUpdate(){
+    componentDidUpdate() {
+        this.validateLoginStatus();
         // if(this.props.loginAttempt == false && this.state.showMessageLoginFailed == false){
         //     this.setState({showMessageLoginFailed:true})
         // }
     }
 
     render() {
-      
+
         let message = <p>
-            {this.props.loginFailed  ?  <Message endMessage={this.endMessage} type="failed" text="Login Failed" />:""}
+            {this.props.loginFailed ? <Message endMessage={this.endMessage} type="failed" text="Login Failed" /> : ""}
         </p>
 
         return (
             <div className="section-container">
                 <h2>Login Page</h2>
-               
-                {message} 
+
+                {message}
                 <Label text="Username" />
                 <InputField id="username-field" onKeyUp={this.handleUsername} />
                 <Label text="Password" />
@@ -66,4 +79,4 @@ class Login extends Component {
 }
 
 
-export default Login;
+export default withRouter(Login);

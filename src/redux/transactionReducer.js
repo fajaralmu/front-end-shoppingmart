@@ -4,7 +4,8 @@ export const initState = {
     productFlowStock: null,
     transactionData: null,
     successTransaction: false,
-    customersData: null
+    customersData: null,
+    productsData: null
 };
 
 export const reducer = (state = initState, action) => {
@@ -17,7 +18,10 @@ export const reducer = (state = initState, action) => {
         case types.RESET_TRX_PURCHASE:
             return initState;
         case types.FETCH_CUSTOMER_LIST:
-             result = { ...state, customersData: action.payload.entities };
+            result = { ...state, customersData: action.payload.entities };
+            return result;
+        case types.FETCH_PRODUCT_LIST_TRX:
+            result = { ...state, productsData: action.payload.entities };
             return result;
         default:
             return { ...state };

@@ -5,6 +5,8 @@ import * as menus from '../constant/Menus'
 import DashboardMenu from './DashboardMenu';
 import TransactionOut from './TransactionOut';
 import ErrorPage from './ErrorPage';
+import { withRouter } from 'react-router';
+import TransactionIn from './TransactionIn';
 
 class Dashboard extends Component {
 
@@ -17,11 +19,19 @@ class Dashboard extends Component {
         this.setFeatureCode = (code) => {
             this.setState({ featureCode: code });
         }
+        this.validateLoginStatus = () => {
+            if (this.props.loginStatus != true) this.props.history.push("/login");
+        }
     }
 
     componentDidMount() {
+        this.validateLoginStatus();
         this.props.setMenuCode(menus.DASHBOARD);
         document.title = "Dashboard";
+    }
+
+    componentDidUpdate() {
+        this.validateLoginStatus();
     }
 
     render() {
@@ -33,7 +43,9 @@ class Dashboard extends Component {
                 case 'trxOut':
                     mainComponent = <TransactionOut setFeatureCode={this.setFeatureCode} />
                     break;
-
+                case 'trxIn':
+                    mainComponent = <TransactionIn setFeatureCode={this.setFeatureCode} />
+                    break;
                 default:
                     break;
             }
@@ -52,4 +64,4 @@ class Dashboard extends Component {
 
 }
 
-export default Dashboard;
+export default withRouter(Dashboard);

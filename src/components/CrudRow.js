@@ -18,8 +18,7 @@ class CrudRow extends Component {
         }
     }
 
-    render() {
-        console.log("CS:", this.props.CS);
+    render() { 
         let values = this.props.values;
         const defaultColspan = 1;
         if (null == values) {

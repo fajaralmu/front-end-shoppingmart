@@ -51,6 +51,7 @@
     width: auto; 
     width:100%; 
     overflow: scroll;
+    z-index: 1;
 }
 .dropdown-wrapper{
     position: relative;

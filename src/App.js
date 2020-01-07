@@ -81,11 +81,10 @@ class App extends Component {
       doLogin={this.props.performLogin}
       loginFailed={this.props.loginFailed}
       loginAttempt={this.props.loginAttempt}
+      loginStatus={this.props.loginStatus}
     />;
 
-    if (this.props.loginStatus == true) {
-      loginComponent = <Dashboard loginStatus={this.props.loginStatus} setMenuCode={this.setMenuCode} />
-    }
+     
 
     let menus = this.setMenus();
 

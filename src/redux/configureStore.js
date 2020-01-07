@@ -25,12 +25,42 @@ export const configureStore = () => {
             getStockInfoMiddleware,
             submitPurchaseTransactionMiddleware,
             resetPurchaseTransactionMiddleware,
-            getCustomerListMiddleware
+            getCustomerListMiddleware,
+            getProductListTrxMiddleware
 
         )
     );
 
     return store;
+}
+
+const getProductListTrxMiddleware = store => next => action => {
+    if (!action.meta || action.meta.type !== types.FETCH_PRODUCT_LIST_TRX) { return next(action); }
+
+    if (action.payload.filter.fieldsFilter.name == null || action.payload.filter.fieldsFilter.name.trim() == "") {
+        let newAction = Object.assign({}, action, {
+            payload: {entities:[]}
+        });
+        delete newAction.meta;
+        store.dispatch(newAction);
+    } else
+        fetch(action.meta.url, {
+            method: 'POST',
+            body: JSON.stringify(action.payload),
+            headers: commonHeader
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.debug("Response:", data);
+                if (data.entities == null || data.entities.length == 0) {
+                    alert("Data not found!");
+                    return;
+                }
+                let newAction = Object.assign({}, action, {  payload: data  });
+                delete newAction.meta;
+                store.dispatch(newAction);
+            })
+            .catch(err => console.log(err));
 }
 
 const getCustomerListMiddleware = store => next => action => {
@@ -55,9 +85,7 @@ const getCustomerListMiddleware = store => next => action => {
                     alert("Data not found!");
                     return;
                 }
-                let newAction = Object.assign({}, action, {
-                    payload: data
-                });
+                let newAction = Object.assign({}, action, {  payload: data  });
                 delete newAction.meta;
                 store.dispatch(newAction);
             })
