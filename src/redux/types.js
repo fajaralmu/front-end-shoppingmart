@@ -13,3 +13,4 @@ export const RESET_TRX_PURCHASE = "reset_purchase";
 export const FETCH_CUSTOMER_LIST = "fetch_cust_list";
 export const FETCH_PRODUCT_LIST_TRX = "fetch_product_list";
 export const GET_CASHFLOW_INFO = "get_cashflow";
+export const GET_CASHFLOW_DETAIL = "get_cashflow_detail";

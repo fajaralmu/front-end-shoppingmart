@@ -34,15 +34,19 @@
 .dashboard-menu-item{
     text-align: center; 
     margin:5px;
-     
+    vertical-align: middle;
     height:100px;
     width:100px;
     color:bisque;
-    background-color: darkslateblue
+    background-color: darkslateblue;
+    border-top-right-radius: 11px;
+    border-top-left-radius: 11px;
 }
-
+  
 .dashboard-menu-item:hover{
-    background-color: darkslategray
+    background-color: darkslategray; 
+    border-bottom-right-radius: 11px;
+    border-bottom-left-radius: 11px;
 }
 
 a {

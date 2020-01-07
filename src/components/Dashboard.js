@@ -78,12 +78,12 @@ class Dashboard extends Component {
                 <ComboBoxes values={[
                     {
                         id: "select-month",
-                        defaultValue: componentUtil.getCurrentMMYY()[0], onChange: this.handleOrderChange,
+                        defaultValue: componentUtil.getCurrentMMYY()[0], 
                         options: componentUtil.getDropdownOptionsMonth()
                     },
                     {
                         id: "select-year",
-                        defaultValue: componentUtil.getCurrentMMYY()[1], onChange: this.handleOrderChange,
+                        defaultValue: componentUtil.getCurrentMMYY()[1], 
                         options: componentUtil.getDropdownOptionsYear(2017, 2020)
                     }
                 ]} />
@@ -92,8 +92,8 @@ class Dashboard extends Component {
                     <InstantTable disabled={true}
                         rows={[{
                             values: [
-                                <Card title={"My earning-"+cashflowInfoOut.month+"/"+cashflowInfoOut.year} content={earningContent} />,
-                                <Card title={"My spending-"+cashflowInfoIn.month+"/"+cashflowInfoIn.year} content={spendingContent} />
+                                <Card title={"My earning in "+cashflowInfoOut.month+"/"+cashflowInfoOut.year} content={earningContent} />,
+                                <Card title={"My spending in "+cashflowInfoIn.month+"/"+cashflowInfoIn.year} content={spendingContent} />
                             ]
                         }]} />
                 </div>

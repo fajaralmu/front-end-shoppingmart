@@ -16,6 +16,7 @@ import * as stringUtil from '../utils/StringUtil'
 import ActionButtons from './ActionButtons'
 import InstantTable from './InstantTable'
 import InputDropdown from './InputDropdown'
+import { _byId } from '../utils/ComponentUtil'
 import * as componentUtil from '../utils/ComponentUtil'
 
 class TransactionOut extends Component {
@@ -25,7 +26,7 @@ class TransactionOut extends Component {
         this.state = { productFlowStock: {}, customer: {}, showDetail: false, productFlows: [], messageShow: false, messageType: "" }
 
         this.getStockInfo = () => {
-            let stockId = document.getElementById("input-stock-id").value;
+            let stockId = _byId("input-stock-id").value;
             this.props.getStockInfo(stockId);
             this.setState({ showDetail: true })
         }
@@ -36,10 +37,10 @@ class TransactionOut extends Component {
         }
 
         this.addToCart = () => {
-            if (document.getElementById("input-quantity").value <= 0) {
+            if (_byId("input-quantity").value <= 0) {
                 alert("Please provide valid quantity!"); return;
             }
-            let quantity = document.getElementById("input-quantity").value;
+            let quantity = _byId("input-quantity").value;
             let productFlowStock = this.props.productFlowStock;
             if (quantity > productFlowStock.remainingStock) {
                 alert("Stock unavailable!"); return;
@@ -86,7 +87,7 @@ class TransactionOut extends Component {
         this.handleEdit = (stockId) => {
             alert("will Edit: " + stockId);
             this.props.getStockInfo(stockId);
-            document.getElementById("input-quantity").value = this.getProductFlow(stockId).count;
+            _byId("input-quantity").value = this.getProductFlow(stockId).count;
         }
 
         this.handleDelete = (stockId) => {
@@ -142,8 +143,8 @@ class TransactionOut extends Component {
         }
 
         this.getCustomerList = () => {
-            if (document.getElementById("input-customer-name") == null) return;
-            let customerName = document.getElementById("input-customer-name").value;
+            if (_byId("input-customer-name") == null) return;
+            let customerName = _byId("input-customer-name").value;
             this.props.getCustomerList(customerName);
         }
 
@@ -160,13 +161,13 @@ class TransactionOut extends Component {
     componentDidMount() {
         document.title = "Transaction::Out";
         if (this.props.productFlowStock && this.props.productFlowStock.productFlow
-            && document.getElementById("input-stock-id"))
-            document.getElementById("input-stock-id").value = this.props.productFlowStock.productFlow.id
+            && _byId("input-stock-id"))
+            _byId("input-stock-id").value = this.props.productFlowStock.productFlow.id
     }
     componentDidUpdate() {
         if (this.props.productFlowStock && this.props.productFlowStock.productFlow
-            && document.getElementById("input-stock-id")) {
-            document.getElementById("input-stock-id").value = this.props.productFlowStock.productFlow.id
+            && _byId("input-stock-id")) {
+            _byId("input-stock-id").value = this.props.productFlowStock.productFlow.id
         }
     }
 

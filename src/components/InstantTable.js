@@ -17,8 +17,8 @@ class InstantTable extends Component {
                     if(row.CS!=null){
                         colspan = row.CS;
                     }
-                    return (<CrudRow CS={colspan} values={row.values ? row.values : []}
-                        key={row.id} disabled={this.props.disabled}></CrudRow>
+                    return (<CrudRow valign={this.props.valign?this.props.valign:"top"} CS={colspan} values={row.values ? row.values : []}
+                        key={row.id} disabled={this.props.disabled == null? true: this.props.disabled}></CrudRow>
                     )
                 })}
             </tbody> </table>

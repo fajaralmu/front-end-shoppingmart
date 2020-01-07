@@ -58,7 +58,7 @@ class CrudRow extends Component {
             actionButton = "";
         }
         return (
-            <tr valign="top">
+            <tr valign={this.props.valign}>
                 {values.map(
                     value => {
                         return (

@@ -1,3 +1,5 @@
+export const _byId = (id) => { return document.getElementById(id) }
+
 export const clearFields = (...ignore) => {
     let inputs = document.getElementsByTagName("input");
     let withIgnore = ignore != null;
@@ -9,6 +11,16 @@ export const clearFields = (...ignore) => {
         if (inputs[i].type == "text") inputs[i].value = "";
         if (inputs[i].type == "number") inputs[i].value = 0;
     }
+}
+
+export const checkExistance = function (...ids) {
+    for (let i = 0; i < ids.length; i++) {
+        if(_byId(ids[i]) == null) {
+            console.log("component with id:", ids[i], "does not exist");
+            return false; 
+        }
+    }
+    return true;
 }
 
 export const createNavButtons = (totalButton) => {
@@ -23,20 +35,20 @@ export const createNavButtons = (totalButton) => {
 }
 
 export const getCurrentMMYY = () => {
-    return [new Date().getMonth(), new Date().getFullYear()];
+    return [new Date().getMonth()+1, new Date().getFullYear()];
 }
 
 export const getDropdownOptionsMonth = () => {
     let options = [];
     for (let i = 1; i <= 12; i++) {
-        options.push({value:i, text:i});
+        options.push({ value: i, text: i });
     }
     return options;
 }
-export const getDropdownOptionsYear = (from , to) => {
+export const getDropdownOptionsYear = (from, to) => {
     let options = [];
     for (let i = from; i <= to; i++) {
-        options.push({value:i, text:i});
+        options.push({ value: i, text: i });
     }
     return options;
 }

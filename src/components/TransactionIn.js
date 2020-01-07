@@ -17,6 +17,7 @@ import ActionButtons from './ActionButtons'
 import InstantTable from './InstantTable'
 import InputDropdown from './InputDropdown'
 import * as componentUtil from '../utils/ComponentUtil'
+import { _byId } from '../utils/ComponentUtil'
 
 class TransactionIn
     extends Component {
@@ -26,7 +27,7 @@ class TransactionIn
         this.state = { product: null, supplier: {}, showDetail: false, productFlows: [], messageShow: false, messageType: "" }
 
         this.getProductList = () => {
-            let productName = document.getElementById("input-product-name").value;
+            let productName = _byId("input-product-name").value;
             this.props.getProductList(productName);
             this.setState({ showDetail: true })
         }
@@ -37,12 +38,12 @@ class TransactionIn
         }
 
         this.addToCart = () => {
-            if (document.getElementById("input-quantity").value <= 0) {
+            if (_byId("input-quantity").value <= 0) {
                 alert("Please provide valid quantity!"); return;
             }
-            let quantity = document.getElementById("input-quantity").value;
-            let price = document.getElementById("input-product-price").value;
-            let expDate = document.getElementById("input-product-exp-date").value;
+            let quantity = _byId("input-quantity").value;
+            let price = _byId("input-product-price").value;
+            let expDate = _byId("input-product-exp-date").value;
             let product = this.state.product 
  
             if (this.isExistInTheChart(product.id))
@@ -104,10 +105,10 @@ class TransactionIn
                 alert("Data not found");
                 return;
             }
-            document.getElementById("input-quantity").value = productFlow.count;
-            document.getElementById("input-product-price").value = productFlow.price;
-            document.getElementById("input-product-name").value = productFlow.product.name;
-            document.getElementById("input-product-exp-date").value = productFlow.expiryDate;
+            _byId("input-quantity").value = productFlow.count;
+            _byId("input-product-price").value = productFlow.price;
+            _byId("input-product-name").value = productFlow.product.name;
+            _byId("input-product-exp-date").value = productFlow.expiryDate;
             this.setState({product:productFlow.product})
         }
 
@@ -164,8 +165,8 @@ class TransactionIn
         }
 
         this.getSupplierList = () => {
-            if (document.getElementById("input-supplier-name") == null) return;
-            let supplierName = document.getElementById("input-supplier-name").value;
+            if (_byId("input-supplier-name") == null) return;
+            let supplierName = _byId("input-supplier-name").value;
             this.props.getSupplierList(supplierName);
         }
 
@@ -192,13 +193,13 @@ class TransactionIn
     componentDidMount() {
         document.title = "Transaction::In";
         if (this.props.selectedProduct && this.props.selectedProduct.productFlow
-            && document.getElementById("input-product-name"))
-            document.getElementById("input-product-name").value = this.props.selectedProduct.productFlow.id
+            && _byId("input-product-name"))
+            _byId("input-product-name").value = this.props.selectedProduct.productFlow.id
     }
     componentDidUpdate() {
         if (this.props.selectedProduct && this.props.selectedProduct.productFlow
-            && document.getElementById("input-product-name")) {
-            document.getElementById("input-product-name").value = this.props.selectedProduct.productFlow.id
+            && _byId("input-product-name")) {
+            _byId("input-product-name").value = this.props.selectedProduct.productFlow.id
         }
     }
 

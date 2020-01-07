@@ -25,9 +25,12 @@ class DashboardMenu extends Component {
                     rows={[
                         {
                             values: [
-                                <div onClick={() => this.goToMenu('trxIn')} className="dashboard-menu-item clickable">New Items</div>,
-                                <div onClick={() => this.goToMenu('trxOut')} className="dashboard-menu-item clickable">Transactions</div>,
-                                <div onClick={() => this.goToMenu('cashflow')} className="dashboard-menu-item clickable">Cashflow</div>]
+                                <div onClick={() => this.goToMenu('trxIn')} className="dashboard-menu-item clickable">
+                                   <p>--</p> <span>New Items</span></div>,
+                                <div onClick={() => this.goToMenu('trxOut')} className="dashboard-menu-item clickable">
+                                   <p>--</p> <span>Transactions</span></div>,
+                                <div onClick={() => this.goToMenu('cashflow')} className="dashboard-menu-item clickable">
+                                   <p>--</p> <span>Cashflow</span></div>]
                         }]} />
             </div>
         )

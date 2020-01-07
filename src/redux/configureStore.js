@@ -4,6 +4,7 @@ import * as actionCreator from './actionCreators';
 import * as types from './types';
 
 const commonHeader = { 'Content-Type': 'application/json', 'requestId': '1234' };
+const POST_METHOD = "POST";
 
 export const configureStore = () => {
     const store = createStore(
@@ -28,7 +29,8 @@ export const configureStore = () => {
             resetPurchaseTransactionMiddleware,
             getCustomerListMiddleware,
             getProductListTrxMiddleware,
-            getCashflowInfoMiddleware
+            getCashflowInfoMiddleware,
+            getCashflowDetailMiddleware
 
         )
     );
@@ -36,11 +38,30 @@ export const configureStore = () => {
     return store;
 }
 
+const getCashflowDetailMiddleware = store => next => action => {
+    if (!action.meta || action.meta.type !== types.GET_CASHFLOW_DETAIL) { return next(action); }
+    fetch(action.meta.url, {
+        method: POST_METHOD, body: JSON.stringify(action.payload),
+        headers: { 'Content-Type': 'application/json', 'requestId': '1234', 'loginKey': localStorage.getItem("loginKey") }
+    }).then(response => response.json())
+        .then(data => {
+            console.debug("Response:", data);
+            if(data.code != "00"){
+                alert("Server error");
+                return;
+            }
+ 
+            let newAction = Object.assign({}, action, { payload: data  });
+            delete newAction.meta;
+            store.dispatch(newAction);
+        })
+        .catch(err => console.log(err));
+}
+
 const getCashflowInfoMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.GET_CASHFLOW_INFO) { return next(action); }
     fetch(action.meta.url, {
-        method: 'POST',
-        body: JSON.stringify(action.payload),
+        method: POST_METHOD, body: JSON.stringify(action.payload),
         headers: { 'Content-Type': 'application/json', 'requestId': '1234', 'loginKey': localStorage.getItem("loginKey") }
     }).then(response => response.json())
         .then(data => {
@@ -51,7 +72,7 @@ const getCashflowInfoMiddleware = store => next => action => {
             }
 
             if (data.entity == null || data.entity.amount == null) {
-                alert("Data for cashflow: "+action.payload.filter.module+" in this period not found!");
+                alert("Data for cashflow: "+action.payload.filter.module+" in "+action.payload.filter.month+"/"+action.payload.filter.year+" period not found!");
                 return;
             }
             let newAction = Object.assign({}, action, { payload: data.entity });
@@ -60,7 +81,7 @@ const getCashflowInfoMiddleware = store => next => action => {
         })
         .catch(err => console.log(err));
 }
-
+ 
 const getProductListTrxMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.FETCH_PRODUCT_LIST_TRX) { return next(action); }
 
@@ -72,9 +93,7 @@ const getProductListTrxMiddleware = store => next => action => {
         store.dispatch(newAction);
     } else
         fetch(action.meta.url, {
-            method: 'POST',
-            body: JSON.stringify(action.payload),
-            headers: commonHeader
+            method: POST_METHOD, body: JSON.stringify(action.payload), headers: commonHeader
         })
             .then(response => response.json())
             .then(data => {
@@ -101,7 +120,7 @@ const getCustomerListMiddleware = store => next => action => {
         store.dispatch(newAction);
     } else
         fetch(action.meta.url, {
-            method: 'POST',
+            method: POST_METHOD,
             body: JSON.stringify(action.payload),
             headers: commonHeader
         })
@@ -134,8 +153,7 @@ const submitSupplyTransactionMiddleware = store => next => action => {
     }
 
     fetch(action.meta.url, {
-        method: 'POST',
-        body: JSON.stringify(action.payload),
+        method: POST_METHOD, body: JSON.stringify(action.payload),
         headers: { 'Content-Type': 'application/json', 'requestId': '1234', 'loginKey': localStorage.getItem("loginKey") }
     })
         .then(response => response.json())
@@ -161,8 +179,7 @@ const submitPurchaseTransactionMiddleware = store => next => action => {
     }
 
     fetch(action.meta.url, {
-        method: 'POST',
-        body: JSON.stringify(action.payload),
+        method: POST_METHOD, body: JSON.stringify(action.payload),
         headers: { 'Content-Type': 'application/json', 'requestId': '1234', 'loginKey': localStorage.getItem("loginKey") }
     })
         .then(response => response.json())
@@ -187,8 +204,7 @@ const getStockInfoMiddleware = store => next => action => {
     }
 
     fetch(action.meta.url, {
-        method: 'POST',
-        body: JSON.stringify(action.payload),
+        method: POST_METHOD, body: JSON.stringify(action.payload),
         headers: { 'Content-Type': 'application/json', 'requestId': '1234', 'loginKey': localStorage.getItem("loginKey") }
     })
         .then(response => response.json())
@@ -211,8 +227,7 @@ const getSupplierListMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.FETCH_SUPPLIER_LIST) { return next(action); }
 
     fetch(action.meta.url, {
-        method: 'POST',
-        body: JSON.stringify(action.payload),
+        method: POST_METHOD, body: JSON.stringify(action.payload),
         headers: commonHeader
     })
         .then(response => response.json())
@@ -238,8 +253,7 @@ const performLogoutMiddleware = store => next => action => {
 
     console.log("---------perform logout------------");
     fetch(action.meta.url, {
-        method: 'POST',
-        body: JSON.stringify(action.payload),
+        method: POST_METHOD, body: JSON.stringify(action.payload),
         headers: { 'Content-Type': 'application/json', 'requestId': '1234', 'loginKey': localStorage.getItem("loginKey") }
     })
         .then(response => { return Promise.all([response.json(), response]); })
@@ -266,10 +280,9 @@ const performLoginMiddleware = store => next => action => {
         return next(action);
     }
     fetch(action.meta.url, {
-        method: 'POST',
-        body: JSON.stringify(action.payload),
-        headers: commonHeader
-    }).then(response => { return Promise.all([response.json(), response]); })
+        method: POST_METHOD,  body: JSON.stringify(action.payload), headers: commonHeader
+    })
+        .then(response => { return Promise.all([response.json(), response]); })
         .then(([responseJson, response]) => {
 
             let loginKey = "";
@@ -305,9 +318,7 @@ const getAllProductCategoriesMiddleware = store => next => action => {
         return next(action);
     }
     fetch(action.meta.url, {
-        method: 'POST',
-        body: JSON.stringify(action.payload),
-        headers: commonHeader
+        method: POST_METHOD, body: JSON.stringify(action.payload), headers: commonHeader
     })
         .then(response => response.json())
         .then(data => {
@@ -331,9 +342,7 @@ const loadMoreSupplierMiddleware = store => next => action => {
         return next(action);
     }
     fetch(action.meta.url, {
-        method: 'POST',
-        body: JSON.stringify(action.payload),
-        headers: commonHeader
+        method: POST_METHOD, body: JSON.stringify(action.payload),  headers: commonHeader
     })
         .then(response => response.json())
         .then(data => {
@@ -366,9 +375,7 @@ const getProductDetailMiddleWare = store => next => action => {
     }
 
     fetch(action.meta.url, {
-        method: 'POST',
-        body: JSON.stringify(action.payload),
-        headers: commonHeader
+        method: POST_METHOD, body: JSON.stringify(action.payload),  headers: commonHeader
     })
         .then(response => response.json())
         .then(data => {
@@ -392,9 +399,7 @@ const getProductListMiddleware = store => next => action => {
     }
 
     fetch(action.meta.url, {
-        method: 'POST',
-        body: JSON.stringify(action.payload),
-        headers: commonHeader
+        method: POST_METHOD, body: JSON.stringify(action.payload), headers: commonHeader
     })
         .then(response => response.json())
         .then(data => {

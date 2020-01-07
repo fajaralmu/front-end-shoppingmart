@@ -1,4 +1,5 @@
 export function beautifyNominal(val) {
+	if(val == "" || val == null) val = "0";
 	let nominal = ""+val;
 	let result = "";
 	if (nominal.length > 3) {

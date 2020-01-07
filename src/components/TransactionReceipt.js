@@ -11,7 +11,7 @@ class TransactionReceipt extends Component {
     }
 
     render() {
-        const line = "--------------------------------------------------------------------------";
+        const line = "-".repeat(77);
         let transactionReceiptComponent = <p>Loading data ...</p>;
         let stakeHolder = {};
 
