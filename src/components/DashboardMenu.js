@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import '../css/Menu.css'
 import '../css/Common.css'
+import InstantTable from './InstantTable';
 
 class DashboardMenu extends Component {
     constructor(props) {
@@ -20,8 +21,14 @@ class DashboardMenu extends Component {
 
         return (
             <div className="dashboard-menu" >
-                <div onClick={() => this.goToMenu('trxIn')} className="dashboard-menu-item clickable">New Items</div>
-                <div onClick={() => this.goToMenu('trxOut')} className="dashboard-menu-item clickable">Transactions</div>
+                <InstantTable disabled={true}
+                    rows={[
+                        {
+                            values: [
+                                <div onClick={() => this.goToMenu('trxIn')} className="dashboard-menu-item clickable">New Items</div>,
+                                <div onClick={() => this.goToMenu('trxOut')} className="dashboard-menu-item clickable">Transactions</div>,
+                                <div onClick={() => this.goToMenu('cashflow')} className="dashboard-menu-item clickable">Cashflow</div>]
+                        }]} />
             </div>
         )
     }

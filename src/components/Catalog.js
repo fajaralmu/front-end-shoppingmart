@@ -9,7 +9,7 @@ import ProductDetail from './ProductDetail'
 import * as menus from '../constant/Menus'
 import ActionButtons from './ActionButtons'
 import InputField from './InputField'
-import ComboBox from './ComboBox'
+import * as componentUtil from '../utils/ComponentUtil'
 import ComboBoxes from './ComboBoxes'
 
 class Catalog extends Component {
@@ -29,7 +29,8 @@ class Catalog extends Component {
             requestOrderType: null,
             requestProductName: "",
             requestCategoryId: null,
-            selectedProduct: null
+            selectedProduct: null,
+            buttonCount: 0
 
         };
 
@@ -107,6 +108,24 @@ class Catalog extends Component {
                 this.setState({ requestCategoryId: null });
         }
 
+        this.next = () => {
+            let catalogPage = this.state.catalogPage;
+            let totalPage = this.props.catalogData.totalData / this.state.limit
+            if (catalogPage >= totalPage - 1) { catalogPage = 0; }
+            else { catalogPage++; }
+
+            this.getProductCatalog(catalogPage);
+        }
+
+        this.prev = () => {
+            let catalogPage = this.state.catalogPage;
+            let totalPage = this.props.catalogData.totalData / this.state.limit
+            if (catalogPage <= 0) { catalogPage = totalPage - 1; }
+            else { catalogPage--; }
+
+            this.getProductCatalog(catalogPage);
+        }
+
     }
 
     componentWillMount() {
@@ -120,24 +139,13 @@ class Catalog extends Component {
 
     componentDidUpdate() {
         console.log("Entity:", this.props.selectedProduct);
-        if (this.state.firstLoad) {
-            if (this.props.catalogData.filter != null) {
-                this.setState({ limit: this.props.catalogData.filter.limit });
-                this.setState({ totalData: this.props.catalogData.totalData });
-                this.setState({ firstLoad: false });
-            }
-        }
-    }
-
-    createNavButtons(totalButton) {
-        let buttonData = [];
-        for (let index = 0; index < totalButton; index++) {
-            buttonData.push({
-                text: index + 1,
-                value: index
+        if (this.state.firstLoad && this.props.catalogData.filter != null) {
+            this.setState({
+                limit: this.props.catalogData.filter.limit,
+                totalData: this.props.catalogData.totalData,
+                firstLoad: false
             });
         }
-        return buttonData;
     }
 
 
@@ -146,7 +154,7 @@ class Catalog extends Component {
         let products = this.props.catalogData.entities == null ? [] : this.props.catalogData.entities;
         let buttonData = [];
         if (products.length > 0)
-            buttonData = this.createNavButtons(this.props.catalogData.totalData / this.state.limit);
+            buttonData = componentUtil.createNavButtons(this.props.catalogData.totalData / this.state.limit);
 
         let categories = [];
 
@@ -154,29 +162,21 @@ class Catalog extends Component {
             categories.push({ value: category.id, text: category.name });
         })
 
-
         let filterBox = <div className="filter-box">
             <InputField placeholder="search by product name" onKeyUp={this.handleInputNameChange} type="search" id="input-product-name" />
-
             <ComboBoxes
-                values={[
-                    {
-                        defaultValue: "00", onChange: this.handleOrderChange,
-                        options: [
-                            { value: "00", text: "-Select Order-" },
-                            { value: "name-asc", text: "Name [A-Z]" },
-                            { value: "name-desc", text: "Name [Z-A]" },
-                            { value: "price-asc", text: "Price [cheap]" },
-                            { value: "price-desc", text: "Price [expensive]" }
-                        ],
-                        id: "select-order"
-                    },
-                    {
-                        defaultValue: "00",
-                        onChange: this.handleOrderChange,
-                        id: "select-category",
-                        options: categories
-                    }]}
+                values={[{
+                    defaultValue: "00", onChange: this.handleOrderChange,
+                    options: [
+                        { value: "00", text: "-Select Order-" },
+                        { value: "name-asc", text: "Name [A-Z]" },
+                        { value: "name-desc", text: "Name [Z-A]" },
+                        { value: "price-asc", text: "Price [cheap]" },
+                        { value: "price-desc", text: "Price [expensive]" }
+                    ], id: "select-order"
+                }, {
+                    defaultValue: "00", onChange: this.handleOrderChange, id: "select-category", options: categories
+                }]}
 
             />
             <ActionButtons buttonsData={[{
@@ -192,14 +192,15 @@ class Catalog extends Component {
             <h2>Catalog Page</h2>
             <p>Choose your favourite products</p>
             <div className="nav-containter">
+                <NavButton buttonClick={this.prev} key="nav-prev" text="<" />
                 {buttonData.map(b => {
                     let active = (b.value == this.state.catalogPage)
                     return <NavButton active={active} buttonClick={() => this.getProductCatalog(b.value)} key={b.value} text={b.text} />
                 })}
-                <br />
-                <span>Total item(s) : {this.props.catalogData.totalData}</span>
-                {filterBox}
+                <NavButton buttonClick={this.next} key="nav-next" text=">" />
+
             </div>
+            {filterBox}
             <div className="product-panel">
                 {products.map(
                     product => {

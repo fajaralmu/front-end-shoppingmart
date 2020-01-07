@@ -4,6 +4,18 @@ const apiEntityBaseUrl = "http://localhost:8080/universal-good-shop/api/entity/"
 const apiAccount = "http://localhost:8080/universal-good-shop/api/account/"
 const apiTransaction = "http://localhost:8080/universal-good-shop/api/transaction/";
 
+export const getCashflowInfo = (month, year, type) => {
+    console.log("getCashflowInfo:",type)
+    let requested = {
+        type: types.GET_CASHFLOW_INFO,
+        payload: { filter: { year: year, month: month, module: type } },
+        meta: {
+            type: types.GET_CASHFLOW_INFO, url: apiTransaction.concat("cashflowinfo")
+        }
+    };
+    return requested;
+}
+
 export const getProductListTrx = (name) => ({
     type: types.FETCH_PRODUCT_LIST_TRX,
     payload: {

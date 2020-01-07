@@ -65,8 +65,7 @@ class Login extends Component {
 
         return (
             <div className="section-container">
-                <h2>Login Page</h2>
-
+                <h2>Login Page</h2> 
                 {message}
                 <Label text="Username" />
                 <InputField id="username-field" onKeyUp={this.handleUsername} />

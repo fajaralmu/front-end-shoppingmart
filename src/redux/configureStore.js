@@ -27,7 +27,8 @@ export const configureStore = () => {
             submitSupplyTransactionMiddleware,
             resetPurchaseTransactionMiddleware,
             getCustomerListMiddleware,
-            getProductListTrxMiddleware
+            getProductListTrxMiddleware,
+            getCashflowInfoMiddleware
 
         )
     );
@@ -35,12 +36,37 @@ export const configureStore = () => {
     return store;
 }
 
+const getCashflowInfoMiddleware = store => next => action => {
+    if (!action.meta || action.meta.type !== types.GET_CASHFLOW_INFO) { return next(action); }
+    fetch(action.meta.url, {
+        method: 'POST',
+        body: JSON.stringify(action.payload),
+        headers: { 'Content-Type': 'application/json', 'requestId': '1234', 'loginKey': localStorage.getItem("loginKey") }
+    }).then(response => response.json())
+        .then(data => {
+            console.debug("Response:", data);
+            if(data.code != "00"){
+                alert("Server error");
+                return;
+            }
+
+            if (data.entity == null || data.entity.amount == null) {
+                alert("Data for cashflow: "+action.payload.filter.module+" in this period not found!");
+                return;
+            }
+            let newAction = Object.assign({}, action, { payload: data.entity });
+            delete newAction.meta;
+            store.dispatch(newAction);
+        })
+        .catch(err => console.log(err));
+}
+
 const getProductListTrxMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.FETCH_PRODUCT_LIST_TRX) { return next(action); }
 
     if (action.payload.filter.fieldsFilter.name == null || action.payload.filter.fieldsFilter.name.trim() == "") {
         let newAction = Object.assign({}, action, {
-            payload: {entities:[]}
+            payload: { entities: [] }
         });
         delete newAction.meta;
         store.dispatch(newAction);
@@ -57,7 +83,7 @@ const getProductListTrxMiddleware = store => next => action => {
                     alert("Data not found!");
                     return;
                 }
-                let newAction = Object.assign({}, action, {  payload: data  });
+                let newAction = Object.assign({}, action, { payload: data });
                 delete newAction.meta;
                 store.dispatch(newAction);
             })
@@ -69,7 +95,7 @@ const getCustomerListMiddleware = store => next => action => {
 
     if (action.payload.filter.fieldsFilter.name == null || action.payload.filter.fieldsFilter.name.trim() == "") {
         let newAction = Object.assign({}, action, {
-            payload: {entities:[]}
+            payload: { entities: [] }
         });
         delete newAction.meta;
         store.dispatch(newAction);
@@ -86,7 +112,7 @@ const getCustomerListMiddleware = store => next => action => {
                     alert("Data not found!");
                     return;
                 }
-                let newAction = Object.assign({}, action, {  payload: data  });
+                let newAction = Object.assign({}, action, { payload: data });
                 delete newAction.meta;
                 store.dispatch(newAction);
             })
@@ -243,11 +269,7 @@ const performLoginMiddleware = store => next => action => {
         method: 'POST',
         body: JSON.stringify(action.payload),
         headers: commonHeader
-    })
-        .then(response => {
-
-            return Promise.all([response.json(), response]);
-        })
+    }).then(response => { return Promise.all([response.json(), response]); })
         .then(([responseJson, response]) => {
 
             let loginKey = "";
@@ -260,12 +282,9 @@ const performLoginMiddleware = store => next => action => {
                         break;
                     }
                 }
-
                 console.log("loginKey: ", loginKey);
                 loginSuccess = true;
                 localStorage.setItem("loginKey", loginKey);
-                alert("Login Success!");
-
             }
             let newAction = Object.assign({}, action, {
                 payload: {

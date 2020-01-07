@@ -8,6 +8,7 @@ import { connect } from 'react-redux'
 import ActionButtons from './ActionButtons'
 import ActionButton from './ActionButton'
 import InstantTable from './InstantTable'
+import ImageCarousel from './ImageCarousel'
 
 
 
@@ -38,20 +39,26 @@ class ProductDetail extends Component {
     }
 
     componentDidMount() {
-        this.setState({ supplierShown: false })
+        this.setState({ supplierShown: false });
+        document.title = "Product Detail";
 
     }
 
-    componentDidUpdate() {
-
+    componentDidUpdate() { 
     }
 
-    render() {
+    render() { 
+         
         let product = this.props.product;
         let imageComponent = "";
         if (product && product.imageUrl) {
-            let imageUrl = url.baseImageUrl + product.imageUrl.split("~")[0];
-            imageComponent = <div className="img-panel rounded box-shadow"><img src={imageUrl} width="300" height="200" /></div>;
+            
+            let imageUrls = new Array();
+            for (let index = 0; index < product.imageUrl.split("~").length; index++) {
+                imageUrls.push(url.baseImageUrl + product.imageUrl.split("~")[index]); 
+            }
+            imageComponent = <ImageCarousel imageUrls={imageUrls} />
+           
         }
 
         if (product == null) {
@@ -102,7 +109,7 @@ class ProductDetail extends Component {
         }
         return (
             <div className="section-container" >
-                <h2>Product Detail Page</h2> 
+                <h2>{product.name}</h2> 
                 <InstantTable disabled={true}
                     rows={[
                         { id: "row-img", values: [imageComponent] ,CS:[2]},

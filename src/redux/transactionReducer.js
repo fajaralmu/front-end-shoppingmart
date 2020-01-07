@@ -1,11 +1,14 @@
 import * as types from './types'
+import { nullLiteral } from '@babel/types';
 
 export const initState = {
     productFlowStock: null,
     transactionData: null,
     successTransaction: false,
     customersData: null,
-    productsData: null
+    productsData: null,
+    cashflowInfoOut: null,
+    cashflowInfoIn: null
 };
 
 export const reducer = (state = initState, action) => {
@@ -24,6 +27,13 @@ export const reducer = (state = initState, action) => {
             return result;
         case types.FETCH_PRODUCT_LIST_TRX:
             result = { ...state, productsData: action.payload.entities };
+            return result;
+        case types.GET_CASHFLOW_INFO:
+            result = state;
+            if (action.payload.module == "OUT")
+                result.cashflowInfoOut = action.payload;
+            if (action.payload.module == "IN")
+                result.cashflowInfoIn = action.payload;
             return result;
         default:
             return { ...state };

@@ -39,8 +39,8 @@
 .warning{  border-color:  orange; color:orange}
 .warning:hover{  background-color:  orange; }
 
-.success{  border-color: darkolivegreen  ; color:darkolivegreen}
-.success:hover{  background-color:  darkolivegreen; }
+.success{  border-color: green  ; color:green}
+.success:hover{  background-color:  green; }
 
 .submit{  border-color:  royalblue; color: royalblue}
 .submit:hover{  background-color:  royalblue; }
@@ -50,6 +50,7 @@
     position:   absolute;
     width: auto; 
     width:100%; 
+    max-height: 400px;
     overflow: scroll;
     z-index: 1;
 }

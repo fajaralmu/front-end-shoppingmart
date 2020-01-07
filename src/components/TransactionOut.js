@@ -16,6 +16,7 @@ import * as stringUtil from '../utils/StringUtil'
 import ActionButtons from './ActionButtons'
 import InstantTable from './InstantTable'
 import InputDropdown from './InputDropdown'
+import * as componentUtil from '../utils/ComponentUtil'
 
 class TransactionOut extends Component {
 
@@ -71,7 +72,7 @@ class TransactionOut extends Component {
  
             this.setState({ productFlows: currentFlows });
             this.showMessage("Success saving to chart", "success");
-            this.clearFields("input-customer-name");
+            componentUtil.clearFields("input-customer-name");
         }
 
         this.getProductFlow = (flowId) => {
@@ -80,20 +81,7 @@ class TransactionOut extends Component {
                 if (this.state.productFlows[index].flowReferenceId == flowId) return this.state.productFlows[index];
             }
             return null;
-        }
-
-        this.clearFields = (...ignore) => {
-            let inputs = document.getElementsByTagName("input");
-            let withIgnore = ignore != null;
-            loop: for (let i = 0; i < inputs.length; i++) {
-                if (withIgnore)
-                    for (let y = 0; y < ignore.length; y++)
-                        if (inputs[i].id == ignore[y]) continue loop;
-
-                if (inputs[i].type == "text") inputs[i].value = "";
-                if (inputs[i].type == "number") inputs[i].value = 0;
-            }
-        }
+        } 
 
         this.handleEdit = (stockId) => {
             alert("will Edit: " + stockId);
@@ -138,7 +126,7 @@ class TransactionOut extends Component {
         }
 
         this.reset = () => {
-            this.clearFields(null);
+            componentUtil.clearFields(null);
             this.setState({ productFlows: [], showDetail: false });
             this.props.resetPurchaseTransaction();
         }

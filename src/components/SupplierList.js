@@ -10,37 +10,27 @@ import CatalogItemSupplier from './CatalogItemSupplier'
 import ActionButtons from './ActionButtons'
 import InputField from './InputField'
 import ComboBox from './ComboBox'
+import * as componentUtil from '../utils/ComponentUtil'
 
 class SupplierList extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            suppliersData: {
-                entities: []
-            },
-            limit: 10,
-            totalData: 0,
-            suppliers: [],
-            supplierPage: 0,
-            firstLoad: true,
-            requestOrderBy: null,
-            requestOrderType: null,
+            suppliersData: { entities: [] },
+            limit: 10, totalData: 0, suppliers: [], supplierPage: 0, firstLoad: true, requestOrderBy: null, requestOrderType: null,
             requestSupplierName: "",
-
         };
 
         this.getSupplierList = (_page) => {
             console.log("will go to page: ", _page)
 
-            this.props.getSupplierList(
-                {
-                    page: _page,
-                    name: this.state.requestSupplierName,
-                    orderby: this.state.requestOrderBy,
-                    ordertype: this.state.requestOrderType
-                }
-            );
+            this.props.getSupplierList({
+                page: _page,
+                name: this.state.requestSupplierName,
+                orderby: this.state.requestOrderBy,
+                ordertype: this.state.requestOrderType
+            });
             this.setState({ supplierPage: _page });
             this.setState({ totalData: this.props.suppliersData.totalData });
         }
@@ -76,6 +66,24 @@ class SupplierList extends Component {
             alert("filter has been cleared, please push the search button to take effect")
         }
 
+        this.next = () => {
+            let supplierPage = this.state.supplierPage;
+            let totalPage = this.props.suppliersData.totalData / this.state.limit
+            if (supplierPage >= totalPage - 1) { supplierPage = 0; }
+            else { supplierPage++; }
+
+            this.getSupplierList(supplierPage);
+        }
+
+        this.prev = () => {
+            let supplierPage = this.state.supplierPage;
+            let totalPage = this.props.suppliersData.totalData / this.state.limit
+            if (supplierPage <= 0) { supplierPage = totalPage - 1; }
+            else { supplierPage--; }
+
+            this.getSupplierList(supplierPage);
+        }
+
     }
 
     componentWillMount() {
@@ -88,25 +96,16 @@ class SupplierList extends Component {
 
     componentDidUpdate() {
         console.log("Entity:", this.props.selectedSupplier);
-        if (this.state.firstLoad) {
-            if (this.props.suppliersData.filter != null) {
-                this.setState({ limit: this.props.suppliersData.filter.limit });
-                this.setState({ totalData: this.props.suppliersData.totalData });
-                this.setState({ firstLoad: false });
-            }
+        if (this.state.firstLoad && this.props.suppliersData.filter != null) {
+            this.setState({
+                limit: this.props.suppliersData.filter.limit,
+                totalData: this.props.suppliersData.totalData,
+                firstLoad: false
+            });
         }
     }
 
-    createNavButtons(totalButton) {
-        let buttonData = [];
-        for (let index = 0; index < totalButton; index++) {
-            buttonData.push({
-                text: index + 1,
-                value: index
-            });
-        }
-        return buttonData;
-    }
+
 
 
     render() {
@@ -114,7 +113,7 @@ class SupplierList extends Component {
         let suppliers = this.props.suppliersData.entities == null ? [] : this.props.suppliersData.entities;
         let buttonData = [];
         if (suppliers.length > 0)
-            buttonData = this.createNavButtons(this.props.suppliersData.totalData / this.state.limit);
+            buttonData = componentUtil.createNavButtons(this.props.suppliersData.totalData / this.state.limit);
 
         let filterBox = <div className="filter-box">
             <InputField placeholder="search by supplier name" onKeyUp={this.handleInputNameChange} type="search"
@@ -139,16 +138,14 @@ class SupplierList extends Component {
             <h2>Supplier List Page</h2>
             <p>List of our partners</p>
             <div className="nav-containter">
-                {
-                    buttonData.map(b => {
-                        let active = (b.value == this.state.supplierPage)
-                        return <NavButton active={active} buttonClick={() => this.getSupplierList(b.value)} value={b.value} text={b.text} />
-                    })
-                }
-                <br />
-                <span>Total item(s) : {this.props.suppliersData.totalData}</span>
-                {filterBox}
+                <NavButton buttonClick={this.prev} key="nav-prev" text="<" />
+                {buttonData.map(b => {
+                    let active = (b.value == this.state.supplierPage)
+                    return <NavButton active={active} buttonClick={() => this.getSupplierList(b.value)} value={b.value} text={b.text} />
+                })}
+                <NavButton buttonClick={this.next} key="nav-next" text=">" />
             </div>
+            {filterBox}
             <div className="supplier-panel">
                 {suppliers.map(
                     supplier => {

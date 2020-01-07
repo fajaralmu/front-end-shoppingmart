@@ -1,0 +1,14 @@
+.carousel-item{
+    margin:5%;
+    width:90%;
+    height:70%
+}
+
+.carousel{
+    width: 400px;
+    height: 300px;
+    margin-bottom: 20px;
+    border:solid;
+    border-width:2px;
+    border-color:gray
+}
