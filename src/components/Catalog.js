@@ -35,8 +35,7 @@ class Catalog extends Component {
         };
 
         this.getProductCatalog = (_page) => {
-            console.log("will go to page: ", _page)
-
+            console.log("will go to page: ", _page) 
             this.props.getProductCatalog(
                 {
                     page: _page,
@@ -51,8 +50,7 @@ class Catalog extends Component {
         }
 
         this.handleOrderChange = (value) => {
-            console.log("==selectbox changed==", value);
-            
+            console.log("==selectbox changed==", value); 
             if (value == null || value == "00" || value.length == 0 || value.split("-").length != 2) {
                 this.setState({ requestOrderBy: null });
                 this.setState({ requestOrderType: null });
@@ -65,15 +63,12 @@ class Catalog extends Component {
 
         }
 
-        this.handleInputNameChange = () => {
-            console.log("==input name changed==");
-            this.setState({ catalogPage: 0 })
-            let input = document.getElementById("input-product-name");
-            this.setState({ requestProductName: input.value });
+        this.handleInputNameChange = (value) => {
+            console.log("==input name changed=="); 
+            this.setState({ requestProductName:  value });
         }
 
-        this.clearField = () => {
-            
+        this.clearField = () => { 
             this.setState({ requestProductName: "" }); 
             this.setState({ requestOrderBy: null, requestOrderType: null }); 
             this.setState({ requestCategoryId: null });

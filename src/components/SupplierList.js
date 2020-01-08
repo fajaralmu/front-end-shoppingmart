@@ -36,10 +36,8 @@ class SupplierList extends Component {
             this.setState({ totalData: this.props.suppliersData.totalData });
         }
 
-        this.handleOrderChange = () => {
-            console.log("==selectbox changed==");
-            let selectBox = document.getElementById("select-order");
-            let value = selectBox.value;
+        this.handleOrderChange = (value) => {
+            console.log("==selectbox changed=="); 
             if (value == null || value.length == 0 || value.split("-").length != 2) {
                 return;
             } else {
@@ -50,11 +48,9 @@ class SupplierList extends Component {
 
         }
 
-        this.handleInputNameChange = () => {
-            console.log("==input name changed==");
-            let input = document.getElementById("input-supplier-name");
+        this.handleInputNameChange = (value) => { 
             this.setState({ catalogPage: 0 })
-            this.setState({ requestSupplierName: input.value });
+            this.setState({ requestSupplierName:  value });
         }
 
         this.clearField = () => {

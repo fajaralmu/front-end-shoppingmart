@@ -35,7 +35,7 @@ class TransactionOut extends Component {
         }
 
         this.getStockInfo = () => {
-            let stockId = _byId("input-stock-id").value;
+            let stockId =this.state.stockId;
             this.props.getStockInfo(stockId, this.props.app);
             this.setState({ showDetail: true })
         }
@@ -157,9 +157,9 @@ class TransactionOut extends Component {
             return stringUtil.beautifyNominal(totalPrice) + (",00");
         }
 
-        this.getCustomerList = (value) => { 
+        this.getCustomerList = (value,id) => { 
             this.setState({ customerName: value });
-            this.setActiveField("input-customer-name");
+            this.setActiveField(id);
             this.props.getCustomerList(value, this.props.app);
         }
 
@@ -216,13 +216,13 @@ class TransactionOut extends Component {
                             },
                             {
                                 values: [<InputField id="input-stock-id"
-                                    value={this.state.stockId} onKeyUp={(value) => this.setState({ activeField: "input-stock-id", stockId: value })}
+                                    value={this.state.stockId} onKeyUp={(value,id) => this.setState({ activeField: id, stockId: value })}
                                     type="number" placeholder="input stock id" />,
                                 <ActionButton id="btn-search-stock" text="Search" onClick={this.getStockInfo} />]
                             },
                             {
                                 values: [<InputField id="input-quantity"
-                                    value={this.state.quantity} onKeyUp={(value) => this.setState({ activeField: "input-quantity", quantity: value })}
+                                    value={this.state.quantity} onKeyUp={(value,id) => this.setState({ activeField: id, quantity: value })}
                                     type="number" placeholder="quantity" />]
                             }
                         ]}

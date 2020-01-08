@@ -11,7 +11,7 @@ class InputField extends Component {
         super(props);
         this.handleKeyup = () => { 
             if (this.props.onKeyUp && this.props.id)
-                this.props.onKeyUp(_byId(this.props.id).value);
+                this.props.onKeyUp(_byId(this.props.id).value,this.props.id);
         }
 
         this.onChange = () => {

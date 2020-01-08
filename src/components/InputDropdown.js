@@ -14,7 +14,7 @@ class InputDropdown extends Component {
 
         this.handleKeyup = () => {
             if (this.props.onKeyUp && this.props.id)
-                this.props.onKeyUp(document.getElementById(this.props.id).value);
+                this.props.onKeyUp(document.getElementById(this.props.id).value, this.props.id);
         }
 
         this.onBlur = () => {

@@ -179,10 +179,10 @@ class TransactionIn
             return stringUtil.beautifyNominal(totalPrice) + (",00");
         }
 
-        this.getSupplierList = (value) => { 
+        this.getSupplierList = (value, id) => { 
             this.setState({ supplierName: value });
             this.props.getSupplierList(value, this.props.app); 
-            this.setActiveField("input-supplier-name");
+            this.setActiveField(id);
         }
 
         this.selectSupplier = (id) => {
@@ -196,10 +196,10 @@ class TransactionIn
             this.props.resetSuppliers();
         }
 
-        this.getProductList = (value) => { 
+        this.getProductList = (value, id) => { 
             this.setState({ showDetail: true, productName: value })
             this.props.getProductList(value, this.props.app); 
-            this.setActiveField("input-product-name");
+            this.setActiveField(id);
         }
 
         this.selectProduct = (id) => {
@@ -277,17 +277,17 @@ class TransactionIn
                             },
                             {
                                 values: [<InputField id="input-product-price"
-                                    value={this.state.price} onKeyUp={(value) => this.setState({activeField:"input-product-price", price: value })}
+                                    value={this.state.price} onKeyUp={(value, id) => this.setState({activeField:id, price: value })}
                                     type="number" placeholder="input product price" />]
                             },
                             {
                                 values: [<InputField id="input-quantity"
-                                    value={this.state.quantity} onKeyUp={(value) => this.setState({activeField:"input-quantity", quantity: value })}
+                                    value={this.state.quantity} onKeyUp={(value, id) => this.setState({activeField:id, quantity: value })}
                                     type="number" placeholder="quantity" />]
                             },
                             {
                                 values: [<InputField id="input-exp-date"
-                                    value={this.state.expiryDate} onKeyUp={(value) => this.setState({activeField:"input-exp-date", expiryDate: value })}
+                                    value={this.state.expiryDate} onKeyUp={(value, id) => this.setState({activeField:id, expiryDate: value })}
                                     type="date" placeholder="input product exp date" />]
                             }
                         ]}
