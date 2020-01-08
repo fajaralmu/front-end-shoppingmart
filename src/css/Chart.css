@@ -1,0 +1,16 @@
+.chart{ 
+}
+
+.char-bar {
+    height:100%; 
+    background-color: coral
+}
+
+.success-chart{
+    background-color: green;
+     
+}
+.warning-chart{
+    background-color: orange;
+    
+}

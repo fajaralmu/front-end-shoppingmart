@@ -20,18 +20,20 @@ class CrudRow extends Component {
 
     render() { 
         let values = this.props.values;
-        const defaultColspan = 1;
+        const defaultRowColSpan = 1;
         if (null == values) {
             values = new Array();
         } else {
             let newValues = new Array();
-            for (let index = 0; index < values.length; index++) {
-                const value = values[index];
-                if (this.props.CS) {
+            for (let i = 0; i < values.length; i++) {
+                const value = values[i];
+                if (this.props.CS || this.props.RS) {
                     let colspan = this.props.CS != null
                         && this.props.CS.length > 0 &&
-                        this.props.CS[index] != null ? this.props.CS[index] : defaultColspan;
-                    newValues.push({ value: value, colspan: colspan });
+                        this.props.CS[i] != null ? this.props.CS[i] : defaultRowColSpan;
+                    let rowspan = this.props.RS != null && this.props.RS.length > 0 
+                        &&this.props.RS[i]!=null?this.props.RS[i] : defaultRowColSpan;
+                    newValues.push({ value: value, colspan: colspan, rowspan:rowspan });
                 } else
                     newValues.push({ value: value });
             }
@@ -58,11 +60,11 @@ class CrudRow extends Component {
             actionButton = "";
         }
         return (
-            <tr valign={this.props.valign}>
+            <tr id={this.props.id} valign={this.props.valign}>
                 {values.map(
                     value => {
                         return (
-                            <td colSpan={value.colspan}>{value.value}</td>
+                            <td rowSpan={value.rowspan} colSpan={value.colspan}>{value.value}</td>
                         )
                     }
                 )}

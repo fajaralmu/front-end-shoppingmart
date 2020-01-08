@@ -10,19 +10,16 @@ class InstantTable extends Component {
         let rows = [];
         if (this.props.rows) { rows = this.props.rows; }
         let className = "table";
-        if(this.props.className){
-            className+=" "+this.props.className;
+        let tableStyle = this.props.style ? this.props.style : {};
+        if (this.props.className) {
+            className += " " + this.props.className;
         }
         return (
-            <table className={className}> <tbody>
+            <table style={tableStyle} className={className}> <tbody>
                 {rows.map(row => {
-                    
-                    let colspan = null;
-                    if(row.CS!=null){
-                        colspan = row.CS;
-                    }
-                    return (<CrudRow valign={this.props.valign?this.props.valign:"top"} CS={colspan} values={row.values ? row.values : []}
-                        key={row.id} disabled={this.props.disabled == null? true: this.props.disabled}></CrudRow>
+
+                    return (<CrudRow valign={this.props.valign ? this.props.valign : "top"} RS={row.RS} CS={row.CS} values={row.values ? row.values : []}
+                        key={row.id} id={row.id} disabled={this.props.disabled == null ? true : this.props.disabled}></CrudRow>
                     )
                 })}
             </tbody> </table>

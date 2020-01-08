@@ -43,8 +43,7 @@ class ImageCarousel extends Component {
             }
         }
         return (
-            <div className="carousel rounded">
-
+            <div className="carousel rounded"> 
                 {image}
                 <InstantTable className="carousel-navigation" rows={[{
                     values: [

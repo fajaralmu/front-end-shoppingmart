@@ -14,9 +14,9 @@ class StockListTable extends Component {
             "No", "Flow ID", "Product Name", "Expiry Date", "Quantity", "Price @Item", "Total Price", "Reff Stock ID", "Option"
         ];
 
-        if(this.props.disabled == true){
+        if (this.props.disabled == true) {
             headers = [
-                "No", "Flow ID", "Product Name", "Expiry Date", "Quantity", "Price @Item", "Total Price", "Reff Stock ID" 
+                "No", "Flow ID", "Product Name", "Expiry Date", "Quantity", "Price @Item", "Total Price", "Reff Stock ID"
             ];
         }
 
@@ -28,18 +28,19 @@ class StockListTable extends Component {
                     let product = productFlow.product ? productFlow.product : {};
                     let totalPrice = productFlow.count * product.price;
                     let values = [
-                        i, productFlow.id, product.name, productFlow.expiryDate, stringUtil.beautifyNominal(productFlow.count), stringUtil.beautifyNominal(product.price)+",00", stringUtil.beautifyNominal(totalPrice)+",00", productFlow.flowReferenceId
+                        i, productFlow.id, product.name, productFlow.expiryDate, stringUtil.beautifyNominal(productFlow.count), stringUtil.beautifyNominal(product.price) + ",00", stringUtil.beautifyNominal(totalPrice) + ",00", productFlow.flowReferenceId
                     ];
                     i++;
-                    return <CrudRow disabled={this.props.disabled} handleDelete={this.props.handleDelete} handleEdit={this.props.handleEdit} 
-                    key={"product-list-k" + i + "_" + productFlow.id} identifier={productFlow.flowReferenceId} values={values} />
+                    return <CrudRow disabled={this.props.disabled} handleDelete={this.props.handleDelete} handleEdit={this.props.handleEdit}
+                        key={"product-list-k" + i + "_" + productFlow.id} identifier={productFlow.flowReferenceId} values={values} />
                 }
             );
 
-
+        let tableStyle = { fontFamily: 'consolas', fontSize: '0.8em' }
+        
         return (
             <div className="entity-list">
-                <table className="entity-list-table">
+                <table className="entity-list-table" style={tableStyle}>
                     <thead>
                         <tr>
                             {headers.map(headerValue => <th>{headerValue} </th>)}

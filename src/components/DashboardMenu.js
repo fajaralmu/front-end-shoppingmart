@@ -22,16 +22,15 @@ class DashboardMenu extends Component {
         return (
             <div className="dashboard-menu" >
                 <InstantTable disabled={true}
-                    rows={[
-                        {
-                            values: [
-                                <div onClick={() => this.goToMenu('trxIn')} className="dashboard-menu-item clickable">
-                                   <p>--</p> <span>New Items</span></div>,
-                                <div onClick={() => this.goToMenu('trxOut')} className="dashboard-menu-item clickable">
-                                   <p>--</p> <span>Transactions</span></div>,
-                                <div onClick={() => this.goToMenu('cashflow')} className="dashboard-menu-item clickable">
-                                   <p>--</p> <span>Cashflow</span></div>]
-                        }]} />
+                    rows={[{
+                        values: [
+                            <div onClick={() => this.goToMenu('trxIn')} className="dashboard-menu-item clickable">
+                                <p>_____</p> <h3>New Items</h3></div>,
+                            <div onClick={() => this.goToMenu('trxOut')} className="dashboard-menu-item clickable">
+                                <p>_____</p> <h3>Transactions</h3></div>,
+                            <div onClick={() => this.goToMenu('cashflow')} className="dashboard-menu-item clickable">
+                                <p>_____</p> <h3>Cashflow</h3></div>]
+                    }]} />
             </div>
         )
     }
