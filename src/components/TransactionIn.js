@@ -31,12 +31,7 @@ class TransactionIn
             activeField: ""
         }
 
-        this.getProductList = () => {
-            let productName = _byId("input-product-name").value;
-            this.props.getProductList(productName, this.props.app);
-            this.setState({ showDetail: true, productName: productName })
-            this.setActiveField("input-product-name");
-        }
+       
 
         this.isExistInTheChart = (productId) => {
             if (this.state.productFlows == null) return false;
@@ -184,11 +179,9 @@ class TransactionIn
             return stringUtil.beautifyNominal(totalPrice) + (",00");
         }
 
-        this.getSupplierList = () => {
-            if (_byId("input-supplier-name") == null) return;
-            let supplierName = _byId("input-supplier-name").value;
-            this.props.getSupplierList(supplierName, this.props.app);
-            this.setState({ supplierName: supplierName });
+        this.getSupplierList = (value) => { 
+            this.setState({ supplierName: value });
+            this.props.getSupplierList(value, this.props.app); 
             this.setActiveField("input-supplier-name");
         }
 
@@ -201,6 +194,12 @@ class TransactionIn
                 if (this.props.suppliers[i].id == id)
                     this.setState({ supplierName: this.props.suppliers[i].name, supplier: this.props.suppliers[i] });
             this.props.resetSuppliers();
+        }
+
+        this.getProductList = (value) => { 
+            this.setState({ showDetail: true, productName: value })
+            this.props.getProductList(value, this.props.app); 
+            this.setActiveField("input-product-name");
         }
 
         this.selectProduct = (id) => {

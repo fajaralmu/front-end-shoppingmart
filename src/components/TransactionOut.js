@@ -157,13 +157,10 @@ class TransactionOut extends Component {
             return stringUtil.beautifyNominal(totalPrice) + (",00");
         }
 
-        this.getCustomerList = () => {
-            if (_byId("input-customer-name") == null) return;
-            let customerName = _byId("input-customer-name").value;
-
-            this.setState({ customerName: customerName });
+        this.getCustomerList = (value) => { 
+            this.setState({ customerName: value });
             this.setActiveField("input-customer-name");
-            this.props.getCustomerList(customerName, this.props.app);
+            this.props.getCustomerList(value, this.props.app);
         }
 
         this.selectCustomer = (id) => {
