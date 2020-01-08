@@ -27,8 +27,8 @@ class ProductSales
 
     constructor(props) {
         super(props);
-        this.state = { chartOrientation: "horizontal", page: 0 }
-        this.getProductSales = () => {
+        this.state = { chartOrientation: "horizontal", page: 0, updated: new Date() }
+        this.getProductSales = (loadMore) => {
             if (!componentUtil.checkExistance("select-month-from", "select-month-to",
                 "select-year-from", "select-year-to")) {
                 return;
@@ -38,10 +38,19 @@ class ProductSales
                 fromMonth: _byId("select-month-from").value,
                 fromYear: _byId("select-year-from").value,
                 toMonth: _byId("select-month-to").value,
-                toYear: _byId("select-year-to").value
+                toYear: _byId("select-year-to").value,
+
+                //special fro laod more case
+                loadMore: loadMore,
+                referrer: this
             }
-            console.log("wil get detail: ", request);
+
             this.props.getProductSales(request);
+        }
+
+        this.refresh = () => {
+            console.log("++reresh++");
+            this.setState({ updated: new Date() });
         }
 
         this.onChangeChartOrientation = (value) => {
@@ -53,37 +62,42 @@ class ProductSales
 
         this.loadMore = () => {
             let currentPage = this.state.page;
-            this.setState({ page: currentPage+1 });
-            this.getProductSales();
+            this.setState({ page: currentPage + 1 });
+            this.getProductSales(true);
+        }
+
+        this.resetPage = () => {
+            this.setState({ page: 0 });
         }
 
     }
     componentDidMount() {
         document.title = "ProductSales";
-        this.getProductSales();
+        // this.getProductSales();
     }
     componentDidUpdate() {
-        console.log("============(product sales data)====", this.props.productSalesData);
+        console.log("updated");
     }
 
     render() {
 
-        let productSalesData = this.props.productSalesData != null ? this.props.productSalesData : { entities: [], filter:{} };
-        let maxValue = 100; 
-
-        let filterInfo = <div>From
-            {stringUtil.monthYearString(productSalesData.filter.month,productSalesData.filter.year)} 
-            to 
-            {stringUtil.monthYearString(productSalesData.filter.monthTo,productSalesData.filter.yearTo)}
+        let productSalesData = this.props.productSalesData != null ? this.props.productSalesData : { entities: [], filter: {} };
+        let maxValue = stringUtil.getMaxSales(productSalesData.entities);
+        console.log("============(product sales data)====", productSalesData.entities.length, "IN", new Date());
+        let filterInfo = <div>
+            {"From "}
+            {stringUtil.monthYearString(productSalesData.filter.month, productSalesData.filter.year)}
+            {" to "}
+            {stringUtil.monthYearString(productSalesData.filter.monthTo, productSalesData.filter.yearTo)}
         </div>
 
         let filterButtons = <ActionButtons buttonsData={[
             { text: "Back", onClick: () => this.props.setFeatureCode(null), id: "btn-back" },
-            { text: "Search", onClick: this.getProductSales, id: "btn-get-product-sales", status: "success" }]}
+            { text: "Search", onClick: () => this.getProductSales(null), id: "btn-get-product-sales", status: "success" }]}
         />;
 
         const filterBox =
-            <creator.FilterBox rows={[{ values: [<creator.DateSelectionFrom />, <creator.DateSelectionTo />, filterButtons] }]} />
+            <creator.FilterBox rows={[{ values: [<creator.DateSelectionFrom handleOnChange={this.resetPage} />, <creator.DateSelectionTo handleOnChange={this.resetPage} />, filterButtons] }]} />
 
         let productDetailRows = new Array();
 
@@ -93,14 +107,16 @@ class ProductSales
 
             productDetailRows.push({
                 id: 'chart-e-' + entity.product.id,
-                values: [entity.product.name, sales]
+                values: [(i + 1), entity.product.name,
+                <Chart text={sales}
+                    type="success" width={450} value={entity.sales} maxValue={maxValue} />
+                ]
             });
-
-        } 
+        }
 
         let tableStyle = { fontFamily: 'consolas', fontSize: '0.8em' }
         let productSalesListComponent = <div className="cashflow-list">
-            <InstantTable   style={tableStyle} rows={productDetailRows} />
+            <InstantTable style={tableStyle} rows={productDetailRows} />
         </div>
         return (
             <div className="cashflow-container">

@@ -7,9 +7,9 @@ const apiTransaction = "http://localhost:8080/universal-good-shop/api/transactio
 export const getProductSales = (request) => {
     return {
         type: types.GET_PRODUCT_SALES,
-        payload: { filter: { page: request.page, limit:10, month: request.fromMonth, year: request.fromYear, monthTo: request.toMonth, yearTo: request.toYear } },
+        payload: { filter: { page: request.page, limit: 10, month: request.fromMonth, year: request.fromYear, monthTo: request.toMonth, yearTo: request.toYear } },
         meta: {
-            type: types.GET_PRODUCT_SALES, url: apiTransaction.concat("productsales")
+            referrer: request.referrer, type: types.GET_PRODUCT_SALES, loadMore: request.loadMore == true, url: apiTransaction.concat("productsales")
         }
     };
 }
@@ -23,7 +23,7 @@ export const getCashflowDetail = (request) => {
     };
 }
 export const getCashflowInfo = (month, year, type) => {
-    console.log("getCashflowInfo:", type)
+
     return {
         type: types.GET_CASHFLOW_INFO,
         payload: { filter: { year: year, month: month, module: type } },
@@ -219,12 +219,13 @@ export const removeEntity = () => ({
     meta: { type: types.REMOVE_SHOP_ENTITY }
 })
 
-export const loadMoreSupplier = (page, productId) => ({
+export const loadMoreSupplier = (page, productId, referrer) => ({
     type: types.LOAD_MORE_SUPPLIER,
     payload: { filter: { page: page, fieldsFilter: { "productId": productId } } },
     meta: {
         type: types.LOAD_MORE_SUPPLIER,
-        url: apiBaseUrl.concat("moresupplier")
+        url: apiBaseUrl.concat("moresupplier"),
+        referrer: referrer
     }
 })
 

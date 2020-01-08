@@ -28,6 +28,7 @@ export const reducer = (state = initState, action) => {
                 currentProduct.suppliers.push(loadedSupplier[index]);
             }
             console.info("additinal suppliers: ", currentProduct.suppliers);
+            action.referrer.refresh();
             return { ...state, entity: currentProduct };
         case types.FETCH_PRODUCT_CATEGORIES_ALL:
             return { ...state, categories: action.payload.entities };

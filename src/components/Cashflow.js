@@ -38,8 +38,7 @@ class Cashflow
                 fromYear: _byId("select-year-from").value,
                 toMonth: _byId("select-month-to").value,
                 toYear: _byId("select-year-to").value
-            }
-            console.log("wil get detail: ", request);
+            } 
             this.props.getCashflowDetail(request);
         }
 

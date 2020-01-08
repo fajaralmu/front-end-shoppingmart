@@ -18,7 +18,13 @@ class ProductDetail extends Component {
         this.state = {
             supplierShown: false,
             supplierPage: 1,
-            product: null
+            product: null,
+            updated: new Date()
+        }
+
+        this.refresh = () => {
+            console.log("++reresh++");
+            this.setState({ updated: new Date() });
         }
 
         this.goBack = () => {
@@ -34,7 +40,7 @@ class ProductDetail extends Component {
 
             page++;
             this.setState({ supplierPage: page });
-            this.props.loadMoreSupplier(this.state.supplierPage, productId);
+            this.props.loadMoreSupplier(this.state.supplierPage, productId, this);
         }
     }
 
@@ -44,21 +50,21 @@ class ProductDetail extends Component {
 
     }
 
-    componentDidUpdate() { 
+    componentDidUpdate() {
     }
 
-    render() { 
-         
+    render() {
+
         let product = this.props.product;
         let imageComponent = "";
         if (product && product.imageUrl) {
-            
+
             let imageUrls = new Array();
             for (let index = 0; index < product.imageUrl.split("~").length; index++) {
-                imageUrls.push(url.baseImageUrl + product.imageUrl.split("~")[index]); 
+                imageUrls.push(url.baseImageUrl + product.imageUrl.split("~")[index]);
             }
             imageComponent = <ImageCarousel imageUrls={imageUrls} />
-           
+
         }
 
         if (product == null) {
@@ -109,10 +115,10 @@ class ProductDetail extends Component {
         }
         return (
             <div className="section-container" >
-                <h2>{product.name}</h2> 
+                <h2>{product.name}</h2>
                 <InstantTable disabled={true}
                     rows={[
-                        { id: "row-img", values: [imageComponent] ,CS:[2]},
+                        { id: "row-img", values: [imageComponent], CS: [2] },
                         { id: "row-name", values: ["Name", product.name] },
                         { id: "row-price", values: ["Price", product.price] },
                         { id: "row-count", values: ["Item(s)", product.count + " " + (product.unit ? product.unit.name : "")] },
@@ -124,7 +130,7 @@ class ProductDetail extends Component {
                     id: "btn-back", onClick: this.goBack, text: "Back"
                 },
                 {
-                    id: "btn-show-supplier",  status: "success",
+                    id: "btn-show-supplier", status: "success",
                     onClick: () => this.showSupplierList(supplierShown && product.suppliers ? false : true),
                     text: (supplierShown && product.suppliers ? "Hide suppliers" : "Show suppliers")
                 }]} />
@@ -143,7 +149,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
-    loadMoreSupplier: (page, productId) => dispatch(actions.loadMoreSupplier(page, productId))
+    loadMoreSupplier: (page, productId, referrer) => dispatch(actions.loadMoreSupplier(page, productId, referrer))
 
 })
 export default (connect(

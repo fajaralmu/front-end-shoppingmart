@@ -47,13 +47,13 @@ const getProductSalesMiddleware = store => next => action => {
         headers: { 'Content-Type': 'application/json', 'requestId': '1234', 'loginKey': localStorage.getItem("loginKey") }
     }).then(response => response.json())
         .then(data => {
-            console.debug("Response:", data);
+            console.debug("getProductSalesMiddleware Response:", data, "load more:",action.meta.loadMore);
             if(data.code != "00"){
                 alert("Server error");
                 return;
             }
  
-            let newAction = Object.assign({}, action, { payload: data  });
+            let newAction = Object.assign({}, action, { payload: data , loadMore: action.meta.loadMore , referrer: action.meta.referrer });
             delete newAction.meta;
             store.dispatch(newAction);
         })
@@ -67,7 +67,7 @@ const getCashflowDetailMiddleware = store => next => action => {
         headers: { 'Content-Type': 'application/json', 'requestId': '1234', 'loginKey': localStorage.getItem("loginKey") }
     }).then(response => response.json())
         .then(data => {
-            console.debug("Response:", data);
+            console.debug("getCashflowDetailMiddleware Response:", data);
             if(data.code != "00"){
                 alert("Server error");
                 return;
@@ -87,7 +87,7 @@ const getCashflowInfoMiddleware = store => next => action => {
         headers: { 'Content-Type': 'application/json', 'requestId': '1234', 'loginKey': localStorage.getItem("loginKey") }
     }).then(response => response.json())
         .then(data => {
-            console.debug("Response:", data);
+            console.debug("getCashflowInfoMiddleware Response:", data);
             if(data.code != "00"){
                 alert("Server error");
                 return;
@@ -119,7 +119,7 @@ const getProductListTrxMiddleware = store => next => action => {
         })
             .then(response => response.json())
             .then(data => {
-                console.debug("Response:", data);
+                console.debug("getProductListTrxMiddleware Response:", data);
                 if (data.entities == null || data.entities.length == 0) {
                     alert("Data not found!");
                     return;
@@ -374,7 +374,7 @@ const loadMoreSupplierMiddleware = store => next => action => {
                 return;
             }
             let newAction = Object.assign({}, action, {
-                payload: data
+                payload: data, referrer: action.meta.referrer
             });
             delete newAction.meta;
             store.dispatch(newAction);

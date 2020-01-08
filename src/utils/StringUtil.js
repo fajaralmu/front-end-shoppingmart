@@ -20,22 +20,32 @@ export function beautifyNominal(val) {
 	return result;
 }
 
+export const getMaxSales = (list) => {
+	let result = 0;
+	for (let i = 0; i < list.length; i++) {
+		const element = list[i];
+		if (element.sales > result)
+			result = element.sales;
+	}
+	return result;
+}
+
 export const isNonNullArray = function (array) {
 	return array != null && array.length > 0;
 }
 
-export const isNonNullArrayWithIndex = function (array,i) {
+export const isNonNullArrayWithIndex = function (array, i) {
 	return array != null && array.length > 0 && array[i] != null;
 }
 
 const months = [
-	"January","Ferbuary","March","April","May","June",
-	"July","August","September","October","November","December"
+	"January", "Ferbuary", "March", "April", "May", "June",
+	"July", "August", "September", "October", "November", "December"
 ]
 
-export const monthYearString = function(m,y){
-	if(m == null || y == null){
+export const monthYearString = function (m, y) {
+	if (m == null || y == null) {
 		return "...";
 	}
-	return months[m-1]+" "+y;
+	return months[m - 1] + " " + y;
 }

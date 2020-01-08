@@ -50,8 +50,18 @@ export const reducer = (state = initState, action) => {
         case types.GET_CASHFLOW_DETAIL:
             return { ...state, cashflowDetail: action.payload };
         case types.GET_PRODUCT_SALES:
-            return { ...state, productSalesData: action.payload };
-
+            let currentProductSalesData = action.payload;
+            if (action.loadMore == true) {
+                currentProductSalesData = state.productSalesData;
+                let loadedProductList = action.payload.entities;
+                for (let i = 0; i < loadedProductList.length; i++) {
+                    currentProductSalesData.entities.push(loadedProductList[i]);
+                }
+            }
+            console.log("will update currentProductSalesData: ",currentProductSalesData.entities.length);
+            result = { ...state, productSalesData: currentProductSalesData };
+            action.referrer.refresh();
+            return result;
         default:
             return { ...state };
     }

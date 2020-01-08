@@ -52,9 +52,7 @@ class Dashboard extends Component {
     }
 
     componentDidUpdate() {
-        this.validateLoginStatus();
-        console.log("cashflow out: ", this.props.cashflowInfoOut)
-        console.log("cashflow in: ", this.props.cashflowInfoOut)
+        this.validateLoginStatus(); 
     }
 
     render() {
@@ -95,8 +93,8 @@ class Dashboard extends Component {
                     <InstantTable disabled={true}
                         rows={[{
                             values: [
-                                <Card title={"My earning in " + cashflowInfoOut.month + "/" + cashflowInfoOut.year} content={earningContent} />,
-                                <Card title={"My spending in " + cashflowInfoIn.month + "/" + cashflowInfoIn.year} content={spendingContent} />
+                                <Card title={"My earning in " + stringUtil.monthYearString(cashflowInfoOut.month, cashflowInfoOut.year)} content={earningContent} />,
+                                <Card title={"My spending in " + stringUtil.monthYearString(cashflowInfoIn.month, cashflowInfoIn.year)} content={spendingContent} />
                             ]
                         }]} />
                 </div>
