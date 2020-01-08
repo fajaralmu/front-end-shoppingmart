@@ -7,7 +7,7 @@ export const initState = {
 
     },
     categories: [],
-    suppliersData: []
+    suppliersData: [],
 
 };
 

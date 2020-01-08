@@ -1,6 +1,6 @@
 export function beautifyNominal(val) {
-	if(val == "" || val == null) val = "0";
-	let nominal = ""+val;
+	if (val == "" || val == null) val = "0";
+	let nominal = "" + val;
 	let result = "";
 	if (nominal.length > 3) {
 		let zero = 0;
@@ -18,4 +18,24 @@ export function beautifyNominal(val) {
 		result = val;
 	}
 	return result;
+}
+
+export const isNonNullArray = function (array) {
+	return array != null && array.length > 0;
+}
+
+export const isNonNullArrayWithIndex = function (array,i) {
+	return array != null && array.length > 0 && array[i] != null;
+}
+
+const months = [
+	"January","Ferbuary","March","April","May","June",
+	"July","August","September","October","November","December"
+]
+
+export const monthYearString = function(m,y){
+	if(m == null || y == null){
+		return "...";
+	}
+	return months[m-1]+" "+y;
 }

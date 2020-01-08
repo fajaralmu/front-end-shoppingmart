@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import ActionButton from './ActionButton';
 import ActionButtons from './ActionButtons';
+import * as stringUtil from '../utils/StringUtil'
 
 class CrudRow extends Component {
     constructor(props) {
@@ -18,7 +19,7 @@ class CrudRow extends Component {
         }
     }
 
-    render() { 
+    render() {
         let values = this.props.values;
         const defaultRowColSpan = 1;
         if (null == values) {
@@ -28,12 +29,11 @@ class CrudRow extends Component {
             for (let i = 0; i < values.length; i++) {
                 const value = values[i];
                 if (this.props.CS || this.props.RS) {
-                    let colspan = this.props.CS != null
-                        && this.props.CS.length > 0 &&
-                        this.props.CS[i] != null ? this.props.CS[i] : defaultRowColSpan;
-                    let rowspan = this.props.RS != null && this.props.RS.length > 0 
-                        &&this.props.RS[i]!=null?this.props.RS[i] : defaultRowColSpan;
-                    newValues.push({ value: value, colspan: colspan, rowspan:rowspan });
+                    let colspan = stringUtil.isNonNullArrayWithIndex(this.props.CS, i) ?
+                        this.props.CS[i] : defaultRowColSpan;
+                    let rowspan = stringUtil.isNonNullArrayWithIndex(this.props.RS, i) ?
+                        this.props.RS[i] : defaultRowColSpan;
+                    newValues.push({ value: value, colspan: colspan, rowspan: rowspan });
                 } else
                     newValues.push({ value: value });
             }
@@ -41,7 +41,7 @@ class CrudRow extends Component {
         }
 
         let trStyle = {
-            borderTop:'solid 1px gray',  
+            borderTop: 'solid 1px gray',
         };
         let actionButton = <td style={trStyle}>
             <ActionButtons buttonsData={[
@@ -59,17 +59,17 @@ class CrudRow extends Component {
                 }
             ]} />
         </td>;
- 
+
         if (this.props.disabled == true) {
-            actionButton = ""; 
+            actionButton = "";
             trStyle = {};
-        } 
+        }
         return (
             <tr id={this.props.id} valign={this.props.valign}>
                 {values.map(
                     value => {
                         return (
-                            <td style={trStyle}  rowSpan={value.rowspan} colSpan={value.colspan}>{value.value}</td>
+                            <td style={trStyle} rowSpan={value.rowspan} colSpan={value.colspan}>{value.value}</td>
                         )
                     }
                 )}

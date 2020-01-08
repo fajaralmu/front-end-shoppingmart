@@ -9,7 +9,8 @@ export const initState = {
     productsData: null,
     cashflowInfoOut: null,
     cashflowInfoIn: null,
-    cashflowDetail: null
+    cashflowDetail: null,
+    productSalesData: null
 };
 
 export const reducer = (state = initState, action) => {
@@ -46,8 +47,10 @@ export const reducer = (state = initState, action) => {
                 result.cashflowInfoIn = action.payload;
             return result;
 
-        case types.GET_CASHFLOW_DETAIL: 
+        case types.GET_CASHFLOW_DETAIL:
             return { ...state, cashflowDetail: action.payload };
+        case types.GET_PRODUCT_SALES:
+            return { ...state, productSalesData: action.payload };
 
         default:
             return { ...state };

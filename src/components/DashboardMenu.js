@@ -24,17 +24,26 @@ class DashboardMenu extends Component {
                 <InstantTable disabled={true}
                     rows={[{
                         values: [
-                            <div onClick={() => this.goToMenu('trxIn')} className="dashboard-menu-item clickable">
-                                <p>_____</p> <h3>New Items</h3></div>,
-                            <div onClick={() => this.goToMenu('trxOut')} className="dashboard-menu-item clickable">
-                                <p>_____</p> <h3>Transactions</h3></div>,
-                            <div onClick={() => this.goToMenu('cashflow')} className="dashboard-menu-item clickable">
-                                <p>_____</p> <h3>Cashflow</h3></div>]
+                            <MenuItem onClick={() => this.goToMenu('trxIn')} text="Product Supply" />,
+                            <MenuItem onClick={() => this.goToMenu('trxOut')} text="Purchase" />,
+                            <MenuItem onClick={() => this.goToMenu('cashflow')} text="Cashflow" />]
+                    },
+                    {
+                        values: [
+                            <MenuItem onClick={() => this.goToMenu('productSales')} text="Product Sales" />
+                        ]
                     }]} />
             </div>
         )
     }
 
+}
+
+const MenuItem = (props) => {
+    return (
+        <div onClick={props.onClick} className="dashboard-menu-item clickable">
+            <p>_____</p> <h3>{props.text}</h3></div>
+    )
 }
 
 export default DashboardMenu;

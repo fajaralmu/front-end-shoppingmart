@@ -17,6 +17,7 @@ import InstantTable from './InstantTable';
 import Card from './Card'
 import * as stringUtil from '../utils/StringUtil'
 import Label from './Label';
+import ProductSales from './ProductSales';
 
 class Dashboard extends Component {
 
@@ -43,11 +44,11 @@ class Dashboard extends Component {
 
     componentDidMount() {
         this.validateLoginStatus();
-        if (this.props.loginStatus != true) 
+        if (this.props.loginStatus != true)
             return;
-            this.props.setMenuCode(menus.DASHBOARD);
-            document.title = "Dashboard";
-            this.getCashflowInfo(); 
+        this.props.setMenuCode(menus.DASHBOARD);
+        document.title = "Dashboard";
+        this.getCashflowInfo();
     }
 
     componentDidUpdate() {
@@ -112,6 +113,9 @@ class Dashboard extends Component {
                     break;
                 case 'cashflow':
                     mainComponent = <Cashflow setFeatureCode={this.setFeatureCode} />
+                    break;
+                case 'productSales':
+                    mainComponent = <ProductSales setFeatureCode={this.setFeatureCode} />
                     break;
                 default:
                     break;

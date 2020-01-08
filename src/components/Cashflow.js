@@ -20,6 +20,7 @@ import * as componentUtil from '../utils/ComponentUtil'
 import { _byId } from '../utils/ComponentUtil'
 import ComboBoxes from './ComboBoxes'
 import Chart from './Chart'
+import * as creator from '../utils/ComponentCreator'
 
 class Cashflow
     extends Component {
@@ -49,6 +50,7 @@ class Cashflow
                 this.setState({ chartOrientation: 'vertical' })
         }
 
+
     }
     componentDidMount() {
         document.title = "Cashflow";
@@ -60,34 +62,7 @@ class Cashflow
     render() {
         let cashflowDetail = this.props.cashflowDetail != null ? this.props.cashflowDetail : { supplies: [], purchases: [] };
         let maxValue = this.props.cashflowDetail != null ? this.props.cashflowDetail.maxValue : 0;
-        let filterDateFrom = <div> <Label text="from date" />
-            <ComboBoxes values={[
-                {
-                    id: "select-month-from",
-                    defaultValue: componentUtil.getCurrentMMYY()[0],
-                    options: componentUtil.getDropdownOptionsMonth()
-                },
-                {
-                    id: "select-year-from",
-                    defaultValue: componentUtil.getCurrentMMYY()[1],
-                    options: componentUtil.getDropdownOptionsYear(2017, 2020)
-                }
-            ]} /></div>;
-        let filterDateTo = <div>
-            <Label text="to date" />
-            <ComboBoxes values={[
-                {
-                    id: "select-month-to",
-                    defaultValue: componentUtil.getCurrentMMYY()[0],
-                    options: componentUtil.getDropdownOptionsMonth()
-                },
-                {
-                    id: "select-year-to",
-                    defaultValue: componentUtil.getCurrentMMYY()[1],
-                    options: componentUtil.getDropdownOptionsYear(2017, 2020)
-                }
-            ]} />
-        </div>;
+
         let inputRadio = <div>
             <InputField name="orientation" onChange={() => this.onChangeChartOrientation('h')} selected={true} type="radio" id="orientation-h" text="Horizontal orientation" />
             <InputField name="orientation" onChange={() => this.onChangeChartOrientation('v')} type="radio" id="orientation-v" text="Vertical orientation" />
@@ -97,16 +72,13 @@ class Cashflow
 
         let filterButtons = <ActionButtons buttonsData={[
             { text: "Back", onClick: () => this.props.setFeatureCode(null), id: "btn-back" },
-            { status: "success", id: "btn-get-cashflow-detail", text: "Search", onClick: this.getCashflowDetail }]}
+            { text: "Search", onClick: this.getCashflowDetail, status: "success", id: "btn-get-cashflow-detail" }]}
         />;
 
-        const filterBox = <div className="filter-box rounded" >
-            <InstantTable valign="bottom" rows={[{ values: [filterDateFrom, filterDateTo, filterButtons, inputRadio] }]} />
-
-        </div>
+        const filterBox =
+            <creator.FilterBox rows={[{ values: [<creator.DateSelectionFrom />, <creator.DateSelectionTo />, filterButtons, inputRadio] }]} />
 
         let cashflowDataRows = new Array();
-
 
         for (let i = 0; i < cashflowDetail.supplies.length; i++) {
             const spending = cashflowDetail.supplies[i];
@@ -129,23 +101,8 @@ class Cashflow
                 values: [<Chart orientation={chartOrientation} text={spendingAmount + "(" + spendingCount + "items)"} type="warning" width={450} value={spending.amount} maxValue={maxValue} />],
                 CS: [3]
             });
-            // cashflowDataRows.push({
-            //     id: 'label-e-' + yymm, values: [
-            //         "Earning :" + yymm,
-            //         "Value :" + earningAmount,
-            //         "Item: " + earningCount
-            //     ]
-            // });
-            // cashflowDataRows.push({
-            //     id: 'label-s-' + yymm, values: [
-            //         "Spending :" + yymm,
-            //         "Value :" + spendingAmount,
-            //         "Item: " + spendingCount
-            //     ]
-            // });
 
         }
-        console.log("______cashflow detail:", cashflowDataRows);
 
         if (chartOrientation == "vertical") {
             let cashflowsDataRowsVert = new Array();
@@ -164,8 +121,6 @@ class Cashflow
 
             });
 
-            console.log("cashflowsDataRowsVert==>", cashflowsDataRowsVert);
-            console.log("cashflowDataRows==>", cashflowDataRows);
             cashflowDataRows = cashflowsDataRowsVert;
         }
 
@@ -188,13 +143,11 @@ class Cashflow
 const mapStateToProps = state => {
     return {
         cashflowDetail: state.transactionState.cashflowDetail
-
     }
 }
 
 const mapDispatchToProps = dispatch => ({
     getCashflowDetail: (request) => dispatch(actions.getCashflowDetail(request))
-
 })
 export default (connect(
     mapStateToProps,

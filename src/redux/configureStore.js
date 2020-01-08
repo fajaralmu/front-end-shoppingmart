@@ -30,12 +30,34 @@ export const configureStore = () => {
             getCustomerListMiddleware,
             getProductListTrxMiddleware,
             getCashflowInfoMiddleware,
-            getCashflowDetailMiddleware
+            getCashflowDetailMiddleware,
+            getProductSalesMiddleware
+            
 
         )
     );
 
     return store;
+}
+
+const getProductSalesMiddleware = store => next => action => {
+    if (!action.meta || action.meta.type !== types.GET_PRODUCT_SALES) { return next(action); }
+    fetch(action.meta.url, {
+        method: POST_METHOD, body: JSON.stringify(action.payload),
+        headers: { 'Content-Type': 'application/json', 'requestId': '1234', 'loginKey': localStorage.getItem("loginKey") }
+    }).then(response => response.json())
+        .then(data => {
+            console.debug("Response:", data);
+            if(data.code != "00"){
+                alert("Server error");
+                return;
+            }
+ 
+            let newAction = Object.assign({}, action, { payload: data  });
+            delete newAction.meta;
+            store.dispatch(newAction);
+        })
+        .catch(err => console.log(err));
 }
 
 const getCashflowDetailMiddleware = store => next => action => {

@@ -4,24 +4,33 @@ const apiEntityBaseUrl = "http://localhost:8080/universal-good-shop/api/entity/"
 const apiAccount = "http://localhost:8080/universal-good-shop/api/account/"
 const apiTransaction = "http://localhost:8080/universal-good-shop/api/transaction/";
 
-export const getCashflowDetail = (request) => { 
+export const getProductSales = (request) => {
+    return {
+        type: types.GET_PRODUCT_SALES,
+        payload: { filter: { page: request.page, limit:10, month: request.fromMonth, year: request.fromYear, monthTo: request.toMonth, yearTo: request.toYear } },
+        meta: {
+            type: types.GET_PRODUCT_SALES, url: apiTransaction.concat("productsales")
+        }
+    };
+}
+export const getCashflowDetail = (request) => {
     return {
         type: types.GET_CASHFLOW_DETAIL,
-        payload: {filter:{month:request.fromMonth,year:request.fromYear,monthTo:request.toMonth,yearTo:request.toYear}},
+        payload: { filter: { month: request.fromMonth, year: request.fromYear, monthTo: request.toMonth, yearTo: request.toYear } },
         meta: {
             type: types.GET_CASHFLOW_DETAIL, url: apiTransaction.concat("cashflowdetail")
         }
-    }; 
+    };
 }
 export const getCashflowInfo = (month, year, type) => {
-    console.log("getCashflowInfo:",type)
+    console.log("getCashflowInfo:", type)
     return {
         type: types.GET_CASHFLOW_INFO,
         payload: { filter: { year: year, month: month, module: type } },
         meta: {
             type: types.GET_CASHFLOW_INFO, url: apiTransaction.concat("cashflowinfo")
         }
-    }; 
+    };
 }
 
 export const getProductListTrx = (name) => ({
