@@ -40,7 +40,10 @@ class CrudRow extends Component {
             values = newValues;
         }
 
-        let actionButton = <td>
+        let trStyle = {
+            borderTop:'solid 1px gray',  
+        };
+        let actionButton = <td style={trStyle}>
             <ActionButtons buttonsData={[
                 {
                     id: "k-btn-edit-" + this.props.identifier,
@@ -56,15 +59,17 @@ class CrudRow extends Component {
                 }
             ]} />
         </td>;
+ 
         if (this.props.disabled == true) {
-            actionButton = "";
-        }
+            actionButton = ""; 
+            trStyle = {};
+        } 
         return (
             <tr id={this.props.id} valign={this.props.valign}>
                 {values.map(
                     value => {
                         return (
-                            <td rowSpan={value.rowspan} colSpan={value.colspan}>{value.value}</td>
+                            <td style={trStyle}  rowSpan={value.rowspan} colSpan={value.colspan}>{value.value}</td>
                         )
                     }
                 )}
