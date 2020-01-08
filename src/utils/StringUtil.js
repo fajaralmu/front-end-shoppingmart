@@ -1,3 +1,11 @@
+let index = 1;
+export const uniqueId = function () {
+	let string = "";
+	string = new Date().getUTCMilliseconds();
+	index++;
+	return index + "-" + string;
+}
+
 export function beautifyNominal(val) {
 	if (val == "" || val == null) val = "0";
 	let nominal = "" + val;

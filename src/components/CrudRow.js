@@ -65,13 +65,12 @@ class CrudRow extends Component {
             trStyle = {};
         }
         return (
-            <tr id={this.props.id} valign={this.props.valign}>
-                {values.map(
-                    value => {
-                        return (
-                            <td style={trStyle} rowSpan={value.rowspan} colSpan={value.colspan}>{value.value}</td>
-                        )
-                    }
+            <tr key={this.props.id} valign={this.props.valign}>
+                {values.map(value => {
+                    return (
+                        <td key={"td-" + stringUtil.uniqueId()} style={trStyle} rowSpan={value.rowspan} colSpan={value.colspan}>{value.value}</td>
+                    )
+                }
                 )}
                 {actionButton}
             </tr>

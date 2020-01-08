@@ -22,6 +22,9 @@ class ProductDetail extends Component {
             updated: new Date()
         }
 
+        /**
+         * this method is called in shopReducer
+         */
         this.refresh = () => {
             console.log("++reresh++");
             this.setState({ updated: new Date() });

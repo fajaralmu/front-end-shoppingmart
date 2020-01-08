@@ -14,7 +14,7 @@ class ActionButtons extends Component {
                          className=className.concat(" ").concat(buttonData.status);
                      }
                     return(
-                        <button className={className} id={buttonData.id} onClick={buttonData.onClick}>{buttonData.text}</button>
+                        <button className={className} key={"key-"+buttonData.id} onClick={buttonData.onClick}>{buttonData.text}</button>
                     )
                 })}
             </div>);

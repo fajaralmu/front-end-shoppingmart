@@ -15,14 +15,14 @@ class InstantTable extends Component {
             className += " " + this.props.className;
         }
         return (
-            <table style={tableStyle} className={className}> <tbody>
+            <table style={tableStyle} className={className}><tbody>
                 {rows.map(row => {
 
                     return (<CrudRow valign={this.props.valign ? this.props.valign : "top"} RS={row.RS} CS={row.CS} values={row.values ? row.values : []}
-                        key={row.id} id={row.id} disabled={this.props.disabled == null ? true : this.props.disabled}></CrudRow>
+                        key={"key-row-"+row.id} disabled={this.props.disabled == null ? true : this.props.disabled}></CrudRow>
                     )
                 })}
-            </tbody> </table>
+            </tbody></table>
 
         )
     }

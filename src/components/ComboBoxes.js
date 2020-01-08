@@ -27,10 +27,10 @@ class ComboBoxes extends Component {
                 if (comboBox.options) { options = comboBox.options; }
                 return (
                     <select defaultValue={comboBox.defaultValue ? comboBox.defaultValue : ""} className="rounded" 
-                    id={comboBox.id} 
+                    key={comboBox.id} 
                     onChange={comboBox.handleOnChange?comboBox.handleOnChange:()=>console.log("not supported")} >
                         {options.map(
-                            option => { return <option value={option.value}>{option.text}</option> }
+                            option => { return <option key={comboBox.id+"-k-"+option.value} value={option.value}>{option.text}</option> }
                         )}
                     </select>
                 )

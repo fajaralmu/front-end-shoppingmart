@@ -48,6 +48,9 @@ class ProductSales
             this.props.getProductSales(request);
         }
 
+         /**
+         * this method is called in trxReducer
+         */
         this.refresh = () => {
             console.log("++reresh++");
             this.setState({ updated: new Date() });

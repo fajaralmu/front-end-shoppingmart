@@ -27,7 +27,7 @@ class ComboBox extends Component {
             <div className="input-field ">
                 <select defaultValue={this.props.defaultValue?this.props.defaultValue:""} className="rounded" id={this.props.id} onChange={this.handleOnChange} >
                     {options.map(
-                        option => { return <option value={option.value}>{option.text}</option> }
+                        option => { return <option key={"opt"+option.value} value={option.value}>{option.text}</option> }
                     )}
                 </select>
             </div>

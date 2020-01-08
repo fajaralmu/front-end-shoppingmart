@@ -11,6 +11,7 @@ import ActionButtons from './ActionButtons'
 import InputField from './InputField'
 import ComboBox from './ComboBox'
 import * as componentUtil from '../utils/ComponentUtil'
+import * as stringUtil from '../utils/StringUtil'
 
 class SupplierList extends Component {
 
@@ -118,14 +119,14 @@ class SupplierList extends Component {
         let filterBox = <div className="filter-box">
             <InputField placeholder="search by supplier name" onKeyUp={this.handleInputNameChange} type="search"
                 id="input-supplier-name" />
-            <ComboBox defaultValue="00" onChange={this.handleOrderChange}
+            <ComboBox  defaultValue="00" onChange={this.handleOrderChange}
                 options={[
                     { value: "00", text: "-Select Order-" },
                     { value: "name-asc", text: "Name [A-Z]" },
                     { value: "name-desc", text: "Name [Z-A]" }
-                ]} id="select-order" />
+                ]} key="k-select-order" id="select-order" />
 
-            <ActionButtons buttonsData={[{
+            <ActionButtons key="btns" buttonsData={[{
                 text: "Search", status: "success", onClick: () => this.getSupplierList(this.state.supplierPage), id: "btn-search"
             }, {
                 text: "Clear", status: 'warning', onClick: this.clearField, id: "Clear"
@@ -138,12 +139,12 @@ class SupplierList extends Component {
             <h2>Supplier List Page</h2>
             <p>List of our partners</p>
             <div className="nav-containter">
-                <NavButton buttonClick={this.prev} key="nav-prev" text="<" />
+                <NavButton key={stringUtil.uniqueId()}  buttonClick={this.prev} key="nav-prev" text="<" />
                 {buttonData.map(b => {
                     let active = (b.value == this.state.supplierPage)
-                    return <NavButton active={active} buttonClick={() => this.getSupplierList(b.value)} value={b.value} text={b.text} />
+                    return <NavButton key={stringUtil.uniqueId()} active={active} buttonClick={() => this.getSupplierList(b.value)} value={b.value} text={b.text} />
                 })}
-                <NavButton buttonClick={this.next} key="nav-next" text=">" />
+                <NavButton key={stringUtil.uniqueId()}  buttonClick={this.next} key="nav-next" text=">" />
             </div>
             {filterBox}
             <div className="supplier-panel">
