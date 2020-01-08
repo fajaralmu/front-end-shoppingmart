@@ -15,3 +15,6 @@ export const FETCH_PRODUCT_LIST_TRX = "fetch_product_list";
 export const GET_CASHFLOW_INFO = "get_cashflow";
 export const GET_CASHFLOW_DETAIL = "get_cashflow_detail";
 export const GET_PRODUCT_SALES = "get_product_sales";
+export const RESET_SUPPLIERS = "reset_suppliers";
+export const RESET_PRODUCTS = "reset_products";
+export const RESET_CUSTOMERS = "RESET_CUSTOMERS";

@@ -24,12 +24,18 @@ class TransactionIn
 
     constructor(props) {
         super(props);
-        this.state = { product: null, supplier: {}, showDetail: false, productFlows: [], messageShow: false, messageType: "" }
+        this.state = {
+            productName: "", supplierName: "", product: null, supplier: {}, showDetail: false, productFlows: [],
+            messageShow: false, messageType: "",
+            quantity: 0, price: 0, expiryDate: "2020-01-01",
+            activeField: ""
+        }
 
         this.getProductList = () => {
             let productName = _byId("input-product-name").value;
-            this.props.getProductList(productName);
-            this.setState({ showDetail: true })
+            this.props.getProductList(productName, this.props.app);
+            this.setState({ showDetail: true, productName: productName })
+            this.setActiveField("input-product-name");
         }
 
         this.isExistInTheChart = (productId) => {
@@ -38,14 +44,14 @@ class TransactionIn
         }
 
         this.addToCart = () => {
-            if (_byId("input-quantity").value <= 0) {
+            if (this.state.quantity <= 0) {
                 alert("Please provide valid quantity!"); return;
             }
-            let quantity = _byId("input-quantity").value;
-            let price = _byId("input-product-price").value;
-            let expDate = _byId("input-product-exp-date").value;
-            let product = this.state.product 
- 
+            let quantity = this.state.quantity;
+            let price = this.state.price;
+            let expDate = this.state.expiryDate;
+            let product = this.state.product;
+
             if (this.isExistInTheChart(product.id))
                 if (!window.confirm("The product already exist in the chart, do you want to override it?"))
                     return;
@@ -53,15 +59,16 @@ class TransactionIn
             let ID = Math.floor(Math.random() * 1000);
             let newProductFlow = {
                 "id": ID,
-                "product":  product, 
+                "product": product,
                 "price": price,
-                "count": quantity, 
+                "count": quantity,
                 "expiryDate": expDate,
                 flowReferenceId: product.id
             };
 
             //update list in the state
             this.addProductFlow(newProductFlow);
+            this.emptyForm();
         }
 
         this.addProductFlow = (productFlow) => {
@@ -69,7 +76,7 @@ class TransactionIn
             //update
             if (this.getProductFlow(productFlow.product.id) != null) {
                 for (let index = 0; index < this.state.productFlows.length; index++)
-                    if (this.state.productFlows[index].product.id == productFlow.product.id) 
+                    if (this.state.productFlows[index].product.id == productFlow.product.id)
                         currentFlows[index] = productFlow;
 
             } else
@@ -77,7 +84,7 @@ class TransactionIn
 
             this.setState({ productFlows: currentFlows });
             this.showMessage("Success saving to chart", "success");
-            componentUtil.clearFields("input-supplier-name");
+            
         }
 
         this.getProductFlow = (productId) => {
@@ -96,20 +103,20 @@ class TransactionIn
             return null;
         }
 
-       
+
 
         this.handleEdit = (productId) => {
             alert("will Edit: " + productId);
             let productFlow = this.getProductFlow(productId);
-            if(null == productFlow){
+            if (null == productFlow) {
                 alert("Data not found");
                 return;
             }
-            _byId("input-quantity").value = productFlow.count;
-            _byId("input-product-price").value = productFlow.price;
-            _byId("input-product-name").value = productFlow.product.name;
-            _byId("input-product-exp-date").value = productFlow.expiryDate;
-            this.setState({product:productFlow.product})
+            this.setState({ quantity: productFlow.count });
+            this.setState({ price: productFlow.price });
+            this.setState({ productName: productFlow.product.name });
+            this.setState({ expiryDate: productFlow.expiryDate });
+            this.setState({ product: productFlow.product })
         }
 
         this.handleDelete = (id) => {
@@ -139,7 +146,7 @@ class TransactionIn
             if (!window.confirm("Are you sure want to proceed?"))
                 return;
             let request = { productFlows: this.state.productFlows, supplier: this.state.supplier };
-            this.props.submitSupplyTransaction(request);
+            this.props.submitSupplyTransaction(request, this.props.app);
         }
 
         this.endMessage = () => { this.setState({ messageShow: false }) }
@@ -150,8 +157,21 @@ class TransactionIn
 
         this.reset = () => {
             componentUtil.clearFields(null);
-            this.setState({ productFlows: [], showDetail: false, product:null });
+            this.setState({
+                productFlows: [], showDetail: false, product: null,
+                supplierName: null, productName: null, expiryDate: null, quantity: null, price: null
+            });
             this.props.resetPurchaseTransaction();
+        }
+
+        this.emptyForm = () => {
+            this.setState({
+                 productName: null, expiryDate: null, quantity: null, price: null
+            });
+        }
+
+        this.setActiveField = (id) => {
+            this.setState({ activeField: id });
         }
 
         this.calculateTotalPrice = () => {
@@ -167,7 +187,9 @@ class TransactionIn
         this.getSupplierList = () => {
             if (_byId("input-supplier-name") == null) return;
             let supplierName = _byId("input-supplier-name").value;
-            this.props.getSupplierList(supplierName);
+            this.props.getSupplierList(supplierName, this.props.app);
+            this.setState({ supplierName: supplierName });
+            this.setActiveField("input-supplier-name");
         }
 
         this.selectSupplier = (id) => {
@@ -177,7 +199,8 @@ class TransactionIn
             }
             for (let i = 0; i < this.props.suppliers.length; i++)
                 if (this.props.suppliers[i].id == id)
-                    this.setState({ supplier: this.props.suppliers[i] });
+                    this.setState({ supplierName: this.props.suppliers[i].name, supplier: this.props.suppliers[i] });
+            this.props.resetSuppliers();
         }
 
         this.selectProduct = (id) => {
@@ -187,19 +210,18 @@ class TransactionIn
             }
             for (let i = 0; i < this.props.products.length; i++)
                 if (this.props.products[i].id == id)
-                    this.setState({ product: this.props.products[i] });
+                    this.setState({ productName: this.props.products[i].name, product: this.props.products[i] });
+            this.props.resetProducts();
+             
         }
     }
     componentDidMount() {
         document.title = "Transaction::In";
-        if (this.props.selectedProduct && this.props.selectedProduct.productFlow
-            && _byId("input-product-name"))
-            _byId("input-product-name").value = this.props.selectedProduct.productFlow.id
+
     }
     componentDidUpdate() {
-        if (this.props.selectedProduct && this.props.selectedProduct.productFlow
-            && _byId("input-product-name")) {
-            _byId("input-product-name").value = this.props.selectedProduct.productFlow.id
+        if (_byId(this.state.activeField) != null) {
+            _byId(this.state.activeField).focus();
         }
     }
 
@@ -213,11 +235,11 @@ class TransactionIn
             </div>;
         }
         if (this.state.messageShow == true) {
-            message = <Message text={this.state.messageText} endMessage={this.endMessage} type={this.state.messageType} />
+            message = <Message withTimer={true} text={this.state.messageText} endMessage={this.endMessage} type={this.state.messageType} />
         }
 
         let supplierList = [];
-       
+
         if (this.props.suppliers != null)
             for (let index = 0; index < this.props.suppliers.length; index++) {
                 const supplier = this.props.suppliers[index];
@@ -232,6 +254,11 @@ class TransactionIn
                 productList.push({ value: product.id, text: product.name });
             }
 
+        let stateInfo = <div>
+            qty: {this.state.quantity},
+            price: {this.state.price},
+            exp: {this.state.expiryDate}
+        </div>
 
         let formComponent = <table><tbody>
             <tr valign="top"> <td>
@@ -241,15 +268,29 @@ class TransactionIn
                         disabled={true} rows={[
                             {
                                 values: [<InputDropdown onSelect={this.selectSupplier} dropdownList={supplierList}
+                                    value={this.state.supplierName}
                                     onKeyUp={this.getSupplierList} id="input-supplier-name" placeholder="supplier name" />]
                             },
                             {
                                 values: [<InputDropdown onSelect={this.selectProduct} id="input-product-name" dropdownList={productList}
+                                    value={this.state.productName}
                                     onKeyUp={this.getProductList} placeholder="input product name" />]
                             },
-                            { values: [<InputField id="input-product-price" type="number" placeholder="input product price" />] },
-                            { values: [<InputField id="input-quantity" type="number" placeholder="quantity" />] },
-                            { values: [<InputField id="input-product-exp-date" type="date" placeholder="input product exp date" />] }
+                            {
+                                values: [<InputField id="input-product-price"
+                                    value={this.state.price} onKeyUp={(value) => this.setState({activeField:"input-product-price", price: value })}
+                                    type="number" placeholder="input product price" />]
+                            },
+                            {
+                                values: [<InputField id="input-quantity"
+                                    value={this.state.quantity} onKeyUp={(value) => this.setState({activeField:"input-quantity", quantity: value })}
+                                    type="number" placeholder="quantity" />]
+                            },
+                            {
+                                values: [<InputField id="input-exp-date"
+                                    value={this.state.expiryDate} onKeyUp={(value) => this.setState({activeField:"input-exp-date", expiryDate: value })}
+                                    type="date" placeholder="input product exp date" />]
+                            }
                         ]}
                     />
                     {this.state.product != null ? <ActionButton text="Save" onClick={this.addToCart} /> : ""}
@@ -267,7 +308,8 @@ class TransactionIn
         return (
             <div className="transaction-container">
                 {message}
-                <h2>Product Supply From ({this.state.supplier.name})</h2>
+                <h2>Product Supply From ({this.state.supplier ? this.state.supplier.name : null})</h2>
+                {stateInfo}
                 {formComponent}
                 <div>
                     <ActionButtons buttonsData={[
@@ -296,10 +338,12 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
-    getProductList: (productName) => dispatch(actions.getProductListTrx(productName)),
-    submitSupplyTransaction: (request) => dispatch(actions.submitSupplyTrx(request)),
+    getProductList: (productName, app) => dispatch(actions.getProductListTrx(productName, app)),
+    submitSupplyTransaction: (request, app) => dispatch(actions.submitSupplyTrx(request, app)),
     resetPurchaseTransaction: () => dispatch(actions.resetPurchaseTransaction()),
-    getSupplierList: (name) => dispatch(actions.getSupplierList({ name: name, page: 0 }))
+    resetSuppliers: () => dispatch(actions.resetSuppliers()),
+    resetProducts: () => dispatch(actions.resetProducts()),
+    getSupplierList: (name, app) => dispatch(actions.getSupplierList({ name: name, page: 0 }, app))
 })
 export default (connect(
     mapStateToProps,

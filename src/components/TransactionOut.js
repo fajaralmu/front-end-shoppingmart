@@ -23,11 +23,20 @@ class TransactionOut extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { productFlowStock: {}, customer: {}, showDetail: false, productFlows: [], messageShow: false, messageType: "" }
+        this.state = {
+            customerName: "", productFlowStock: {},
+            customer: {}, showDetail: false, productFlows: [], messageShow: false, messageType: "",
+            stockId: 0, quantity: 0,
+            activeField: ""
+        }
+
+        this.setActiveField = (id) => {
+            this.setState({ activeField: id });
+        }
 
         this.getStockInfo = () => {
             let stockId = _byId("input-stock-id").value;
-            this.props.getStockInfo(stockId);
+            this.props.getStockInfo(stockId, this.props.app);
             this.setState({ showDetail: true })
         }
 
@@ -37,10 +46,10 @@ class TransactionOut extends Component {
         }
 
         this.addToCart = () => {
-            if (_byId("input-quantity").value <= 0) {
+            if (this.state.quantity <= 0) {
                 alert("Please provide valid quantity!"); return;
             }
-            let quantity = _byId("input-quantity").value;
+            let quantity = this.state.quantity;
             let productFlowStock = this.props.productFlowStock;
             if (quantity > productFlowStock.remainingStock) {
                 alert("Stock unavailable!"); return;
@@ -59,6 +68,7 @@ class TransactionOut extends Component {
 
             //update list in the state
             this.addProductFlow(newProductFlow);
+            this.emptyForm();
         }
 
         this.addProductFlow = (productFlow) => {
@@ -70,7 +80,7 @@ class TransactionOut extends Component {
 
             } else
                 currentFlows.push(productFlow); //add new
- 
+
             this.setState({ productFlows: currentFlows });
             this.showMessage("Success saving to chart", "success");
             componentUtil.clearFields("input-customer-name");
@@ -82,12 +92,16 @@ class TransactionOut extends Component {
                 if (this.state.productFlows[index].flowReferenceId == flowId) return this.state.productFlows[index];
             }
             return null;
-        } 
+        }
+
+        this.emptyForm = () => {
+            this.setState({ stockId: 0, quantity: 0 });
+        }
 
         this.handleEdit = (stockId) => {
             alert("will Edit: " + stockId);
-            this.props.getStockInfo(stockId);
-            _byId("input-quantity").value = this.getProductFlow(stockId).count;
+            this.props.getStockInfo(stockId, this.props.app);
+            this.setState({ stockId: stockId, quantity: this.getProductFlow(stockId).count });
         }
 
         this.handleDelete = (stockId) => {
@@ -117,10 +131,10 @@ class TransactionOut extends Component {
             if (!window.confirm("Are you sure want to proceed?"))
                 return;
             let request = { productFlows: this.state.productFlows, customer: this.state.customer };
-            this.props.submitPurchaseTransaction(request);
+            this.props.submitPurchaseTransaction(request, this.props.app);
         }
 
-        this.endMessage = () => {  this.setState({ messageShow: false })  }
+        this.endMessage = () => { this.setState({ messageShow: false }) }
 
         this.showMessage = (text, type) => {
             this.setState({ messageShow: true, messageText: text, messageType: type });
@@ -128,24 +142,28 @@ class TransactionOut extends Component {
 
         this.reset = () => {
             componentUtil.clearFields(null);
-            this.setState({ productFlows: [], showDetail: false });
+            this.setState({ customerName: null, customer: null, product: null, productFlows: [], showDetail: false });
+            this.emptyForm();
             this.props.resetPurchaseTransaction();
         }
 
         this.calculateTotalPrice = () => {
             let totalPrice = 0;
-            if (this.state.productFlows)  
+            if (this.state.productFlows)
                 this.state.productFlows.forEach(productFlow => {
                     totalPrice = totalPrice + productFlow.count * productFlow.product.price;
-                }); 
-                
+                });
+
             return stringUtil.beautifyNominal(totalPrice) + (",00");
         }
 
         this.getCustomerList = () => {
             if (_byId("input-customer-name") == null) return;
             let customerName = _byId("input-customer-name").value;
-            this.props.getCustomerList(customerName);
+
+            this.setState({ customerName: customerName });
+            this.setActiveField("input-customer-name");
+            this.props.getCustomerList(customerName, this.props.app);
         }
 
         this.selectCustomer = (id) => {
@@ -155,19 +173,16 @@ class TransactionOut extends Component {
             }
             for (let index = 0; index < this.props.customersData.length; index++)
                 if (this.props.customersData[index].id == id)
-                    this.setState({ customer: this.props.customersData[index] });
+                    this.setState({ customerName: this.props.customersData[index].name, customer: this.props.customersData[index] });
+            this.props.resetCustomers();
         }
     }
     componentDidMount() {
         document.title = "Transaction::Out";
-        if (this.props.productFlowStock && this.props.productFlowStock.productFlow
-            && _byId("input-stock-id"))
-            _byId("input-stock-id").value = this.props.productFlowStock.productFlow.id
     }
     componentDidUpdate() {
-        if (this.props.productFlowStock && this.props.productFlowStock.productFlow
-            && _byId("input-stock-id")) {
-            _byId("input-stock-id").value = this.props.productFlowStock.productFlow.id
+        if (_byId(this.state.activeField) != null) {
+            _byId(this.state.activeField).focus();
         }
     }
 
@@ -181,7 +196,7 @@ class TransactionOut extends Component {
             </div>;
         }
         if (this.state.messageShow == true) {
-            message = <Message text={this.state.messageText} endMessage={this.endMessage} type={this.state.messageType} />
+            message = <Message withTimer={true} text={this.state.messageText} endMessage={this.endMessage} type={this.state.messageType} />
         }
 
         let customerList = [];
@@ -199,14 +214,20 @@ class TransactionOut extends Component {
                     <InstantTable
                         disabled={true} rows={[
                             {
-                                values: [<InputDropdown onSelect={this.selectCustomer} dropdownList={customerList}
+                                values: [<InputDropdown value={this.state.customerName} onSelect={this.selectCustomer} dropdownList={customerList}
                                     onKeyUp={this.getCustomerList} id="input-customer-name" placeholder="customer name" />]
                             },
                             {
-                                values: [<InputField id="input-stock-id" type="number" placeholder="input stock id" />,
+                                values: [<InputField id="input-stock-id"
+                                    value={this.state.stockId} onKeyUp={(value) => this.setState({ activeField: "input-stock-id", stockId: value })}
+                                    type="number" placeholder="input stock id" />,
                                 <ActionButton id="btn-search-stock" text="Search" onClick={this.getStockInfo} />]
                             },
-                            { values: [<InputField id="input-quantity" type="number" placeholder="quantity" />] }
+                            {
+                                values: [<InputField id="input-quantity"
+                                    value={this.state.quantity} onKeyUp={(value) => this.setState({ activeField: "input-quantity", quantity: value })}
+                                    type="number" placeholder="quantity" />]
+                            }
                         ]}
                     />
                     {this.props.productFlowStock != null ? <ActionButton text="Save" onClick={this.addToCart} /> : ""}
@@ -221,10 +242,17 @@ class TransactionOut extends Component {
             </div>
         }
 
+        let stateInfo = <div>
+            qty: {this.state.quantity},
+            stockId: {this.state.stockId},
+            cust name: {this.state.customerName}
+        </div>
+
         return (
             <div className="transaction-container">
                 {message}
-                <h2>Costumer Payment ({this.state.customer.name})</h2>
+                {stateInfo}
+                <h2>Costumer Payment ({this.state.customer ? this.state.customer.name : ""})</h2>
                 {formComponent}
                 <div>
                     <ActionButtons buttonsData={[
@@ -252,10 +280,11 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
-    getStockInfo: (stockId) => dispatch(actions.getStockInfo(stockId)),
-    submitPurchaseTransaction: (request) => dispatch(actions.submitPurchaseTransaction(request)),
+    resetCustomers: () => dispatch(actions.resetCustomers()),
+    getStockInfo: (stockId, app) => dispatch(actions.getStockInfo(stockId, app)),
+    submitPurchaseTransaction: (request, app) => dispatch(actions.submitPurchaseTransaction(request, app)),
     resetPurchaseTransaction: () => dispatch(actions.resetPurchaseTransaction()),
-    getCustomerList: (name) => dispatch(actions.getCustomerList(name))
+    getCustomerList: (name, app) => dispatch(actions.getCustomerList(name, app))
 })
 export default (connect(
     mapStateToProps,

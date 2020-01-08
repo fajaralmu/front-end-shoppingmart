@@ -20,7 +20,9 @@ export const reducer = (state = initState, action) => {
         case types.REMOVE_SHOP_ENTITY:
             return { ...state, entity: action.payload  /*null*/ };
         case types.FETCH_SUPPLIER_LIST:
-            return { ...state, suppliersData: action.payload    };
+            return { ...state, suppliersData: action.payload };
+        case types.RESET_SUPPLIERS:
+            return { ...state, suppliersData: {} };
         case types.LOAD_MORE_SUPPLIER:
             let currentProduct = state.entity;
             let loadedSupplier = action.payload.entities;

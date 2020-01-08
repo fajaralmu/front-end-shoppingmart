@@ -96,8 +96,8 @@ class ProductDetail extends Component {
         let supplierListPanel = <p></p>
         let supplierShown = this.state.supplierShown ? true : false;
         if (supplierShown && product.suppliers) {
-            supplierListPanel = <div className="detail-container">
-
+            supplierListPanel = <div className="detail-container"> 
+                <h3>Supplier List</h3>
                 <table className="suppllier-container">
                     <tbody>
                         {product.suppliers.map(

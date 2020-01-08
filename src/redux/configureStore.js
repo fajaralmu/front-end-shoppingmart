@@ -31,8 +31,10 @@ export const configureStore = () => {
             getProductListTrxMiddleware,
             getCashflowInfoMiddleware,
             getCashflowDetailMiddleware,
-            getProductSalesMiddleware
-            
+            getProductSalesMiddleware,
+            resetProductsMiddleware,
+            resetSuppliersMiddleware,
+            resetCustomersMiddleware
 
         )
     );
@@ -47,17 +49,17 @@ const getProductSalesMiddleware = store => next => action => {
         headers: { 'Content-Type': 'application/json', 'requestId': '1234', 'loginKey': localStorage.getItem("loginKey") }
     }).then(response => response.json())
         .then(data => {
-            console.debug("getProductSalesMiddleware Response:", data, "load more:",action.meta.loadMore);
-            if(data.code != "00"){
+            console.debug("getProductSalesMiddleware Response:", data, "load more:", action.meta.loadMore);
+            if (data.code != "00") {
                 alert("Server error");
                 return;
             }
- 
-            let newAction = Object.assign({}, action, { payload: data , loadMore: action.meta.loadMore , referrer: action.meta.referrer });
+
+            let newAction = Object.assign({}, action, { payload: data, loadMore: action.meta.loadMore, referrer: action.meta.referrer });
             delete newAction.meta;
             store.dispatch(newAction);
         })
-        .catch(err => console.log(err));
+        .catch(err => console.log(err)).finally(param => action.meta.referrer.props.app.endLoading());
 }
 
 const getCashflowDetailMiddleware = store => next => action => {
@@ -68,16 +70,16 @@ const getCashflowDetailMiddleware = store => next => action => {
     }).then(response => response.json())
         .then(data => {
             console.debug("getCashflowDetailMiddleware Response:", data);
-            if(data.code != "00"){
+            if (data.code != "00") {
                 alert("Server error");
                 return;
             }
- 
-            let newAction = Object.assign({}, action, { payload: data  });
+
+            let newAction = Object.assign({}, action, { payload: data });
             delete newAction.meta;
             store.dispatch(newAction);
         })
-        .catch(err => console.log(err));
+        .catch(err => console.log(err)).finally(param => action.meta.app.endLoading());
 }
 
 const getCashflowInfoMiddleware = store => next => action => {
@@ -88,22 +90,22 @@ const getCashflowInfoMiddleware = store => next => action => {
     }).then(response => response.json())
         .then(data => {
             console.debug("getCashflowInfoMiddleware Response:", data);
-            if(data.code != "00"){
+            if (data.code != "00") {
                 alert("Server error");
                 return;
             }
 
             if (data.entity == null || data.entity.amount == null) {
-                alert("Data for cashflow: "+action.payload.filter.module+" in "+action.payload.filter.month+"/"+action.payload.filter.year+" period not found!");
+                alert("Data for cashflow: " + action.payload.filter.module + " in " + action.payload.filter.month + "/" + action.payload.filter.year + " period not found!");
                 return;
             }
-            let newAction = Object.assign({}, action, { payload: data.entity });
+            let newAction = Object.assign({}, action, { payload: data });
             delete newAction.meta;
             store.dispatch(newAction);
         })
-        .catch(err => console.log(err));
+        .catch(err => console.log(err)).finally(param => action.meta.app.endLoading());
 }
- 
+
 const getProductListTrxMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.FETCH_PRODUCT_LIST_TRX) { return next(action); }
 
@@ -128,7 +130,7 @@ const getProductListTrxMiddleware = store => next => action => {
                 delete newAction.meta;
                 store.dispatch(newAction);
             })
-            .catch(err => console.log(err));
+            .catch(err => console.log(err)).finally(param => action.meta.app.endLoading());
 }
 
 const getCustomerListMiddleware = store => next => action => {
@@ -157,9 +159,28 @@ const getCustomerListMiddleware = store => next => action => {
                 delete newAction.meta;
                 store.dispatch(newAction);
             })
-            .catch(err => console.log(err));
+            .catch(err => console.log(err)).finally(param => action.meta.app.endLoading());
 }
 
+const resetCustomersMiddleware = store => next => action => {
+    if (!action.meta || action.meta.type !== types.RESET_CUSTOMERS) { return next(action); }
+    let newAction = Object.assign({}, action, { payload: null });
+    delete newAction.meta;
+    store.dispatch(newAction);
+}
+
+const resetProductsMiddleware = store => next => action => {
+    if (!action.meta || action.meta.type !== types.RESET_PRODUCTS) { return next(action); }
+    let newAction = Object.assign({}, action, { payload: null });
+    delete newAction.meta;
+    store.dispatch(newAction);
+}
+const resetSuppliersMiddleware = store => next => action => {
+    if (!action.meta || action.meta.type !== types.RESET_SUPPLIERS) { return next(action); }
+    let newAction = Object.assign({}, action, { payload: null });
+    delete newAction.meta;
+    store.dispatch(newAction);
+}
 
 const resetPurchaseTransactionMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.RESET_TRX_PURCHASE) { return next(action); }
@@ -191,7 +212,7 @@ const submitSupplyTransactionMiddleware = store => next => action => {
             delete newAction.meta;
             store.dispatch(newAction);
         })
-        .catch(err => console.log(err));
+        .catch(err => console.log(err)).finally(param => action.meta.app.endLoading());
 }
 
 
@@ -217,7 +238,7 @@ const submitPurchaseTransactionMiddleware = store => next => action => {
             delete newAction.meta;
             store.dispatch(newAction);
         })
-        .catch(err => console.log(err));
+        .catch(err => console.log(err)).finally(param => action.meta.app.endLoading());
 }
 
 const getStockInfoMiddleware = store => next => action => {
@@ -242,7 +263,7 @@ const getStockInfoMiddleware = store => next => action => {
             delete newAction.meta;
             store.dispatch(newAction);
         })
-        .catch(err => console.log(err));
+        .catch(err => console.log(err)).finally(param => action.meta.app.endLoading());
 }
 
 const getSupplierListMiddleware = store => next => action => {
@@ -265,15 +286,16 @@ const getSupplierListMiddleware = store => next => action => {
             delete newAction.meta;
             store.dispatch(newAction);
         })
-        .catch(err => console.log(err));
+        .catch(err => console.log(err))
+        .finally(param => action.meta.app.endLoading());
 }
 
 const performLogoutMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.DO_LOGOUT) {
         return next(action);
     }
+    const app = action.meta.app;
 
-    console.log("---------perform logout------------");
     fetch(action.meta.url, {
         method: POST_METHOD, body: JSON.stringify(action.payload),
         headers: { 'Content-Type': 'application/json', 'requestId': '1234', 'loginKey': localStorage.getItem("loginKey") }
@@ -293,7 +315,8 @@ const performLogoutMiddleware = store => next => action => {
             delete newAction.meta;
             store.dispatch(newAction);
         })
-        .catch(err => console.log(err));
+        .catch(err => { console.log(err) })
+        .finally(param => app.endLoading());
 
 }
 
@@ -301,8 +324,9 @@ const performLoginMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.DO_LOGIN) {
         return next(action);
     }
+    const app = action.meta.app;
     fetch(action.meta.url, {
-        method: POST_METHOD,  body: JSON.stringify(action.payload), headers: commonHeader
+        method: POST_METHOD, body: JSON.stringify(action.payload), headers: commonHeader
     })
         .then(response => { return Promise.all([response.json(), response]); })
         .then(([responseJson, response]) => {
@@ -331,7 +355,8 @@ const performLoginMiddleware = store => next => action => {
             delete newAction.meta;
             store.dispatch(newAction);
         })
-        .catch(err => console.log(err));
+        .catch(err => { console.log(err) })
+        .finally(param => app.endLoading());
 
 }
 
@@ -364,7 +389,7 @@ const loadMoreSupplierMiddleware = store => next => action => {
         return next(action);
     }
     fetch(action.meta.url, {
-        method: POST_METHOD, body: JSON.stringify(action.payload),  headers: commonHeader
+        method: POST_METHOD, body: JSON.stringify(action.payload), headers: commonHeader
     })
         .then(response => response.json())
         .then(data => {
@@ -379,7 +404,8 @@ const loadMoreSupplierMiddleware = store => next => action => {
             delete newAction.meta;
             store.dispatch(newAction);
         })
-        .catch(err => console.log(err));
+        .catch(err => console.log(err))
+        .finally(parap => action.meta.referrer.props.app.endLoading());
 
 }
 
@@ -395,9 +421,9 @@ const getProductDetailMiddleWare = store => next => action => {
     if (!action.meta || action.meta.type !== types.FETCH_PRODUCT_DETAIL) {
         return next(action);
     }
-
+    const app = action.meta.app;
     fetch(action.meta.url, {
-        method: POST_METHOD, body: JSON.stringify(action.payload),  headers: commonHeader
+        method: POST_METHOD, body: JSON.stringify(action.payload), headers: commonHeader
     })
         .then(response => response.json())
         .then(data => {
@@ -412,7 +438,8 @@ const getProductDetailMiddleWare = store => next => action => {
             delete newAction.meta;
             store.dispatch(newAction);
         })
-        .catch(err => console.log(err));
+        .catch(err => console.log(err))
+        .finally(param => app.endLoading());
 }
 
 const getProductListMiddleware = store => next => action => {
@@ -436,7 +463,7 @@ const getProductListMiddleware = store => next => action => {
             delete newAction.meta;
             store.dispatch(newAction);
         })
-        .catch(err => console.log(err));
+        .catch(err => console.log(err)).finally(param => action.meta.app.endLoading());
 }
 
 export default configureStore;

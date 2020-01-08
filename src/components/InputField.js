@@ -9,12 +9,15 @@ import { _byId } from '../utils/ComponentUtil'
 class InputField extends Component {
     constructor(props) {
         super(props);
-        this.handleKeyup = () => {
+        this.handleKeyup = () => { 
             if (this.props.onKeyUp && this.props.id)
                 this.props.onKeyUp(_byId(this.props.id).value);
         }
 
         this.onChange = () => {
+            if (this.props.type == "date") {
+                this.handleKeyup();
+            }
             if (this.props.onChange && this.props.id) {
                 this.props.onChange();
             }
@@ -31,11 +34,15 @@ class InputField extends Component {
     render() {
         let type = this.props.type ? this.props.type : "text";
         let placeholder = this.props.placeholder ? this.props.placeholder : "";
+        let name = this.props.name ? this.props.name : "";
         return (
             <div className="input-field ">
                 {this.props.disabled == true ?
-                    <input className="rounded" name={this.props.name?this.props.name:""}  id={this.props.id} type={type} onKeyUp={this.handleKeyup} placeholder={placeholder} disabled />
-                    : <input onChange={this.onChange} name={this.props.name?this.props.name:""} id={this.props.id} type={type} onKeyUp={this.handleKeyup} placeholder={placeholder} />}
+                    <input className="rounded" name={name} key={"KEY-input-" + this.props.id} id={this.props.id}
+                        type={type} onKeyUp={this.handleKeyup} placeholder={placeholder} checked={this.props.checked} disabled />
+
+                    : <input onChange={this.onChange} name={name} key={"KEY-input-" + this.props.id} checked={this.props.checked} id={this.props.id}
+                        type={type} onKeyUp={this.handleKeyup} placeholder={placeholder} />}
                 {this.props.type == "radio" ? this.props.text : ""}
             </div>
         )

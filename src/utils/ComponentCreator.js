@@ -17,14 +17,14 @@ export const DateSelectionFrom = (props) => {
         <div> <Label text="from date" />
             <ComboBoxes values={[{
                 id: "select-month-from",
-                defaultValue: componentUtil.getCurrentMMYY()[0],
+                defaultValue: props.monthVal,
                 options: componentUtil.getDropdownOptionsMonth(),
-                handleOnChange:props.handleOnChange
+                handleOnChange:props.handleOnChangeMfrom
             }, {
                 id: "select-year-from",
-                defaultValue: componentUtil.getCurrentMMYY()[1],
-                options: componentUtil.getDropdownOptionsYear(2017, 2020),
-                handleOnChange:props.handleOnChange
+                defaultValue: props.yearVal,
+                options: componentUtil.getDropdownOptionsYear(props.years[0], props.years[1]),
+                handleOnChange:props.handleOnChangeYfrom
             }]} /></div>)
 }
 
@@ -34,15 +34,15 @@ export const DateSelectionTo = (props) => {
             <Label text="to date" />
             <ComboBoxes values={[{
                 id: "select-month-to",
-                defaultValue: componentUtil.getCurrentMMYY()[0],
+                defaultValue: props.monthVal,
                 options: componentUtil.getDropdownOptionsMonth(),
-                handleOnChange:props.handleOnChange
+                handleOnChange:props.handleOnChangeMto
             },
             {
                 id: "select-year-to",
-                defaultValue: componentUtil.getCurrentMMYY()[1],
-                options: componentUtil.getDropdownOptionsYear(2017, 2020),
-                handleOnChange:props.handleOnChange
+                defaultValue: props.yearVal,
+                options: componentUtil.getDropdownOptionsYear(props.years[0], props.years[1]),
+                handleOnChange:props.handleOnChangeYto
             }]} />
         </div>
     )

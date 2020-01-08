@@ -36,8 +36,8 @@ class Dashboard extends Component {
         this.getCashflowInfo = () => {
             let month = document.getElementById("select-month") ? document.getElementById("select-month").value : componentUtil.getCurrentMMYY()[0];
             let year = document.getElementById("select-year") ? document.getElementById("select-year").value : componentUtil.getCurrentMMYY()[1];
-            this.props.getCashflowInfo(month, year, "OUT");
-            this.props.getCashflowInfo(month, year, "IN");
+            this.props.getCashflowInfo(month, year, "OUT", this.props.app);
+            this.props.getCashflowInfo(month, year, "IN", this.props.app);
 
         }
     }
@@ -52,10 +52,18 @@ class Dashboard extends Component {
     }
 
     componentDidUpdate() {
-        this.validateLoginStatus(); 
+        this.validateLoginStatus();
     }
 
     render() {
+        let minYear, maxYear = new Date().getFullYear();
+
+        console.log("-trx year-", this.props.transactionYears);
+
+
+        minYear = this.props.transactionYears[0];
+        maxYear = this.props.transactionYears[1];
+
 
         let cashflowInfoIn = this.props.cashflowInfoIn ? this.props.cashflowInfoIn : { amount: "loading...", count: "loading..." };
         let cashflowInfoOut = this.props.cashflowInfoOut ? this.props.cashflowInfoOut : { amount: "loading...", count: "loading..." };
@@ -85,7 +93,7 @@ class Dashboard extends Component {
                     {
                         id: "select-year",
                         defaultValue: componentUtil.getCurrentMMYY()[1],
-                        options: componentUtil.getDropdownOptionsYear(2017, 2020)
+                        options: componentUtil.getDropdownOptionsYear(minYear, maxYear)
                     }
                 ]} />
                 <ActionButton status="success" id="btn-get-cashflow-info" text="Search" onClick={this.getCashflowInfo} />
@@ -104,16 +112,16 @@ class Dashboard extends Component {
         if (this.state.featureCode != null) {
             switch (this.state.featureCode) {
                 case 'trxOut':
-                    mainComponent = <TransactionOut setFeatureCode={this.setFeatureCode} />
+                    mainComponent = <TransactionOut app={this.props.app} setFeatureCode={this.setFeatureCode} />
                     break;
                 case 'trxIn':
-                    mainComponent = <TransactionIn setFeatureCode={this.setFeatureCode} />
+                    mainComponent = <TransactionIn app={this.props.app} setFeatureCode={this.setFeatureCode} />
                     break;
                 case 'cashflow':
-                    mainComponent = <Cashflow setFeatureCode={this.setFeatureCode} />
+                    mainComponent = <Cashflow app={this.props.app} transactionYears={this.props.transactionYears} setFeatureCode={this.setFeatureCode} />
                     break;
                 case 'productSales':
-                    mainComponent = <ProductSales setFeatureCode={this.setFeatureCode} />
+                    mainComponent = <ProductSales app={this.props.app} transactionYears={this.props.transactionYears} setFeatureCode={this.setFeatureCode} />
                     break;
                 default:
                     break;
@@ -135,12 +143,13 @@ class Dashboard extends Component {
 const mapStateToProps = state => {
     return {
         cashflowInfoIn: state.transactionState.cashflowInfoIn,
-        cashflowInfoOut: state.transactionState.cashflowInfoOut
+        cashflowInfoOut: state.transactionState.cashflowInfoOut,
+        transactionYears: state.transactionState.transactionYears
     }
 }
 
 const mapDispatchToProps = dispatch => ({
-    getCashflowInfo: (month, year, type) => dispatch(actions.getCashflowInfo(month, year, type)),
+    getCashflowInfo: (month, year, type, app) => dispatch(actions.getCashflowInfo(month, year, type, app)),
 
 })
 export default withRouter(connect(

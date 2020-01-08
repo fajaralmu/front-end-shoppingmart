@@ -31,7 +31,7 @@ class SupplierList extends Component {
                 name: this.state.requestSupplierName,
                 orderby: this.state.requestOrderBy,
                 ordertype: this.state.requestOrderType
-            });
+            }, this.props.app);
             this.setState({ supplierPage: _page });
             this.setState({ totalData: this.props.suppliersData.totalData });
         }
@@ -170,7 +170,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
-    getSupplierList: (request) => dispatch(actions.getSupplierList(request))
+    getSupplierList: (request, app) => dispatch(actions.getSupplierList(request, app))
 
 })
 export default withRouter(connect(

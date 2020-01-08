@@ -1,5 +1,6 @@
 .message{
     text-align: center;
+    font-family: 'Segoe UI'
 }
 .message-failed{
      color: white;
@@ -8,4 +9,8 @@
 .message-success{
     color: white;
     background-color:lawngreen
+}
+.message-warning{
+    color: white;
+    background-color:orange
 }

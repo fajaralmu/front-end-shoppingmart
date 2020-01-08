@@ -15,6 +15,7 @@ import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import * as menus from './constant/Menus'
 import SupplierList from './components/SupplierList';
+import Message from './components/Message';
 
 class App extends Component {
 
@@ -23,7 +24,8 @@ class App extends Component {
     this.state = {
       menus: [],
       detailMode: false,
-      menuCode: ''
+      menuCode: '',
+      loading: false
     };
 
     this.setDetailMode = (detailMode) => {
@@ -37,16 +39,23 @@ class App extends Component {
 
     this.handleMenuCLick = (menu) => {
       switch (menu.code) {
-        case menus.LOGOUT: 
-          if(!window.confirm("Are you sure want to logout?")){
+        case menus.LOGOUT:
+          if (!window.confirm("Are you sure want to logout?")) {
             return;
           }
-          this.props.performLogout();
+          this.props.performLogout(this);
           break;
 
         default:
           break;
       }
+    }
+
+    this.startLoading = () => {
+      this.setState({loading:true});
+    }
+    this.endLoading = () => {
+      this.setState({loading:false});
     }
   }
 
@@ -74,8 +83,8 @@ class App extends Component {
 
   render() {
 
-    
-    let loginComponent = <Login setMenuCode={this.setMenuCode}
+
+    let loginComponent = <Login main={this} setMenuCode={this.setMenuCode}
       setDetailMode={this.setDetailMode}
       detailMode={this.state.detailMode}
       doLogin={this.props.performLogin}
@@ -84,14 +93,20 @@ class App extends Component {
       loginStatus={this.props.loginStatus}
     />;
 
-     
+    let loadingComponent = "";
+    if(this.state.loading == true){
+      loadingComponent = <Message text="loading" type="warning"/>;
+    }
 
     let menus = this.setMenus();
 
     return (
       <div className="App">
-        <Header title="Universal Good Shop" /> 
-        {/*this.props.loginStatus == true?"Logged In":"Un Logged"*/ }
+        <Header title="Universal Good Shop" />
+        {/*this.props.loginStatus == true?"Logged In":"Un Logged"*/}
+
+        {loadingComponent}
+
         <table className="main-layout">
           <tbody>
             <tr valign="top">
@@ -111,7 +126,7 @@ class App extends Component {
                     } />
                     <Route exact path="/suppliers" render={
                       (renderProps) =>
-                        <SupplierList setMenuCode={this.setMenuCode}  />
+                        <SupplierList app={this} setMenuCode={this.setMenuCode} />
                     } />
                     <Route exact path="/about" render={
                       (renderProps) =>
@@ -119,7 +134,7 @@ class App extends Component {
                     }></Route>
                     <Route exact path="/catalog" render={
                       (renderProps) =>
-                        <Catalog setMenuCode={this.setMenuCode} setDetailMode={this.setDetailMode} detailMode={this.state.detailMode} />
+                        <Catalog app={this} setMenuCode={this.setMenuCode} setDetailMode={this.setDetailMode} detailMode={this.state.detailMode} />
 
                     }></Route>
                     <Route exact path="/login" render={
@@ -134,7 +149,7 @@ class App extends Component {
                      */}
                     <Route exact path="/dashboard" render={
                       (renderProps) =>
-                        <Dashboard loginStatus={this.props.loginStatus } setMenuCode={this.setMenuCode} />
+                        <Dashboard app={this} loginStatus={this.props.loginStatus} setMenuCode={this.setMenuCode} />
 
                     }></Route>
 
@@ -168,8 +183,8 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
-  performLogin: (username, password) => dispatch(actions.performLogin(username, password)),
-  performLogout: () => dispatch(actions.performLogout())
+  performLogin: (username, password, app) => dispatch(actions.performLogin(username, password, app)),
+  performLogout: (app) => dispatch(actions.performLogout(app))
   // getProductCatalog: (page) => dispatch(actions.getProductList(page))
 
 })

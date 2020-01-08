@@ -5,20 +5,12 @@ import * as actions from '../redux/actionCreators'
 import '../css/Common.css'
 import '../css/Cashflow.css'
 import '../css/CatalogItem.css'
-import ActionButton from './ActionButton'
-import Label from './Label';
-import InputField from './InputField';
-import DetailProductPanel from './DetailProductPanel';
-import StockListTable from './StockListTable'
-import Message from './Message'
-import TransactionReceipt from './TransactionReceipt'
+import ActionButton from './ActionButton' 
 import * as stringUtil from '../utils/StringUtil'
 import ActionButtons from './ActionButtons'
-import InstantTable from './InstantTable'
-import InputDropdown from './InputDropdown'
+import InstantTable from './InstantTable' 
 import * as componentUtil from '../utils/ComponentUtil'
-import { _byId } from '../utils/ComponentUtil'
-import ComboBoxes from './ComboBoxes'
+import { _byId } from '../utils/ComponentUtil' 
 import Chart from './Chart'
 import * as creator from '../utils/ComponentCreator'
 
@@ -27,18 +19,24 @@ class ProductSales
 
     constructor(props) {
         super(props);
-        this.state = { chartOrientation: "horizontal", page: 0, updated: new Date() }
-        this.getProductSales = (loadMore) => {
+        const date = new Date();
+        this.state = {
+            chartOrientation: "horizontal", page: 0, updated: new Date(),
+            fromMonth: date.getMonth() + 1, fromYear: date.getFullYear(),
+            toMonth: date.getMonth() + 1, toYear: date.getFullYear()
+        }
+        this.getProductSales = (loadMore,_page) => {
+            this.setState({ page: _page });
             if (!componentUtil.checkExistance("select-month-from", "select-month-to",
                 "select-year-from", "select-year-to")) {
                 return;
             }
             let request = {
-                page: this.state.page,
-                fromMonth: _byId("select-month-from").value,
-                fromYear: _byId("select-year-from").value,
-                toMonth: _byId("select-month-to").value,
-                toYear: _byId("select-year-to").value,
+                page: _page,
+                fromMonth: this.state.fromMonth,//_byId("select-month-from").value,
+                fromYear: this.state.fromYear,// _byId("select-year-from").value,
+                toMonth: this.state.toMonth,//_byId("select-month-to").value,
+                toYear: this.state.toYear,// _byId("select-year-to").value,
 
                 //special fro laod more case
                 loadMore: loadMore,
@@ -48,9 +46,9 @@ class ProductSales
             this.props.getProductSales(request);
         }
 
-         /**
-         * this method is called in trxReducer
-         */
+        /**
+        * this method is called in trxReducer
+        */
         this.refresh = () => {
             console.log("++reresh++");
             this.setState({ updated: new Date() });
@@ -65,8 +63,8 @@ class ProductSales
 
         this.loadMore = () => {
             let currentPage = this.state.page;
-            this.setState({ page: currentPage + 1 });
-            this.getProductSales(true);
+            
+            this.getProductSales(true,currentPage + 1);
         }
 
         this.resetPage = () => {
@@ -79,7 +77,7 @@ class ProductSales
         // this.getProductSales();
     }
     componentDidUpdate() {
-        console.log("updated");
+        console.log("updated", this.state.fromMonth, this.state.fromYear," to ", this.state.toMonth, this.state.toYear);
     }
 
     render() {
@@ -96,11 +94,21 @@ class ProductSales
 
         let filterButtons = <ActionButtons buttonsData={[
             { text: "Back", onClick: () => this.props.setFeatureCode(null), id: "btn-back" },
-            { text: "Search", onClick: () => this.getProductSales(null), id: "btn-get-product-sales", status: "success" }]}
-        />;
+            { text: "Search", onClick: () => this.getProductSales(null, 0), id: "btn-get-product-sales", status: "success" }]}
+        />; 
 
         const filterBox =
-            <creator.FilterBox rows={[{ values: [<creator.DateSelectionFrom handleOnChange={this.resetPage} />, <creator.DateSelectionTo handleOnChange={this.resetPage} />, filterButtons] }]} />
+            <creator.FilterBox rows={[{
+                values: [<creator.DateSelectionFrom years={this.props.transactionYears}
+                    monthVal={this.state.fromMonth} yearVal={this.state.fromYear}
+                    handleOnChangeMfrom={(value) => this.setState({ fromMonth: value })}
+                    handleOnChangeYfrom={(value) => this.setState({ fromYear: value })}
+                />,
+                <creator.DateSelectionTo years={this.props.transactionYears}
+                    monthVal={ this.state.toMonth} yearVal={this.state.toYear}
+                    handleOnChangeMto={(value) => this.setState({ toMonth: value })}
+                    handleOnChangeYto={(value) => this.setState({ toYear: value })} />, filterButtons]
+            }]} />
 
         let productDetailRows = new Array();
 
@@ -123,7 +131,7 @@ class ProductSales
         </div>
         return (
             <div className="cashflow-container">
-                <h2>Product Sales</h2>
+                <h2>Product Sales {this.state.page}</h2>
                 {filterBox}
                 <div><p>{filterInfo}</p></div>
                 {productSalesListComponent}

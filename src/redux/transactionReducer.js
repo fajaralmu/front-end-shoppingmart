@@ -10,10 +10,17 @@ export const initState = {
     cashflowInfoOut: null,
     cashflowInfoIn: null,
     cashflowDetail: null,
-    productSalesData: null
+    productSalesData: null,
+    transactionYears: [new Date().getFullYear(), new Date().getFullYear()]
 };
 
 export const reducer = (state = initState, action) => {
+
+    //update trx year
+    if (action != null && action.payload != null && action.payload.transactionYears != null) {
+        state.transactionYears = action.payload.transactionYears;
+    }
+
     switch (action.type) {
 
         case types.GET_STOCK_INFO:
@@ -35,16 +42,21 @@ export const reducer = (state = initState, action) => {
 
         case types.FETCH_CUSTOMER_LIST:
             return { ...state, customersData: action.payload.entities };
-
+        case types.RESET_CUSTOMERS:
+            return { ...state, customersData: null }; 
         case types.FETCH_PRODUCT_LIST_TRX:
             return { ...state, productsData: action.payload.entities };
+        case types.RESET_PRODUCTS:
+            return { ...state, productsData: null };
 
         case types.GET_CASHFLOW_INFO:
             result = state;
-            if (action.payload.module == "OUT")
-                result.cashflowInfoOut = action.payload;
-            if (action.payload.module == "IN")
-                result.cashflowInfoIn = action.payload;
+
+            if (action.payload.entity.module == "OUT")
+                result.cashflowInfoOut = action.payload.entity;
+            if (action.payload.entity.module == "IN")
+                result.cashflowInfoIn = action.payload.entity;
+
             return result;
 
         case types.GET_CASHFLOW_DETAIL:
@@ -58,7 +70,7 @@ export const reducer = (state = initState, action) => {
                     currentProductSalesData.entities.push(loadedProductList[i]);
                 }
             }
-            console.log("will update currentProductSalesData: ",currentProductSalesData.entities.length);
+            console.log("will update currentProductSalesData: ", currentProductSalesData.entities.length);
             result = { ...state, productSalesData: currentProductSalesData };
             action.referrer.refresh();
             return result;

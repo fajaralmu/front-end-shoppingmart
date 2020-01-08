@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import '../css/Common.css'
 import '../css/Input.css'
+import ComboBox from './ComboBox';
 
 class ComboBoxes extends Component {
     constructor(props) {
@@ -26,13 +27,10 @@ class ComboBoxes extends Component {
                 let options = [];
                 if (comboBox.options) { options = comboBox.options; }
                 return (
-                    <select defaultValue={comboBox.defaultValue ? comboBox.defaultValue : ""} className="rounded" 
-                    key={comboBox.id} 
-                    onChange={comboBox.handleOnChange?comboBox.handleOnChange:()=>console.log("not supported")} >
-                        {options.map(
-                            option => { return <option key={comboBox.id+"-k-"+option.value} value={option.value}>{option.text}</option> }
-                        )}
-                    </select>
+                    <ComboBox defaultValue={comboBox.defaultValue ? comboBox.defaultValue : ""}
+                        key={"key_" + comboBox.id} id={comboBox.id}
+                        onChange={comboBox.handleOnChange}
+                        options={options} />
                 )
             })}
 

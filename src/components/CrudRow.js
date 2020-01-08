@@ -68,7 +68,7 @@ class CrudRow extends Component {
             <tr key={this.props.id} valign={this.props.valign}>
                 {values.map(value => {
                     return (
-                        <td key={"td-" + stringUtil.uniqueId()} style={trStyle} rowSpan={value.rowspan} colSpan={value.colspan}>{value.value}</td>
+                        <td key={"td-key-" + stringUtil.uniqueId()}  id={"td-" + stringUtil.uniqueId()} style={trStyle} rowSpan={value.rowspan} colSpan={value.colspan}>{value.value}</td>
                     )
                 }
                 )}

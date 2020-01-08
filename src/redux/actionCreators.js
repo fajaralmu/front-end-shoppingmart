@@ -4,7 +4,18 @@ const apiEntityBaseUrl = "http://localhost:8080/universal-good-shop/api/entity/"
 const apiAccount = "http://localhost:8080/universal-good-shop/api/account/"
 const apiTransaction = "http://localhost:8080/universal-good-shop/api/transaction/";
 
+export const resetProducts = () => {
+    return { type: types.RESET_PRODUCTS, payload: {}, meta: { type: types.RESET_PRODUCTS } };
+}
+export const resetSuppliers = () => {
+    return { type: types.RESET_SUPPLIERS, payload: {}, meta: { type: types.RESET_SUPPLIERS } };
+}
+export const resetCustomers = () => {
+    return { type: types.RESET_CUSTOMERS, payload: {}, meta: { type: types.RESET_CUSTOMERS } };
+}
+
 export const getProductSales = (request) => {
+    request.referrer.props.app.startLoading();
     return {
         type: types.GET_PRODUCT_SALES,
         payload: { filter: { page: request.page, limit: 10, month: request.fromMonth, year: request.fromYear, monthTo: request.toMonth, yearTo: request.toYear } },
@@ -13,51 +24,60 @@ export const getProductSales = (request) => {
         }
     };
 }
-export const getCashflowDetail = (request) => {
+export const getCashflowDetail = (request, app) => {
+    app.startLoading();
     return {
         type: types.GET_CASHFLOW_DETAIL,
         payload: { filter: { month: request.fromMonth, year: request.fromYear, monthTo: request.toMonth, yearTo: request.toYear } },
         meta: {
-            type: types.GET_CASHFLOW_DETAIL, url: apiTransaction.concat("cashflowdetail")
+            app: app, type: types.GET_CASHFLOW_DETAIL, url: apiTransaction.concat("cashflowdetail")
         }
     };
 }
-export const getCashflowInfo = (month, year, type) => {
-
+export const getCashflowInfo = (month, year, type, app) => {
+    app.startLoading();
     return {
         type: types.GET_CASHFLOW_INFO,
         payload: { filter: { year: year, month: month, module: type } },
         meta: {
-            type: types.GET_CASHFLOW_INFO, url: apiTransaction.concat("cashflowinfo")
+            app: app, type: types.GET_CASHFLOW_INFO, url: apiTransaction.concat("cashflowinfo")
         }
     };
 }
 
-export const getProductListTrx = (name) => ({
-    type: types.FETCH_PRODUCT_LIST_TRX,
-    payload: {
-        entity: "product", filter: { page: 0, limit: 10, fieldsFilter: { name: name } }
-    },
-    meta: {
-        type: types.FETCH_PRODUCT_LIST, url: apiEntityBaseUrl.concat("get")
+export const getProductListTrx = (name, app) => {
+    app.startLoading();
+    return {
+        type: types.FETCH_PRODUCT_LIST_TRX,
+        payload: {
+            entity: "product", filter: { page: 0, limit: 10, fieldsFilter: { name: name } }
+        },
+        meta: {
+            type: types.FETCH_PRODUCT_LIST, url: apiEntityBaseUrl.concat("get"), app: app
+        }
     }
-})
-export const getCustomerList = (name) => ({
-    type: types.FETCH_CUSTOMER_LIST,
-    payload: {
-        entity: "customer", filter: { page: 0, limit: 10, fieldsFilter: { name: name } }
-    },
-    meta: {
-        type: types.FETCH_CUSTOMER_LIST, url: apiEntityBaseUrl.concat("get")
+}
+
+export const getCustomerList = (name, app) => {
+    app.startLoading();
+    return {
+        type: types.FETCH_CUSTOMER_LIST,
+        payload: {
+            entity: "customer", filter: { page: 0, limit: 10, fieldsFilter: { name: name } }
+        },
+        meta: {
+            type: types.FETCH_CUSTOMER_LIST, url: apiEntityBaseUrl.concat("get"), app: app
+        }
     }
-})
+}
 
 export const resetPurchaseTransaction = () => ({
     type: types.RESET_TRX_PURCHASE,
     payload: {},
     meta: { type: types.RESET_TRX_PURCHASE }
 })
-export const submitPurchaseTransaction = (request) => {
+export const submitPurchaseTransaction = (request, app) => {
+    app.startLoading();
     console.log("Submit Supply Purchase...")
     let requested = {
         type: types.SUBMIT_TRX_PURCHASE,
@@ -66,13 +86,14 @@ export const submitPurchaseTransaction = (request) => {
             productFlows: request.productFlows
         },
         meta: {
-            type: types.SUBMIT_TRX_PURCHASE, url: apiTransaction.concat("purchase")
+            app: app, type: types.SUBMIT_TRX_PURCHASE, url: apiTransaction.concat("purchase")
         }
     };
     return requested;
 }
-export const submitSupplyTrx = (request) => {
+export const submitSupplyTrx = (request, app) => {
     console.log("Submit Supply Trx...")
+    app.startLoading();
     let requested = {
         type: types.SUBMIT_TRX_SUPPLY,
         payload: {
@@ -80,36 +101,40 @@ export const submitSupplyTrx = (request) => {
             productFlows: request.productFlows
         },
         meta: {
-            type: types.SUBMIT_TRX_SUPPLY, url: apiTransaction.concat("supply")
+            app: app, type: types.SUBMIT_TRX_SUPPLY, url: apiTransaction.concat("supply")
         }
     };
     return requested;
 }
 
-export const getStockInfo = (stockId) => ({
-    type: types.GET_STOCK_INFO,
-    payload: { productFlow: { id: stockId } },
-    meta: {
-        type: types.GET_STOCK_INFO, url: apiTransaction.concat("stockinfo")
+export const getStockInfo = (stockId, app) => {
+    app.startLoading();
+    return {
+        type: types.GET_STOCK_INFO,
+        payload: { productFlow: { id: stockId } },
+        meta: {
+            app: app, type: types.GET_STOCK_INFO, url: apiTransaction.concat("stockinfo")
+        }
     }
-})
+}
 
-export const performLogout = () => {
+export const performLogout = (app) => {
     let loginRequest = {
         type: types.DO_LOGOUT,
         payload: {},
-        meta: { type: types.DO_LOGOUT, url: apiAccount.concat("logout") }
+        meta: { app: app, type: types.DO_LOGOUT, url: apiAccount.concat("logout") }
     };
     return loginRequest;
 }
 
-export const performLogin = (username, password) => {
+export const performLogin = (username, password, app) => {
+    app.startLoading();
     let loginRequest = {
         type: types.DO_LOGIN,
         payload: {
             user: { username: username, password: password }
         },
-        meta: { type: types.DO_LOGIN, url: apiAccount.concat("login") }
+        meta: { type: types.DO_LOGIN, url: apiAccount.concat("login"), app: app }
     };
     return loginRequest;
 }
@@ -132,7 +157,8 @@ export const getAllProductCategories = () => ({
     }
 })
 
-export const getSupplierList = (request) => {
+export const getSupplierList = (request, app) => {
+    app.startLoading();
     let requested = {
         type: types.FETCH_SUPPLIER_LIST,
         payload: {
@@ -149,7 +175,8 @@ export const getSupplierList = (request) => {
         },
         meta: {
             type: types.FETCH_SUPPLIER_LIST,
-            url: apiBaseUrl.concat("get")
+            url: apiBaseUrl.concat("get"),
+            app: app
         }
     };
 
@@ -160,8 +187,8 @@ export const getSupplierList = (request) => {
     return requested;
 }
 
-export const getProductList = (request) => {
-
+export const getProductList = (request, app) => {
+    app.startLoading();
     let requested = {
         type: types.FETCH_PRODUCT_LIST,
         payload: {
@@ -179,7 +206,8 @@ export const getProductList = (request) => {
         },
         meta: {
             type: types.FETCH_PRODUCT_LIST,
-            url: apiBaseUrl.concat("get")
+            url: apiBaseUrl.concat("get"),
+            app: app
         }
     };
 
@@ -191,27 +219,31 @@ export const getProductList = (request) => {
 }
 
 
-export const getProductDetail = (code) => ({
-    type: types.FETCH_PRODUCT_DETAIL,
-    payload: {
-
-        entity: "product",
-        filter: {
-            limit: 1,
-            exacts: true,
-            contains: false,
-            fieldsFilter: {
-                code: code,
-                withStock: true,
-                withSupplier: true
-            }
-        }
-    },
-    meta: {
+export const getProductDetail = (code, app) => {
+    app.startLoading();
+    return {
         type: types.FETCH_PRODUCT_DETAIL,
-        url: apiBaseUrl.concat("get")
+        payload: {
+
+            entity: "product",
+            filter: {
+                limit: 1,
+                exacts: true,
+                contains: false,
+                fieldsFilter: {
+                    code: code,
+                    withStock: true,
+                    withSupplier: true
+                }
+            }
+        },
+        meta: {
+            type: types.FETCH_PRODUCT_DETAIL,
+            url: apiBaseUrl.concat("get"),
+            app: app
+        }
     }
-})
+}
 
 export const removeEntity = () => ({
     type: types.REMOVE_SHOP_ENTITY,
@@ -219,13 +251,16 @@ export const removeEntity = () => ({
     meta: { type: types.REMOVE_SHOP_ENTITY }
 })
 
-export const loadMoreSupplier = (page, productId, referrer) => ({
-    type: types.LOAD_MORE_SUPPLIER,
-    payload: { filter: { page: page, fieldsFilter: { "productId": productId } } },
-    meta: {
+export const loadMoreSupplier = (page, productId, referrer) => {
+    referrer.props.app.startLoading();
+    return {
         type: types.LOAD_MORE_SUPPLIER,
-        url: apiBaseUrl.concat("moresupplier"),
-        referrer: referrer
+        payload: { filter: { page: page, fieldsFilter: { "productId": productId } } },
+        meta: {
+            type: types.LOAD_MORE_SUPPLIER,
+            url: apiBaseUrl.concat("moresupplier"),
+            referrer: referrer
+        }
     }
-})
+}
 

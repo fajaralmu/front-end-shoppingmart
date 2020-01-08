@@ -22,9 +22,10 @@ class Message extends Component{
     }
 
     componentDidMount(){
-       
-        let intervalId =setInterval(this.update, 1,null);
-        this.setState({ intervalId:intervalId})
+        if(this.props.withTimer == true){
+            let intervalId =setInterval(this.update, 1,null);
+            this.setState({ intervalId:intervalId})
+        }
     }
 
     render(){
