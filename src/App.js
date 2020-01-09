@@ -16,6 +16,9 @@ import Dashboard from './components/Dashboard';
 import * as menus from './constant/Menus'
 import SupplierList from './components/SupplierList';
 import Message from './components/Message';
+import Footer from './components/Footer';
+import SockJsClient from 'react-stomp';
+
 
 class App extends Component {
 
@@ -29,6 +32,9 @@ class App extends Component {
     };
 
     this.setDetailMode = (detailMode) => {
+       
+
+      
       this.setState({ detailMode: detailMode });
     }
 
@@ -52,10 +58,10 @@ class App extends Component {
     }
 
     this.startLoading = () => {
-      this.setState({loading:true});
+      this.setState({ loading: true });
     }
     this.endLoading = () => {
-      this.setState({loading:false});
+      this.setState({ loading: false });
     }
   }
 
@@ -94,8 +100,8 @@ class App extends Component {
     />;
 
     let loadingComponent = "";
-    if(this.state.loading == true){
-      loadingComponent = <Message text="loading" type="warning"/>;
+    if (this.state.loading == true) {
+      loadingComponent = <Message text="loading" type="loading" />;
     }
 
     let menus = this.setMenus();
@@ -162,6 +168,7 @@ class App extends Component {
 
 
         </table>
+        <Footer />
       </div>
     )
   }
