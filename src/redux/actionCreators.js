@@ -119,6 +119,7 @@ export const getStockInfo = (stockId, app) => {
 }
 
 export const performLogout = (app) => {
+    app.startLoading();
     let loginRequest = {
         type: types.DO_LOGOUT,
         payload: {},

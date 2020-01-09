@@ -157,17 +157,16 @@ class App extends Component {
                       (renderProps) =>
                         <Dashboard app={this} loginStatus={this.props.loginStatus} setMenuCode={this.setMenuCode} />
 
-                    }></Route>
-
+                    }></Route> 
                   </Switch>
-                </div>
-
+                </div> 
               </td>
             </tr>
-          </tbody>
-
-
+          </tbody> 
         </table>
+        <SockJsClient url='http://localhost:8080/ws' topics={['/topics/all']}
+            onMessage={(msg) => { console.log("========(message)=======",msg); }}
+            ref={ (client) => { this.clientRef = client }} />
         <Footer />
       </div>
     )
