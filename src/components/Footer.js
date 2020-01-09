@@ -12,7 +12,7 @@ class Footer extends Component{
 
         return (
             <div className="App-footer">
-                {date+" powered by React Js "+React.version}
+               Kebumen {date+" powered by React Js "+React.version}
             </div>
         )
     }

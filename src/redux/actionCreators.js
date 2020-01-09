@@ -15,7 +15,7 @@ export const resetCustomers = () => {
 }
 
 export const getProductSales = (request) => {
-    request.referrer.props.app.startLoading();
+    request.referrer.props.app.startLoading(true);
     return {
         type: types.GET_PRODUCT_SALES,
         payload: { filter: { page: request.page, limit: 10, month: request.fromMonth, year: request.fromYear, monthTo: request.toMonth, yearTo: request.toYear } },
@@ -25,7 +25,7 @@ export const getProductSales = (request) => {
     };
 }
 export const getCashflowDetail = (request, app) => {
-    app.startLoading();
+    app.startLoading(true);
     return {
         type: types.GET_CASHFLOW_DETAIL,
         payload: { filter: { month: request.fromMonth, year: request.fromYear, monthTo: request.toMonth, yearTo: request.toYear } },
@@ -35,7 +35,7 @@ export const getCashflowDetail = (request, app) => {
     };
 }
 export const getCashflowInfo = (month, year, type, app) => {
-    app.startLoading();
+    app.startLoading(true);
     return {
         type: types.GET_CASHFLOW_INFO,
         payload: { filter: { year: year, month: month, module: type } },
@@ -77,7 +77,7 @@ export const resetPurchaseTransaction = () => ({
     meta: { type: types.RESET_TRX_PURCHASE }
 })
 export const submitPurchaseTransaction = (request, app) => {
-    app.startLoading();
+    app.startLoading(true);
     console.log("Submit Supply Purchase...")
     let requested = {
         type: types.SUBMIT_TRX_PURCHASE,
@@ -93,7 +93,7 @@ export const submitPurchaseTransaction = (request, app) => {
 }
 export const submitSupplyTrx = (request, app) => {
     console.log("Submit Supply Trx...")
-    app.startLoading();
+    app.startLoading(true);
     let requested = {
         type: types.SUBMIT_TRX_SUPPLY,
         payload: {
@@ -221,7 +221,7 @@ export const getProductList = (request, app) => {
 
 
 export const getProductDetail = (code, app) => {
-    app.startLoading();
+    app.startLoading(true);
     return {
         type: types.FETCH_PRODUCT_DETAIL,
         payload: {

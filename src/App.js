@@ -28,14 +28,12 @@ class App extends Component {
       menus: [],
       detailMode: false,
       menuCode: '',
-      loading: false
+      loading: false,
+      loadingPercentage: 0
     };
 
     this.setDetailMode = (detailMode) => {
-       
-
-      
-      this.setState({ detailMode: detailMode });
+        this.setState({ detailMode: detailMode });
     }
 
     this.setMenuCode = (code) => {
@@ -57,16 +55,24 @@ class App extends Component {
       }
     }
 
-    this.startLoading = () => {
-      this.setState({ loading: true });
+    this.startLoading = (realtime) => {
+      this.setState({ loading: true, realtime: realtime });
     }
     this.endLoading = () => {
-      this.setState({ loading: false });
+      this.setState({ loading: false ,loadingPercentage:0});
+    }
+
+    this.handleMessage = (msg) => {
+      let percentage = msg.percentage;
+      if(msg.percentage <0 || msg.percentage > 100){
+        this.endLoading();
+      }
+      this.setState({loadingPercentage:percentage});
     }
   }
 
   componentDidMount() {
-
+    this.setState({loadingPercentage:0});
   }
 
   setMenus() {
@@ -87,8 +93,7 @@ class App extends Component {
 
   }
 
-  render() {
-
+  render() {  
 
     let loginComponent = <Login main={this} setMenuCode={this.setMenuCode}
       setDetailMode={this.setDetailMode}
@@ -101,7 +106,7 @@ class App extends Component {
 
     let loadingComponent = "";
     if (this.state.loading == true) {
-      loadingComponent = <Message text="loading" type="loading" />;
+      loadingComponent = <Message realtime={this.state.realtime} progress={this.state.loadingPercentage} text="loading" type="loading" />;
     }
 
     let menus = this.setMenus();
@@ -112,7 +117,7 @@ class App extends Component {
         {/*this.props.loginStatus == true?"Logged In":"Un Logged"*/}
 
         {loadingComponent}
-
+        
         <table className="main-layout">
           <tbody>
             <tr valign="top">
@@ -164,10 +169,11 @@ class App extends Component {
             </tr>
           </tbody> 
         </table>
-        <SockJsClient url='http://localhost:8080/ws' topics={['/topics/all']}
-            onMessage={(msg) => { console.log("========(message)=======",msg); }}
+        <SockJsClient url='http://localhost:8080/universal-good-shop/shop-app' topics={['/wsResp/progress']}
+            onMessage={(msg) => { this.handleMessage(msg) }}
             ref={ (client) => { this.clientRef = client }} />
         <Footer />
+       
       </div>
     )
   }
