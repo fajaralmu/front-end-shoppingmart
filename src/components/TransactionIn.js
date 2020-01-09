@@ -181,6 +181,7 @@ class TransactionIn
         }
 
         this.getSupplierList = (value, id) => {
+            if(value == null || value.trim() == ""){ return; }
             this.setState({ supplierName: value });
             this.props.getSupplierList(value, this.props.app);
             this.setActiveField(id);
@@ -198,6 +199,7 @@ class TransactionIn
         }
 
         this.getProductList = (value, id) => {
+            if(value == null || value.trim() == ""){ return; }
             this.setState({ showDetail: true, productName: value })
             this.props.getProductList(value, this.props.app);
             this.setActiveField(id);
@@ -285,6 +287,9 @@ class TransactionIn
                                 values: [<InputField id="input-quantity"
                                     value={this.state.quantity} onKeyUp={(value, id) => this.setState({ activeField: id, quantity: value })}
                                     type="number" placeholder="quantity" />]
+                            },
+                            {
+                                values:[<Label text="Expiry Date"/>]
                             },
                             {
                                 values: [<InputField id="input-exp-date"

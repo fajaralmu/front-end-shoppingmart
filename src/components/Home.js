@@ -17,10 +17,10 @@ class Home extends Component {
     render() {
         return (
             <div className="section-container">
-                <h2>Home Page</h2>
+                <h2>Welcome to the App</h2>
                 <p>{this.props.content}</p>
-                <h2 style={{textAlign:"center"}}>Tanpo Waton</h2>
-                <p style={{textAlign:"center"}}>Ngawiti ingsun nglaras syi’iran # Kelawan muji maring pengeran<br />
+                <h2  >Tanpo Waton</h2>
+                <p style={{fontFamily:'Times New Roman'}} >Ngawiti ingsun nglaras syi’iran # Kelawan muji maring pengeran<br />
                     Kang paring rohmat lan kenikmatan # Rino wengine tanpo pitungan<br />
                     Duh bolo konco priyo wanito # Ojo mung ngaji syare’at bloko<br />
                     Gur pinter dongeng nulis lan moco # Tembe mburine bakal sangsoro<br />

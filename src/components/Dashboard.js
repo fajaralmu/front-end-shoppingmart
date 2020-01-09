@@ -130,8 +130,7 @@ class Dashboard extends Component {
         if (this.props.loginStatus == true)
             return (
                 <div className="section-container">
-                    <h2>Welcome to Universal Shop App!</h2>
-                    <p>Happy shop keeping</p>
+                    <h1>Have a Nice Shop Keeping!</h1> 
                     {mainComponent}
                 </div>
             )
