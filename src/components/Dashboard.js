@@ -70,13 +70,13 @@ class Dashboard extends Component {
 
         let earningContent = <div>
             <Label text="Value" />
-            <Label text={stringUtil.beautifyNominal(cashflowInfoOut.amount) + ",00"} />
+            <Label style={{fontFamily:"Arial Black"}}  text={stringUtil.beautifyNominal(cashflowInfoOut.amount) + ",00"} />
             <Label text="Item" />
             <Label text={stringUtil.beautifyNominal(cashflowInfoOut.count)} />
         </div>;
         let spendingContent = <div>
             <Label text="Value" />
-            <Label text={stringUtil.beautifyNominal(cashflowInfoIn.amount) + ",00"} />
+            <Label style={{fontFamily:"Arial Black"}} text={stringUtil.beautifyNominal(cashflowInfoIn.amount) + ",00"} />
             <Label text="Item" />
             <Label text={stringUtil.beautifyNominal(cashflowInfoIn.count)} />
         </div>

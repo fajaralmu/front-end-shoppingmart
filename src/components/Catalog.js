@@ -28,6 +28,7 @@ class Catalog extends Component {
             requestOrderBy: null,
             requestOrderType: null,
             requestProductName: "",
+            requestWithStock: null,
             requestCategoryId: null,
             selectedProduct: null,
             buttonCount: 0
@@ -35,14 +36,15 @@ class Catalog extends Component {
         };
 
         this.getProductCatalog = (_page) => {
-            console.log("will go to page: ", _page) 
+            console.log("will go to page: ", _page)
             this.props.getProductCatalog(
                 {
                     page: _page,
                     name: this.state.requestProductName,
                     orderby: this.state.requestOrderBy,
                     ordertype: this.state.requestOrderType,
-                    categoryId: this.state.requestCategoryId
+                    categoryId: this.state.requestCategoryId,
+                    withStock: this.state.requestWithStock
                 }, this.props.app
             );
             this.setState({ catalogPage: _page });
@@ -50,7 +52,6 @@ class Catalog extends Component {
         }
 
         this.handleOrderChange = (value) => {
-            console.log("==selectbox changed==", value); 
             if (value == null || value == "00" || value.length == 0 || value.split("-").length != 2) {
                 this.setState({ requestOrderBy: null });
                 this.setState({ requestOrderType: null });
@@ -64,13 +65,13 @@ class Catalog extends Component {
         }
 
         this.handleInputNameChange = (value) => {
-            console.log("==input name changed=="); 
-            this.setState({ requestProductName:  value });
+            console.log("==input name changed==");
+            this.setState({ requestProductName: value });
         }
 
-        this.clearField = () => { 
-            this.setState({ requestProductName: "" }); 
-            this.setState({ requestOrderBy: null, requestOrderType: null }); 
+        this.clearField = () => {
+            this.setState({ requestProductName: "" });
+            this.setState({ requestOrderBy: null, requestOrderType: null });
             this.setState({ requestCategoryId: null });
 
             alert("filter has been cleared, please push the search button to take effect")
@@ -81,7 +82,7 @@ class Catalog extends Component {
             //remove selected product if any
             this.props.removeEntity();
 
-            this.props.getProductDetail(code,this.props.app);
+            this.props.getProductDetail(code, this.props.app);
             this.props.setDetailMode(true);
         }
 
@@ -90,9 +91,9 @@ class Catalog extends Component {
             this.props.removeEntity();
         }
 
-        this.handleCategoryChange = (value) => { 
+        this.handleCategoryChange = (value) => {
             this.setState({ catalogPage: 0 })
-            if (value!=null && value != "00")
+            if (value != null && value != "00")
                 this.setState({ requestCategoryId: value });
             else
                 this.setState({ requestCategoryId: null });
@@ -114,6 +115,12 @@ class Catalog extends Component {
             else { catalogPage--; }
 
             this.getProductCatalog(catalogPage);
+        }
+
+        this.handleChangeWithStockOption = (id) => { 
+            if(!componentUtil._byId(id))
+                return; 
+            this.setState({ requestWithStock: componentUtil._byId(id).checked });
         }
 
     }
@@ -139,14 +146,14 @@ class Catalog extends Component {
     }
 
 
-    render() { 
+    render() {
 
         let products = this.props.catalogData.entities == null ? [] : this.props.catalogData.entities;
         let buttonData = [];
         if (products.length > 0)
             buttonData = componentUtil.createNavButtons(this.props.catalogData.totalData / this.state.limit);
 
-        let categories = [{value: "00", text:"-all category-"}];
+        let categories = [{ value: "00", text: "-all category-" }];
 
         this.props.productCategories.map(category => {
             categories.push({ value: category.id, text: category.name });
@@ -165,13 +172,15 @@ class Catalog extends Component {
                         { value: "price-desc", text: "Price [expensive]" }
                     ], id: "select-order"
                 }, {
-                    defaultValue: this.state.requestCategoryId, handleOnChange: this.handleCategoryChange, 
+                    defaultValue: this.state.requestCategoryId, handleOnChange: this.handleCategoryChange,
                     id: "select-category", options: categories
                 }]}
 
             />
+            <InputField onChange={this.handleChangeWithStockOption} type="checkbox" id="checkbox-with-stock" text="Inculde Remaining Stock" />
+
             <ActionButtons buttonsData={[{
-                text: "Search", status: "success", onClick: () => this.getProductCatalog(this.state.catalogPage), id: "btn-search"
+                text: "Search", status: "success", onClick: () => this.getProductCatalog(0), id: "btn-search"
             }, {
                 text: "Clear", status: 'warning', onClick: this.clearField, id: "Clear"
             }]} />
@@ -191,7 +200,7 @@ class Catalog extends Component {
                 <NavButton buttonClick={this.next} key="nav-next" text=">" />
 
             </div>
-            {filterBox} 
+            {filterBox}
             <div className="product-panel">
                 {products.map(
                     product => {

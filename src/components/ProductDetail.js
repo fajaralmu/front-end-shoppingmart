@@ -9,7 +9,7 @@ import ActionButtons from './ActionButtons'
 import ActionButton from './ActionButton'
 import InstantTable from './InstantTable'
 import ImageCarousel from './ImageCarousel'
-
+import { beautifyNominal } from '../utils/StringUtil'
 
 
 class ProductDetail extends Component {
@@ -70,14 +70,16 @@ class ProductDetail extends Component {
 
         }
 
+        const loadingChars = ".".repeat(20);
+
         if (product == null) {
             product = {
-                name: "loading...",
-                price: "loading...",
-                count: "loading...",
-                description: "loading....",
+                name: loadingChars,
+                price: loadingChars,
+                count: loadingChars,
+                description: loadingChars,
                 category: {
-                    name: "loading..."
+                    name: loadingChars
                 }
             }
 
@@ -96,7 +98,7 @@ class ProductDetail extends Component {
         let supplierListPanel = <p></p>
         let supplierShown = this.state.supplierShown ? true : false;
         if (supplierShown && product.suppliers) {
-            supplierListPanel = <div className="detail-container"> 
+            supplierListPanel = <div className="detail-container">
                 <h3>Supplier List</h3>
                 <table className="suppllier-container">
                     <tbody>
@@ -123,8 +125,8 @@ class ProductDetail extends Component {
                     rows={[
                         { id: "row-img", values: [imageComponent], CS: [2] },
                         { id: "row-name", values: ["Name", product.name] },
-                        { id: "row-price", values: ["Price", product.price] },
-                        { id: "row-count", values: ["Item(s)", product.count + " " + (product.unit ? product.unit.name : "")] },
+                        { id: "row-price", values: ["Price", beautifyNominal(product.price)] },
+                        { id: "row-count", values: ["Item(s)", beautifyNominal(product.count) + " " + (product.unit ? product.unit.name : "")] },
                         { id: "row-cat", values: ["Category", product.category.name] },
                         { id: "row-desc", values: ["Name", product.description] }
                     ]} />

@@ -123,7 +123,7 @@ class SupplierList extends Component {
                 ]} key="k-select-order" id="select-order" />
 
             <ActionButtons key="btns" buttonsData={[{
-                text: "Search", status: "success", onClick: () => this.getSupplierList(this.state.supplierPage), id: "btn-search"
+                text: "Search", status: "success", onClick: () => this.getSupplierList(0), id: "btn-search"
             }, {
                 text: "Clear", status: 'warning', onClick: this.clearField, id: "Clear"
             }]} />

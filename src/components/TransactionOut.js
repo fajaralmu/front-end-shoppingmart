@@ -243,7 +243,7 @@ class TransactionOut extends Component {
         let formComponent = <table><tbody>
             <tr valign="top"> <td>
                 <div className="form-panel rounded">
-                    <div className="panel-title rounded-top">Payment Form</div>
+                    <div className="panel-title rounded-top">Transaction Detail</div>
                     <InstantTable
                         disabled={true} rows={[
                             {
@@ -301,7 +301,7 @@ class TransactionOut extends Component {
                 {/* ======= product list ======== */}
                 <h3>Product List</h3>
                 <StockListTable disabled={this.props.successTransaction} handleEdit={this.handleEdit} handleDelete={this.handleDelete} productFlows={this.state.productFlows} />
-                <Label text={"Total Price: IDR " + totalPrice} />
+                <Label  text={"Total Price: IDR " + totalPrice} />
 
             </div >
         )

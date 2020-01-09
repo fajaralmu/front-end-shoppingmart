@@ -7,8 +7,9 @@ class Label extends Component{
     }
 
     render(){
+        let style = this.props.style?this.props.style:{};
         return(
-            <div className="input-field">
+            <div style={style} className="input-field">
                 <label>{this.props.text}</label>
             </div>
         )

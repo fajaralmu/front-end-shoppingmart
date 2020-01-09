@@ -263,7 +263,7 @@ class TransactionIn
         let formComponent = <table><tbody>
             <tr valign="top"> <td>
                 <div className="form-panel rounded">
-                    <div className="panel-title rounded-top">Payment Form</div>
+                    <div className="panel-title rounded-top">Transaction Detail</div>
                     <InstantTable
                         disabled={true} rows={[
                             {
@@ -313,7 +313,7 @@ class TransactionIn
         return (
             <div className="transaction-container">
                 {message}
-                <h2>Product Supply From {this.state.supplier && this.state.supplier.name ? "["+this.state.supplier.name+"]" : null})</h2>
+                <h2>Product Supply From {this.state.supplier && this.state.supplier.name ? "["+this.state.supplier.name+"]" : null}</h2>
                 {/* {stateInfo} */}
                 {formComponent}
                 <div>

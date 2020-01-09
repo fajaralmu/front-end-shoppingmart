@@ -203,7 +203,7 @@ export const getSupplierList = (request, app) => {
 }
 
 export const getProductList = (request, app) => {
-    app.startLoading();
+    app.startLoading(true);
     let requested = {
         type: types.FETCH_PRODUCT_LIST,
         payload: {
@@ -213,7 +213,7 @@ export const getProductList = (request, app) => {
                 page: request.page,
                 fieldsFilter: {
                     name: request.name,
-                    withStock: false
+                    withStock: request.withStock
                 },
                 orderBy: request.orderby,
                 orderType: request.ordertype

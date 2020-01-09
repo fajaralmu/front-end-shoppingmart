@@ -9,14 +9,17 @@ import { _byId } from '../utils/ComponentUtil'
 class InputField extends Component {
     constructor(props) {
         super(props);
-        this.handleKeyup = () => { 
+        this.handleKeyup = () => {
             if (this.props.onKeyUp && this.props.id)
-                this.props.onKeyUp(_byId(this.props.id).value,this.props.id);
+                this.props.onKeyUp(_byId(this.props.id).value, this.props.id);
         }
 
         this.onChange = () => {
             if (this.props.type == "date") {
                 this.handleKeyup();
+            }
+            if(this.props.id && this.props.type=="checkbox"){
+                this.props.onChange(this.props.id);
             }
             if (this.props.onChange && this.props.id) {
                 this.props.onChange();
@@ -43,7 +46,7 @@ class InputField extends Component {
 
                     : <input onChange={this.onChange} name={name} key={"KEY-input-" + this.props.id} checked={this.props.checked} id={this.props.id}
                         type={type} onKeyUp={this.handleKeyup} placeholder={placeholder} />}
-                {this.props.type == "radio" ? this.props.text : ""}
+                {this.props.type == "radio" || this.props.type == "checkbox" ? this.props.text : ""}
             </div>
         )
     }
