@@ -132,12 +132,12 @@ class SupplierList extends Component {
             <h2>Supplier List Page</h2>
             <p>List of our partners</p>
             <div className="nav-containter">
-                <NavButton key={stringUtil.uniqueId()} buttonClick={this.prev} key="nav-prev" text="<" />
+                <NavButton id="btn-prv-" key={stringUtil.uniqueId()} buttonClick={this.prev} key="nav-prev" text="<" />
                 {buttonData.map(b => {
                     let active = (b.value == this.state.supplierPage)
-                    return <NavButton key={stringUtil.uniqueId()} active={active} buttonClick={() => this.getSupplierList(b.value)} value={b.value} text={b.text} />
+                    return <NavButton id={b.value} key={stringUtil.uniqueId()} active={active} buttonClick={() => this.getSupplierList(b.value)} value={b.value} text={b.text} />
                 })}
-                <NavButton key={stringUtil.uniqueId()} buttonClick={this.next} key="nav-next" text=">" />
+                <NavButton id="btn-nxt" key={stringUtil.uniqueId()} buttonClick={this.next} key="nav-next" text=">" />
             </div>
             {filterBox}
             <div className="supplier-panel">

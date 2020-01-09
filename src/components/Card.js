@@ -20,7 +20,8 @@ class Card extends Component {
                 backgroundRepeat: 'no-repeat',
                 backgroundColor: 'white',
                 backgroundImage: "url(" + this.props.icon + ")",
-                backgroundSize: '200px 110px'
+                backgroundSize: '200px 110px',
+                borderBottom: 'solid 1px gray'
             }
         }
         return (
