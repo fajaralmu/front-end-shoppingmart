@@ -192,12 +192,12 @@ class Catalog extends Component {
             <h2>Catalog Page</h2>
             <p>Choose your favourite products</p>
             <div className="nav-containter">
-                <NavButton buttonClick={this.prev} key="nav-prev" text="<" />
+                <NavButton id="btn-prv" buttonClick={this.prev} key="nav-prev" text="<" />
                 {buttonData.map(b => {
                     let active = (b.value == this.state.catalogPage)
-                    return <NavButton active={active} buttonClick={() => this.getProductCatalog(b.value)} key={b.value} text={b.text} />
+                    return <NavButton id={b.value} active={active} buttonClick={() => this.getProductCatalog(b.value)} key={b.value} text={b.text} />
                 })}
-                <NavButton buttonClick={this.next} key="nav-next" text=">" />
+                <NavButton id="btn-nxt" buttonClick={this.next} key="nav-next" text=">" />
 
             </div>
             {filterBox}

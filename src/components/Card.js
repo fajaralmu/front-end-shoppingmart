@@ -14,7 +14,7 @@ class Card extends Component {
     }
 
     render() {
-        let titleStyle = {}
+        let titleStyle = {height:'auto'}
         if (this.props.icon) {
             titleStyle = {
                 backgroundRepeat: 'no-repeat',
@@ -24,7 +24,7 @@ class Card extends Component {
             }
         }
         return (
-            <div onClick={this.onClick} style={this.props.style} className="card rounded ">
+            <div onClick={this.onClick} style={this.props.style} className="card rounded box-shadow">
                 <div className="card-title rounded-top" style={titleStyle}>
                     {this.props.title}
                 </div>
