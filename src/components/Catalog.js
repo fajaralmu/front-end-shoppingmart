@@ -93,10 +93,11 @@ class Catalog extends Component {
 
         this.handleCategoryChange = (value) => {
             this.setState({ catalogPage: 0 })
-            if (value != null && value != "00")
-                this.setState({ requestCategoryId: value });
+            if (value != null && value != "00") 
+                this.setState({ requestCategoryId: value });  
             else
                 this.setState({ requestCategoryId: null });
+            
         }
 
         this.next = () => {
@@ -117,9 +118,9 @@ class Catalog extends Component {
             this.getProductCatalog(catalogPage);
         }
 
-        this.handleChangeWithStockOption = (id) => { 
-            if(!componentUtil._byId(id))
-                return; 
+        this.handleChangeWithStockOption = (id) => {
+            if (!componentUtil._byId(id))
+                return;
             this.setState({ requestWithStock: componentUtil._byId(id).checked });
         }
 

@@ -39,7 +39,7 @@ class Message extends Component {
                 width:progress + "%",
                 textAlign: 'left'
             };
-
+            className+=" rounded";
             messageText =  <span className="loader">{this.props.progress + "%"}</span>          
         }
         return (
