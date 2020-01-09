@@ -29,6 +29,7 @@ h1{
     background-color: darkolivegreen;
     color:lemonchiffon;
     font-size: 1.1em;
+    
     padding: 5px;
 }
 
@@ -42,6 +43,7 @@ h1{
 
 .clickable:hover{
     cursor: pointer;
+    color:cadetblue
 }
 
 

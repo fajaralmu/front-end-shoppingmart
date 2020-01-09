@@ -1,17 +1,17 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import CatalogItem from './CatalogItem'
 import NavButton from './NavButton'
 import '../css/Catalog.css'
 import { BrowserRouter as Router, Route, Link, Switch, withRouter } from 'react-router-dom'
 import * as actions from '../redux/actionCreators'
 import * as menus from '../constant/Menus'
-import CatalogItemSupplier from './CatalogItemSupplier'
 import ActionButtons from './ActionButtons'
 import InputField from './InputField'
 import ComboBox from './ComboBox'
 import * as componentUtil from '../utils/ComponentUtil'
 import * as stringUtil from '../utils/StringUtil'
+import * as url from '../constant/Url'
+import Card from './Card'
 
 class SupplierList extends Component {
 
@@ -23,7 +23,7 @@ class SupplierList extends Component {
             requestSupplierName: "",
         };
 
-        this.getSupplierList = (_page) => {  
+        this.getSupplierList = (_page) => {
             this.props.getSupplierList({
                 page: _page,
                 name: this.state.requestSupplierName,
@@ -34,7 +34,7 @@ class SupplierList extends Component {
             this.setState({ totalData: this.props.suppliersData.totalData });
         }
 
-        this.handleOrderChange = (value) => { 
+        this.handleOrderChange = (value) => {
             if (value == null || value.length == 0 || value.split("-").length != 2) {
                 return;
             } else {
@@ -45,9 +45,9 @@ class SupplierList extends Component {
 
         }
 
-        this.handleInputNameChange = (value) => { 
+        this.handleInputNameChange = (value) => {
             this.setState({ catalogPage: 0 })
-            this.setState({ requestSupplierName:  value });
+            this.setState({ requestSupplierName: value });
         }
 
         this.clearField = () => {
@@ -81,7 +81,7 @@ class SupplierList extends Component {
     }
 
     componentWillMount() {
-       
+
         document.title = "Our Suppliers";
         this.getSupplierList(this.state.supplierPage);
         this.props.setMenuCode(menus.SUPPLIERLIST);
@@ -89,7 +89,6 @@ class SupplierList extends Component {
     }
 
     componentDidUpdate() {
-         
         if (this.state.firstLoad && this.props.suppliersData.filter != null) {
             this.setState({
                 //limit: this.props.suppliersData.filter.limit,
@@ -99,24 +98,21 @@ class SupplierList extends Component {
         }
     }
 
-
-
-
     render() {
 
         let suppliers = this.props.suppliersData.entities == null ? [] : this.props.suppliersData.entities;
         let buttonData = [];
-        if (suppliers.length > 0){
+        if (suppliers.length > 0) {
             buttonData = componentUtil.createNavButtons(this.props.suppliersData.totalData / this.state.limit);
             console.log("_________________will create nav buttons__________________"
-                ,this.props.suppliersData.totalData ,this.state.limit);
+                , this.props.suppliersData.totalData, this.state.limit);
         }
 
 
         let filterBox = <div className="filter-box">
             <InputField placeholder="search by supplier name" onKeyUp={this.handleInputNameChange} type="search"
                 id="input-supplier-name" />
-            <ComboBox  defaultValue="00" onChange={this.handleOrderChange}
+            <ComboBox defaultValue="00" onChange={this.handleOrderChange}
                 options={[
                     { value: "00", text: "-Select Order-" },
                     { value: "name-asc", text: "Name [A-Z]" },
@@ -136,18 +132,31 @@ class SupplierList extends Component {
             <h2>Supplier List Page</h2>
             <p>List of our partners</p>
             <div className="nav-containter">
-                <NavButton key={stringUtil.uniqueId()}  buttonClick={this.prev} key="nav-prev" text="<" />
+                <NavButton key={stringUtil.uniqueId()} buttonClick={this.prev} key="nav-prev" text="<" />
                 {buttonData.map(b => {
                     let active = (b.value == this.state.supplierPage)
                     return <NavButton key={stringUtil.uniqueId()} active={active} buttonClick={() => this.getSupplierList(b.value)} value={b.value} text={b.text} />
                 })}
-                <NavButton key={stringUtil.uniqueId()}  buttonClick={this.next} key="nav-next" text=">" />
+                <NavButton key={stringUtil.uniqueId()} buttonClick={this.next} key="nav-next" text=">" />
             </div>
             {filterBox}
             <div className="supplier-panel">
                 {suppliers.map(
                     supplier => {
-                        return <CatalogItemSupplier key={supplier.id} supplier={supplier} />
+                        let imageUrl = url.baseImageUrl + supplier.iconUrl;
+                        let content = <div  >
+                            <a href={supplier.website}>{supplier.name}
+                            </a>
+                            <br />
+                            <span style={{ fontSize: '0.7em' }}>{supplier.address}</span>
+                        </div>
+
+                        return <Card
+                            icon={imageUrl}
+                            style={{ float: 'left' }}
+                            key={supplier.id}
+                            content={content}
+                        />
                     }
                 )}
             </div>
@@ -159,7 +168,7 @@ class SupplierList extends Component {
     }
 }
 
-const mapStateToProps = state => { 
+const mapStateToProps = state => {
     return {
         suppliersData: state.shopState.suppliersData
     }

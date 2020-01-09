@@ -18,7 +18,7 @@ class InstantTable extends Component {
             <table style={tableStyle} className={className}><tbody>
                 {rows.map(row => {
 
-                    return (<CrudRow valign={this.props.valign ? this.props.valign : "top"} RS={row.RS} CS={row.CS} values={row.values ? row.values : []}
+                    return (<CrudRow style={row.style} valign={this.props.valign ? this.props.valign : "top"} RS={row.RS} CS={row.CS} values={row.values ? row.values : []}
                         key={"key-row-"+row.id} disabled={this.props.disabled == null ? true : this.props.disabled}></CrudRow>
                     )
                 })}

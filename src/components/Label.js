@@ -4,12 +4,22 @@ import '../css/Input.css'
 class Label extends Component{
     constructor(props){
         super(props);
+
+        this.onClick = () =>{
+            if(this.props.onClick){
+                this.props.onClick();
+            }
+        }
     }
 
     render(){
         let style = this.props.style?this.props.style:{};
+        let className = "input-field ";
+        if(this.props.className){
+            className+=" "+this.props.className;
+        }
         return(
-            <div style={style} className="input-field">
+            <div onClick={this.onClick} style={style} className={className}>
                 <label>{this.props.text}</label>
             </div>
         )
