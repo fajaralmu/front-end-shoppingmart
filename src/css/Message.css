@@ -21,12 +21,12 @@
     font-family: 'Lucida Sans';
     position: fixed;
     color: white;
-    margin-top: 5px;
+    
     z-index: 1;
     background-color: rgba(106, 154, 243 );
 }
  .loader{
-    font-size: '60px';
+    font-size: '60';
     font-family: 'Arial';
-    color:blue
+    color:white
 }

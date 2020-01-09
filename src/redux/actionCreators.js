@@ -4,6 +4,10 @@ const apiEntityBaseUrl = "http://localhost:8080/universal-good-shop/api/entity/"
 const apiAccount = "http://localhost:8080/universal-good-shop/api/account/"
 const apiTransaction = "http://localhost:8080/universal-good-shop/api/transaction/";
 
+export const resetProductStocks = () => {
+    return { type: types.RESET_PRODUCT_STOCKS, payload: {}, meta: { type: types.RESET_PRODUCT_STOCKS } };
+}
+
 export const resetProducts = () => {
     return { type: types.RESET_PRODUCTS, payload: {}, meta: { type: types.RESET_PRODUCTS } };
 }
@@ -13,7 +17,17 @@ export const resetSuppliers = () => {
 export const resetCustomers = () => {
     return { type: types.RESET_CUSTOMERS, payload: {}, meta: { type: types.RESET_CUSTOMERS } };
 }
-
+export const getProductStocks = (name, app) => {
+    app.startLoading();
+    return {
+        type: types.GET_PRODUCT_STOCKS,
+        payload: { product:{name:name}},
+        meta: {
+            app: app, type: types.GET_PRODUCT_STOCKS, 
+            url: apiTransaction.concat("stocks")
+        }
+    };
+}
 export const getProductSales = (request) => {
     request.referrer.props.app.startLoading(true);
     return {
@@ -35,7 +49,7 @@ export const getCashflowDetail = (request, app) => {
     };
 }
 export const getCashflowInfo = (month, year, type, app) => {
-    app.startLoading(true);
+    app.startLoading();
     return {
         type: types.GET_CASHFLOW_INFO,
         payload: { filter: { year: year, month: month, module: type } },

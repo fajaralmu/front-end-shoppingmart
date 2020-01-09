@@ -106,17 +106,18 @@ class App extends Component {
 
     let loadingComponent = "";
     if (this.state.loading == true) {
-      loadingComponent = <Message realtime={this.state.realtime} progress={this.state.loadingPercentage} text="loading" type="loading" />;
+      loadingComponent = <Message realtime={this.state.realtime} progress={this.state.loadingPercentage} text="Please wait..." type="loading" />;
     }
 
     let menus = this.setMenus();
 
     return (
       <div className="App">
+        {loadingComponent}
         <Header title="Universal Good Shop" />
         {/*this.props.loginStatus == true?"Logged In":"Un Logged"*/}
 
-        {loadingComponent}
+        
         
         <table className="main-layout">
           <tbody>

@@ -9,3 +9,7 @@
 .transaction-container{
     width:90%
 }
+
+.transaction-receipt{
+    text-align: center
+}

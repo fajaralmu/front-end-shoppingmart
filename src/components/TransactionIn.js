@@ -31,7 +31,7 @@ class TransactionIn
             activeField: ""
         }
 
-       
+
 
         this.isExistInTheChart = (productId) => {
             if (this.state.productFlows == null) return false;
@@ -79,7 +79,7 @@ class TransactionIn
 
             this.setState({ productFlows: currentFlows });
             this.showMessage("Success saving to chart", "success");
-            
+
         }
 
         this.getProductFlow = (productId) => {
@@ -152,16 +152,17 @@ class TransactionIn
 
         this.reset = () => {
             componentUtil.clearFields(null);
-            this.setState({
+            this.setState({supplier:null,
                 productFlows: [], showDetail: false, product: null,
                 supplierName: null, productName: null, expiryDate: null, quantity: null, price: null
             });
+           
             this.props.resetPurchaseTransaction();
         }
 
         this.emptyForm = () => {
             this.setState({
-                 productName: null, expiryDate: null, quantity: null, price: null
+                productName: null, expiryDate: null, quantity: null, price: null
             });
         }
 
@@ -179,9 +180,9 @@ class TransactionIn
             return stringUtil.beautifyNominal(totalPrice) + (",00");
         }
 
-        this.getSupplierList = (value, id) => { 
+        this.getSupplierList = (value, id) => {
             this.setState({ supplierName: value });
-            this.props.getSupplierList(value, this.props.app); 
+            this.props.getSupplierList(value, this.props.app);
             this.setActiveField(id);
         }
 
@@ -196,9 +197,9 @@ class TransactionIn
             this.props.resetSuppliers();
         }
 
-        this.getProductList = (value, id) => { 
+        this.getProductList = (value, id) => {
             this.setState({ showDetail: true, productName: value })
-            this.props.getProductList(value, this.props.app); 
+            this.props.getProductList(value, this.props.app);
             this.setActiveField(id);
         }
 
@@ -211,7 +212,7 @@ class TransactionIn
                 if (this.props.products[i].id == id)
                     this.setState({ productName: this.props.products[i].name, product: this.props.products[i] });
             this.props.resetProducts();
-             
+
         }
     }
     componentDidMount() {
@@ -253,11 +254,11 @@ class TransactionIn
                 productList.push({ value: product.id, text: product.name });
             }
 
-        let stateInfo = <div>
-            qty: {this.state.quantity},
-            price: {this.state.price},
-            exp: {this.state.expiryDate}
-        </div>
+        // let stateInfo = <div>
+        //     qty: {this.state.quantity},
+        //     price: {this.state.price},
+        //     exp: {this.state.expiryDate}
+        // </div>
 
         let formComponent = <table><tbody>
             <tr valign="top"> <td>
@@ -277,17 +278,17 @@ class TransactionIn
                             },
                             {
                                 values: [<InputField id="input-product-price"
-                                    value={this.state.price} onKeyUp={(value, id) => this.setState({activeField:id, price: value })}
+                                    value={this.state.price} onKeyUp={(value, id) => this.setState({ activeField: id, price: value })}
                                     type="number" placeholder="input product price" />]
                             },
                             {
                                 values: [<InputField id="input-quantity"
-                                    value={this.state.quantity} onKeyUp={(value, id) => this.setState({activeField:id, quantity: value })}
+                                    value={this.state.quantity} onKeyUp={(value, id) => this.setState({ activeField: id, quantity: value })}
                                     type="number" placeholder="quantity" />]
                             },
                             {
                                 values: [<InputField id="input-exp-date"
-                                    value={this.state.expiryDate} onKeyUp={(value, id) => this.setState({activeField:id, expiryDate: value })}
+                                    value={this.state.expiryDate} onKeyUp={(value, id) => this.setState({ activeField: id, expiryDate: value })}
                                     type="date" placeholder="input product exp date" />]
                             }
                         ]}
@@ -297,25 +298,26 @@ class TransactionIn
             </td><td> {detailStock} </td></tr>
         </tbody></table>;
 
+        let buttonsData = [
+            { text: "Back", onClick: () => this.props.setFeatureCode(null), id: "btn-back" },
+            { text: "Back And Reset", status: "warning", onClick: () => { this.props.setFeatureCode(null); this.reset() }, id: "btn-back-reset" }, 
+            { text: "Reset", status: 'danger', id: "btn-reset-trx", onClick: this.reset }];
+
         if (this.props.successTransaction) {
-            formComponent = <div>
-                <h2>Transaction Success</h2>
-                <TransactionReceipt transactionData={this.props.transactionData} />
-            </div>
+            formComponent =
+                <TransactionReceipt status="Success" transactionData={this.props.transactionData} /> 
+        }else{
+            buttonsData.push({ id: "btn-submit-trx", status: 'submit', text: "Submit Transaction", onClick: this.submitTransaction });
         }
 
         return (
             <div className="transaction-container">
                 {message}
-                <h2>Product Supply From ({this.state.supplier ? this.state.supplier.name : null})</h2>
-                {stateInfo}
+                <h2>Product Supply From {this.state.supplier && this.state.supplier.name ? "["+this.state.supplier.name+"]" : null})</h2>
+                {/* {stateInfo} */}
                 {formComponent}
                 <div>
-                    <ActionButtons buttonsData={[
-                        { text: "Back", onClick: () => this.props.setFeatureCode(null), id: "btn-back" },
-                        { text: "Back And Reset", status: "warning", onClick: () => { this.props.setFeatureCode(null); this.reset() }, id: "btn-back" },
-                        { id: "btn-submit-trx", status: 'submit', text: "Submit Transaction", onClick: this.submitTransaction },
-                        { text: "Reset", status: 'danger', id: "btn-reset-trx", onClick: this.reset }]} />
+                    <ActionButtons buttonsData={buttonsData} />
                 </div>
                 {/* ======= product list ======== */}
                 <h3>Product List</h3>

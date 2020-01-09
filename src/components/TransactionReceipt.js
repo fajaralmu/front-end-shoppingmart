@@ -41,6 +41,7 @@ class TransactionReceipt extends Component {
 
         return (
             <div className="transaction-receipt" >
+                <h2>Transaction {this.props.status}</h2>
                 {transactionReceiptComponent}
             </div>
         )

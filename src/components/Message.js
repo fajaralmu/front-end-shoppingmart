@@ -34,8 +34,9 @@ class Message extends Component {
 
         let msgStyle = {};
         if (this.props.realtime == true) {
+            let progress = Math.floor( this.props.progress);
             msgStyle = {
-                width: this.props.progress + "%",
+                width:progress + "%",
                 textAlign: 'left'
             };
 
