@@ -12,6 +12,7 @@ export const initState = {
     cashflowInfoIn: null,
     cashflowDetail: null,
     productSalesData: null,
+    productSalesDetails: null,
     transactionYears: [new Date().getFullYear(), new Date().getFullYear()]
 };
 
@@ -79,6 +80,8 @@ export const reducer = (state = initState, action) => {
             return { ...state, productFlowStocks: action.payload.entities };
         case types.RESET_PRODUCT_STOCKS:
             return { ...state, productFlowStocks: null };
+        case types.GET_PRODUCT_SALES_DETAIL:
+            return { ...state, productSalesDetails: action.payload.entities };
         default:
             return { ...state };
     }

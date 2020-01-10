@@ -28,6 +28,22 @@ export const getProductStocks = (name, app) => {
         }
     };
 }
+
+export const getProductSalesDetail = (request, app) => {
+    app.startLoading(true);
+    return {
+        type: types.GET_PRODUCT_SALES_DETAIL,
+        payload: {  
+            filter:
+             { page: request.page, limit: 10, month: request.fromMonth, year: request.fromYear, monthTo: request.toMonth, yearTo: request.toYear } },
+        meta: {
+            app:app, 
+            type: types.GET_PRODUCT_SALES_DETAIL, 
+            loadMore: request.loadMore == true, url: apiTransaction.concat("productsalesdetail/"+request.productId)
+        }
+    };
+}
+
 export const getProductSales = (request) => {
     request.referrer.props.app.startLoading(true);
     return {

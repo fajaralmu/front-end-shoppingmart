@@ -37,6 +37,7 @@ export const configureStore = () => {
             resetCustomersMiddleware,
             getProductStocksMiddleware,
             resetProductStocksMiddleware,
+            getProductSalesDetailMiddleware
 
         )
     );
@@ -58,6 +59,26 @@ const getProductStocksMiddleware = store => next => action => {
             }
 
             let newAction = Object.assign({}, action, { payload: data  });
+            delete newAction.meta;
+            store.dispatch(newAction);
+        })
+        .catch(err => console.log(err)).finally(param => action.meta.app.endLoading());
+}
+
+const getProductSalesDetailMiddleware = store => next => action => {
+    if (!action.meta || action.meta.type !== types.GET_PRODUCT_SALES_DETAIL) { return next(action); }
+    fetch(action.meta.url, {
+        method: POST_METHOD, body: JSON.stringify(action.payload),
+        headers: { 'Content-Type': 'application/json', 'requestId': '1234', 'loginKey': localStorage.getItem("loginKey") }
+    }).then(response => response.json())
+        .then(data => {
+            console.debug("getProductSalesDetailMiddleware Response:", data, "load more:", action.meta.loadMore);
+            if (data.code != "00") {
+                alert("Server error");
+                return;
+            }
+
+            let newAction = Object.assign({}, action, { payload: data });
             delete newAction.meta;
             store.dispatch(newAction);
         })

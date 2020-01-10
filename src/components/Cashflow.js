@@ -58,7 +58,45 @@ class Cashflow
 
         }
 
+        this.constructFilterBox = () => {
 
+            let isChartHorizontal = this.state.chartOrientation == "horizontal";
+            let isChartVertical = this.state.chartOrientation == "vertical";
+
+            let inputRadio = <div>
+                <InputField key="radio-o-h" checked={isChartHorizontal} name="orientation" onChange={() => this.onChangeChartOrientation('h')} type="radio"
+                    id="radio-orientation-h" text="Horizontal orientation" />
+                <InputField key="radio-o-v" checked={isChartVertical} name="orientation" onChange={() => this.onChangeChartOrientation('v')} type="radio"
+                    id="radio-orientation-v" text="Vertical orientation" />
+            </div>;
+
+            let filterButtons = <ActionButtons buttonsData={[
+                { text: "Back", onClick: () => this.props.setFeatureCode(null), id: "btn-back" },
+                { text: "Search", onClick: this.getCashflowDetail, status: "success", id: "btn-get-cashflow-detail" }]}
+            />;
+
+            return (
+                <creator.FilterBox rows={[{
+                    values: [<creator.DateSelectionFrom years={this.props.transactionYears}
+                        monthVal={this.state.fromMonth} yearVal={this.state.fromYear}
+                        handleOnChangeMfrom={(value) => this.setState({ fromMonth: value })}
+                        handleOnChangeYfrom={(value) => this.setState({ fromYear: value })}
+                    />,
+                    <creator.DateSelectionTo years={this.props.transactionYears}
+                        monthVal={this.state.toMonth} yearVal={this.state.toYear}
+                        handleOnChangeMto={(value) => this.setState({ toMonth: value })}
+                        handleOnChangeYto={(value) => this.setState({ toYear: value })} />, filterButtons, inputRadio]
+                }]} />)
+        }
+
+        this.constructFilterInfo = () => {
+            return (<div>
+                {"From "}
+                {stringUtil.monthYearString(this.state.fromMonth, this.state.fromYear)}
+                {" to "}
+                {stringUtil.monthYearString(this.state.toMonth, this.state.toYear)}
+            </div>);
+        }
     }
     componentDidMount() {
         document.title = "Cashflow";
@@ -69,46 +107,14 @@ class Cashflow
 
     render() {
 
-        let filterInfo = <div>
-            {"From "}
-            {stringUtil.monthYearString(this.state.fromMonth, this.state.fromYear)}
-            {" to "}
-            {stringUtil.monthYearString(this.state.toMonth, this.state.toYear)}
-        </div>
-
-        let isChartHorizontal = this.state.chartOrientation == "horizontal";
-        let isChartVertical = this.state.chartOrientation == "vertical";
+        let filterInfo = this.constructFilterInfo();
 
         let cashflowDetail = this.props.cashflowDetail != null ? this.props.cashflowDetail : { supplies: [], purchases: [] };
-        let maxValue = this.props.cashflowDetail != null ? this.props.cashflowDetail.maxValue : 0;
-
-        let inputRadio = <div>
-            <InputField key="radio-o-h" checked={isChartHorizontal} name="orientation" onChange={() => this.onChangeChartOrientation('h')} type="radio"
-                id="radio-orientation-h" text="Horizontal orientation" />
-            <InputField key="radio-o-v" checked={isChartVertical} name="orientation" onChange={() => this.onChangeChartOrientation('v')} type="radio"
-                id="radio-orientation-v" text="Vertical orientation" />
-        </div>
-
+        let maxValue = this.props.cashflowDetail != null ? this.props.cashflowDetail.maxValue : 0; 
 
         let chartOrientation = this.state.chartOrientation;
 
-        let filterButtons = <ActionButtons buttonsData={[
-            { text: "Back", onClick: () => this.props.setFeatureCode(null), id: "btn-back" },
-            { text: "Search", onClick: this.getCashflowDetail, status: "success", id: "btn-get-cashflow-detail" }]}
-        />;
-
-        const filterBox =
-            <creator.FilterBox rows={[{
-                values: [<creator.DateSelectionFrom years={this.props.transactionYears}
-                    monthVal={this.state.fromMonth} yearVal={this.state.fromYear}
-                    handleOnChangeMfrom={(value) => this.setState({ fromMonth: value })}
-                    handleOnChangeYfrom={(value) => this.setState({ fromYear: value })}
-                />,
-                <creator.DateSelectionTo years={this.props.transactionYears}
-                    monthVal={this.state.toMonth} yearVal={this.state.toYear}
-                    handleOnChangeMto={(value) => this.setState({ toMonth: value })}
-                    handleOnChangeYto={(value) => this.setState({ toYear: value })} />, filterButtons, inputRadio]
-            }]} />
+        const filterBox = this.constructFilterBox();
 
         let cashflowDataRows = new Array();
 

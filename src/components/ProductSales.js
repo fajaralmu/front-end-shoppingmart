@@ -14,6 +14,7 @@ import { _byId } from '../utils/ComponentUtil'
 import Chart from './Chart'
 import * as creator from '../utils/ComponentCreator'
 import InputField from './InputField'
+import Label from './Label'
 
 class ProductSales
     extends Component {
@@ -22,6 +23,7 @@ class ProductSales
         super(props);
         const date = new Date();
         this.state = {
+            showDetail: false,
             chartOrientation: "horizontal", page: 0, updated: new Date(),
             fromMonth: date.getMonth() + 1, fromYear: date.getFullYear(),
             toMonth: date.getMonth() + 1, toYear: date.getFullYear(),
@@ -46,6 +48,20 @@ class ProductSales
             }
 
             this.props.getProductSales(request);
+        }
+
+        this.getProductSalesDetail = (productId) => {
+            let request = {
+                page: 0,
+                fromMonth: this.state.fromMonth,//_byId("select-month-from").value,
+                fromYear: this.state.fromYear,// _byId("select-year-from").value,
+                toMonth: this.state.toMonth,//_byId("select-month-to").value,
+                toYear: this.state.toYear,// _byId("select-year-to").value, 
+                productId: productId
+            }
+
+            this.props.getProductSalesDetail(request, this.props.app);
+            this.setState({showDetail:true})
         }
 
         /**
@@ -74,40 +90,15 @@ class ProductSales
         }
 
         this.setRequestProductName = (value, id) => {
-            this.setState({ productName: value, activeField:id })
+            this.setState({ productName: value, activeField: id })
         }
 
-    }
-    componentDidMount() {
-        document.title = "ProductSales";
-        // this.getProductSales();
-    }
-    componentDidUpdate() {
-        console.log("updated", this.state.fromMonth, this.state.fromYear, " to ", this.state.toMonth, this.state.toYear);
-        if(_byId(this.state.activeField)){
-            _byId(this.state.activeField).focus();
-        }
-    }
-
-    render() {
-
-        let productSalesData = this.props.productSalesData != null ? this.props.productSalesData : { entities: [], filter: {} };
-        let maxValue = stringUtil.getMaxSales(productSalesData.entities);
-        console.log("============(product sales data)====", productSalesData.entities.length, "IN", new Date());
-        let filterInfo = <div>
-            {"From "}
-            {stringUtil.monthYearString(productSalesData.filter.month, productSalesData.filter.year)}
-            {" to "}
-            {stringUtil.monthYearString(productSalesData.filter.monthTo, productSalesData.filter.yearTo)}
-        </div>
-
-        let filterButtons = <ActionButtons buttonsData={[
-            { text: "Back", onClick: () => this.props.setFeatureCode(null), id: "btn-back" },
-            { text: "Search", onClick: () => this.getProductSales(null, 0), id: "btn-get-product-sales", status: "success" }]}
-        />;
-
-        const filterBox =
-            <creator.FilterBox rows={[{
+        this.constructFilterBox = () => {
+            let filterButtons = <ActionButtons buttonsData={[
+                { text: "Back", onClick: () => this.props.setFeatureCode(null), id: "btn-back" },
+                { text: "Search", onClick: () => this.getProductSales(null, 0), id: "btn-get-product-sales", status: "success" }]}
+            />;
+            return (<creator.FilterBox rows={[{
                 values: [<creator.DateSelectionFrom years={this.props.transactionYears}
                     monthVal={this.state.fromMonth} yearVal={this.state.fromYear}
                     handleOnChangeMfrom={(value) => this.setState({ fromMonth: value })}
@@ -123,19 +114,53 @@ class ProductSales
                     ,
                     filterButtons
                 ]
-            }]} />
+            }]} />);
+        }
 
+        this.constructFilterInfo = (productSalesData) => {
+            return (<div>
+                {"From "}
+                {stringUtil.monthYearString(productSalesData.filter.month, productSalesData.filter.year)}
+                {" to "}
+                {stringUtil.monthYearString(productSalesData.filter.monthTo, productSalesData.filter.yearTo)}
+            </div>)
+        }
+
+    }
+    componentDidMount() {
+        document.title = "ProductSales";
+        // this.getProductSales();
+    }
+    componentDidUpdate() {
+        console.log("updated", this.state.fromMonth, this.state.fromYear, " to ", this.state.toMonth, this.state.toYear);
+        if (_byId(this.state.activeField)) {
+            _byId(this.state.activeField).focus();
+        }
+    }
+
+    render() {
+
+        let productSalesData = this.props.productSalesData != null ? this.props.productSalesData : { entities: [], filter: {} };
+        let maxValue = stringUtil.getMaxSales(productSalesData.entities);
+        console.log("============(product sales data)====", productSalesData.entities.length, "IN", new Date());
+        let filterInfo = this.constructFilterInfo(productSalesData);
+        let filterBox = this.constructFilterBox();
         let productDetailRows = new Array();
-
+        /**
+         * construct chart
+         */
         for (let i = 0; i < productSalesData.entities.length; i++) {
             const entity = productSalesData.entities[i];
             const sales = stringUtil.beautifyNominal(entity.sales);
 
             productDetailRows.push({
                 id: 'chart-e-' + entity.product.id,
-                values: [(i + 1), entity.product.name,
-                <Chart text={sales}
-                    type="success" width={450} value={entity.sales} maxValue={maxValue} />
+                values: [
+                    <Label key={'lbl-e-' + entity.product.id} text={(i + 1), entity.product.name}
+                        onClick={() => this.getProductSalesDetail(entity.product.id)} />
+                    ,
+                    <Chart text={sales}
+                        type="success" width={450} value={entity.sales} maxValue={maxValue} />
                 ]
             });
         }
@@ -154,20 +179,19 @@ class ProductSales
             </div>
         )
     }
-
-
 }
-
 
 
 const mapStateToProps = state => {
     return {
-        productSalesData: state.transactionState.productSalesData
+        productSalesData: state.transactionState.productSalesData,
+        productSalesDetails: state.transactionState.productSalesDetails
     }
 }
 
 const mapDispatchToProps = dispatch => ({
-    getProductSales: (request) => dispatch(actions.getProductSales(request))
+    getProductSales: (request) => dispatch(actions.getProductSales(request)),
+    getProductSalesDetail: (request, app) => dispatch(actions.getProductSalesDetail(request, app))
 })
 export default (connect(
     mapStateToProps,
