@@ -24,14 +24,14 @@ class ProductSales
         super(props);
         const date = new Date();
         this.state = {
-            showDetail: false,
+            showDetail: false, productDetailId: null,
             chartOrientation: "horizontal", page: 0, updated: new Date(),
             fromMonth: date.getMonth() + 1, fromYear: date.getFullYear(),
             toMonth: date.getMonth() + 1, toYear: date.getFullYear(),
             productName: null
         }
         this.getProductSales = (loadMore, _page) => {
-            this.setState({ page: _page });
+            this.setState({ page: _page , productDetailId:null});
             if (!componentUtil.checkExistance("select-month-from", "select-month-to",
                 "select-year-from", "select-year-to")) {
                 return;
@@ -52,17 +52,20 @@ class ProductSales
         }
 
         this.getProductSalesDetail = (productId) => {
-            let request = {
-                page: 0,
-                fromMonth: this.state.fromMonth,//_byId("select-month-from").value,
-                fromYear: this.state.fromYear,// _byId("select-year-from").value,
-                toMonth: this.state.toMonth,//_byId("select-month-to").value,
-                toYear: this.state.toYear,// _byId("select-year-to").value, 
-                productId: productId
-            }
+            if (this.state.productDetailId != productId) {
 
-            this.props.getProductSalesDetail(request, this.props.app);
-            this.setState({showDetail:true})
+                let request = {
+                    page: 0,
+                    fromMonth: this.state.fromMonth,//_byId("select-month-from").value,
+                    fromYear: this.state.fromYear,// _byId("select-year-from").value,
+                    toMonth: this.state.toMonth,//_byId("select-month-to").value,
+                    toYear: this.state.toYear,// _byId("select-year-to").value, 
+                    productId: productId
+                }
+
+                this.props.getProductSalesDetail(request, this.props.app);
+            }
+            this.setState({ showDetail: true, productDetailId: productId })
         }
 
         /**
@@ -175,9 +178,9 @@ class ProductSales
          * if show detail
          */
         let productSalesDetailsXX = this.props.productSalesDetails;
-        if(this.state.showDetail){
-            productSalesListComponent = <ProductSalesDetail productSalesDetails={productSalesDetailsXX }
-                goBack = {()=>{this.setState({showDetail:false})} } />
+        if (this.state.showDetail) {
+            productSalesListComponent = <ProductSalesDetail productSalesDetails={productSalesDetailsXX}
+                goBack={() => { this.setState({ showDetail: false }) }} />
         }
 
         return (
