@@ -24,6 +24,7 @@
     
     z-index: 1;
     background-color: rgba(106, 154, 243 );
+    transition-duration: 700ms; 
 }
  .loader{
     font-size: '60';

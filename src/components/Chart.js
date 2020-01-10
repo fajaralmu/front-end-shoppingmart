@@ -5,10 +5,30 @@ import '../css/Chart.css'
 class Chart extends Component {
     constructor(props) {
         super(props);
+        this.state = {firstLoad:true, counter:1};
 
+        this.update = () => {
+            let counter = this.state.counter + 1;
+            this.setState({counter:counter})
+            if(this.state.firstLoad&&counter > 10){
+                this.setState({firstLoad:false});
+                clearInterval(this.state.intervalId);
+            }
+        }
     }
+
+    componentDidMount(){
+       // this.setState({firstLoad:false})
+       if(this.state.firstLoad){
+           let intervalId = setInterval(this.update, 1, null);
+           this.setState({intervalId : intervalId});
+       }
+    }
+
     render() {
-        let percentage = this.props.value / this.props.maxValue * 100;
+        
+
+        let percentage = this.state.firstLoad?0: this.props.value / this.props.maxValue * 100;
         let orientation = this.props.orientation ? this.props.orientation : "horizontal";
         const width = this.props.width ? this.props.width : 400;
         if (percentage < 0 || this.props.maxValue <= 0) {

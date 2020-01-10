@@ -2,6 +2,7 @@
 }
 
 .char-bar {
+    transition-duration: 700ms; 
     height:100%; 
     background-color: coral
 }
