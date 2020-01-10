@@ -97,7 +97,7 @@ class TransactionOut extends Component {
         }
 
         this.emptyForm = () => {
-            this.setState({ stockId: 0, quantity: 0 });
+            this.setState({productName:null, stockId: 0, quantity: 0 });
         }
 
         this.handleEdit = (stockId) => {

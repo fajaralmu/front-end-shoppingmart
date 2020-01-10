@@ -21,7 +21,7 @@ class Card extends Component {
                 backgroundColor: 'white',
                 backgroundImage: "url(" + this.props.icon + ")",
                 backgroundSize: '200px 110px',
-                borderBottom: 'solid 1px gray'
+                borderBottom: 'solid 0.1px gray'
             }
         }
         return (

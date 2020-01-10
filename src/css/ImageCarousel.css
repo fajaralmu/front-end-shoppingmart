@@ -1,7 +1,8 @@
 .carousel-item{
     margin:5%;
     width:90%;
-    height:70%
+    height:70%;
+    transition-duration: 500ms
 }
 
 .carousel{
