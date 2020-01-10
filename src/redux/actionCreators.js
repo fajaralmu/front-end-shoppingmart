@@ -32,7 +32,10 @@ export const getProductSales = (request) => {
     request.referrer.props.app.startLoading(true);
     return {
         type: types.GET_PRODUCT_SALES,
-        payload: { filter: { page: request.page, limit: 10, month: request.fromMonth, year: request.fromYear, monthTo: request.toMonth, yearTo: request.toYear } },
+        payload: { 
+            product:{name:request.productName},
+            filter:
+             { page: request.page, limit: 10, month: request.fromMonth, year: request.fromYear, monthTo: request.toMonth, yearTo: request.toYear } },
         meta: {
             referrer: request.referrer, type: types.GET_PRODUCT_SALES, loadMore: request.loadMore == true, url: apiTransaction.concat("productsales")
         }

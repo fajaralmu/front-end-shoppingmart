@@ -5,14 +5,15 @@ import * as actions from '../redux/actionCreators'
 import '../css/Common.css'
 import '../css/Cashflow.css'
 import '../css/CatalogItem.css'
-import ActionButton from './ActionButton' 
+import ActionButton from './ActionButton'
 import * as stringUtil from '../utils/StringUtil'
 import ActionButtons from './ActionButtons'
-import InstantTable from './InstantTable' 
+import InstantTable from './InstantTable'
 import * as componentUtil from '../utils/ComponentUtil'
-import { _byId } from '../utils/ComponentUtil' 
+import { _byId } from '../utils/ComponentUtil'
 import Chart from './Chart'
 import * as creator from '../utils/ComponentCreator'
+import InputField from './InputField'
 
 class ProductSales
     extends Component {
@@ -23,9 +24,10 @@ class ProductSales
         this.state = {
             chartOrientation: "horizontal", page: 0, updated: new Date(),
             fromMonth: date.getMonth() + 1, fromYear: date.getFullYear(),
-            toMonth: date.getMonth() + 1, toYear: date.getFullYear()
+            toMonth: date.getMonth() + 1, toYear: date.getFullYear(),
+            productName: null
         }
-        this.getProductSales = (loadMore,_page) => {
+        this.getProductSales = (loadMore, _page) => {
             this.setState({ page: _page });
             if (!componentUtil.checkExistance("select-month-from", "select-month-to",
                 "select-year-from", "select-year-to")) {
@@ -37,7 +39,7 @@ class ProductSales
                 fromYear: this.state.fromYear,// _byId("select-year-from").value,
                 toMonth: this.state.toMonth,//_byId("select-month-to").value,
                 toYear: this.state.toYear,// _byId("select-year-to").value,
-
+                productName: this.state.productName,
                 //special fro laod more case
                 loadMore: loadMore,
                 referrer: this
@@ -63,12 +65,16 @@ class ProductSales
 
         this.loadMore = () => {
             let currentPage = this.state.page;
-            
-            this.getProductSales(true,currentPage + 1);
+
+            this.getProductSales(true, currentPage + 1);
         }
 
         this.resetPage = () => {
             this.setState({ page: 0 });
+        }
+
+        this.setRequestProductName = (value, id) => {
+            this.setState({ productName: value, activeField:id })
         }
 
     }
@@ -77,7 +83,10 @@ class ProductSales
         // this.getProductSales();
     }
     componentDidUpdate() {
-        console.log("updated", this.state.fromMonth, this.state.fromYear," to ", this.state.toMonth, this.state.toYear);
+        console.log("updated", this.state.fromMonth, this.state.fromYear, " to ", this.state.toMonth, this.state.toYear);
+        if(_byId(this.state.activeField)){
+            _byId(this.state.activeField).focus();
+        }
     }
 
     render() {
@@ -95,7 +104,7 @@ class ProductSales
         let filterButtons = <ActionButtons buttonsData={[
             { text: "Back", onClick: () => this.props.setFeatureCode(null), id: "btn-back" },
             { text: "Search", onClick: () => this.getProductSales(null, 0), id: "btn-get-product-sales", status: "success" }]}
-        />; 
+        />;
 
         const filterBox =
             <creator.FilterBox rows={[{
@@ -103,11 +112,17 @@ class ProductSales
                     monthVal={this.state.fromMonth} yearVal={this.state.fromYear}
                     handleOnChangeMfrom={(value) => this.setState({ fromMonth: value })}
                     handleOnChangeYfrom={(value) => this.setState({ fromYear: value })}
-                />,
+                />
+                    ,
                 <creator.DateSelectionTo years={this.props.transactionYears}
-                    monthVal={ this.state.toMonth} yearVal={this.state.toYear}
+                    monthVal={this.state.toMonth} yearVal={this.state.toYear}
                     handleOnChangeMto={(value) => this.setState({ toMonth: value })}
-                    handleOnChangeYto={(value) => this.setState({ toYear: value })} />, filterButtons]
+                    handleOnChangeYto={(value) => this.setState({ toYear: value })} />
+                    ,
+                <InputField value={this.state.productName} onKeyUp={this.setRequestProductName} id="input-product-name" placeholder="Product Name" />
+                    ,
+                    filterButtons
+                ]
             }]} />
 
         let productDetailRows = new Array();
