@@ -81,7 +81,7 @@ export const reducer = (state = initState, action) => {
         case types.RESET_PRODUCT_STOCKS:
             return { ...state, productFlowStocks: null };
         case types.GET_PRODUCT_SALES_DETAIL:
-            return { ...state, productSalesDetails: action.payload.entities };
+            return { ...state, productSalesDetails: action.payload };
         default:
             return { ...state };
     }

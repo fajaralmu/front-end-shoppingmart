@@ -72,7 +72,7 @@ const getProductSalesDetailMiddleware = store => next => action => {
         headers: { 'Content-Type': 'application/json', 'requestId': '1234', 'loginKey': localStorage.getItem("loginKey") }
     }).then(response => response.json())
         .then(data => {
-            console.debug("getProductSalesDetailMiddleware Response:", data, "load more:", action.meta.loadMore);
+            console.debug("getProductSalesDetailMiddleware Response:", data);
             if (data.code != "00") {
                 alert("Server error");
                 return;

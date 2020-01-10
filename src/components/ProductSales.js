@@ -15,6 +15,7 @@ import Chart from './Chart'
 import * as creator from '../utils/ComponentCreator'
 import InputField from './InputField'
 import Label from './Label'
+import ProductSalesDetail from './ProductSalesDetail'
 
 class ProductSales
     extends Component {
@@ -169,6 +170,16 @@ class ProductSales
         let productSalesListComponent = <div className="cashflow-list">
             <InstantTable style={tableStyle} rows={productDetailRows} />
         </div>
+
+        /**
+         * if show detail
+         */
+        let productSalesDetailsXX = this.props.productSalesDetails;
+        if(this.state.showDetail){
+            productSalesListComponent = <ProductSalesDetail productSalesDetails={productSalesDetailsXX }
+                goBack = {()=>{this.setState({showDetail:false})} } />
+        }
+
         return (
             <div className="cashflow-container">
                 <h2>Product Sales {this.state.page}</h2>

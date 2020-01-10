@@ -2,8 +2,7 @@ import React, { Component } from 'react'
 import * as stringUtil from '../utils/StringUtil'
 import InstantTable from './InstantTable';
 import Chart from './Chart';
-import ActionButton from './ActionButton';
-import * as stringUtil from '../utils/StringUtil'
+import ActionButton from './ActionButton'; 
 
 class ProductSalesDetail extends Component {
     constructor(props) {
@@ -18,20 +17,14 @@ class ProductSalesDetail extends Component {
     render() {
         let chartRows = new Array();
         let maxValue = 0;
-        let productName = this.props.productSalesDetails ? this.props.productSalesDetails.entity.name : "....";
-        let salesPeriod = "...";
-        const entities = new Array();
-        if (this.props.productSalesDetails.entities != null) {
+        console.log("this.props.productSalesDetails : ",this.props.productSalesDetails );
+        let productName = this.props.productSalesDetails && this.props.productSalesDetails.entity? this.props.productSalesDetails.entity.name : "....";
+       
+        let entities = new Array();
+        if ( this.props.productSalesDetails && this.props.productSalesDetails.entities != null) {
             entities = this.props.productSalesDetails.entities;
             maxValue = this.props.productSalesDetails.maxValue;
-            let length = this.props.productSalesDetails.entities.length;
-            if(length > 0){
-                let first =  this.props.productSalesDetails.entities[0];
-                let last =  this.props.productSalesDetails.entities[ this.props.productSalesDetails.entities.length];
-                let fromSalesPeriod = stringUtil.monthYearString(first.month, first.year);
-                let toSalesPeriod = stringUtil.monthYearString(last.month, last.year);
-                salesPeriod = fromSalesPeriod+" to "+toSalesPeriod;
-            }
+           
         }
 
         for (let i = 0; i < entities.length; i++) {
@@ -46,11 +39,11 @@ class ProductSalesDetail extends Component {
             });
         }
 
-        <div>
-            <h2>{productName} Sales Detail Period: {salesPeriod}</h2>
+        return (<div>
+            <h2>{productName} Sales Detail</h2>
             <ActionButton onClick={this.goBack} text="Back" />
             <InstantTable rows={chartRows} />
-        </div>
+        </div>)
     }
 
 
