@@ -21,3 +21,4 @@ export const RESET_PRODUCT_STOCKS = "RESET_PRODUCT_STOCKS";
 export const RESET_CUSTOMERS = "RESET_CUSTOMERS";
 export const GET_PRODUCT_STOCKS = "get_product_stocks";
 export const GET_PRODUCT_SALES_DETAIL = "get_product_Sales_detail";
+export const REQUEST_ID = "req_ID";

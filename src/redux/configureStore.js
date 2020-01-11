@@ -3,7 +3,11 @@ import { initialState, rootReducer } from './reducers'
 import * as actionCreator from './actionCreators';
 import * as types from './types';
 
-const commonHeader = { 'Content-Type': 'application/json', 'requestId': '1234' };
+const commonHeader = () => {
+    return {
+        'Content-Type': 'application/json', 'requestId':  localStorage.getItem("requestId")
+    }
+};
 const POST_METHOD = "POST";
 
 export const configureStore = () => {
@@ -37,7 +41,8 @@ export const configureStore = () => {
             resetCustomersMiddleware,
             getProductStocksMiddleware,
             resetProductStocksMiddleware,
-            getProductSalesDetailMiddleware
+            getProductSalesDetailMiddleware,
+            requestAppIdMiddleware
 
         )
     );
@@ -45,11 +50,31 @@ export const configureStore = () => {
     return store;
 }
 
+const requestAppIdMiddleware = store => next => action => {
+    if (!action.meta || action.meta.type !== types.REQUEST_ID) { return next(action); }
+    fetch(action.meta.url, {
+        method: POST_METHOD, body: JSON.stringify(action.payload),
+        headers: { 'Content-Type': 'application/json' }
+    }).then(response => response.json())
+        .then(data => {
+            console.debug("requestAppIdMiddleware Response:", data);
+            if (data.code != "00") {
+                alert("Error requesting app ID");
+                return;
+            }
+
+            let newAction = Object.assign({}, action, { payload: data });
+            delete newAction.meta;
+            store.dispatch(newAction);
+        })
+        .catch(err => console.log(err)).finally(param => action.meta.app.endLoading());
+}
+
 const getProductStocksMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.GET_PRODUCT_STOCKS) { return next(action); }
     fetch(action.meta.url, {
         method: POST_METHOD, body: JSON.stringify(action.payload),
-        headers: { 'Content-Type': 'application/json', 'requestId': '1234', 'loginKey': localStorage.getItem("loginKey") }
+        headers: { 'Content-Type': 'application/json', 'requestId': localStorage.getItem("requestId"), 'loginKey': localStorage.getItem("loginKey") }
     }).then(response => response.json())
         .then(data => {
             console.debug("getProductSalesMiddleware Response:", data, "load more:", action.meta.loadMore);
@@ -58,7 +83,7 @@ const getProductStocksMiddleware = store => next => action => {
                 return;
             }
 
-            let newAction = Object.assign({}, action, { payload: data  });
+            let newAction = Object.assign({}, action, { payload: data });
             delete newAction.meta;
             store.dispatch(newAction);
         })
@@ -69,7 +94,7 @@ const getProductSalesDetailMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.GET_PRODUCT_SALES_DETAIL) { return next(action); }
     fetch(action.meta.url, {
         method: POST_METHOD, body: JSON.stringify(action.payload),
-        headers: { 'Content-Type': 'application/json', 'requestId': '1234', 'loginKey': localStorage.getItem("loginKey") }
+        headers: { 'Content-Type': 'application/json', 'requestId': localStorage.getItem("requestId"), 'loginKey': localStorage.getItem("loginKey") }
     }).then(response => response.json())
         .then(data => {
             console.debug("getProductSalesDetailMiddleware Response:", data);
@@ -89,7 +114,7 @@ const getProductSalesMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.GET_PRODUCT_SALES) { return next(action); }
     fetch(action.meta.url, {
         method: POST_METHOD, body: JSON.stringify(action.payload),
-        headers: { 'Content-Type': 'application/json', 'requestId': '1234', 'loginKey': localStorage.getItem("loginKey") }
+        headers: { 'Content-Type': 'application/json', 'requestId': localStorage.getItem("requestId"), 'loginKey': localStorage.getItem("loginKey") }
     }).then(response => response.json())
         .then(data => {
             console.debug("getProductSalesMiddleware Response:", data, "load more:", action.meta.loadMore);
@@ -109,7 +134,7 @@ const getCashflowDetailMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.GET_CASHFLOW_DETAIL) { return next(action); }
     fetch(action.meta.url, {
         method: POST_METHOD, body: JSON.stringify(action.payload),
-        headers: { 'Content-Type': 'application/json', 'requestId': '1234', 'loginKey': localStorage.getItem("loginKey") }
+        headers: { 'Content-Type': 'application/json', 'requestId': localStorage.getItem("requestId"), 'loginKey': localStorage.getItem("loginKey") }
     }).then(response => response.json())
         .then(data => {
             console.debug("getCashflowDetailMiddleware Response:", data);
@@ -129,7 +154,7 @@ const getCashflowInfoMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.GET_CASHFLOW_INFO) { return next(action); }
     fetch(action.meta.url, {
         method: POST_METHOD, body: JSON.stringify(action.payload),
-        headers: { 'Content-Type': 'application/json', 'requestId': '1234', 'loginKey': localStorage.getItem("loginKey") }
+        headers: { 'Content-Type': 'application/json', 'requestId': localStorage.getItem("requestId"), 'loginKey': localStorage.getItem("loginKey") }
     }).then(response => response.json())
         .then(data => {
             console.debug("getCashflowInfoMiddleware Response:", data);
@@ -160,7 +185,7 @@ const getProductListTrxMiddleware = store => next => action => {
         store.dispatch(newAction);
     } else
         fetch(action.meta.url, {
-            method: POST_METHOD, body: JSON.stringify(action.payload), headers: commonHeader
+            method: POST_METHOD, body: JSON.stringify(action.payload), headers: commonHeader()
         })
             .then(response => response.json())
             .then(data => {
@@ -189,7 +214,7 @@ const getCustomerListMiddleware = store => next => action => {
         fetch(action.meta.url, {
             method: POST_METHOD,
             body: JSON.stringify(action.payload),
-            headers: commonHeader
+            headers: commonHeader()
         })
             .then(response => response.json())
             .then(data => {
@@ -247,7 +272,7 @@ const submitSupplyTransactionMiddleware = store => next => action => {
 
     fetch(action.meta.url, {
         method: POST_METHOD, body: JSON.stringify(action.payload),
-        headers: { 'Content-Type': 'application/json', 'requestId': '1234', 'loginKey': localStorage.getItem("loginKey") }
+        headers: { 'Content-Type': 'application/json', 'requestId': localStorage.getItem("requestId"), 'loginKey': localStorage.getItem("loginKey") }
     })
         .then(response => response.json())
         .then(data => {
@@ -273,7 +298,7 @@ const submitPurchaseTransactionMiddleware = store => next => action => {
 
     fetch(action.meta.url, {
         method: POST_METHOD, body: JSON.stringify(action.payload),
-        headers: { 'Content-Type': 'application/json', 'requestId': '1234', 'loginKey': localStorage.getItem("loginKey") }
+        headers: { 'Content-Type': 'application/json', 'requestId': localStorage.getItem("requestId"), 'loginKey': localStorage.getItem("loginKey") }
     })
         .then(response => response.json())
         .then(data => {
@@ -298,7 +323,7 @@ const getStockInfoMiddleware = store => next => action => {
 
     fetch(action.meta.url, {
         method: POST_METHOD, body: JSON.stringify(action.payload),
-        headers: { 'Content-Type': 'application/json', 'requestId': '1234', 'loginKey': localStorage.getItem("loginKey") }
+        headers: { 'Content-Type': 'application/json', 'requestId': localStorage.getItem("requestId"), 'loginKey': localStorage.getItem("loginKey") }
     })
         .then(response => response.json())
         .then(data => {
@@ -321,7 +346,7 @@ const getSupplierListMiddleware = store => next => action => {
 
     fetch(action.meta.url, {
         method: POST_METHOD, body: JSON.stringify(action.payload),
-        headers: commonHeader
+        headers: commonHeader()
     })
         .then(response => response.json())
         .then(data => {
@@ -348,7 +373,7 @@ const performLogoutMiddleware = store => next => action => {
 
     fetch(action.meta.url, {
         method: POST_METHOD, body: JSON.stringify(action.payload),
-        headers: { 'Content-Type': 'application/json', 'requestId': '1234', 'loginKey': localStorage.getItem("loginKey") }
+        headers: { 'Content-Type': 'application/json', 'requestId': localStorage.getItem("requestId"), 'loginKey': localStorage.getItem("loginKey") }
     })
         .then(response => { return Promise.all([response.json(), response]); })
         .then(([responseJson, response]) => {
@@ -376,7 +401,7 @@ const performLoginMiddleware = store => next => action => {
     }
     const app = action.meta.app;
     fetch(action.meta.url, {
-        method: POST_METHOD, body: JSON.stringify(action.payload), headers: commonHeader
+        method: POST_METHOD, body: JSON.stringify(action.payload), headers: commonHeader()
     })
         .then(response => { return Promise.all([response.json(), response]); })
         .then(([responseJson, response]) => {
@@ -415,7 +440,7 @@ const getAllProductCategoriesMiddleware = store => next => action => {
         return next(action);
     }
     fetch(action.meta.url, {
-        method: POST_METHOD, body: JSON.stringify(action.payload), headers: commonHeader
+        method: POST_METHOD, body: JSON.stringify(action.payload), headers: commonHeader()
     })
         .then(response => response.json())
         .then(data => {
@@ -439,7 +464,7 @@ const loadMoreSupplierMiddleware = store => next => action => {
         return next(action);
     }
     fetch(action.meta.url, {
-        method: POST_METHOD, body: JSON.stringify(action.payload), headers: commonHeader
+        method: POST_METHOD, body: JSON.stringify(action.payload), headers: commonHeader()
     })
         .then(response => response.json())
         .then(data => {
@@ -473,7 +498,7 @@ const getProductDetailMiddleWare = store => next => action => {
     }
     const app = action.meta.app;
     fetch(action.meta.url, {
-        method: POST_METHOD, body: JSON.stringify(action.payload), headers: commonHeader
+        method: POST_METHOD, body: JSON.stringify(action.payload), headers: commonHeader()
     })
         .then(response => response.json())
         .then(data => {
@@ -498,7 +523,7 @@ const getProductListMiddleware = store => next => action => {
     }
 
     fetch(action.meta.url, {
-        method: POST_METHOD, body: JSON.stringify(action.payload), headers: commonHeader
+        method: POST_METHOD, body: JSON.stringify(action.payload), headers: commonHeader()
     })
         .then(response => response.json())
         .then(data => {

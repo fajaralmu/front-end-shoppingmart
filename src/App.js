@@ -29,7 +29,8 @@ class App extends Component {
       detailMode: false,
       menuCode: '',
       loading: false,
-      loadingPercentage: 0
+      loadingPercentage: 0,
+      requestId: null
     };
 
     this.setDetailMode = (detailMode) => {
@@ -53,6 +54,11 @@ class App extends Component {
         default:
           break;
       }
+
+      
+    }
+    this.requestAppId = () => {
+      this.props.requestAppId(this);
     }
 
     this.startLoading = (realtime) => {
@@ -71,7 +77,15 @@ class App extends Component {
     }
   }
 
+  componentDidUpdate(){
+    if(this.props.requestId != this.state.requestId ){
+      this.setState({requestId:this.props.requestId});
+      localStorage.setItem("requestId",this.props.requestId);
+    }
+  }
+  
   componentDidMount() {
+    this.requestAppId();
     this.setState({loadingPercentage:0});
   }
 
@@ -94,6 +108,14 @@ class App extends Component {
   }
 
   render() {  
+
+    if(!this.state.requestId){
+      return(
+        <div>
+          Please wait..
+        </div>
+      )
+    }
 
     let loginComponent = <Login main={this} setMenuCode={this.setMenuCode}
       setDetailMode={this.setDetailMode}
@@ -191,13 +213,15 @@ const mapStateToProps = state => {
     loginFailed: state.userState.loginFailed,
     menus: state.userState.menus,
     loggedUser: state.userState.loggedUser,
-    loginAttempt: state.userState.loginAttempt
+    loginAttempt: state.userState.loginAttempt,
+    requestId: state.shopState.requestId
   }
 }
 
 const mapDispatchToProps = dispatch => ({
   performLogin: (username, password, app) => dispatch(actions.performLogin(username, password, app)),
-  performLogout: (app) => dispatch(actions.performLogout(app))
+  performLogout: (app) => dispatch(actions.performLogout(app)),
+  requestAppId: (app) => dispatch(actions.requestAppId(app))
   // getProductCatalog: (page) => dispatch(actions.getProductList(page))
 
 })
