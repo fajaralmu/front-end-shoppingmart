@@ -37,6 +37,13 @@ export const menus = [
     authenticated: false
   } ,
   {
+    code:"chatroom",
+    name:"ChatRoom",
+    url:"chatroom",
+    active: false,
+    authenticated: false
+  } ,
+  {
     code:"login",
     name:"Login",
     url:"login",

@@ -18,6 +18,7 @@ import SupplierList from './components/SupplierList';
 import Message from './components/Message';
 import Footer from './components/Footer';
 import SockJsClient from 'react-stomp';
+import ChatRoom from './components/ChatRoom';
 
 
 class App extends Component {
@@ -161,6 +162,10 @@ class App extends Component {
                     <Route exact path="/suppliers" render={
                       (renderProps) =>
                         <SupplierList app={this} setMenuCode={this.setMenuCode} />
+                    } />
+                   <Route exact path="/chatroom" render={
+                      (renderProps) =>
+                        <ChatRoom app={this} setMenuCode={this.setMenuCode} />
                     } />
                     <Route exact path="/about" render={
                       (renderProps) =>

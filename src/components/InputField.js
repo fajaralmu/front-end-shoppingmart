@@ -38,13 +38,14 @@ class InputField extends Component {
         let type = this.props.type ? this.props.type : "text";
         let placeholder = this.props.placeholder ? this.props.placeholder : "";
         let name = this.props.name ? this.props.name : "";
+        let style=this.props.style?this.props.style:{};
         return (
             <div className="input-field ">
                 {this.props.disabled == true ?
-                    <input className="rounded" name={name} key={"KEY-input-" + this.props.id} id={this.props.id}
+                    <input style={style} className="rounded" name={name} key={"KEY-input-" + this.props.id} id={this.props.id}
                         type={type} onKeyUp={this.handleKeyup} placeholder={placeholder} checked={this.props.checked} disabled />
 
-                    : <input onChange={this.onChange} name={name} key={"KEY-input-" + this.props.id} checked={this.props.checked} id={this.props.id}
+                    : <input style={style}  onChange={this.onChange} name={name} key={"KEY-input-" + this.props.id} checked={this.props.checked} id={this.props.id}
                         type={type} onKeyUp={this.handleKeyup} placeholder={placeholder} />}
                 {this.props.type == "radio" || this.props.type == "checkbox" ? this.props.text : ""}
             </div>

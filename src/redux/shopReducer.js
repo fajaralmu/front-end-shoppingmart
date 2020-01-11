@@ -8,7 +8,8 @@ export const initState = {
     },
     categories: [],
     suppliersData: [],
-    requestId: null
+    requestId: null,
+    messages: null
 
 };
 
@@ -37,6 +38,8 @@ export const reducer = (state = initState, action) => {
             return { ...state, categories: action.payload.entities };
         case types.REQUEST_ID:
             return { ...state, requestId: action.payload.message };
+        case types.SEND_MESSAGE:
+            return { ...state, messages: action.payload.entities };
         default:
             return state;
     }

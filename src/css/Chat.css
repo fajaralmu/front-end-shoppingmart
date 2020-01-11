@@ -1,0 +1,11 @@
+.chat-item{
+    margin: 5px;
+    background-color: wheat;
+    color:darkblue;
+    text-align: left;
+    padding:3px;
+}
+
+.admin{
+    background-color: cadetblue;
+}

@@ -2,6 +2,7 @@ import * as types from './types'
 const apiBaseUrl = "http://localhost:8080/universal-good-shop/api/public/"
 const apiEntityBaseUrl = "http://localhost:8080/universal-good-shop/api/entity/"
 const apiAccount = "http://localhost:8080/universal-good-shop/api/account/"
+const apiAdmin = "http://localhost:8080/universal-good-shop/api/admin/"
 const apiTransaction = "http://localhost:8080/universal-good-shop/api/transaction/";
 
 export const resetProductStocks = () => {
@@ -41,6 +42,20 @@ export const requestAppId = (app) => {
     };
 }
 
+export const sendChatMessage = (message, app) => {
+    app.startLoading();
+    return {
+        type: types.SEND_MESSAGE,
+        payload: {  
+            value:message
+         },
+        meta: {
+            app:app, 
+            type: types.SEND_MESSAGE, 
+             url: apiAdmin.concat("sendmessage")
+        }
+    };
+}
 
 export const getProductSalesDetail = (request, app) => {
     app.startLoading(true);
