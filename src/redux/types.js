@@ -23,3 +23,4 @@ export const GET_PRODUCT_STOCKS = "get_product_stocks";
 export const GET_PRODUCT_SALES_DETAIL = "get_product_Sales_detail";
 export const REQUEST_ID = "req_ID";
 export const SEND_MESSAGE = "send_message";
+export const STORE_MESSAGE = "store_message";

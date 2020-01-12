@@ -42,6 +42,19 @@ export const requestAppId = (app) => {
     };
 }
 
+export const storeMessageLocally = (messages) => {
+  
+    return {
+        type: types.STORE_MESSAGE,
+        payload: {  
+             entities:messages
+         },
+        meta: { 
+            type: types.STORE_MESSAGE,  
+        }
+    };
+}
+
 export const sendChatMessage = (message, app) => {
     app.startLoading();
     return {

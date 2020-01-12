@@ -18,11 +18,13 @@ class ChatRoom extends Component {
         }
 
         this.handleMessage = (response) => {
-            console.log("Responses: ", response);
+            console.log("Responses handleMessage: ", response.code);
+            console.log("LOCAL STORAGE:",localStorage.getItem("requestId"))
             if (response.code != localStorage.getItem("requestId")) {
                 return;
             }
-            this.setState({ messages: response.entities });
+            this.props.storeChatMessageLocally(response.entities);
+            // this.setState({ messages: response.entities });
         }
 
     }
@@ -37,7 +39,7 @@ class ChatRoom extends Component {
             <div style={{textAlign:'left'}} id="chat-room">
                 <h3>Please Give Us Any Feedback!</h3>
                 <div style={{ maxHeight: '600px', overflow: 'scroll', width: '80%' }} >
-                    <ChatList messages={this.state.messages} />
+                    <ChatList messages={this.props.messages} />
                 </div>
                 <InputField style={{ width: '80%' }} placeholder="input message" id="input-msg" />
                 <ActionButton onClick={this.sendChatMessage} text="send" /> 
@@ -58,7 +60,8 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
-    sendChatMessage: (message, app) => dispatch(actions.sendChatMessage(message, app))
+    sendChatMessage: (message, app) => dispatch(actions.sendChatMessage(message, app)),
+    storeChatMessageLocally: (messages) => dispatch(actions.storeMessageLocally(messages))
 
 })
 export default connect(

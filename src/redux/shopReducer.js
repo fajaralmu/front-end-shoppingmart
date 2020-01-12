@@ -40,6 +40,8 @@ export const reducer = (state = initState, action) => {
             return { ...state, requestId: action.payload.message };
         case types.SEND_MESSAGE:
             return { ...state, messages: action.payload.entities };
+        case types.STORE_MESSAGE:
+            return { ...state, messages: action.payload.entities };
         default:
             return state;
     }

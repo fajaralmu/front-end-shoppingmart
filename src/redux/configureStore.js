@@ -43,7 +43,8 @@ export const configureStore = () => {
             resetProductStocksMiddleware,
             getProductSalesDetailMiddleware,
             requestAppIdMiddleware,
-            sendChatMessageMiddleware
+            sendChatMessageMiddleware,
+            storeChatMessageLocallyMiddleware
 
         )
     );
@@ -63,6 +64,13 @@ const sendChatMessageMiddleware = store => next => action => {
             store.dispatch(newAction);
         })
         .catch(err => console.log(err)).finally(param => action.meta.app.endLoading());
+}
+
+const storeChatMessageLocallyMiddleware = store => next => action => {
+    if (!action.meta || action.meta.type !== types.STORE_MESSAGE) { return next(action); }
+    let newAction = Object.assign({}, action, { payload: action.payload });
+    delete newAction.meta;
+    store.dispatch(newAction);
 }
 
 const requestAppIdMiddleware = store => next => action => {
