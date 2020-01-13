@@ -35,6 +35,7 @@ class ChatRoom extends Component {
     componentWillMount() {
         this.props.setMenuCode('chatroom');
         document.title = "Chat Room";
+        this.props.getMessages(this.props.app);
     }
 
     componentDidUpdate(){
@@ -71,7 +72,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
     sendChatMessage: (message, username, app) => dispatch(actions.sendChatMessage(message, username, app)),
-    storeChatMessageLocally: (messages) => dispatch(actions.storeMessageLocally(messages))
+    storeChatMessageLocally: (messages) => dispatch(actions.storeMessageLocally(messages)),
+    getMessages : (app)=> dispatch(actions.getMessageList(app))
 
 })
 export default connect(

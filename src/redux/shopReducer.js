@@ -42,6 +42,8 @@ export const reducer = (state = initState, action) => {
             return { ...state, messages: action.payload.entities };
         case types.STORE_MESSAGE:
             return { ...state, messages: action.payload.entities };
+        case types.GET_MESSAGE:
+            return { ...state, messages: action.payload.entities };
         default:
             return state;
     }

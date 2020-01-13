@@ -15,9 +15,9 @@ export const clearFields = (...ignore) => {
 
 export const checkExistance = function (...ids) {
     for (let i = 0; i < ids.length; i++) {
-        if(_byId(ids[i]) == null) {
+        if (_byId(ids[i]) == null) {
             console.log("component with id:", ids[i], "does not exist");
-            return false; 
+            return false;
         }
     }
     return true;
@@ -35,7 +35,7 @@ export const createNavButtons = (totalButton) => {
 }
 
 export const getCurrentMMYY = () => {
-    return [new Date().getMonth()+1, new Date().getFullYear()];
+    return [new Date().getMonth() + 1, new Date().getFullYear()];
 }
 
 export const getDropdownOptionsMonth = () => {

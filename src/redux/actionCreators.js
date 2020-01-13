@@ -22,9 +22,9 @@ export const getProductStocks = (name, app) => {
     app.startLoading();
     return {
         type: types.GET_PRODUCT_STOCKS,
-        payload: { product:{name:name}},
+        payload: { product: { name: name } },
         meta: {
-            app: app, type: types.GET_PRODUCT_STOCKS, 
+            app: app, type: types.GET_PRODUCT_STOCKS,
             url: apiTransaction.concat("stocks")
         }
     };
@@ -34,23 +34,35 @@ export const requestAppId = (app) => {
     app.startLoading();
     return {
         type: types.REQUEST_ID,
-        payload: {  },
+        payload: {},
         meta: {
-            app: app, type: types.REQUEST_ID, 
+            app: app, type: types.REQUEST_ID,
             url: apiBaseUrl.concat("requestid")
         }
     };
 }
 
+export const getMessageList = (app) => {
+    app.startLoading();
+    return {
+        type: types.GET_MESSAGE,
+        payload: {},
+        meta: {
+            type: types.GET_MESSAGE, app: app,
+            url: apiAdmin.concat("getmessages")
+        }
+    };
+}
+
 export const storeMessageLocally = (messages) => {
-  
+
     return {
         type: types.STORE_MESSAGE,
-        payload: {  
-             entities:messages
-         },
-        meta: { 
-            type: types.STORE_MESSAGE,  
+        payload: {
+            entities: messages
+        },
+        meta: {
+            type: types.STORE_MESSAGE,
         }
     };
 }
@@ -59,14 +71,14 @@ export const sendChatMessage = (message, username, app) => {
     app.startLoading();
     return {
         type: types.SEND_MESSAGE,
-        payload: {  
-            value:message,
-            username:username
-         },
+        payload: {
+            value: message,
+            username: username
+        },
         meta: {
-            app:app, 
-            type: types.SEND_MESSAGE, 
-             url: apiAdmin.concat("sendmessage")
+            app: app,
+            type: types.SEND_MESSAGE,
+            url: apiAdmin.concat("sendmessage")
         }
     };
 }
@@ -75,13 +87,14 @@ export const getProductSalesDetail = (request, app) => {
     app.startLoading(true);
     return {
         type: types.GET_PRODUCT_SALES_DETAIL,
-        payload: {  
+        payload: {
             filter:
-             { page: request.page, limit: 10, month: request.fromMonth, year: request.fromYear, monthTo: request.toMonth, yearTo: request.toYear } },
+                { page: request.page, limit: 10, month: request.fromMonth, year: request.fromYear, monthTo: request.toMonth, yearTo: request.toYear }
+        },
         meta: {
-            app:app, 
-            type: types.GET_PRODUCT_SALES_DETAIL, 
-            loadMore: request.loadMore == true, url: apiTransaction.concat("productsalesdetail/"+request.productId)
+            app: app,
+            type: types.GET_PRODUCT_SALES_DETAIL,
+            loadMore: request.loadMore == true, url: apiTransaction.concat("productsalesdetail/" + request.productId)
         }
     };
 }
@@ -90,10 +103,11 @@ export const getProductSales = (request) => {
     request.referrer.props.app.startLoading(true);
     return {
         type: types.GET_PRODUCT_SALES,
-        payload: { 
-            product:{name:request.productName},
+        payload: {
+            product: { name: request.productName },
             filter:
-             { page: request.page, limit: 10, month: request.fromMonth, year: request.fromYear, monthTo: request.toMonth, yearTo: request.toYear } },
+                { page: request.page, limit: 10, month: request.fromMonth, year: request.fromYear, monthTo: request.toMonth, yearTo: request.toYear }
+        },
         meta: {
             referrer: request.referrer, type: types.GET_PRODUCT_SALES, loadMore: request.loadMore == true, url: apiTransaction.concat("productsales")
         }

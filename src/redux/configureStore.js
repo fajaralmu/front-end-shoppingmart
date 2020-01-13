@@ -44,13 +44,30 @@ export const configureStore = () => {
             getProductSalesDetailMiddleware,
             requestAppIdMiddleware,
             sendChatMessageMiddleware,
-            storeChatMessageLocallyMiddleware
+            storeChatMessageLocallyMiddleware,
+            getMessagesMiddleware
 
         )
     );
 
     return store;
 }
+
+const getMessagesMiddleware = store => next => action => {
+    if (!action.meta || action.meta.type !== types.GET_MESSAGE) { return next(action); }
+    fetch(action.meta.url, {
+        method: POST_METHOD, body: JSON.stringify(action.payload),
+        headers: { 'Content-Type': 'application/json','requestId': localStorage.getItem("requestId")  }
+    }).then(response => response.json())
+        .then(data => {
+            console.debug("sendChatMessageMiddleware Response:", data); 
+            let newAction = Object.assign({}, action, { payload: data });
+            delete newAction.meta;
+            store.dispatch(newAction);
+        })
+        .catch(err => console.log(err)).finally(param => action.meta.app.endLoading());
+}
+
 const sendChatMessageMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.SEND_MESSAGE) { return next(action); }
     fetch(action.meta.url, {
