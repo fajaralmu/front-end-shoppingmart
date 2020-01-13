@@ -4,16 +4,15 @@ import * as actions from '../redux/actionCreators'
 import { _byId } from '../utils/ComponentUtil'
 import InputField from './InputField';
 import ActionButton from './ActionButton';
-import SockJsClient from 'react-stomp';
-import InstantTable from './InstantTable';
+import SockJsClient from 'react-stomp'; 
 import ChatList from './CharList';
 
 class ChatRoom extends Component {
     constructor(props) {
         super(props);
-        this.state = { messages: null }
+        this.state = { messages: null , username:null, activeId:null}
         this.sendChatMessage = () => {
-            this.props.sendChatMessage(_byId("input-msg").value, this.props.app);
+            this.props.sendChatMessage(_byId("input-msg").value, this.state.username, this.props.app);
             _byId("input-msg").value = "";
         }
 
@@ -27,6 +26,10 @@ class ChatRoom extends Component {
             // this.setState({ messages: response.entities });
         }
 
+        this.changeUsername = (value,id)=>{
+            this.setState({username:value, activeId:id});
+        }
+
     }
 
     componentWillMount() {
@@ -34,14 +37,21 @@ class ChatRoom extends Component {
         document.title = "Chat Room";
     }
 
+    componentDidUpdate(){
+        if(this.state.activeId && _byId(this.state.activeId)){
+            _byId(this.state.activeId).focus();
+        }
+    }
+
     render() {
         return (
             <div style={{textAlign:'left'}} id="chat-room">
-                <h3>Please Give Us Any Feedback!</h3>
+                <h2>Please Give Us Any Feedback!</h2>
+                <InputField onKeyUp={this.changeUsername} id="input-username" placeholder="identify your name" />
                 <div style={{ maxHeight: '600px', overflow: 'scroll', width: '80%' }} >
-                    <ChatList messages={this.props.messages} />
+                    <ChatList username={this.state.username} messages={this.props.messages} />
                 </div>
-                <InputField style={{ width: '80%' }} placeholder="input message" id="input-msg" />
+                <InputField style={{ width: '80%' }} value={this.state.username} placeholder="input message" id="input-msg" />
                 <ActionButton onClick={this.sendChatMessage} text="send" /> 
 
                 <SockJsClient url='http://localhost:8080/universal-good-shop/shop-app' topics={['/wsResp/messages']}
@@ -60,7 +70,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
-    sendChatMessage: (message, app) => dispatch(actions.sendChatMessage(message, app)),
+    sendChatMessage: (message, username, app) => dispatch(actions.sendChatMessage(message, username, app)),
     storeChatMessageLocally: (messages) => dispatch(actions.storeMessageLocally(messages))
 
 })

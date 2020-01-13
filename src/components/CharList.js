@@ -16,7 +16,7 @@ class ChatList extends Component {
             const chat = chats[i];
             chatRows.push({
                 values: [
-                    <ChatItem message={chat} />
+                    <ChatItem message={chat} username={this.props.username} />
                 ]
             })
         }
@@ -27,7 +27,11 @@ class ChatList extends Component {
 
 const ChatItem = props => {
     let className = "chat-item rounded " + (props.message.admin == 1 ? " admin " : "user");
-    let sender = props.message.admin == 1 ? "Admin" : "You";
+    let username = "";
+    if(props.username){
+        username= " ["+props.username+"]";
+    }
+    let sender = props.message.admin == 1 ? "Admin" : "You"+username;
     let senderComponent = <span>
         {sender}<span style={{ marginLeft:'11px',fontSize: '0.7em' , float:'right'}} >     {props.message.date}</span>
     </span>

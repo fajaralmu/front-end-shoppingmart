@@ -55,12 +55,13 @@ export const storeMessageLocally = (messages) => {
     };
 }
 
-export const sendChatMessage = (message, app) => {
+export const sendChatMessage = (message, username, app) => {
     app.startLoading();
     return {
         type: types.SEND_MESSAGE,
         payload: {  
-            value:message
+            value:message,
+            username:username
          },
         meta: {
             app:app, 
