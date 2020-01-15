@@ -202,7 +202,7 @@ class Catalog extends Component {
 
             </div>
             {filterBox}
-            <div className="product-panel">
+            <div  >
                 {products.map(
                     product => {
                         return <CatalogItem getProductDetail={this.getProductDetail} key={product.id} product={product} />

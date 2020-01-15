@@ -21,7 +21,7 @@ class ChatList extends Component {
             })
         }
         return (
-            <InstantTable rows={chatRows} />)
+            <InstantTable  rows={chatRows} />)
     }
 }
 

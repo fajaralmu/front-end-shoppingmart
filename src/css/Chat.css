@@ -9,3 +9,10 @@
 .admin{
     background-color: cadetblue;
 }
+.chat-container{
+    background-color: white;
+  /*  max-height: 600px;
+     overflow: scroll;*/
+      width: 50%;
+      margin: 5px;
+}

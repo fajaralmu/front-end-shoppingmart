@@ -49,10 +49,10 @@ class ChatRoom extends Component {
             <div style={{textAlign:'left'}} id="chat-room">
                 <h2>Please Give Us Any Feedback!</h2>
                 <InputField onKeyUp={this.changeUsername} id="input-username" placeholder="identify your name" />
-                <div style={{ maxHeight: '600px', overflow: 'scroll', width: '80%' }} >
+                <div className="chat-container"  >
                     <ChatList username={this.state.username} messages={this.props.messages} />
                 </div>
-                <InputField style={{ width: '80%' }} value={this.state.username} placeholder="input message" id="input-msg" />
+                <InputField style={{ width: '50%' }} value={this.state.username} placeholder="input message" id="input-msg" />
                 <ActionButton onClick={this.sendChatMessage} text="send" /> 
 
                 <SockJsClient url='http://localhost:8080/universal-good-shop/shop-app' topics={['/wsResp/messages']}

@@ -112,13 +112,14 @@ class SupplierList extends Component {
         let filterBox = <div className="filter-box">
             <InputField placeholder="search by supplier name" onKeyUp={this.handleInputNameChange} type="search"
                 id="input-supplier-name" />
-            <ComboBox defaultValue="00" onChange={this.handleOrderChange}
-                options={[
-                    { value: "00", text: "-Select Order-" },
-                    { value: "name-asc", text: "Name [A-Z]" },
-                    { value: "name-desc", text: "Name [Z-A]" }
-                ]} key="k-select-order" id="select-order" />
-
+            <div class="input-field">
+                <ComboBox defaultValue="00" onChange={this.handleOrderChange}
+                    options={[
+                        { value: "00", text: "-Select Order-" },
+                        { value: "name-asc", text: "Name [A-Z]" },
+                        { value: "name-desc", text: "Name [Z-A]" }
+                    ]} key="k-select-order" id="select-order" />
+            </div>
             <ActionButtons key="btns" buttonsData={[{
                 text: "Search", status: "success", onClick: () => this.getSupplierList(0), id: "btn-search"
             }, {

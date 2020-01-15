@@ -19,7 +19,7 @@ export const resetCustomers = () => {
     return { type: types.RESET_CUSTOMERS, payload: {}, meta: { type: types.RESET_CUSTOMERS } };
 }
 export const getProductStocks = (name, app) => {
-    app.startLoading();
+    app.startLoading(true);
     return {
         type: types.GET_PRODUCT_STOCKS,
         payload: { product: { name: name } },

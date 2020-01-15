@@ -57,8 +57,7 @@ class TransactionIn
                 "product": product,
                 "price": price,
                 "count": quantity,
-                "expiryDate": expDate,
-                flowReferenceId: product.id
+                "expiryDate": expDate
             };
 
             //update list in the state

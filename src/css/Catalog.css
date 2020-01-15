@@ -11,5 +11,8 @@
 }
 .filter-box{
     width: 60%;
+    background-color: antiquewhite;
+    padding: 5px;
+    margin:5px
 }
 
