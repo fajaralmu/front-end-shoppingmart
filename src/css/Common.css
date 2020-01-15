@@ -35,7 +35,7 @@ h1{
 .section-container{
     margin-left: 5%;
     text-align: left;
-    
+    padding-bottom: 10px;
     width: 80%
 } 
 .clickable:hover{

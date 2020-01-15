@@ -181,6 +181,7 @@ class TransactionIn
 
         this.getSupplierList = (value, id) => {
             if(value == null || value.trim() == ""){ return; }
+            alert("VALUE:"+value)
             this.setState({ supplierName: value });
             this.props.getSupplierList(value, this.props.app);
             this.setActiveField(id);

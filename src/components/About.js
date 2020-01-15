@@ -21,8 +21,7 @@ class About extends Component {
         return (
             <div  className="section-container about-section  " >
                 <h2>About Us</h2>
-                <div className="rounded" style={{padding:'5px', 
-                    border: "solid 1px green",
+                <div className="rounded box-shadow abount-content" style={{padding:'5px',  
                     width: '500px',
                     fontFamily: 'Consolas'}}>
                 <InstantTable
