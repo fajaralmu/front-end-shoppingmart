@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import '../css/Common.css'
 import '../css/Input.css'
 import * as stringUtil from '../utils/StringUtil'
+import DropdownItem from './DropdownItem';
 /**
  * JUST FOR INPUT !!!
  */
@@ -9,7 +10,7 @@ class InputDropdown extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            focus: true
+            focus: true, hover: false, hoverIndex:-1
         }
 
         this.handleKeyup = () => {
@@ -19,7 +20,7 @@ class InputDropdown extends Component {
 
         this.onBlur = () => {
             console.log("blur");
-            this.setState({ focus: false })
+            this.setState({ focus: false, hover: false })
         }
 
         this.onSelect = (dataValue, text) => {
@@ -29,6 +30,13 @@ class InputDropdown extends Component {
                 document.getElementById(this.props.id).value = text;
             }
         }
+
+        this.hover = (i) => {
+           console.log("HOVER INDEX:",i);
+        //    if(this.state.hoverIndex!=i)
+        //         this.setState({ hoverIndex: i });
+        }
+
     }
 
     componentDidMount() {
@@ -44,8 +52,16 @@ class InputDropdown extends Component {
             dropdownList = this.props.dropdownList;
             dropdownComponent = <div className="dropdown">
                 {dropdownList.map(
-                    data => {
-                        return (<div key={"dropdown-xx-"+stringUtil.uniqueId()} onClick={() => this.onSelect(data.value, data.text)} className="dropdown-item clickable">{data.text}</div>)
+                    (data,i) => {
+                        let className = "dropdown-item";
+                        if(this.state.hoverIndex == i) className +=" clickable";
+                        return (
+                            <div onMouseOver={this.hover} id={stringUtil.uniqueId()}  key={"dropdown-xx-" + stringUtil.uniqueId()}
+                                onClick={() => this.onSelect(data.value, data.text)} 
+                                className={className}>
+                                <DropdownItem  index={i} text={data.text} />
+                            </div>
+                        )
                     })}
             </div>
         }
@@ -59,5 +75,6 @@ class InputDropdown extends Component {
         )
     }
 }
+
 
 export default InputDropdown;

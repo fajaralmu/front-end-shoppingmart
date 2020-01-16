@@ -59,7 +59,16 @@
 }
 .dropdown-item{
     margin : 10px;  
+    color:red
 }
 .dropdown-item:hover{
-    color:green
+    color:green;
+    cursor: pointer;
+}
+
+.test{
+    color:aqua
+}
+.test:hover{
+    color:blue
 }
