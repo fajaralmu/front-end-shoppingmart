@@ -241,7 +241,7 @@ class TransactionOut extends Component {
             }
 
         let formComponent = <table><tbody>
-            <tr valign="top"> <td>
+            <tr valign="top"><td>
                 <div className="form-panel rounded">
                     <div className="panel-title rounded-top">Transaction Detail</div>
                     <InstantTable
@@ -269,7 +269,7 @@ class TransactionOut extends Component {
                     />
                     {this.props.productFlowStock != null ? <ActionButton text="Save" onClick={this.addToCart} /> : ""}
                 </div>
-            </td><td> {detailStock} </td></tr>
+            </td><td>{detailStock}</td></tr>
         </tbody></table>;
 
         let buttonsData = [

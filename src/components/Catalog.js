@@ -11,6 +11,7 @@ import ActionButtons from './ActionButtons'
 import InputField from './InputField'
 import * as componentUtil from '../utils/ComponentUtil'
 import ComboBoxes from './ComboBoxes'
+import ContentTitle from './ContentTitle'
 
 class Catalog extends Component {
 
@@ -46,9 +47,8 @@ class Catalog extends Component {
                     categoryId: this.state.requestCategoryId,
                     withStock: this.state.requestWithStock
                 }, this.props.app
-            );
-            this.setState({ catalogPage: _page });
-            this.setState({ totalData: this.props.catalogData.totalData });
+            ); 
+            this.setState({catalogPage: _page, totalData: this.props.catalogData.totalData });
         }
 
         this.handleOrderChange = (value) => {
@@ -102,7 +102,7 @@ class Catalog extends Component {
 
         this.next = () => {
             let catalogPage = this.state.catalogPage;
-            let totalPage = this.props.catalogData.totalData / this.state.limit
+            let totalPage = Math.floor(this.props.catalogData.totalData / this.state.limit);
             if (catalogPage >= totalPage - 1) { catalogPage = 0; }
             else { catalogPage++; }
 
@@ -111,7 +111,7 @@ class Catalog extends Component {
 
         this.prev = () => {
             let catalogPage = this.state.catalogPage;
-            let totalPage = this.props.catalogData.totalData / this.state.limit
+            let totalPage = Math.floor(this.props.catalogData.totalData / this.state.limit);
             if (catalogPage <= 0) { catalogPage = totalPage - 1; }
             else { catalogPage--; }
 
@@ -152,8 +152,10 @@ class Catalog extends Component {
         let products = this.props.catalogData.entities == null ? [] : this.props.catalogData.entities;
         let buttonData = [];
         if (products.length > 0)
-            buttonData = componentUtil.createNavButtons(this.props.catalogData.totalData / this.state.limit);
-
+            buttonData = componentUtil.createNavButtons(this.props.catalogData.totalData / this.state.limit,
+                 this.state.catalogPage);
+                 
+         
         let categories = [{ value: "00", text: "-all category-" }];
 
         this.props.productCategories.map(category => {
@@ -190,8 +192,9 @@ class Catalog extends Component {
         </div>;
 
         let productCatalog = (<div className="section-container" id="catalog-main" key="catalog-main">
-            <h2>Catalog Page</h2>
-            <p>Choose your favourite products</p>
+            
+            <ContentTitle title="Catalog Page" description="Choose your favourite products"/>
+ 
             <div className="nav-containter">
                 <NavButton id="btn-prv" buttonClick={this.prev} key="nav-prev" text="<" />
                 {buttonData.map(b => {

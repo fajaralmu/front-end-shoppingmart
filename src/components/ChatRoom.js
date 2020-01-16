@@ -6,6 +6,7 @@ import InputField from './InputField';
 import ActionButton from './ActionButton';
 import SockJsClient from 'react-stomp'; 
 import ChatList from './CharList';
+import ContentTitle from './ContentTitle';
 
 class ChatRoom extends Component {
     constructor(props) {
@@ -46,8 +47,10 @@ class ChatRoom extends Component {
 
     render() {
         return (
+            <div className="section-container">
             <div style={{textAlign:'left'}} id="chat-room">
-                <h2>Please Give Us Any Feedback!</h2>
+                <ContentTitle title="What Do You Feel?" description=
+                "Please Give Us Any Feedback!" />
                 <InputField onKeyUp={this.changeUsername} id="input-username" placeholder="identify your name" />
                 <div className="chat-container"  >
                     <ChatList username={this.state.username} messages={this.props.messages} />
@@ -58,6 +61,7 @@ class ChatRoom extends Component {
                 <SockJsClient url='http://localhost:8080/universal-good-shop/shop-app' topics={['/wsResp/messages']}
                     onMessage={(msg) => { this.handleMessage(msg) }}
                     ref={(client) => { this.clientRef = client }} />
+            </div>
             </div>
         )
     }

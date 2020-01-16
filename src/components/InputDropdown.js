@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import '../css/Common.css'
 import '../css/Input.css'
-
+import * as stringUtil from '../utils/StringUtil'
 /**
  * JUST FOR INPUT !!!
  */
@@ -45,7 +45,7 @@ class InputDropdown extends Component {
             dropdownComponent = <div className="dropdown">
                 {dropdownList.map(
                     data => {
-                        return (<div onClick={() => this.onSelect(data.value, data.text)} className="dropdown-item clickable">{data.text}</div>)
+                        return (<div key={"dropdown-xx-"+stringUtil.uniqueId()} onClick={() => this.onSelect(data.value, data.text)} className="dropdown-item clickable">{data.text}</div>)
                     })}
             </div>
         }

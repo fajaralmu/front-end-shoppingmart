@@ -203,9 +203,15 @@ const getCashflowInfoMiddleware = store => next => action => {
                 return;
             }
 
-            if (data.entity == null || data.entity.amount == null) {
+            if (data.entity == null  ) {
                 alert("Data for cashflow: " + action.payload.filter.module + " in " + action.payload.filter.month + "/" + action.payload.filter.year + " period not found!");
                 return;
+            }
+            
+            if(data.entity.amount == null){
+                data.entity.amount = 0;
+                data.entity.count = 0;
+                console.log("DATA:",data);
             }
             let newAction = Object.assign({}, action, { payload: data });
             delete newAction.meta;

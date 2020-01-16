@@ -12,6 +12,7 @@ import * as componentUtil from '../utils/ComponentUtil'
 import * as stringUtil from '../utils/StringUtil'
 import * as url from '../constant/Url'
 import Card from './Card'
+import ContentTitle from './ContentTitle'
 
 class SupplierList extends Component {
 
@@ -62,7 +63,7 @@ class SupplierList extends Component {
 
         this.next = () => {
             let supplierPage = this.state.supplierPage;
-            let totalPage = this.props.suppliersData.totalData / this.state.limit
+            let totalPage = Math.floor(this.props.suppliersData.totalData / this.state.limit);
             if (supplierPage >= totalPage - 1) { supplierPage = 0; }
             else { supplierPage++; }
 
@@ -71,7 +72,7 @@ class SupplierList extends Component {
 
         this.prev = () => {
             let supplierPage = this.state.supplierPage;
-            let totalPage = this.props.suppliersData.totalData / this.state.limit
+            let totalPage = Math.floor(this.props.suppliersData.totalData / this.state.limit);
             if (supplierPage <= 0) { supplierPage = totalPage - 1; }
             else { supplierPage--; }
 
@@ -103,16 +104,15 @@ class SupplierList extends Component {
         let suppliers = this.props.suppliersData.entities == null ? [] : this.props.suppliersData.entities;
         let buttonData = [];
         if (suppliers.length > 0) {
-            buttonData = componentUtil.createNavButtons(this.props.suppliersData.totalData / this.state.limit);
-            console.log("_________________will create nav buttons__________________"
-                , this.props.suppliersData.totalData, this.state.limit);
+            buttonData = componentUtil.createNavButtons(this.props.suppliersData.totalData / this.state.limit ,this.state.supplierPage);
+           
         }
 
 
         let filterBox = <div className="filter-box">
             <InputField placeholder="search by supplier name" onKeyUp={this.handleInputNameChange} type="search"
                 id="input-supplier-name" />
-            <div class="input-field">
+            <div className="input-field">
                 <ComboBox defaultValue="00" onChange={this.handleOrderChange}
                     options={[
                         { value: "00", text: "-Select Order-" },
@@ -130,8 +130,7 @@ class SupplierList extends Component {
         </div>;
 
         let supplierCatalog = (<div className="section-container" id="catalog-main" key="catalog-main">
-            <h2>Supplier List Page</h2>
-            <p>List of our partners</p>
+            <ContentTitle title="Supplier List Page" description="List of our partners"/>
             <div className="nav-containter">
                 <NavButton id="btn-prv-" key={stringUtil.uniqueId()} buttonClick={this.prev} key="nav-prev" text="<" />
                 {buttonData.map(b => {

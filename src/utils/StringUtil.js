@@ -7,7 +7,7 @@ export const uniqueId = function () {
 }
 
 export function beautifyNominal(val) {
-	if (val == "" || val == null) val = "0";
+	if (val == "" || val == null) return "0";
 	let nominal = "" + val;
 	let result = "";
 	if (nominal.length > 3) {

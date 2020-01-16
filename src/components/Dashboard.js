@@ -18,6 +18,7 @@ import Card from './Card'
 import * as stringUtil from '../utils/StringUtil'
 import Label from './Label';
 import ProductSales from './ProductSales';
+import ContentTitle from './ContentTitle';
 
 class Dashboard extends Component {
 
@@ -68,6 +69,7 @@ class Dashboard extends Component {
         let cashflowInfoIn = this.props.cashflowInfoIn ? this.props.cashflowInfoIn : { amount: "loading...", count: "loading..." };
         let cashflowInfoOut = this.props.cashflowInfoOut ? this.props.cashflowInfoOut : { amount: "loading...", count: "loading..." };
 
+        console.log("this.props.cashflowInfoIn ",this.props.cashflowInfoIn );
         let earningContent = <div>
             <Label text="Value" />
             <Label style={{fontFamily:"Arial Black"}}  text={stringUtil.beautifyNominal(cashflowInfoOut.amount) + ",00"} />
@@ -129,8 +131,8 @@ class Dashboard extends Component {
         }
         if (this.props.loginStatus == true)
             return (
-                <div className="section-container">
-                    <h1>Have a Nice Shop Keeping!</h1> 
+                <div className="section-container"> 
+                    <ContentTitle title="Admin Page" description = "Have a Nice Shop Keeping!" />
                     {mainComponent}
                 </div>
             )

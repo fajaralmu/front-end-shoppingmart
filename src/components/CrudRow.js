@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import ActionButton from './ActionButton';
 import ActionButtons from './ActionButtons';
 import * as stringUtil from '../utils/StringUtil'
 
@@ -61,21 +60,28 @@ class CrudRow extends Component {
         </td>;
 
         if (this.props.disabled == true) {
-            actionButton = "";
+            actionButton = null;
             trStyle = {};
         }
+
         return (
-            <tr style={this.props.style} key={this.props.id} valign={this.props.valign}>
-                {values.map(value => {
-                    return (
-                        <td key={"td-key-" + stringUtil.uniqueId()}  id={"td-" + stringUtil.uniqueId()} style={trStyle} rowSpan={value.rowspan} colSpan={value.colspan}>{value.value}</td>
-                    )
-                }
-                )}
-                {actionButton}
-            </tr>
+            <tr style={trStyle} key={stringUtil.uniqueId()}
+                valign={this.props.valign}>
+                <Cells values={values} trStyle={trStyle} />
+                {actionButton}</tr>
         )
     }
+}
+
+const Cells = (props) => {
+
+    return props.values.map(value => {
+        return (
+            <td key={"td-key-" + stringUtil.uniqueId()} id={"td-" + stringUtil.uniqueId()} style={props.trStyle} rowSpan={value.rowspan} colSpan={value.colspan}>
+                {value.value}
+            </td>
+        )
+    });
 }
 
 export default CrudRow;

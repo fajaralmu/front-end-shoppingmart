@@ -4,6 +4,7 @@ import '../css/Common.css'
 import * as menus from '../constant/Menus'
 import InstantTable from './InstantTable'
 import '../css/Common.css'
+import ContentTitle from './ContentTitle'
 
 class About extends Component {
 
@@ -19,11 +20,11 @@ class About extends Component {
 
     render() {
         return (
-            <div  className="section-container about-section  " >
-                <h2>About Us</h2>
+            <div  className="section-container about-section  " > 
+                <ContentTitle title="About Us" />
                 <div className="rounded box-shadow abount-content" style={{padding:'5px',  
                     width: '500px',
-                    fontFamily: 'Consolas'}}>
+                    fontFamily: 'Consolas', margin:'5px'}}>
                 <InstantTable
                     rows={[
                         { values: ["Name","Universal Good Shop"] },

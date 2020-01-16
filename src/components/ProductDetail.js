@@ -10,6 +10,7 @@ import ActionButton from './ActionButton'
 import InstantTable from './InstantTable'
 import ImageCarousel from './ImageCarousel'
 import { beautifyNominal } from '../utils/StringUtil'
+import ContentTitle from './ContentTitle'
 
 
 class ProductDetail extends Component {
@@ -120,7 +121,8 @@ class ProductDetail extends Component {
         }
         return (
             <div className="section-container" >
-                <h2>{product.name}</h2>
+                
+                <ContentTitle title={product.name} />
                 <InstantTable disabled={true}
                     rows={[
                         { id: "row-img", values: [imageComponent], CS: [2] },

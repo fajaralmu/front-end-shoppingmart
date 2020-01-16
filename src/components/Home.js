@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import '../css/Home.css'
 import '../css/Common.css'
 import * as menus from '../constant/Menus'
+import ContentTitle from './ContentTitle';
 
 class Home extends Component {
     constructor(props) {
@@ -17,10 +18,10 @@ class Home extends Component {
     render() {
         return (
             <div className="section-container">
-                <h2>Welcome to the App</h2>
-                <p>{this.props.content}</p>
-                <h2  >Tanpo Waton</h2>
+                <ContentTitle title="Welcome!" description=
+                    {this.props.content} />
                 <div className="article-content">
+                    <h2  >Tanpo Waton</h2>
                     <p style={{ fontFamily: 'Times New Roman' }} >Ngawiti ingsun nglaras syi’iran # Kelawan muji maring pengeran<br />
                         Kang paring rohmat lan kenikmatan # Rino wengine tanpo pitungan<br />
                         Duh bolo konco priyo wanito # Ojo mung ngaji syare’at bloko<br />

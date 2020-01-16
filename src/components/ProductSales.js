@@ -31,7 +31,7 @@ class ProductSales
             productName: null
         }
         this.getProductSales = (loadMore, _page) => {
-            this.setState({ page: _page , productDetailId:null});
+            this.setState({ page: _page, productDetailId: null });
             if (!componentUtil.checkExistance("select-month-from", "select-month-to",
                 "select-year-from", "select-year-to")) {
                 return;
@@ -121,12 +121,17 @@ class ProductSales
             }]} />);
         }
 
+
+
         this.constructFilterInfo = (productSalesData) => {
+            let periodInfo = <div>
+                {"From: "}
+                <span>{stringUtil.monthYearString(productSalesData.filter.month, productSalesData.filter.year)}</span>
+                {" To: "}
+                <span>{stringUtil.monthYearString(productSalesData.filter.monthTo, productSalesData.filter.yearTo)}</span>
+            </div>
             return (<div>
-                {"From "}
-                {stringUtil.monthYearString(productSalesData.filter.month, productSalesData.filter.year)}
-                {" to "}
-                {stringUtil.monthYearString(productSalesData.filter.monthTo, productSalesData.filter.yearTo)}
+                {periodInfo}
             </div>)
         }
 
@@ -187,7 +192,7 @@ class ProductSales
             <div className="cashflow-container">
                 <h2>Product Sales {this.state.page}</h2>
                 {filterBox}
-                <div><p>{filterInfo}</p></div>
+                <div> {filterInfo} </div>
                 {productSalesListComponent}
                 <ActionButton text="Load more" status="warning" onClick={this.loadMore} />
             </div>

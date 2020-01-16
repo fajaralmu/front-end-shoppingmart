@@ -6,6 +6,7 @@ import ActionButton from './ActionButton'
 import Label from './Label';
 import Message from './Message'
 import { withRouter } from 'react-router';
+import ContentTitle from './ContentTitle';
 
 class Login extends Component {
 
@@ -66,7 +67,7 @@ class Login extends Component {
 
         return (
             <div className="section-container">
-                <h2>Login Page</h2> 
+                < ContentTitle title="Login Page" />
                 {message}
                 <Label text="Username" />
                 <InputField id="username-field" onKeyUp={this.handleUsername} />

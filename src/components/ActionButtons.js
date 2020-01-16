@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import '../css/Common.css'
 import '../css/Input.css'
+import * as stringUtil from '../utils/StringUtil'
 
 class ActionButtons extends Component {
     constructor(props) { super(props) }
@@ -14,7 +15,7 @@ class ActionButtons extends Component {
                          className=className.concat(" ").concat(buttonData.status);
                      }
                     return(
-                        <button className={className} key={"key-"+buttonData.id} onClick={buttonData.onClick}>{buttonData.text}</button>
+                        <button className={className} key={"btnKey-"+stringUtil.uniqueId()} onClick={buttonData.onClick}>{buttonData.text}</button>
                     )
                 })}
             </div>);

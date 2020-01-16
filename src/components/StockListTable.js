@@ -42,8 +42,8 @@ class StockListTable extends Component {
             <div className="entity-list">
                 <table className="entity-list-table" style={tableStyle}>
                     <thead>
-                        <tr>
-                            {headers.map(headerValue => <th>{headerValue} </th>)}
+                        <tr key={stringUtil.uniqueId()+"-stock"}>
+                            {headers.map(headerValue => <th key={stringUtil.uniqueId()+"-th"}>{headerValue} </th>)}
                         </tr>
                         {stockListRow}
                     </thead>

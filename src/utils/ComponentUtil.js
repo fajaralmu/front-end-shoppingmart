@@ -23,14 +23,35 @@ export const checkExistance = function (...ids) {
     return true;
 }
 
-export const createNavButtons = (totalButton) => {
-    let buttonData = [];
-    for (let index = 0; index < totalButton; index++) {
+export const createNavButtons = (totalButton, currentPage) => {
+    totalButton = Math.floor(totalButton);
+    if (!currentPage) { currentPage = 0 }
+    let buttonData = new Array(); 
+    let min = currentPage - 2 < 0 ? 0 : currentPage - 2;
+    let max = currentPage + 2 > totalButton  ? totalButton  : currentPage + 2;
+
+    if (min != 0) {
+        buttonData.push({
+            text: 1,
+            value: 0
+        });
+    }
+
+    for (let index = min; index < max; index++) {
         buttonData.push({
             text: index + 1,
             value: index
         });
     }
+
+    if (max != totalButton  ) {
+        buttonData.push({
+            text: totalButton,
+            value: totalButton  
+        });
+    }
+
+
     return buttonData;
 }
 
