@@ -17,7 +17,7 @@ class CartDetail extends Component {
     }
 
     render() {
-        let cart = this.props.cart;
+        let cart = this.props.enableShopping? this.props.cart:[];
         let grandTotalPrice = 0;
         let cartRows = [
             { values: ["No", "Name", "Qty", "@Price", "Total Price"] }

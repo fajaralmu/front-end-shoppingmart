@@ -113,6 +113,10 @@ class App extends Component {
     for (let i = 0; i < additionalMenus.length; i++) {
 
       let menu = additionalMenus[i];
+
+      if(!this.state.enableShopping && menu.code == 'cart')
+        continue;
+
       if (this.props.loginStatus != true && menu.authenticated == true)
         continue;
 
@@ -198,7 +202,7 @@ class App extends Component {
 
               }></Route>
               <Route exact path="/cart" render={
-                (renderProps) => <CartDetail cart={this.props.cart} app={this} setMenuCode={this.setMenuCode} />
+                (renderProps) => <CartDetail enableShopping={this.state.enableShopping} cart={this.props.cart} app={this} setMenuCode={this.setMenuCode} />
 
               }></Route>
                <Route exact path="/login" render={
