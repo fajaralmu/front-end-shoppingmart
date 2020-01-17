@@ -10,11 +10,10 @@ class DropdownItem extends Component {
         }
 
         this.onHover = (e) => {
-            if(this.props.hover)
-                this.props.hover( );
+            if(this.props.onHover)
+                this.props.onHover( this.props.index);
         }
-        this.unHover = (e) => {
-            console.log("~UN HOVER: ", e)
+        this.unHover = (e) => { 
             this.setState({ hover: false })
         }
     }
@@ -22,7 +21,7 @@ class DropdownItem extends Component {
 
     render() {
           return (
-            <div onMouseLeave={this.unHover} onMouseEnter={this.onHover}  >
+            <div onMouseLeave={this.unHover} onMouseOver ={this.onHover}  >
                 {this.props.text}</div>
         )
     }

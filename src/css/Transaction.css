@@ -13,5 +13,15 @@
 }
 
 .transaction-receipt{
-    text-align: center
+    text-align: center;
+    padding: 5px;
+    background-color: antiquewhite;
+    text-align: left
+}
+
+.totalprice-info{
+    background-color: antiquewhite;
+    padding:3px;
+    width:max-content;
+    font-family: monospace
 }

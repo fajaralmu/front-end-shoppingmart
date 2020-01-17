@@ -16,3 +16,19 @@
     margin:5px
 }
 
+.catalog-item-title{
+    text-align: center;
+    font-weight: bold;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+}
+.catalog-item-title label:hover{
+    cursor: pointer;
+}
+.count{
+    padding-left:3px;
+    padding-right:3px;
+    background-color: brown;
+    color:yellow;
+    border-radius:5px;
+}
+

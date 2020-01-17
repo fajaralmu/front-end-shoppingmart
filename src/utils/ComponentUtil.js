@@ -27,8 +27,8 @@ export const createNavButtons = (totalButton, currentPage) => {
     totalButton = Math.floor(totalButton);
     if (!currentPage) { currentPage = 0 }
     let buttonData = new Array(); 
-    let min = currentPage - 2 < 0 ? 0 : currentPage - 2;
-    let max = currentPage + 2 > totalButton  ? totalButton  : currentPage + 2;
+    let min = currentPage - 3 < 0 ? 0 : currentPage - 3;
+    let max = currentPage + 3 > totalButton  ? totalButton  : currentPage + 3;
 
     if (min != 0) {
         buttonData.push({

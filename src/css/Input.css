@@ -1,9 +1,7 @@
 .action-button, .input-field{
     margin : 5px; 
 }
-
  
-
 .input-field input, .input-field select{
     border-color:dimgray;
     border-width: 2px;
@@ -59,16 +57,10 @@
 }
 .dropdown-item{
     margin : 10px;  
-    color:red
+    color:gray
 }
-.dropdown-item:hover{
-    color:green;
+.dropdown-item-hovered{
+    margin : 10px; 
+    color:blue;
     cursor: pointer;
-}
-
-.test{
-    color:aqua
-}
-.test:hover{
-    color:blue
 }

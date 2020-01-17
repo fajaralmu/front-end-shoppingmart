@@ -39,7 +39,7 @@ class CrudRow extends Component {
             values = newValues;
         }
 
-        let trStyle = {
+        let trStyle = this.props.style ? this.props.style : {
             borderTop: 'solid 1px gray',
         };
         let actionButton = <td style={trStyle}>
@@ -61,7 +61,7 @@ class CrudRow extends Component {
 
         if (this.props.disabled == true) {
             actionButton = null;
-            trStyle = {};
+            trStyle = this.props.style ? this.props.style : {};
         }
 
         return (

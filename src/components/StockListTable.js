@@ -31,19 +31,22 @@ class StockListTable extends Component {
                         i, productFlow.id, product.name, productFlow.expiryDate, stringUtil.beautifyNominal(productFlow.count), stringUtil.beautifyNominal(product.price) + ",00", stringUtil.beautifyNominal(totalPrice) + ",00", productFlow.flowReferenceId
                     ];
                     i++;
-                    return <CrudRow disabled={this.props.disabled} handleDelete={this.props.handleDelete} handleEdit={this.props.handleEdit}
-                        key={"product-list-k" + i + "_" + productFlow.id} identifier={productFlow.flowReferenceId} values={values} />
+                    return <CrudRow disabled={this.props.disabled}
+                        handleDelete={this.props.handleDelete} handleEdit={this.props.handleEdit}
+                        key={stringUtil.uniqueId() + "-row-trx"}
+                        identifier={productFlow.flowReferenceId}
+                        values={values} />
                 }
             );
 
         let tableStyle = { fontFamily: 'consolas', fontSize: '0.8em' }
-        
+
         return (
             <div className="entity-list">
                 <table className="entity-list-table" style={tableStyle}>
                     <thead>
-                        <tr key={stringUtil.uniqueId()+"-stock"}>
-                            {headers.map(headerValue => <th key={stringUtil.uniqueId()+"-th"}>{headerValue} </th>)}
+                        <tr key={stringUtil.uniqueId() + "-stock"}>
+                            {headers.map(headerValue => <th key={stringUtil.uniqueId() + "-th"}>{headerValue} </th>)}
                         </tr>
                         {stockListRow}
                     </thead>

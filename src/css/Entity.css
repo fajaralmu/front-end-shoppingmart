@@ -1,11 +1,12 @@
 .entity-list {
     margin :5px;
+   
 
 }
 
 .entity-list-table{
     table-layout: fixed; 
-  
+    background-color: antiquewhite
 }
 
 .entity-list-table  tr{

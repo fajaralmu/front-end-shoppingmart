@@ -281,13 +281,7 @@ class TransactionOut extends Component {
             formComponent = <TransactionReceipt status="Success" transactionData={this.props.transactionData} />
         } else {
             buttonsData.push({ id: "btn-submit-trx", status: 'submit', text: "Submit Transaction", onClick: this.submitTransaction });
-        }
-
-        // let stateInfo = <div>
-        //     qty: {this.state.quantity},
-        //     stockId: {this.state.stockId},
-        //     cust name: {this.state.customerName}
-        // </div>
+        } 
 
         return (
             <div className="transaction-container">
@@ -301,7 +295,7 @@ class TransactionOut extends Component {
                 {/* ======= product list ======== */}
                 <h3>Product List</h3>
                 <StockListTable disabled={this.props.successTransaction} handleEdit={this.handleEdit} handleDelete={this.handleDelete} productFlows={this.state.productFlows} />
-                <Label  text={"Total Price: IDR " + totalPrice} />
+                <Label className="totalprice-info"  text={"Total Price: IDR " + totalPrice} />
 
             </div >
         )

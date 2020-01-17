@@ -21,7 +21,7 @@ class CatalogItem extends Component {
             style: { textAlign: "center" },
             id: "img-icon-" + product.id,
             values: [
-                <Label  className="clickable" text={product.name} onClick={() => this.props.getProductDetail(product.code)}
+                <Label  className="clickable catalog-item-title" text={product.name} onClick={() => this.props.getProductDetail(product.code)}
                 />
             ], CS: [2]
         },
@@ -33,7 +33,7 @@ class CatalogItem extends Component {
             ]
         }, {
             id: "catalog-item-desc-" + product.id,
-            values: ["Available", stringUtil.beautifyNominal(product.count)]
+            values: ["Available", <span class="count">{stringUtil.beautifyNominal(product.count)}</span>]
         },
         {
             id: "catalog-item-cat-" + product.id,

@@ -10,7 +10,7 @@ class InputDropdown extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            focus: true, hover: false, hoverIndex:-1
+            focus: true, hover: false, hoverIndex: -1
         }
 
         this.handleKeyup = () => {
@@ -31,10 +31,9 @@ class InputDropdown extends Component {
             }
         }
 
-        this.hover = (i) => {
-           console.log("HOVER INDEX:",i);
-        //    if(this.state.hoverIndex!=i)
-        //         this.setState({ hoverIndex: i });
+        this.onHover = (i) => {
+            if (this.state.hoverIndex != i)
+                this.setState({ hoverIndex: i });
         }
 
     }
@@ -50,16 +49,17 @@ class InputDropdown extends Component {
         let dropdownComponent = "";
         if (this.state.focus && this.props.dropdownList && this.props.dropdownList.length > 0) {
             dropdownList = this.props.dropdownList;
+            // console.log("RENDERD HOVER:", this.state.hoverIndex);
             dropdownComponent = <div className="dropdown">
                 {dropdownList.map(
-                    (data,i) => {
+                    (data, i) => {
                         let className = "dropdown-item";
-                        if(this.state.hoverIndex == i) className +=" clickable";
+                        if (this.state.hoverIndex == i) className = "dropdown-item-hovered";
                         return (
-                            <div onMouseOver={this.hover} id={stringUtil.uniqueId()}  key={"dropdown-xx-" + stringUtil.uniqueId()}
-                                onClick={() => this.onSelect(data.value, data.text)} 
+                            <div id={stringUtil.uniqueId()} key={"dropdown-xx-" + stringUtil.uniqueId()}
+                                onClick={() => this.onSelect(data.value, data.text)}
                                 className={className}>
-                                <DropdownItem  index={i} text={data.text} />
+                                <DropdownItem onHover={this.onHover} index={i} text={data.text} />
                             </div>
                         )
                     })}
@@ -67,9 +67,10 @@ class InputDropdown extends Component {
         }
 
         let placeholder = this.props.placeholder ? this.props.placeholder : "";
+        let inputClassName = "rounded";
         return (
             <div onMouseOver={() => this.setState({ focus: true })} onMouseLeave={this.onBlur} className="dropdown-wrapper input-field">
-                <input onFocus={() => this.setState({ focus: true })} id={this.props.id} type="text" onKeyUp={this.handleKeyup} placeholder={placeholder} />
+                <input className={inputClassName} onFocus={() => this.setState({ focus: true })} id={this.props.id} type="text" onKeyUp={this.handleKeyup} placeholder={placeholder} />
                 {dropdownComponent}
             </div>
         )

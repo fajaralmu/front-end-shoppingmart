@@ -326,7 +326,7 @@ class TransactionIn
                 {/* ======= product list ======== */}
                 <h3>Product List</h3>
                 <StockListTable disabled={this.props.successTransaction} handleEdit={this.handleEdit} handleDelete={this.handleDelete} productFlows={this.state.productFlows} />
-                <Label text={"Total Price: IDR " + totalPrice} />
+                <Label className="totalprice-info" text={"Total Price: IDR " + totalPrice} />
 
             </div >
         )
