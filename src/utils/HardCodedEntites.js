@@ -28,18 +28,18 @@ export const menus = [
     url:"suppliers",
     active: false,
     authenticated: false
-  },
+  }, 
   {
-    code:"acccount",
-    name:"Account",
-    url:"acccount",
+    code:"chatroom",
+    name:"Chat Room",
+    url:"chatroom",
     active: false,
     authenticated: false
   } ,
   {
-    code:"chatroom",
-    name:"ChatRoom",
-    url:"chatroom",
+    code:"cart",
+    name:"My Cart",
+    url:"cart",
     active: false,
     authenticated: false
   } ,

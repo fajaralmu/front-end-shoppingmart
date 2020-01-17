@@ -20,6 +20,7 @@ import Footer from './components/Footer';
 import SockJsClient from 'react-stomp';
 import ChatRoom from './components/ChatRoom';
 import CartInfo from './components/CartInfo';
+import CartDetail from './components/CartDetail';
 
 
 class App extends Component {
@@ -196,7 +197,11 @@ class App extends Component {
                     setDetailMode={this.setDetailMode} detailMode={this.state.detailMode} />
 
               }></Route>
-              <Route exact path="/login" render={
+              <Route exact path="/cart" render={
+                (renderProps) => <CartDetail cart={this.props.cart} app={this} setMenuCode={this.setMenuCode} />
+
+              }></Route>
+               <Route exact path="/login" render={
                 (renderProps) => loginComponent
 
               }></Route>

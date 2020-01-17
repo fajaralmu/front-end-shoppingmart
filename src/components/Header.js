@@ -6,10 +6,15 @@ class Header extends Component{
 
     constructor(props){
         super(props);
+        this.handleClick = ()=> {
+            
+        }
     }
 
     render(){
-        let cartInfo = this.props.enableShopping ? <CartInfo cart={this.props.cart} />:null;
+        let cartInfo = this.props.enableShopping ? 
+        <CartInfo onClick={this.handleClick} cart={this.props.cart} />:
+        null;
 
         return (
             <div className="App-header">

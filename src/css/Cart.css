@@ -1,6 +1,6 @@
 .cart-info{
     background-color: antiquewhite;
-    color:dimgray; 
+    color:dimgray;   
     min-height:10vh; 
     width:170px;
     right:0px;
@@ -14,4 +14,9 @@
     background-color: goldenrod;
     color: black;
     cursor: pointer;
+}
+
+.cart-container{
+    background-color: antiquewhite;
+    margin:5px;
 }
