@@ -3,14 +3,13 @@ import * as types from './types'
 export const initState = {
     catalogData: {},
     entities: [],
-    entity: {
-
-    },
+    entity: {},
     categories: [],
     suppliersData: [],
     requestId: null,
     messages: null,
-    userAlias:"anonymous_"+new Date().getTime(),
+    userAlias: "anonymous_" + new Date().getTime(),
+    cart: []
 
 };
 
@@ -40,11 +39,16 @@ export const reducer = (state = initState, action) => {
         case types.REQUEST_ID:
             return { ...state, requestId: action.payload.message };
         case types.SEND_MESSAGE:
-            return { ...state, messages: action.payload.entities,userAlias: action.payload.username };
+            return { ...state, messages: action.payload.entities, userAlias: action.payload.username };
         case types.STORE_MESSAGE:
             return { ...state, messages: action.payload.entities };
         case types.GET_MESSAGE:
             return { ...state, messages: action.payload.entities };
+        case types.UPDATE_CART:
+            if (action.payload.app) {
+                action.payload.app.refresh();
+            }
+            return { ...state, cart: action.payload.cart };
         default:
             return state;
     }

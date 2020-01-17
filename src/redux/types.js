@@ -25,3 +25,4 @@ export const REQUEST_ID = "req_ID";
 export const SEND_MESSAGE = "send_message";
 export const STORE_MESSAGE = "store_message";
 export const GET_MESSAGE = "GET_MESSAGE";
+export const UPDATE_CART = "update_cart";

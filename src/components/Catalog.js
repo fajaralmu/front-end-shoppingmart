@@ -12,6 +12,7 @@ import InputField from './InputField'
 import * as componentUtil from '../utils/ComponentUtil'
 import ComboBoxes from './ComboBoxes'
 import ContentTitle from './ContentTitle'
+import * as stringUtil from '../utils/StringUtil'
 
 class Catalog extends Component {
 
@@ -33,14 +34,13 @@ class Catalog extends Component {
             requestCategoryId: null,
             selectedProduct: null,
             buttonCount: 0,
-            enableShopping: false,
-            cart: []
+            enableShopping: false
 
         };
 
         this.getProductInCart = (id) => {
-            for (let i = 0; i < this.state.cart.length; i++) {
-                let cartItem = this.state.cart[i];
+            for (let i = 0; i < this.props.cart.length; i++) {
+                let cartItem = this.props.cart[i];
                 if (cartItem.product.id == id) {
                     cartItem.index = i;
                     return cartItem;
@@ -49,8 +49,12 @@ class Catalog extends Component {
             return { index: -1, count: 0 };
         }
 
+        this.clearCart = () => {
+            this.props.updateCart([], this.props.app);
+        }
+
         this.addToCart = (product, count) => {
-            let currentCart = this.state.cart;
+            let currentCart = this.props.cart;
             let existingIndex = this.getProductInCart(product.id).index;
 
             if (existingIndex >= 0) {
@@ -69,7 +73,7 @@ class Catalog extends Component {
                     count: count
                 })
             }
-            this.setState({ cart: currentCart });
+            this.props.updateCart(currentCart, this.props.app);
         }
 
         this.getProductCatalog = (_page) => {
@@ -161,10 +165,9 @@ class Catalog extends Component {
         }
 
         this.handleChangeEnableShoppingOption = (id) => {
-
             if (!componentUtil._byId(id))
                 return;
-            this.setState({ enableShopping: componentUtil._byId(id).checked });
+            this.props.app.setEnableShopping(componentUtil._byId(id).checked )
         }
 
     }
@@ -209,9 +212,9 @@ class Catalog extends Component {
             { text: "Clear", status: 'warning', onClick: this.clearField, id: "Clear-filter" }
         ];
 
-        if (this.state.enableShopping) {
+        if (this.props.enableShopping) {
             actionButtons.push({
-                text: "Clear Shopping List", status: 'danger', id: "clear-list"
+                text: "Clear Shopping List", onClick: () => { this.clearCart() }, status: 'danger', id: "clear-list"
             });
         }
 
@@ -251,13 +254,14 @@ class Catalog extends Component {
                     product => {
 
                         let shoppingInfo = null;
-                        if (this.state.enableShopping) {
+                        if (this.props.enableShopping) {
 
                             const cartItem = this.getProductInCart(product.id);
                             const qty = cartItem.count;
 
+
                             const cartButtonsData = [
-                                { text: "x", status: "danger", onClick: () => this.addToCart(product, (qty*(-1))), id: "btn-add-cart-" + product.id },
+                                { text: "x", status: "danger", onClick: () => this.addToCart(product, (qty * (-1))), id: "btn-add-cart-" + product.id },
                                 { text: "-", status: "warning", onClick: () => this.addToCart(product, -1), id: "btn-add-cart-" + product.id },
                                 { text: qty, status: 'success', id: "info-cart-" + product.id },
                                 { text: "+", status: 'success', onClick: () => this.addToCart(product, 1), id: "btn-reduce-cart-" + product.id }
@@ -270,7 +274,7 @@ class Catalog extends Component {
                         }
 
                         return (
-                            <div class="catalog-item-container">
+                            <div key={stringUtil.uniqueId()} className="catalog-item-container">
                                 {shoppingInfo}
                                 <CatalogItem getProductDetail={this.getProductDetail} key={product.id} product={product} />
                             </div>
@@ -307,7 +311,8 @@ const mapStateToProps = state => {
     return {
         catalogData: state.shopState.catalogData,
         selectedProduct: state.shopState.entity,
-        productCategories: state.shopState.categories
+        productCategories: state.shopState.categories,
+        cart: state.shopState.cart
     }
 }
 
@@ -315,8 +320,8 @@ const mapDispatchToProps = dispatch => ({
     getProductCatalog: (request, app) => dispatch(actions.getProductList(request, app)),
     getProductDetail: (code, app) => dispatch(actions.getProductDetail(code, app)),
     removeEntity: () => dispatch(actions.removeEntity()),
-    getAllProductCategories: () => dispatch(actions.getAllProductCategories())
-
+    getAllProductCategories: () => dispatch(actions.getAllProductCategories()),
+    updateCart: (cart, app) => dispatch(actions.updateCart(cart, app))
 })
 export default withRouter(connect(
     mapStateToProps,

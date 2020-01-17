@@ -19,6 +19,7 @@ import Message from './components/Message';
 import Footer from './components/Footer';
 import SockJsClient from 'react-stomp';
 import ChatRoom from './components/ChatRoom';
+import CartInfo from './components/CartInfo';
 
 
 class App extends Component {
@@ -31,20 +32,30 @@ class App extends Component {
       menuCode: '',
       loading: false,
       loadingPercentage: 0,
-      requestId: null
+      requestId: null,
+      enableShopping: false,
+      mainAppUpdated:new Date()
     };
 
     this.setDetailMode = (detailMode) => {
       this.setState({ detailMode: detailMode });
     }
 
-    this.setMenuCode = (code) => {
-      console.log(">>>>>> MENU: ", code)
+    this.setMenuCode = (code) => { 
       this.setState({ menuCode: code });
+    }
+
+    this.refresh = () => {
+      this.setState({ mainAppUpdated: new Date() });
+    }
+
+    this.setEnableShopping = (val) => {
+      this.setState({ enableShopping: val })
     }
 
     this.handleMenuCLick = (menu) => {
       switch (menu.code) {
+
         case menus.LOGOUT:
           if (!window.confirm("Are you sure want to logout?")) {
             return;
@@ -58,6 +69,9 @@ class App extends Component {
 
 
     }
+
+
+
     this.requestAppId = () => {
       this.props.requestAppId(this);
     }
@@ -135,13 +149,14 @@ class App extends Component {
     }
 
     let menus = this.setMenus();
+ 
 
     return (
       <div className="App">
         {loadingComponent}
-        <Header title="Universal Good Shop" />
+        <Header title="Universal Good Shop" enableShopping={this.state.enableShopping} cart={this.props.cart} />
         {/*this.props.loginStatus == true?"Logged In":"Un Logged"*/}
-
+      
         <div id="main-layout">
           <div id="main-menu">
             <Menu loggedUser={this.props.loggedUser}
@@ -149,7 +164,9 @@ class App extends Component {
               activeCode={this.state.menuCode}
               menus={menus} />
           </div>
+         
           <div id="main-content">
+         
             <Switch>
               <Route exact path="/" render={
                 (renderProps) =>
@@ -173,7 +190,10 @@ class App extends Component {
               }></Route>
               <Route exact path="/catalog" render={
                 (renderProps) =>
-                  <Catalog app={this} setMenuCode={this.setMenuCode} setDetailMode={this.setDetailMode} detailMode={this.state.detailMode} />
+                  <Catalog app={this}
+                    enableShopping={this.state.enableShopping}
+                    setMenuCode={this.setMenuCode}
+                    setDetailMode={this.setDetailMode} detailMode={this.state.detailMode} />
 
               }></Route>
               <Route exact path="/login" render={
@@ -192,7 +212,9 @@ class App extends Component {
 
               }></Route>
             </Switch>
+           
           </div>
+         
         </div>
         <SockJsClient url='http://localhost:8080/universal-good-shop/shop-app' topics={['/wsResp/progress']}
           onMessage={(msg) => { this.handleMessage(msg) }}
@@ -216,7 +238,8 @@ const mapStateToProps = state => {
     menus: state.userState.menus,
     loggedUser: state.userState.loggedUser,
     loginAttempt: state.userState.loginAttempt,
-    requestId: state.shopState.requestId
+    requestId: state.shopState.requestId,
+    cart: state.shopState.cart
   }
 }
 

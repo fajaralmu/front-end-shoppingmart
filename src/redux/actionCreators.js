@@ -9,6 +9,10 @@ export const resetProductStocks = () => {
     return { type: types.RESET_PRODUCT_STOCKS, payload: {}, meta: { type: types.RESET_PRODUCT_STOCKS } };
 }
 
+export const updateCart = (cart, app) => {
+    return { type: types.UPDATE_CART, payload: {cart:cart, app:app}, meta: { type: types.UPDATE_CART } };
+}
+
 export const resetProducts = () => {
     return { type: types.RESET_PRODUCTS, payload: {}, meta: { type: types.RESET_PRODUCTS } };
 }

@@ -1,0 +1,17 @@
+.cart-info{
+    background-color: antiquewhite;
+    color:dimgray; 
+    min-height:10vh; 
+    width:170px;
+    right:0px;
+    position: fixed;
+    text-align: left;
+    font-size: 17px;
+    transition-duration: 200ms;
+    border-left: solid 3px ;
+}
+.cart-info:hover{
+    background-color: goldenrod;
+    color: black;
+    cursor: pointer;
+}

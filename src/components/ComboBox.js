@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import '../css/Common.css'
 import '../css/Input.css'
 import {_byId} from '../utils/ComponentUtil'
+import * as stringUtil  from '../utils/StringUtil'
 
 class ComboBox extends Component {
     constructor(props) {
@@ -34,7 +35,7 @@ class ComboBox extends Component {
             <select defaultValue={this.props.defaultValue ? this.props.defaultValue : ""} className="rounded" id={this.props.id}
                 onChange={this.handleOnChange} >
                 {options.map(
-                    option => { return <option key={"opt" + option.value} value={option.value}>{option.text}</option> }
+                    option => { return <option key={"opt_" + stringUtil.uniqueId()} value={option.value}>{option.text}</option> }
                 )}
             </select>
             //  </div>

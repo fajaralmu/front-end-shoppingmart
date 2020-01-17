@@ -24,13 +24,8 @@
 .catalog-item-title label:hover{
     cursor: pointer;
 }
-.quantity-label{
-    padding-left:3px;
-    padding-right:3px;
-    background-color: brown;
-    color:yellow;
-    border-radius:5px;
-}
+
+
 .grid-container {
     display: grid;
     grid-gap: 10px;

@@ -45,7 +45,8 @@ export const configureStore = () => {
             requestAppIdMiddleware,
             sendChatMessageMiddleware,
             storeChatMessageLocallyMiddleware,
-            getMessagesMiddleware
+            getMessagesMiddleware,
+            updateCartMiddleware
 
         )
     );
@@ -82,6 +83,13 @@ const sendChatMessageMiddleware = store => next => action => {
             store.dispatch(newAction);
         })
         .catch(err => console.log(err)).finally(param => action.meta.app.endLoading());
+}
+
+const updateCartMiddleware= store => next => action => {
+    if (!action.meta || action.meta.type !== types.UPDATE_CART) { return next(action); }
+    let newAction = Object.assign({}, action, { payload: action.payload });
+    delete newAction.meta;
+    store.dispatch(newAction);
 }
 
 const storeChatMessageLocallyMiddleware = store => next => action => {
