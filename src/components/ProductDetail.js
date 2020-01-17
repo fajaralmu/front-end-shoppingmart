@@ -83,19 +83,7 @@ class ProductDetail extends Component {
                     name: loadingChars
                 }
             }
-
-        } else {
-            // product.suppliers  = this.props. suppliers;
-            //  console.log("product suppliers", this.props.product.suppliers);
         }
-        // if(product.suppliers!=null&&  this.props.suppliers != null){
-        //     console.log("WILL ADD MORE SUPPLIER")
-        //     for (let i = 0; i < this.props.suppliers.length; i++) {
-        //         const element = this.props.suppliers[i];
-        //         product.suppliers.push(element);
-        //     } 
-        // } 
-
         let supplierListPanel = <p></p>
         let supplierShown = this.state.supplierShown ? true : false;
         if (supplierShown && product.suppliers) {
@@ -121,27 +109,28 @@ class ProductDetail extends Component {
         }
         return (
             <div className="section-container" >
-                
+
                 <ContentTitle title={product.name} />
-                <InstantTable disabled={true}
-                    rows={[
-                        { id: "row-img", values: [imageComponent], CS: [2] },
-                        { id: "row-name", values: ["Name", product.name] },
-                        { id: "row-price", values: ["Price", beautifyNominal(product.price)] },
-                        { id: "row-count", values: ["Item(s)", beautifyNominal(product.count) + " " + (product.unit ? product.unit.name : "")] },
-                        { id: "row-cat", values: ["Category", product.category.name] },
-                        { id: "row-desc", values: ["Description", product.description] }
-                    ]} />
+                <div className="product-desc">
+                    <InstantTable disabled={true}
+                        rows={[
+                            { id: "row-img", values: [imageComponent], CS: [2] },
+                            { id: "row-name", values: ["Name", product.name] },
+                            { id: "row-price", values: ["Price", beautifyNominal(product.price)] },
+                            { id: "row-count", values: ["Item(s)", beautifyNominal(product.count) + " " + (product.unit ? product.unit.name : "")] },
+                            { id: "row-cat", values: ["Category", product.category.name] },
+                            { id: "row-desc", values: ["Description", product.description] }
+                        ]} />
 
-                <ActionButtons buttonsData={[{
-                    id: "btn-back", onClick: this.goBack, text: "Back"
-                },
-                {
-                    id: "btn-show-supplier", status: "success",
-                    onClick: () => this.showSupplierList(supplierShown && product.suppliers ? false : true),
-                    text: (supplierShown && product.suppliers ? "Hide suppliers" : "Show suppliers")
-                }]} />
-
+                    <ActionButtons buttonsData={[{
+                        id: "btn-back", onClick: this.goBack, text: "Back"
+                    },
+                    {
+                        id: "btn-show-supplier", status: "success",
+                        onClick: () => this.showSupplierList(supplierShown && product.suppliers ? false : true),
+                        text: (supplierShown && product.suppliers ? "Hide suppliers" : "Show suppliers")
+                    }]} />
+                </div>
                 {supplierListPanel}
             </div>
         )

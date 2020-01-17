@@ -2,4 +2,16 @@
     max-height: 500px;
     overflow: scroll;
     width: 400px;
+    background-color: antiquewhite;
+    padding:5px;
+    margin:5px
+}
+
+.suppllier-container{
+    background-color: antiquewhite
+}
+.product-desc{
+    background-color: antiquewhite;
+    width: min-content;
+    margin:5px
 }
