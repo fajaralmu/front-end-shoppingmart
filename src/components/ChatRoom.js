@@ -37,6 +37,9 @@ class ChatRoom extends Component {
         this.props.setMenuCode('chatroom');
         document.title = "Chat Room";
         this.props.getMessages(this.props.app);
+        if(this.props.userAlias){
+            this.setState({username:this.props.userAlias})
+        }
     }
 
     componentDidUpdate(){
@@ -46,12 +49,14 @@ class ChatRoom extends Component {
     }
 
     render() {
+        let userAlias = this.props.userAlias?this.props.userAlias:"";
+
         return (
             <div className="section-container">
             <div style={{textAlign:'left'}} id="chat-room">
                 <ContentTitle title="What Do You Feel?" description=
                 "Please Give Us Any Feedback!" />
-                <InputField onKeyUp={this.changeUsername} id="input-username" placeholder="identify your name" />
+                <InputField value={userAlias} onKeyUp={this.changeUsername} id="input-username" placeholder="identify your name" />
                 <div className="chat-container"  >
                     <ChatList username={this.state.username} messages={this.props.messages} />
                 </div>
@@ -71,6 +76,7 @@ const mapStateToProps = state => {
     //console.log(state);
     return {
         messages: state.shopState.messages,
+        userAlias: state.shopState.userAlias
     }
 }
 

@@ -76,6 +76,7 @@ const sendChatMessageMiddleware = store => next => action => {
     }).then(response => response.json())
         .then(data => {
             console.debug("sendChatMessageMiddleware Response:", data); 
+            data.username = action.payload.username;
             let newAction = Object.assign({}, action, { payload: data });
             delete newAction.meta;
             store.dispatch(newAction);
