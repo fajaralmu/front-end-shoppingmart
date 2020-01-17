@@ -130,7 +130,7 @@ class ProductDetail extends Component {
                         { id: "row-price", values: ["Price", beautifyNominal(product.price)] },
                         { id: "row-count", values: ["Item(s)", beautifyNominal(product.count) + " " + (product.unit ? product.unit.name : "")] },
                         { id: "row-cat", values: ["Category", product.category.name] },
-                        { id: "row-desc", values: ["Name", product.description] }
+                        { id: "row-desc", values: ["Description", product.description] }
                     ]} />
 
                 <ActionButtons buttonsData={[{

@@ -10,7 +10,7 @@ export const initState = {
     suppliersData: [],
     requestId: null,
     messages: null,
-    userAlias:"",
+    userAlias:"anonymous_"+new Date().getTime(),
 
 };
 

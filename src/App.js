@@ -35,7 +35,7 @@ class App extends Component {
     };
 
     this.setDetailMode = (detailMode) => {
-        this.setState({ detailMode: detailMode });
+      this.setState({ detailMode: detailMode });
     }
 
     this.setMenuCode = (code) => {
@@ -56,7 +56,7 @@ class App extends Component {
           break;
       }
 
-      
+
     }
     this.requestAppId = () => {
       this.props.requestAppId(this);
@@ -66,30 +66,30 @@ class App extends Component {
       this.setState({ loading: true, realtime: realtime });
     }
     this.endLoading = () => {
-      this.setState({ loading: false ,loadingPercentage:0});
+      this.setState({ loading: false, loadingPercentage: 0 });
     }
 
     this.handleMessage = (msg) => {
       let percentage = msg.percentage;
-      if(msg.percentage <0 || msg.percentage > 100){
-       this.endLoading();
+      if (msg.percentage < 0 || msg.percentage > 100) {
+        this.endLoading();
       }
-      this.setState({loadingPercentage:percentage});
+      this.setState({ loadingPercentage: percentage });
     }
   }
 
-  
 
-  componentDidUpdate(){
-    if(this.props.requestId != this.state.requestId ){
-      this.setState({requestId:this.props.requestId});
-      localStorage.setItem("requestId",this.props.requestId);
+
+  componentDidUpdate() {
+    if (this.props.requestId != this.state.requestId) {
+      this.setState({ requestId: this.props.requestId });
+      localStorage.setItem("requestId", this.props.requestId);
     }
   }
-  
+
   componentDidMount() {
     this.requestAppId();
-    this.setState({loadingPercentage:0});
+    this.setState({ loadingPercentage: 0 });
   }
 
   setMenus() {
@@ -110,10 +110,10 @@ class App extends Component {
 
   }
 
-  render() {  
+  render() {
 
-    if(!this.state.requestId){
-      return(
+    if (!this.state.requestId) {
+      return (
         <div>
           Please wait..
         </div>
@@ -142,68 +142,63 @@ class App extends Component {
         <Header title="Universal Good Shop" />
         {/*this.props.loginStatus == true?"Logged In":"Un Logged"*/}
 
-        
-        
-        <table className="main-layout">
-          <tbody>
-            <tr valign="top">
-              <td className="td-menu">
-                <Menu loggedUser={this.props.loggedUser} handleMenuCLick={this.handleMenuCLick} activeCode={this.state.menuCode} menus={menus} />
-              </td>
-              <td>
-                <div>
-                  <Switch>
-                    <Route exact path="/" render={
-                      (renderProps) =>
-                        <Home setMenuCode={this.setMenuCode} content="hello, this is default page" />
-                    } />
-                    <Route exact path="/home" render={
-                      (renderProps) =>
-                        <Home setMenuCode={this.setMenuCode} content="hello, this is home page" />
-                    } />
-                    <Route exact path="/suppliers" render={
-                      (renderProps) =>
-                        <SupplierList app={this} setMenuCode={this.setMenuCode} />
-                    } />
-                   <Route exact path="/chatroom" render={
-                      (renderProps) =>
-                        <ChatRoom app={this} setMenuCode={this.setMenuCode} />
-                    } />
-                    <Route exact path="/about" render={
-                      (renderProps) =>
-                        <About setMenuCode={this.setMenuCode} />
-                    }></Route>
-                    <Route exact path="/catalog" render={
-                      (renderProps) =>
-                        <Catalog app={this} setMenuCode={this.setMenuCode} setDetailMode={this.setDetailMode} detailMode={this.state.detailMode} />
+        <div id="main-layout">
+          <div id="main-menu">
+            <Menu loggedUser={this.props.loggedUser}
+              handleMenuCLick={this.handleMenuCLick}
+              activeCode={this.state.menuCode}
+              menus={menus} />
+          </div>
+          <div id="main-content">
+            <Switch>
+              <Route exact path="/" render={
+                (renderProps) =>
+                  <Home setMenuCode={this.setMenuCode} content="hello, this is default page" />
+              } />
+              <Route exact path="/home" render={
+                (renderProps) =>
+                  <Home setMenuCode={this.setMenuCode} content="hello, this is home page" />
+              } />
+              <Route exact path="/suppliers" render={
+                (renderProps) =>
+                  <SupplierList app={this} setMenuCode={this.setMenuCode} />
+              } />
+              <Route exact path="/chatroom" render={
+                (renderProps) =>
+                  <ChatRoom app={this} setMenuCode={this.setMenuCode} />
+              } />
+              <Route exact path="/about" render={
+                (renderProps) =>
+                  <About setMenuCode={this.setMenuCode} />
+              }></Route>
+              <Route exact path="/catalog" render={
+                (renderProps) =>
+                  <Catalog app={this} setMenuCode={this.setMenuCode} setDetailMode={this.setDetailMode} detailMode={this.state.detailMode} />
 
-                    }></Route>
-                    <Route exact path="/login" render={
-                      (renderProps) => loginComponent
+              }></Route>
+              <Route exact path="/login" render={
+                (renderProps) => loginComponent
 
-                    }></Route>
+              }></Route>
 
-                    {/*
+              {/*
                      =============================
                      ======== need login =========
                      =============================
                      */}
-                    <Route exact path="/dashboard" render={
-                      (renderProps) =>
-                        <Dashboard app={this} loginStatus={this.props.loginStatus} setMenuCode={this.setMenuCode} />
+              <Route exact path="/dashboard" render={
+                (renderProps) =>
+                  <Dashboard app={this} loginStatus={this.props.loginStatus} setMenuCode={this.setMenuCode} />
 
-                    }></Route> 
-                  </Switch>
-                </div> 
-              </td>
-            </tr>
-          </tbody> 
-        </table>
+              }></Route>
+            </Switch>
+          </div>
+        </div>
         <SockJsClient url='http://localhost:8080/universal-good-shop/shop-app' topics={['/wsResp/progress']}
-            onMessage={(msg) => { this.handleMessage(msg) }}
-            ref={ (client) => { this.clientRef = client }} />
+          onMessage={(msg) => { this.handleMessage(msg) }}
+          ref={(client) => { this.clientRef = client }} />
         <Footer />
-       
+
       </div>
     )
   }

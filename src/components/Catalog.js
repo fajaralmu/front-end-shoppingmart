@@ -205,7 +205,7 @@ class Catalog extends Component {
 
             </div>
             {filterBox}
-            <div  >
+            <div  className="grid-container" >
                 {products.map(
                     product => {
                         return <CatalogItem getProductDetail={this.getProductDetail} key={product.id} product={product} />

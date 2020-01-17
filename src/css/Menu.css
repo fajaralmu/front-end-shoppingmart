@@ -36,17 +36,25 @@
 }
 
 /* ============= dashboard menus ================ */
+
+.menu-container{
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: auto auto auto auto;
+}
+
 .dashboard-menu-item{
     text-align: center; 
     margin:5px;
     vertical-align: middle;
-    height:100px;
+    height:max-content;
     width:100px;
     color:bisque;
     background-color: darkslateblue;
     border-top-right-radius: 11px;
     border-top-left-radius: 11px;
 }
+
   
 .dashboard-menu-item:hover{
     background-color: darkslategray; 

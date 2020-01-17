@@ -140,7 +140,7 @@ class SupplierList extends Component {
                 <NavButton id="btn-nxt" key={stringUtil.uniqueId()} buttonClick={this.next} key="nav-next" text=">" />
             </div>
             {filterBox}
-            <div className="supplier-panel">
+            <div className="supplier-panel  grid-container">
                 {suppliers.map(
                     supplier => {
                         let imageUrl = url.baseImageUrl + supplier.iconUrl;

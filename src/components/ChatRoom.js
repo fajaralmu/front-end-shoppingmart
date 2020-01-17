@@ -13,6 +13,10 @@ class ChatRoom extends Component {
         super(props);
         this.state = { messages: null , username:null, activeId:null}
         this.sendChatMessage = () => {
+            if(!_byId("input-msg").value){
+                alert("Message must not be null");
+                return;
+            }
             this.props.sendChatMessage(_byId("input-msg").value, this.state.username, this.props.app);
             _byId("input-msg").value = "";
         }
@@ -60,7 +64,7 @@ class ChatRoom extends Component {
                 <div className="chat-container"  >
                     <ChatList username={this.state.username} messages={this.props.messages} />
                 </div>
-                <InputField style={{ width: '50%' }} value={this.state.username} placeholder="input message" id="input-msg" />
+                <InputField style={{ width: '50%' }}  placeholder="input message" id="input-msg" />
                 <ActionButton onClick={this.sendChatMessage} text="send" /> 
 
                 <SockJsClient url='http://localhost:8080/universal-good-shop/shop-app' topics={['/wsResp/messages']}

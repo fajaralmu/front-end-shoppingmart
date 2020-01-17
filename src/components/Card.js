@@ -24,8 +24,14 @@ class Card extends Component {
                 borderBottom: 'solid 0.1px gray'
             }
         }
+
+        let className= "card rounded box-shadow";
+        if(this.props.className){
+            className+=" "+this.props.className;
+        }
+
         return (
-            <div onClick={this.onClick} style={this.props.style} className="card rounded box-shadow">
+            <div onClick={this.onClick} style={this.props.style} className={className}>
                 <div className="card-title rounded-top" style={titleStyle}>
                     {this.props.title}
                 </div>

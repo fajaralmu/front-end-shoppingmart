@@ -33,7 +33,7 @@ class CatalogItem extends Component {
             ]
         }, {
             id: "catalog-item-desc-" + product.id,
-            values: ["Available", <span class="count">{stringUtil.beautifyNominal(product.count)}</span>]
+            values: ["Available", <span className="count">{stringUtil.beautifyNominal(product.count)}</span>]
         },
         {
             id: "catalog-item-cat-" + product.id,
@@ -41,7 +41,7 @@ class CatalogItem extends Component {
         }
         ]} />;
         return (
-            <Card icon={imageUrl} style={{ float: 'left' }} content={content} />
+            <Card className="grid-item" icon={imageUrl} content={content} />
         )
     }
 }
