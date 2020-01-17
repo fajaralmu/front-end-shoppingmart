@@ -114,11 +114,7 @@ class SupplierList extends Component {
                 id="input-supplier-name" />
             <div className="input-field">
                 <ComboBox defaultValue="00" onChange={this.handleOrderChange}
-                    options={[
-                        { value: "00", text: "-Select Order-" },
-                        { value: "name-asc", text: "Name [A-Z]" },
-                        { value: "name-desc", text: "Name [Z-A]" }
-                    ]} key="k-select-order" id="select-order" />
+                    options={filterSupplierOptions} key="k-select-order" id="select-order" />
             </div>
             <ActionButtons key="btns" buttonsData={[{
                 text: "Search", status: "success", onClick: () => this.getSupplierList(0), id: "btn-search"
@@ -145,8 +141,7 @@ class SupplierList extends Component {
                     supplier => {
                         let imageUrl = url.baseImageUrl + supplier.iconUrl;
                         let content = <div  >
-                            <a href={supplier.website}>{supplier.name}
-                            </a>
+                            <a href={supplier.website}>{supplier.name}</a>
                             <br />
                             <span style={{ fontSize: '0.7em' }}>{supplier.address}</span>
                         </div>
@@ -162,11 +157,16 @@ class SupplierList extends Component {
             </div>
         </div>);
 
-        return (
-            supplierCatalog
-        )
+        return ( supplierCatalog )
     }
 }
+ 
+
+const filterSupplierOptions = [
+    { value: "00", text: "-Select Order-" },
+    { value: "name-asc", text: "Name [A-Z]" },
+    { value: "name-desc", text: "Name [Z-A]" }
+];
 
 const mapStateToProps = state => {
     return {

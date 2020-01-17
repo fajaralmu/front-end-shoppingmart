@@ -24,7 +24,7 @@
 .catalog-item-title label:hover{
     cursor: pointer;
 }
-.count{
+.quantity-label{
     padding-left:3px;
     padding-right:3px;
     background-color: brown;

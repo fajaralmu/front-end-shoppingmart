@@ -33,7 +33,7 @@ class CatalogItem extends Component {
             ]
         }, {
             id: "catalog-item-desc-" + product.id,
-            values: ["Available", <span className="count">{stringUtil.beautifyNominal(product.count)}</span>]
+            values: ["Available", <span className="quantity-label">{stringUtil.beautifyNominal(product.count)}</span>]
         },
         {
             id: "catalog-item-cat-" + product.id,

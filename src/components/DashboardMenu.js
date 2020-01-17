@@ -35,8 +35,8 @@ class DashboardMenu extends Component {
 
 const MenuItem = (props) => {
     return (
-        <div onClick={props.onClick} className="dashboard-menu-item clickable">
-            <p>_____</p> <h3>{props.text}</h3></div>
+        <div onClick={props.onClick} className="dashboard-menu-item  paper-shadow  "> 
+           <h3>{props.text}</h3></div>
     )
 }
 

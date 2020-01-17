@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import '../css/Common.css'
+import '../css/Login.css'
 import * as menus from '../constant/Menus'
 import InputField from './InputField';
 import ActionButton from './ActionButton'
@@ -29,7 +30,7 @@ class Login extends Component {
         }
 
         this.doLogin = () => {
-            
+
             console.log("u:", this.state.username, ",p:", this.state.password);
             this.props.doLogin(document.getElementById("username-field").value,
                 document.getElementById("password-field").value, this.props.main);
@@ -69,11 +70,13 @@ class Login extends Component {
             <div className="section-container">
                 < ContentTitle title="Login Page" />
                 {message}
-                <Label text="Username" />
-                <InputField id="username-field" onKeyUp={this.handleUsername} />
-                <Label text="Password" />
-                <InputField id="password-field" type="password" onKeyUp={this.handlePassword} />
-                <ActionButton id="btn-login" status="submit" onClick={this.doLogin} text="Login" />
+                <div className="login-container">
+                    <Label text="Username" />
+                    <InputField id="username-field" onKeyUp={this.handleUsername} />
+                    <Label text="Password" />
+                    <InputField id="password-field" type="password" onKeyUp={this.handlePassword} />
+                    <ActionButton id="btn-login" status="submit" onClick={this.doLogin} text="Login" />
+                </div>
             </div>
         )
     }

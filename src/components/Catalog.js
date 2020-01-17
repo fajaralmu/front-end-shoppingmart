@@ -32,9 +32,45 @@ class Catalog extends Component {
             requestWithStock: null,
             requestCategoryId: null,
             selectedProduct: null,
-            buttonCount: 0
+            buttonCount: 0,
+            enableShopping: false,
+            cart: []
 
         };
+
+        this.getProductInCart = (id) => {
+            for (let i = 0; i < this.state.cart.length; i++) {
+                let cartItem = this.state.cart[i];
+                if (cartItem.product.id == id) {
+                    cartItem.index = i;
+                    return cartItem;
+                }
+            }
+            return { index: -1, count: 0 };
+        }
+
+        this.addToCart = (product, count) => {
+            let currentCart = this.state.cart;
+            let existingIndex = this.getProductInCart(product.id).index;
+
+            if (existingIndex >= 0) {
+                let currentCount = currentCart[existingIndex].count;
+
+                if (currentCount + count < 0) return;
+
+                let currentCartItem = currentCart[existingIndex];
+                currentCartItem.count += count;
+
+                currentCart[existingIndex] = currentCartItem;
+
+            } else if (count != 0) {
+                currentCart.push({
+                    product: product,
+                    count: count
+                })
+            }
+            this.setState({ cart: currentCart });
+        }
 
         this.getProductCatalog = (_page) => {
             console.log("will go to page: ", _page)
@@ -47,8 +83,8 @@ class Catalog extends Component {
                     categoryId: this.state.requestCategoryId,
                     withStock: this.state.requestWithStock
                 }, this.props.app
-            ); 
-            this.setState({catalogPage: _page, totalData: this.props.catalogData.totalData });
+            );
+            this.setState({ catalogPage: _page, totalData: this.props.catalogData.totalData });
         }
 
         this.handleOrderChange = (value) => {
@@ -93,11 +129,11 @@ class Catalog extends Component {
 
         this.handleCategoryChange = (value) => {
             this.setState({ catalogPage: 0 })
-            if (value != null && value != "00") 
-                this.setState({ requestCategoryId: value });  
+            if (value != null && value != "00")
+                this.setState({ requestCategoryId: value });
             else
                 this.setState({ requestCategoryId: null });
-            
+
         }
 
         this.next = () => {
@@ -122,6 +158,13 @@ class Catalog extends Component {
             if (!componentUtil._byId(id))
                 return;
             this.setState({ requestWithStock: componentUtil._byId(id).checked });
+        }
+
+        this.handleChangeEnableShoppingOption = (id) => {
+
+            if (!componentUtil._byId(id))
+                return;
+            this.setState({ enableShopping: componentUtil._byId(id).checked });
         }
 
     }
@@ -153,48 +196,46 @@ class Catalog extends Component {
         let buttonData = [];
         if (products.length > 0)
             buttonData = componentUtil.createNavButtons(this.props.catalogData.totalData / this.state.limit,
-                 this.state.catalogPage);
-                 
-         
-        let categories = [{ value: "00", text: "-all category-" }];
+                this.state.catalogPage);
+
+        let categories = baseCategoryValues;
 
         this.props.productCategories.map(category => {
             categories.push({ value: category.id, text: category.name });
         })
+
+        let actionButtons = [
+            { text: "Search", status: "success", onClick: () => this.getProductCatalog(0), id: "btn-search" },
+            { text: "Clear", status: 'warning', onClick: this.clearField, id: "Clear-filter" }
+        ];
+
+        if (this.state.enableShopping) {
+            actionButtons.push({
+                text: "Clear Shopping List", status: 'danger', id: "clear-list"
+            });
+        }
 
         let filterBox = <div className="filter-box">
             <InputField placeholder="search by product name" onKeyUp={this.handleInputNameChange} type="search" id="input-product-name" />
             <ComboBoxes
                 values={[{
                     defaultValue: this.state.requestOrderBy, handleOnChange: this.handleOrderChange,
-                    options: [
-                        { value: "00", text: "-all order-" },
-                        { value: "name-asc", text: "Name [A-Z]" },
-                        { value: "name-desc", text: "Name [Z-A]" },
-                        { value: "price-asc", text: "Price [cheap]" },
-                        { value: "price-desc", text: "Price [expensive]" }
-                    ], id: "select-order"
+                    options: filterProductOption, id: "select-order"
                 }, {
                     defaultValue: this.state.requestCategoryId, handleOnChange: this.handleCategoryChange,
-                    id: "select-category", options: categories
+                    options: categories, id: "select-category"
                 }]}
 
             />
             <InputField onChange={this.handleChangeWithStockOption} type="checkbox" id="checkbox-with-stock" text="Inculde Remaining Stock" />
-
-            <ActionButtons buttonsData={[{
-                text: "Search", status: "success", onClick: () => this.getProductCatalog(0), id: "btn-search"
-            }, {
-                text: "Clear", status: 'warning', onClick: this.clearField, id: "Clear"
-            }]} />
-
+            <InputField onChange={this.handleChangeEnableShoppingOption} type="checkbox" id="checkbox-enable-cart" text="I Want to List My Needs" />
+            <ActionButtons buttonsData={actionButtons} />
             <p></p>
         </div>;
 
         let productCatalog = (<div className="section-container" id="catalog-main" key="catalog-main">
-            
-            <ContentTitle title="Catalog Page" description="Choose your favourite products"/>
- 
+
+            <ContentTitle title="Catalog Page" description="Choose your favourite products" />
             <div className="nav-containter">
                 <NavButton id="btn-prv" buttonClick={this.prev} key="nav-prev" text="<" />
                 {buttonData.map(b => {
@@ -205,10 +246,35 @@ class Catalog extends Component {
 
             </div>
             {filterBox}
-            <div  className="grid-container" >
+            <div className="grid-container" >
                 {products.map(
                     product => {
-                        return <CatalogItem getProductDetail={this.getProductDetail} key={product.id} product={product} />
+
+                        let shoppingInfo = null;
+                        if (this.state.enableShopping) {
+
+                            const cartItem = this.getProductInCart(product.id);
+                            const qty = cartItem.count;
+
+                            const cartButtonsData = [
+                                { text: "x", status: "danger", onClick: () => this.addToCart(product, (qty*(-1))), id: "btn-add-cart-" + product.id },
+                                { text: "-", status: "warning", onClick: () => this.addToCart(product, -1), id: "btn-add-cart-" + product.id },
+                                { text: qty, status: 'success', id: "info-cart-" + product.id },
+                                { text: "+", status: 'success', onClick: () => this.addToCart(product, 1), id: "btn-reduce-cart-" + product.id }
+                            ];
+
+                            shoppingInfo = <div>
+                                <ActionButtons buttonsData={cartButtonsData} />
+
+                            </div>
+                        }
+
+                        return (
+                            <div class="catalog-item-container">
+                                {shoppingInfo}
+                                <CatalogItem getProductDetail={this.getProductDetail} key={product.id} product={product} />
+                            </div>
+                        )
                     }
                 )}
             </div>
@@ -217,16 +283,24 @@ class Catalog extends Component {
         let rendered = productCatalog;
 
         if (this.props.detailMode) {
-
             let productDetail = <ProductDetail app={this.props.app} setDetailMode={this.setDetailMode} product={this.props.selectedProduct} />
             rendered = productDetail;
+
         }
 
-        return (
-            rendered
-        )
+        return (rendered)
     }
 }
+
+const baseCategoryValues = [{ value: "00", text: "-all category-" }];
+
+const filterProductOption = [
+    { value: "00", text: "-all order-" },
+    { value: "name-asc", text: "Name [A-Z]" },
+    { value: "name-desc", text: "Name [Z-A]" },
+    { value: "price-asc", text: "Price [cheap]" },
+    { value: "price-desc", text: "Price [expensive]" }
+];
 
 const mapStateToProps = state => {
     console.log("Catalog State to props: ", state);

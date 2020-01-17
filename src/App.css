@@ -18,6 +18,7 @@
 #main-layout{
   table-layout: fixed;
   width: 100%;
+  min-height: 85vh;
   display: grid;
   grid-template-columns: 160px auto;
 }
@@ -25,6 +26,10 @@
 #main-menu{
   /**
   */
+}
+
+#main-content{
+ 
 }
 
 /* .App-header {
@@ -39,7 +44,7 @@
 } */
 
 .App-link {
-  color: #61dafb;
+  color: rgba(165, 42, 42);
 }
 
 

@@ -25,14 +25,14 @@ class Card extends Component {
             }
         }
 
-        let className= "card rounded box-shadow";
+        let className= "card  paper-shadow";
         if(this.props.className){
             className+=" "+this.props.className;
         }
 
         return (
             <div onClick={this.onClick} style={this.props.style} className={className}>
-                <div className="card-title rounded-top" style={titleStyle}>
+                <div className="card-title  " style={titleStyle}>
                     {this.props.title}
                 </div>
                 <div className="card-content">
