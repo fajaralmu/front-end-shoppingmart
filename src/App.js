@@ -85,7 +85,7 @@ class App extends Component {
     }
 
     this.handleMessage = (msg) => {
-      let percentage = msg.percentage;
+      let percentage = Math.floor(msg.percentage);
       if (msg.percentage < 0 || msg.percentage > 100) {
         this.endLoading();
       }
