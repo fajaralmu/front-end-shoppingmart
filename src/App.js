@@ -123,8 +123,7 @@ class App extends Component {
       menus.push(menu);
 
     }
-
-    console.log("State menus", this.state.menus)
+ 
     return menus;
 
   }

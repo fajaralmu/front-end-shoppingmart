@@ -9,8 +9,7 @@ class Menu extends Component {
 
     }
 
-    componentDidUpdate() {
-        console.log("Menus props: ", this.props.menus)
+    componentDidUpdate() { 
     }
 
     render() {
@@ -25,7 +24,7 @@ class Menu extends Component {
         if (this.props.menus != null) {
             renderedMenus = this.props.menus;
         }
-        console.log("Menu props: ", this.props.menus);
+        
         return (
 
             <div className="side-menu" >

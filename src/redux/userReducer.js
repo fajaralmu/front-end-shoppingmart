@@ -12,8 +12,7 @@ export const initState = {
     loginAttempt: false
 };
 
-export const reducer = (state = initState, action) => {
-    console.log("LOGIN STATUS", initialState)
+export const reducer = (state = initState, action) => { 
     /*
         ========setting menu========
     */

@@ -24,9 +24,7 @@ class CartInfo extends Component {
         }
     }
 
-    render() {
-
-        console.log("----show cart: ", this.state.detail);
+    render() { 
 
         let cart = this.props.cart;
 

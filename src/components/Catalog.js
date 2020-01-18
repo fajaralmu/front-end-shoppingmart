@@ -173,7 +173,6 @@ class Catalog extends Component {
     }
 
     componentWillMount() {
-        console.log("=======will mount========")
         document.title = "Product Catalog";
         this.getProductCatalog(this.state.catalogPage);
         this.props.setMenuCode(menus.CATALOG);
@@ -182,7 +181,6 @@ class Catalog extends Component {
     }
 
     componentDidUpdate() {
-        console.log("Entity:", this.props.selectedProduct);
         if (this.state.firstLoad && this.props.catalogData.filter != null) {
             this.setState({
                 limit: this.props.catalogData.filter.limit,
@@ -306,8 +304,7 @@ const filterProductOption = [
     { value: "price-desc", text: "Price [expensive]" }
 ];
 
-const mapStateToProps = state => {
-    console.log("Catalog State to props: ", state);
+const mapStateToProps = state => { 
     return {
         catalogData: state.shopState.catalogData,
         selectedProduct: state.shopState.entity,
