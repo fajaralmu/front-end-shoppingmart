@@ -17,7 +17,7 @@ class CartDetail extends Component {
     }
 
     render() {
-        let cart = this.props.enableShopping? this.props.cart:[];
+        let cart = this.props.enableShopping ? this.props.cart : [];
         let grandTotalPrice = 0;
         let cartRows = [
             { values: ["No", "Name", "Qty", "@Price", "Total Price"] }
@@ -54,14 +54,16 @@ class CartDetail extends Component {
             CS: [4, 1]
         })
 
-        let cartItemList = cart.length > 0 ? <InstantTable style={{width:'100%'}} rows={cartRows} /> :
+        let cartItemList = cart.length > 0 ? <InstantTable style={{ fontFamily: 'consolas', width: '100%' }} rows={cartRows} /> :
             <h3 style={{ margin: 'auto' }}>You don't have any list</h3>;
 
         return (
             <div className="section-container">
                 <ContentTitle title="My Cart" />
-                <div className="cart-container" >
-                    {cartItemList}
+                <div className=" cart-bg">
+                    <div className="cart-container paper-shadow" >
+                        {cartItemList}
+                    </div>
                 </div>
             </div>
         )

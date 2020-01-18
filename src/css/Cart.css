@@ -16,7 +16,16 @@
     cursor: pointer;
 }
 
-.cart-container{
-    background-color: antiquewhite;
+.cart-bg{
+    padding-top:20px;
+    background-color: rgb(216, 213, 213);
     margin:5px;
+    padding-bottom: 20px;
+}
+
+.cart-container{
+    background-color: antiquewhite; 
+    margin:auto;
+    width:50%; 
+    padding:10px;
 }

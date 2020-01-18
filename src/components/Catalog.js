@@ -127,6 +127,7 @@ class Catalog extends Component {
         }
 
         this.setDetailMode = (detailMode) => {
+            document.title = "Product Catalog";
             this.props.setDetailMode(detailMode);
             this.props.removeEntity();
         }

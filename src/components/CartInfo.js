@@ -49,7 +49,7 @@ class CartInfo extends Component {
         let totalPrice = this.caculateTotalPrice();
         let content = <div><Label text="Listed Product" />
             <span style={{ margin: '5px' }} className="quantity-label">{count}</span>
-            <span style={{ margin: '5px',color:'black', backgroundColor:'yellow' }} className="quantity-label">{totalPrice}</span>
+            <span style={{ margin: '5px',color:'yellow', backgroundColor:'blue' }} className="quantity-label">{totalPrice}</span>
             </div>
 
         if(this.state.detail){
