@@ -21,3 +21,19 @@
     min-width: 100px;
     text-align: center
  }
+
+ .filter-wrapper{
+     display: grid;
+     grid-template-columns: auto auto;
+ }
+ .filter-wrapper .input-field{
+    margin:0px;
+    padding:0px;
+}
+
+.entity-form{
+    text-align: left;
+    background-color: antiquewhite;
+    padding: 5px;
+    margin: 5px
+}

@@ -2,7 +2,7 @@
     margin : 5px; 
 }
  
-.input-field input, .input-field select{
+.input-field input, .input-field textarea, .input-field select{
     border-color:dimgray;
     border-width: 2px;
     background-color: white;

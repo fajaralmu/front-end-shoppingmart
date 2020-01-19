@@ -5,10 +5,12 @@ import ContentTitle from './ContentTitle';
 import { _byId } from '../utils/ComponentUtil'
 import * as stringUtil from '../utils/StringUtil'
 import '../css/Management.css'
+import '../css/Entity.css'
 import * as componentUtil from '../utils/ComponentUtil'
 import ActionButtons from './ActionButtons';
 import InputField from './InputField'
 import ActionButton from './ActionButton'
+import EntityForm from './EntityForm';
 
 class EntityList extends Component {
     constructor(props) {
@@ -48,7 +50,7 @@ class EntityList extends Component {
             if (orderObject != null) {
                 config.orderBy = orderObject.orderBy;
                 config.orderType = orderObject.orderType;
-                this.setState({ orderBy: orderObject.orderBy,orderType:orderObject.orderType });
+                this.setState({ orderBy: orderObject.orderBy, orderType: orderObject.orderType });
             }
 
             this.props.getEntityInPage(config, page);
@@ -94,7 +96,7 @@ class EntityList extends Component {
                     onClick={() => { this.setOrderBy(headerName, orderType) }}
                     text={orderType} />
 
-                inputs.push(<div>
+                inputs.push(<div className="filter-wrapper">
                     {input}{orderButton}
                 </div>);
             }
@@ -208,13 +210,15 @@ class EntityList extends Component {
 
         return (
             <div style={{ textAlign: 'center' }}>
-                {navButtons}
-                <div className="entity-container">
 
+                <div className="entity-container">
+                    <h2>{this.props.entityConfig.title}</h2>
+                    {navButtons}
                     <div className="entityForm">
-                        <h2>{this.props.entityConfig.title}</h2>
+                        <EntityForm formData={entityConfig.formData} />
                     </div>
                     {entityTable}
+
                 </div>
             </div>
 

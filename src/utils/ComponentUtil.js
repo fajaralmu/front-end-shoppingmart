@@ -24,7 +24,7 @@ export const checkExistance = function (...ids) {
 }
 
 export const createNavButtons = (totalButton, currentPage) => {
-    totalButton = Math.floor(totalButton);
+    totalButton = Math.ceil(totalButton);
     if (!currentPage) { currentPage = 0 }
     let buttonData = new Array(); 
     let min = currentPage - 3 < 0 ? 0 : currentPage - 3;
