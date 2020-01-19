@@ -1,10 +1,13 @@
 import React, { Component } from 'react'
 import '../css/Common.css'
 import InstantTable from './InstantTable'
-import ContentTitle from './ContentTitle';
+import ContentTitle from './ContentTitle'; 
+import {_byId} from '../utils/ComponentUtil'
+import * as stringUtil from '../utils/StringUtil'
 import '../css/Management.css'
 import * as componentUtil from '../utils/ComponentUtil'
 import ActionButtons from './ActionButtons';
+import InputField from './InputField'
 
 class EntityList extends Component {
     constructor(props) {
@@ -41,6 +44,23 @@ class EntityList extends Component {
             return displayedButtons;
         }
 
+        this.createFilterInputs = (fieldNames) =>{
+            let inputs = new Array(); 
+            for (let i = 0; i < fieldNames.length; i++) {
+                const name = fieldNames[i];
+                let headerName = name;
+                if (name.split(".").length > 1) {
+                    headerName = name.split(".")[0];
+                }
+
+                const input = <InputField key={"input_field_"+stringUtil.uniqueId()} placeholder={headerName} />
+
+                inputs.push(input);
+            }
+            inputs.push("");
+            return inputs;
+        }
+
     }
     render() {
 
@@ -51,11 +71,21 @@ class EntityList extends Component {
             return (<h2>Entity Not Found</h2>)
         }
 
-        const rows = [{
+        const rows = [
+            //header
+            {
             values: this.getHeaderNames(entityConfig.fieldNames),
             disabled: true,
             style: { textAlign: 'center', fontWeight: 'bold' }
-        }];
+             },
+            //filter
+             {
+                 values : this.createFilterInputs(entityConfig.fieldNames),
+                 disabled:true
+             }
+        ];
+
+        
         const entities = this.props.entitiesData.entities;
         const idField = entityConfig.id;
 

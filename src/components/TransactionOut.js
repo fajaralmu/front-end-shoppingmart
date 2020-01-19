@@ -64,8 +64,14 @@ class TransactionOut extends Component {
 
             let ID = Math.floor(Math.random() * 1000);
             let newProductFlow = {
-                "id": ID, "product": productFlow.product, "price": productFlow.product.price,
-                "count": quantity, "expiryDate": productFlow.expiryDate, "flowReferenceId": productFlow.id
+                "id": ID,
+                "product": productFlow.product,
+                "price": productFlow.product.price,
+                "count": quantity,
+                "expiryDate": productFlow.expiryDate,
+                "flowReferenceId": productFlow.id,
+                //stock list table identifier
+                "entityId": productFlow.id,
             };
 
             //update list in the state
@@ -97,7 +103,7 @@ class TransactionOut extends Component {
         }
 
         this.emptyForm = () => {
-            this.setState({productName:null, stockId: 0, quantity: 0 });
+            this.setState({ productName: null, stockId: 0, quantity: 0 });
         }
 
         this.handleEdit = (stockId) => {
@@ -281,7 +287,7 @@ class TransactionOut extends Component {
             formComponent = <TransactionReceipt status="Success" transactionData={this.props.transactionData} />
         } else {
             buttonsData.push({ id: "btn-submit-trx", status: 'submit', text: "Submit Transaction", onClick: this.submitTransaction });
-        } 
+        }
 
         return (
             <div className="transaction-container">
@@ -295,7 +301,7 @@ class TransactionOut extends Component {
                 {/* ======= product list ======== */}
                 <h3>Product List</h3>
                 <StockListTable disabled={this.props.successTransaction} handleEdit={this.handleEdit} handleDelete={this.handleDelete} productFlows={this.state.productFlows} />
-                <Label className="totalprice-info"  text={"Total Price: IDR " + totalPrice} />
+                <Label className="totalprice-info" text={"Total Price: IDR " + totalPrice} />
 
             </div >
         )

@@ -34,7 +34,7 @@ class StockListTable extends Component {
                     return <CrudRow disabled={this.props.disabled}
                         handleDelete={this.props.handleDelete} handleEdit={this.props.handleEdit}
                         key={stringUtil.uniqueId() + "-row-trx"}
-                        identifier={productFlow.flowReferenceId}
+                        identifier={productFlow.entityId}
                         values={values} />
                 }
             );

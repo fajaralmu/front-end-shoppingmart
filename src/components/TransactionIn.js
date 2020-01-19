@@ -57,7 +57,9 @@ class TransactionIn
                 "product": product,
                 "price": price,
                 "count": quantity,
-                "expiryDate": expDate
+                "expiryDate": expDate,
+                //for stock list table identifier
+                "entityId":product.id
             };
 
             //update list in the state
