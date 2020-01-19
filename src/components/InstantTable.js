@@ -16,10 +16,22 @@ class InstantTable extends Component {
             className += " " + this.props.className;
         }
         return (
-            <table   style={tableStyle} className={className}><tbody>
-                {rows.map(row => { 
-                    return (<CrudRow style={row.style} valign={this.props.valign ? this.props.valign : "top"} RS={row.RS} CS={row.CS} values={row.values ? row.values : []}
-                        key={stringUtil.uniqueId()} disabled={this.props.disabled == null ? true : this.props.disabled} />
+            <table style={tableStyle} className={className}><tbody>
+                {rows.map(row => {
+                    return (
+                        <CrudRow
+                            style={row.style}
+                            valign={this.props.valign ? this.props.valign : "top"}
+                            RS={row.RS}
+                            identifier={row.identifier ? row.identifier : "0000"}
+                            handleEdit={row.handleEdit}
+                            handleDelete={row.handleDelete}
+                            CS={row.CS}
+                            values={row.values ? row.values : []}
+                            key={stringUtil.uniqueId()}
+                            disabled={row.disabled == null ? this.props.disabled == null ? true : this.props.disabled :
+                                row.disabled}
+                        />
                     )
                 })}
             </tbody></table>

@@ -2,13 +2,14 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { connect } from 'react-redux'
+
 import Header from './components/Header'
 import Menu from './components/Menu'
 import Home from './components/Home'
 import About from './components/About'
 import { BrowserRouter as Router, Route, Link, Switch, withRouter } from 'react-router-dom'
 import * as actions from './redux/actionCreators'
+import { connect } from 'react-redux'
 import * as hardCoded from './utils/HardCodedEntites'
 import Catalog from './components/Catalog'
 import Login from './components/Login';
@@ -21,6 +22,7 @@ import SockJsClient from 'react-stomp';
 import ChatRoom from './components/ChatRoom';
 import CartInfo from './components/CartInfo';
 import CartDetail from './components/CartDetail';
+import Management from './components/Management';
 
 
 class App extends Component {
@@ -217,6 +219,11 @@ class App extends Component {
               <Route exact path="/dashboard" render={
                 (renderProps) =>
                   <Dashboard app={this} loginStatus={this.props.loginStatus} setMenuCode={this.setMenuCode} />
+
+              }></Route>
+               <Route exact path="/management" render={
+                (renderProps) =>
+                  <Management app={this} loginStatus={this.props.loginStatus} setMenuCode={this.setMenuCode} />
 
               }></Route>
             </Switch>

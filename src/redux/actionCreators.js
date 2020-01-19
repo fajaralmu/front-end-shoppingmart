@@ -22,6 +22,34 @@ export const resetSuppliers = () => {
 export const resetCustomers = () => {
     return { type: types.RESET_CUSTOMERS, payload: {}, meta: { type: types.RESET_CUSTOMERS } };
 }
+
+export const getEntityList = (request, app) => {
+    app.startLoading();
+    let requested = {
+        type: types.GET_ENTITY,
+        payload: {
+            entity: request.entityName,
+            filter: {
+                limit: request.limit,
+                page: request.page,
+                fieldsFilter: request.fieldsFilter,
+                orderBy: request.orderby,
+                orderType: request.ordertype
+            },
+            
+        },
+        meta: {
+            type: types.GET_ENTITY,
+            url: apiEntityBaseUrl.concat("get"),
+            app: app,
+            entityConfig:request.entityConfig
+        }
+    };
+ 
+
+    return requested;
+}
+
 export const getProductStocks = (name, app) => {
     app.startLoading(true);
     return {

@@ -46,12 +46,41 @@ export const configureStore = () => {
             sendChatMessageMiddleware,
             storeChatMessageLocallyMiddleware,
             getMessagesMiddleware,
-            updateCartMiddleware
+            updateCartMiddleware,
+
+            /*enntity management*/
+            getEntityListMiddleware
 
         )
     );
 
     return store;
+}
+
+
+const getEntityListMiddleware = store => next => action => {
+    if (!action.meta || action.meta.type !== types.GET_ENTITY) { return next(action); }
+
+    fetch(action.meta.url, {
+        method: POST_METHOD, body: JSON.stringify(action.payload),
+        headers: commonHeader()
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.debug("Response:", data);
+            if (data.entities == null || data.entities.length == 0) {
+                alert("Data not found!");
+                return;
+            }
+            data.entityConfig = action.meta.entityConfig;
+            let newAction = Object.assign({}, action, {
+                payload: data
+            });
+            delete newAction.meta;
+            store.dispatch(newAction);
+        })
+        .catch(err => console.log(err))
+        .finally(param => action.meta.app.endLoading());
 }
 
 const getMessagesMiddleware = store => next => action => {

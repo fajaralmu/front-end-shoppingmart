@@ -58,6 +58,13 @@ export const menus = [
     authenticated: true
   }, 
   {
+    code:"management",
+    name:"Management",
+    url:"management",
+    active: false,
+    authenticated: true
+  }, 
+  {
     code:"logout",
     name:"Logout",
     url:"#",
