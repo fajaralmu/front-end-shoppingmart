@@ -13,7 +13,7 @@ class Management extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            entityList: [], 
+            entityList: [],
             currentPage: 0
         }
         this.validateLoginStatus = () => {
@@ -21,22 +21,30 @@ class Management extends Component {
         }
 
         this.getEntity = (config) => {
-            this.setState({currentPage:0});
+            this.setState({ currentPage: 0 });
             this.props.getEntities({
                 entityName: config.entityName,
                 page: 0,
                 limit: 10,
-                entityConfig:config
+                entityConfig: config
             }, this.props.app);
         }
         this.getEntityInPage = (config, page) => {
-            this.setState({currentPage:page});
-            this.props.getEntities({
+            this.setState({ currentPage: page });
+
+            const request = {
                 entityName: config.entityName,
                 page: page,
                 limit: 10,
-                entityConfig:config
-            }, this.props.app);
+                entityConfig: config,
+                fieldsFilter: config.filter,
+                orderBy:config.orderBy,
+                orderType:config.orderType,
+            };
+
+            console.log("REQUEST: ",request)
+
+            this.props.getEntities(request, this.props.app);
         }
     }
 
@@ -59,7 +67,7 @@ class Management extends Component {
             {
                 text: "Supplier",
                 onClick: () => { this.getEntity(entityConfig.supplierList) }
-            }, 
+            },
             {
                 text: "Customer",
                 onClick: () => { this.getEntity(entityConfig.customerList) }
@@ -72,8 +80,11 @@ class Management extends Component {
                 <ContentTitle title="Management" />
                 <div className="management-container">
                     <ActionButtons buttonsData={buttonsData} />
-                    <EntityList currentPage={this.state.currentPage} getEntityInPage={this.getEntityInPage} entityConfig={this.props.entitiesData.entityConfig}
-                        entitiesData={this.props.entitiesData} />
+                    <EntityList currentPage={this.state.currentPage}
+                        getEntityInPage={this.getEntityInPage}
+                        entityConfig={this.props.entitiesData.entityConfig}
+                        entitiesData={this.props.entitiesData} 
+                        />
                 </div>
             </div>
         )

@@ -1,17 +1,24 @@
 import React, { Component } from 'react'
 import '../css/Common.css'
 import InstantTable from './InstantTable'
-import ContentTitle from './ContentTitle'; 
-import {_byId} from '../utils/ComponentUtil'
+import ContentTitle from './ContentTitle';
+import { _byId } from '../utils/ComponentUtil'
 import * as stringUtil from '../utils/StringUtil'
 import '../css/Management.css'
 import * as componentUtil from '../utils/ComponentUtil'
 import ActionButtons from './ActionButtons';
 import InputField from './InputField'
+import ActionButton from './ActionButton'
 
 class EntityList extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            filter: {},
+            activeId: null,
+            orderBy: null,
+            orderType: null
+        }
 
         this.handleDelete = (id) => {
             if (!window.confirm("Are your sure for deleting this entity?")) { return; }
@@ -35,8 +42,17 @@ class EntityList extends Component {
             return headers;
         }
 
-        this.goToPage = (page) => {
-            this.props.getEntityInPage(this.props.entityConfig, page);
+        this.goToPage = (page, orderObject) => {
+            let config = this.props.entityConfig;
+            config.filter = this.state.filter;
+            if (orderObject != null) {
+                config.orderBy = orderObject.orderBy;
+                config.orderType = orderObject.orderType;
+                this.setState({ orderBy: orderObject.orderBy,orderType:orderObject.orderType });
+            }
+
+            this.props.getEntityInPage(config, page);
+
         }
 
         this.createNavButtons = () => {
@@ -44,8 +60,12 @@ class EntityList extends Component {
             return displayedButtons;
         }
 
-        this.createFilterInputs = (fieldNames) =>{
-            let inputs = new Array(); 
+        this.setOrderBy = (fieldName, orderType) => {
+            this.goToPage(this.props.currentPage, { orderBy: fieldName, orderType: orderType });
+        }
+
+        this.createFilterInputs = (fieldNames) => {
+            let inputs = new Array();
             for (let i = 0; i < fieldNames.length; i++) {
                 const name = fieldNames[i];
                 let headerName = name;
@@ -53,15 +73,63 @@ class EntityList extends Component {
                     headerName = name.split(".")[0];
                 }
 
-                const input = <InputField key={"input_field_"+stringUtil.uniqueId()} placeholder={headerName} />
+                let value = "";
+                if (this.state.filter[headerName] != null) {
+                    value = this.state.filter[headerName];
+                }
 
-                inputs.push(input);
+                const input = <InputField value={value} id={headerName + "_filter_id"}
+                    onKeyUp={this.handleFilterChange} key={"input_field_" + stringUtil.uniqueId()}
+                    placeholder={headerName} />
+
+                let orderType = "asc";
+                if (this.state.orderBy && this.state.orderBy == headerName) {
+                    if (this.state.orderType == "asc") {
+                        orderType = "desc";
+                    }
+                }
+
+
+                const orderButton = <ActionButton
+                    onClick={() => { this.setOrderBy(headerName, orderType) }}
+                    text={orderType} />
+
+                inputs.push(<div>
+                    {input}{orderButton}
+                </div>);
             }
             inputs.push("");
             return inputs;
         }
 
+        this.handleFilterChange = (value, id) => {
+
+            let filter = this.state.filter;
+            if (value != null && value.trim() == "") {
+                filter[id.split("_filter_id")[0]] = null;
+
+            } else {
+                filter[id.split("_filter_id")[0]] = value;
+
+            }
+
+            this.setState({ filter: filter, activeId: id });
+            this.goToPage(this.props.currentPage);
+        }
+
+        this.focusActiveId = () => {
+            if (_byId(this.state.activeId)) {
+                _byId(this.state.activeId).focus();
+            }
+        }
+
     }
+
+
+    componentDidUpdate() {
+        this.focusActiveId();
+    }
+
     render() {
 
         const entitiesData = this.props.entitiesData;
@@ -74,18 +142,18 @@ class EntityList extends Component {
         const rows = [
             //header
             {
-            values: this.getHeaderNames(entityConfig.fieldNames),
-            disabled: true,
-            style: { textAlign: 'center', fontWeight: 'bold' }
-             },
+                values: this.getHeaderNames(entityConfig.fieldNames),
+                disabled: true,
+                style: { textAlign: 'center', fontWeight: 'bold' }
+            },
             //filter
-             {
-                 values : this.createFilterInputs(entityConfig.fieldNames),
-                 disabled:true
-             }
+            {
+                values: this.createFilterInputs(entityConfig.fieldNames),
+                disabled: true
+            }
         ];
 
-        
+
         const entities = this.props.entitiesData.entities;
         const idField = entityConfig.id;
 
@@ -120,7 +188,7 @@ class EntityList extends Component {
         let buttonsData = this.createNavButtons();
         for (let i = 0; i < buttonsData.length; i++) {
             buttonsData[i].onClick = () => { this.goToPage(i) }
-            if(i == this.props.currentPage){
+            if (i == this.props.currentPage) {
                 buttonsData[i].status = " btn-active";
             }
         }
@@ -128,7 +196,7 @@ class EntityList extends Component {
         let navButtons = <ActionButtons buttonsData={buttonsData} />
 
         let entityTable = <div style={{ width: '100%', overflow: 'scroll' }}>
-            
+
             <InstantTable
                 style={{
                     width: "100%",
@@ -139,7 +207,7 @@ class EntityList extends Component {
         </div>
 
         return (
-            <div style={{textAlign:'center'}}>
+            <div style={{ textAlign: 'center' }}>
                 {navButtons}
                 <div className="entity-container">
 

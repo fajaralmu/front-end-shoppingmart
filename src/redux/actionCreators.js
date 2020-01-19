@@ -33,8 +33,8 @@ export const getEntityList = (request, app) => {
                 limit: request.limit,
                 page: request.page,
                 fieldsFilter: request.fieldsFilter,
-                orderBy: request.orderby,
-                orderType: request.ordertype
+                orderBy: request.orderBy,
+                orderType: request.orderType, 
             },
             
         },
