@@ -46,6 +46,27 @@ class Management extends Component {
 
             this.props.getEntities(request, this.props.app);
         }
+
+        this.getButtonsData = () => {
+            return [
+                {
+                    text: "Product",
+                    onClick: () => { this.getEntity(entityConfig.productConfig) }
+                },
+                {
+                    text: "Supplier",
+                    onClick: () => { this.getEntity(entityConfig.supplierList) }
+                },
+                {
+                    text: "Customer",
+                    onClick: () => { this.getEntity(entityConfig.customerList) }
+                }
+            ];
+        }
+
+        this.getEntityById = (name, id) => {
+            this.props.getEntityById(name, id, this.props.app);
+        }
     }
 
     componentWillMount() {
@@ -59,21 +80,7 @@ class Management extends Component {
         let entityList = this.props.entitiesData ? this.props.entitiesData.entities : [];
         if (null == entityList) { entityList = []; }
 
-        let buttonsData = [
-            {
-                text: "Product",
-                onClick: () => { this.getEntity(entityConfig.productConfig) }
-            },
-            {
-                text: "Supplier",
-                onClick: () => { this.getEntity(entityConfig.supplierList) }
-            },
-            {
-                text: "Customer",
-                onClick: () => { this.getEntity(entityConfig.customerList) }
-            }
-        ];
-
+        let buttonsData = this.getButtonsData();
 
         return (
             <div className="section-container">
@@ -84,6 +91,8 @@ class Management extends Component {
                         getEntityInPage={this.getEntityInPage}
                         entityConfig={this.props.entitiesData.entityConfig}
                         entitiesData={this.props.entitiesData} 
+                        managedEntity = {this.props.managedEntity}
+                        getEntityById = {this.getEntityById}
                         />
                 </div>
             </div>
@@ -96,12 +105,13 @@ const mapStateToProps = state => {
     //console.log(state);
     return {
         entitiesData: state.managementState.entitiesData,
+        managedEntity: state.managementState.managedEntity
     }
 }
 
 const mapDispatchToProps = dispatch => ({
     getEntities: (request, app) => dispatch(actions.getEntityList(request, app)),
-
+    getEntityById: (name, id, app) => dispatch(actions.getEntityById(name, id, app))
 
 })
 export default withRouter(connect(

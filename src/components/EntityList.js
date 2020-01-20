@@ -27,8 +27,7 @@ class EntityList extends Component {
             console.log("Will DELETE: ", id)
         }
         this.handleEdit = (id) => {
-
-            console.log("Will EDIT: ", id)
+            this.getEntityById(id);
         }
         this.getHeaderNames = (fieldNames) => {
             const headers = [];
@@ -55,6 +54,15 @@ class EntityList extends Component {
 
             this.props.getEntityInPage(config, page);
 
+        }
+
+        this.getEntityById = (id) => {
+            const config = this.props.entityConfig;
+            if (config == null) {
+                alert("Config Not Found!");
+                return;
+            }
+            this.props.getEntityById(config.entityName, id);
         }
 
         this.createNavButtons = () => {
@@ -215,7 +223,9 @@ class EntityList extends Component {
                     <h2>{this.props.entityConfig.title}</h2>
                     {navButtons}
                     <div className="entityForm">
-                        <EntityForm formData={entityConfig.formData} />
+                        <EntityForm
+                            managedEntity={this.props.managedEntity}
+                            entityConfig={entityConfig} />
                     </div>
                     {entityTable}
 

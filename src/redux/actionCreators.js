@@ -10,7 +10,7 @@ export const resetProductStocks = () => {
 }
 
 export const updateCart = (cart, app) => {
-    return { type: types.UPDATE_CART, payload: {cart:cart, app:app}, meta: { type: types.UPDATE_CART } };
+    return { type: types.UPDATE_CART, payload: { cart: cart, app: app }, meta: { type: types.UPDATE_CART } };
 }
 
 export const resetProducts = () => {
@@ -21,6 +21,31 @@ export const resetSuppliers = () => {
 }
 export const resetCustomers = () => {
     return { type: types.RESET_CUSTOMERS, payload: {}, meta: { type: types.RESET_CUSTOMERS } };
+}
+
+export const getEntityById = (name, id, app) => {
+    app.startLoading();
+    let requested = {
+        type: types.GET_ENTITY_BY_ID,
+        payload: {
+            "entity": name,
+            "filter": {
+                "limit": 1,
+                "page": 0,
+                "exacts": true,
+                "contains": false,
+                "fieldsFilter": {
+                    "id": id
+                } 
+            }
+        },
+        meta: {
+            type: types.GET_ENTITY_BY_ID,
+            url: apiEntityBaseUrl.concat("get"),
+            app: app
+        }
+    };
+    return requested;
 }
 
 export const getEntityList = (request, app) => {
@@ -34,19 +59,17 @@ export const getEntityList = (request, app) => {
                 page: request.page,
                 fieldsFilter: request.fieldsFilter,
                 orderBy: request.orderBy,
-                orderType: request.orderType, 
+                orderType: request.orderType,
             },
-            
+
         },
         meta: {
             type: types.GET_ENTITY,
             url: apiEntityBaseUrl.concat("get"),
             app: app,
-            entityConfig:request.entityConfig
+            entityConfig: request.entityConfig
         }
     };
- 
-
     return requested;
 }
 

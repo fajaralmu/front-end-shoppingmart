@@ -8,23 +8,28 @@ export const productConfig = {
     formData:[
         {
             lableName:"Product Name",
-            inputType:"text"
+            inputType:"text",
+            name:"name"
         },
         {
             lableName:"Product Description",
-            inputType:"textarea"
+            inputType:"textarea",
+            name:"description"
         },
         {
             lableName:"Product Unit",
-            inputType:"text"
+            inputType:"text",
+            name:"unit.name"
         },
         {
             lableName:"Product Price",
-            inputType:"number"
+            inputType:"number",
+            name:"price"
         },
         {
             lableName:"Product Category",
-            inputType:"text"
+            inputType:"text",
+            name:"category.name"
         }
     ]
 }
@@ -38,19 +43,23 @@ export const supplierList = {
     formData:[
         {
             lableName:"Supplier Name",
-            inputType:"text"
+            inputType:"text",
+            name:"name"
         },
         {
             lableName:"Supplier Address",
-            inputType:"textarea"
+            inputType:"textarea",
+            name:"address"
         },
         {
             lableName:"Supplier Contact",
-            inputType:"text"
+            inputType:"text",
+            name:"contact"
         },
         {
             lableName:"Supplier Website",
-            inputType:"text"
+            inputType:"text",
+            name:"website"
         } 
     ]
 }
@@ -64,23 +73,28 @@ export const customerList = {
     formData:[
         {
             lableName:"Customer Unique Name",
-            inputType:"text"
+            inputType:"text",
+            name:"username"
         },
         {
             lableName:"Customer Name",
-            inputType:"text"
+            inputType:"text",
+            name:"name"
         },
         {
             lableName:"Customer Address",
-            inputType:"textarea"
+            inputType:"textarea",
+            name:"address"
         },
         {
             lableName:"Customer Contact",
-            inputType:"text"
+            inputType:"text",
+            name:"contace"
         },
         {
             lableName:"Customer Email",
-            inputType:"email"
+            inputType:"email",
+            name:"email"
         } 
     ]
 }
