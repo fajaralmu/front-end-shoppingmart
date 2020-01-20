@@ -18,8 +18,9 @@ export const productConfig = {
         },
         {
             lableName:"Product Unit",
-            inputType:"text",
-            name:"unit.name"
+            inputType:"dynamicDropdown",
+            name:"unit.name",
+            reffEntity:"Unit", 
         },
         {
             lableName:"Product Price",
@@ -28,8 +29,9 @@ export const productConfig = {
         },
         {
             lableName:"Product Category",
-            inputType:"text",
-            name:"category.name"
+            inputType:"dynamicDropdown",
+            name:"category.name",
+            reffEntity:"Category", 
         }
     ]
 }

@@ -52,12 +52,40 @@ export const configureStore = () => {
             getEntityListMiddleware,
             getEntityByIdMiddleware,
             updateEntityMiddleware,
-            removeManagedEntityMiddleware
+            removeManagedEntityMiddleware,
+
+            getEntitiesWithCallbackMiddleware
 
         )
     );
 
     return store;
+}
+
+const getEntitiesWithCallbackMiddleware = store => next => action => {
+    if (!action.meta || action.meta.type !== types.GET_ENTITY_WITH_CALLBACK) { return next(action); }
+
+    fetch(action.meta.url, {
+        method: POST_METHOD, body: JSON.stringify(action.payload),
+        headers: commonAuthorizedHeader()
+    })
+        .then(response => response.json())
+        .then(data => { 
+            if (data.entities == null || data.entities.length == 0) {
+                alert("Data not found!");
+                return;
+            } 
+            
+            action.meta.callback(data, action.meta.referer);
+
+            let newAction = Object.assign({}, action, {
+                payload: data
+            });
+            delete newAction.meta;
+            store.dispatch(newAction);
+        })
+        .catch(err => console.log(err))
+        .finally(param => action.meta.app.endLoading());
 }
 
 const updateEntityMiddleware = store => next => action => {
@@ -77,7 +105,7 @@ const updateEntityMiddleware = store => next => action => {
             alert("Update Success!");
             const callback = action.meta.callback;
             const referer = action.meta.referer;
-            let newAction = Object.assign({}, action, { payload: data  });
+            let newAction = Object.assign({}, action, { payload: data });
             delete newAction.meta;
             store.dispatch(newAction);
             callback(referer);

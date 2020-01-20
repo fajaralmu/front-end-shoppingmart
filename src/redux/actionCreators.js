@@ -23,7 +23,7 @@ export const resetCustomers = () => {
     return { type: types.RESET_CUSTOMERS, payload: {}, meta: { type: types.RESET_CUSTOMERS } };
 }
 
-export const removeManagedEntity = () => { 
+export const removeManagedEntity = () => {
     return {
         type: types.REMOVE_MANAGED_ENTITY,
         payload: {},
@@ -40,13 +40,36 @@ export const updateEntity = (request, referer, callback) => {
         },
         meta: {
             type: types.UPDATE_ENTITY,
-            url: request.isNewRecord ? apiEntityBaseUrl.concat("add"): apiEntityBaseUrl.concat("update"),
+            url: request.isNewRecord ? apiEntityBaseUrl.concat("add") : apiEntityBaseUrl.concat("update"),
             app: referer.props.app,
             callback: callback,
-            referer:referer
+            referer: referer
         }
     };
     requested.payload[request.entityName] = request.entity;
+    return requested;
+}
+
+export const getEntitiesWithCallback = (request, referer, callback) => { 
+    referer.props.app.startLoading();
+    let requested = {
+        type: types.GET_ENTITY_WITH_CALLBACK,
+        payload: {
+            "entity": request.entityName,
+            "filter": {
+                "limit": 10,
+                'fieldsFilter':{}
+            }
+        },
+        meta: {
+            type: types.GET_ENTITY_WITH_CALLBACK,
+            url: apiEntityBaseUrl.concat("get"),
+            app: referer.props.app,
+            referer: referer,
+            callback: callback
+        }
+    };
+    requested.payload.filter.fieldsFilter[request.fieldName] = request.fieldValue;
     return requested;
 }
 
@@ -61,9 +84,7 @@ export const getEntityById = (name, id, app) => {
                 "page": 0,
                 "exacts": true,
                 "contains": false,
-                "fieldsFilter": {
-                    "id": id
-                }
+                "fieldsFilter": { "id": id }
             }
         },
         meta: {

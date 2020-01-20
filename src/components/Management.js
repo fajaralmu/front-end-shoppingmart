@@ -115,6 +115,7 @@ class Management extends Component {
                 <div className="management-container">
                     <ActionButtons buttonsData={buttonsData} />
                     <EntityList currentPage={this.state.currentPage}
+                        app = {this.props.app}
                         getEntityInPage={this.getEntityInPage}
                         entityConfig={this.props.entitiesData.entityConfig}
                         entitiesData={this.props.entitiesData}

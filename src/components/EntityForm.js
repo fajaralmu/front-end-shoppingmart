@@ -2,10 +2,14 @@ import React, { Component } from 'react'
 import '../css/Entity.css'
 import '../css/Common.css'
 import Label from './Label'
+import InputDropdown from './InputDropdown'
 import InputField from './InputField';
 import ActionButtons from './ActionButtons';
 import { _byId } from '../utils/ComponentUtil'
 import * as stringUtil from '../utils/StringUtil'
+import { withRouter } from 'react-router';
+import * as actions from '../redux/actionCreators'
+import { connect } from 'react-redux'
 
 class EntityForm extends Component {
     constructor(props) {
@@ -13,7 +17,9 @@ class EntityForm extends Component {
         this.state = {
             managedEntity: null,
             activeId: null,
-            formValues: {}
+            formValues: {},
+            dropdownList: {},
+            dropdownValues: {}
         }
 
         this.handleSubmit = () => {
@@ -26,12 +32,12 @@ class EntityForm extends Component {
             }
 
             const addNewMod = this.state.managedEntity != null;
-            if(addNewMod){
+            if (addNewMod) {
                 console.log("WILL SUBMIT NEW(state):", this.state.managedEntity);
                 if (this.props.updateEntity) {
                     this.props.updateEntity(this.props.entityConfig.entityName, this.state.managedEntity, "addNew");
                 }
-            } 
+            }
             this.clear();
         }
 
@@ -60,6 +66,56 @@ class EntityForm extends Component {
                 this.props.removeManagedEntity();
             }
         }
+
+        this.populateDropdown = (entityname, fieldname, fieldvalue) => {
+            const request = {
+                entityName: entityname,
+                fieldName: fieldname.split(".")[1],
+                fieldValue: fieldvalue
+            }
+            this.props.getEntitiesWithCallback(request, this, function (data, referer) {
+                console.log("DATA FOR DROPDOWN: ", data);
+            });
+
+        }
+
+        this.onKeyUpDynamicDropdown = (value, id, propName, reffEntity) => {
+            const request = {
+                entityName: reffEntity,
+                fieldName: 'name',
+                fieldValue: value
+            }
+            this.props.getEntitiesWithCallback(request, this, function (data, referer) {
+                console.log("LIST FOR DROPDOWN: ", data.entities)
+                referer.populateDropdownValues(data.entities, propName);
+            });
+            let currentDropdownValue = this.state.dropdownValues;
+            currentDropdownValue[propName] = value;
+            this.setState({ activeId: id, dropdownValues: currentDropdownValue });
+        }
+
+        this.populateDropdownValues = (entities, propName) => {
+            console.log("ENTITIES:", entities)
+            let options = new Array();
+            for (let i = 0; i < entities.length; i++) {
+                const entity = entities[i];
+                options.push({
+                    value: entity.id,
+                    text: entity.name
+                })
+            }
+            let currentDropdownList = this.state.dropdownList;
+            currentDropdownList[propName] = options;
+          //  this.setState({ dropdownList: currentDropdownList })
+            return options;
+        }
+
+        this.selectFromDynamicDropdown = (value, propName) => {
+            console.log(propName,":", value);
+            let currentDropdownList = this.state.dropdownList;
+            currentDropdownList[propName] = [];
+            this.setState({dropdownList:currentDropdownList});
+        }
     }
 
     componentDidUpdate() {
@@ -87,10 +143,39 @@ class EntityForm extends Component {
                         }
                     }
 
+                    let inputComponent = null;
+                    const inputId = "input-for-" + data.name;
+
+                    if (data.inputType == "dynamicDropdown") {
+                        /**
+                         * if dynamic dropDown
+                         */
+
+                        if (null == value) {
+                            value = this.state.dropdownValues[data.name]
+                        }
+
+                        inputComponent = <InputDropdown
+                            onSelect={(value) => this.selectFromDynamicDropdown(value, data.name)}
+                            id={inputId}
+                            value={value}
+                            dropdownList={this.state.dropdownList[data.name]}
+                            onKeyUp={(value, id) => { this.onKeyUpDynamicDropdown(value, id, data.name, data.reffEntity) }} />
+
+                    } else {
+                        /**
+                         * regular
+                         */
+                        inputComponent = <InputField
+                            onKeyUp={(value, id) => { this.onKeyUp(value, id, data.name) }}
+                            id={inputId} value={value}
+                            type={data.inputType} placeholder={data.lableName} />;
+                    }
+
                     return (
                         <div key={"FORM-FIELD-" + stringUtil.uniqueId()}>
                             <Label text={data.lableName} />
-                            <InputField onKeyUp={(value, id) => { this.onKeyUp(value, id, data.name) }} id={"input-for-" + data.name} value={value} type={data.inputType} placeholder={data.lableName} />
+                            {inputComponent}
                         </div>
                     )
                 }
@@ -114,4 +199,17 @@ class EntityForm extends Component {
         )
     }
 }
-export default EntityForm;
+
+const mapStateToProps = state => {
+    return {}
+}
+
+const mapDispatchToProps = dispatch => ({
+    getEntitiesWithCallback: (request, referer, callback) => dispatch(actions.getEntitiesWithCallback(request, referer, callback)),
+
+
+})
+export default withRouter(connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(EntityForm))

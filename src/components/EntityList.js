@@ -61,7 +61,7 @@ class EntityList extends Component {
                 alert("Config Not Found!");
                 return;
             }
-            
+
             this.props.getEntityById(config.entityName, id);
         }
 
@@ -224,6 +224,7 @@ class EntityList extends Component {
                     {navButtons}
                     <div className="entityForm">
                         <EntityForm
+                            app = {this.props.app}
                             updateEntity = {this.props.updateEntity}
                             removeManagedEntity={this.props.removeManagedEntity}
                             managedEntity={this.props.managedEntity}
