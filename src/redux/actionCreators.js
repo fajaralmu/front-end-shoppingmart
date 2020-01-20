@@ -23,6 +23,33 @@ export const resetCustomers = () => {
     return { type: types.RESET_CUSTOMERS, payload: {}, meta: { type: types.RESET_CUSTOMERS } };
 }
 
+export const removeManagedEntity = () => { 
+    return {
+        type: types.REMOVE_MANAGED_ENTITY,
+        payload: {},
+        meta: { type: types.REMOVE_MANAGED_ENTITY }
+    };
+}
+
+export const updateEntity = (request, referer, callback) => {
+    referer.props.app.startLoading();
+    let requested = {
+        type: types.UPDATE_ENTITY,
+        payload: {
+            "entity": request.entityName
+        },
+        meta: {
+            type: types.UPDATE_ENTITY,
+            url: request.isNewRecord ? apiEntityBaseUrl.concat("add"): apiEntityBaseUrl.concat("update"),
+            app: referer.props.app,
+            callback: callback,
+            referer:referer
+        }
+    };
+    requested.payload[request.entityName] = request.entity;
+    return requested;
+}
+
 export const getEntityById = (name, id, app) => {
     app.startLoading();
     let requested = {
@@ -36,7 +63,7 @@ export const getEntityById = (name, id, app) => {
                 "contains": false,
                 "fieldsFilter": {
                     "id": id
-                } 
+                }
             }
         },
         meta: {

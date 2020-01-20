@@ -17,6 +17,12 @@ export const reducer = (state = initState, action) => {
         case types.GET_ENTITY_BY_ID:
 
             return { ...state, managedEntity: action.payload.entities[0] };
+        case types.UPDATE_ENTITY:
+
+            return state;
+        case types.REMOVE_MANAGED_ENTITY:
+
+            return { ...state, managedEntity: null };
         default:
             return state;
     }

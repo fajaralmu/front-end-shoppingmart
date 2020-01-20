@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import '../css/Common.css'
-import InstantTable from './InstantTable'
-import ContentTitle from './ContentTitle';
+import InstantTable from './InstantTable' 
 import { _byId } from '../utils/ComponentUtil'
 import * as stringUtil from '../utils/StringUtil'
 import '../css/Management.css'
@@ -62,6 +61,7 @@ class EntityList extends Component {
                 alert("Config Not Found!");
                 return;
             }
+            
             this.props.getEntityById(config.entityName, id);
         }
 
@@ -224,6 +224,8 @@ class EntityList extends Component {
                     {navButtons}
                     <div className="entityForm">
                         <EntityForm
+                            updateEntity = {this.props.updateEntity}
+                            removeManagedEntity={this.props.removeManagedEntity}
                             managedEntity={this.props.managedEntity}
                             entityConfig={entityConfig} />
                     </div>

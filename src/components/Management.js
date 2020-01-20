@@ -14,14 +14,20 @@ class Management extends Component {
         super(props);
         this.state = {
             entityList: [],
-            currentPage: 0
+            currentPage: 0,
+            entityConfig: null
         }
         this.validateLoginStatus = () => {
             if (this.props.loginStatus != true) this.props.history.push("/login");
         }
 
-        this.getEntity = (config) => {
-            this.setState({ currentPage: 0 });
+        this.refresh = () => {
+            this.getEntityInPage(this.state.entityConfig, this.state.currentPage);
+        }
+
+        this.loadEntityManagement = (config) => {
+            this.props.removeManagedEntity();
+            this.setState({ currentPage: 0, entityConfig: config });
             this.props.getEntities({
                 entityName: config.entityName,
                 page: 0,
@@ -29,6 +35,7 @@ class Management extends Component {
                 entityConfig: config
             }, this.props.app);
         }
+
         this.getEntityInPage = (config, page) => {
             this.setState({ currentPage: page });
 
@@ -38,11 +45,11 @@ class Management extends Component {
                 limit: 10,
                 entityConfig: config,
                 fieldsFilter: config.filter,
-                orderBy:config.orderBy,
-                orderType:config.orderType,
+                orderBy: config.orderBy,
+                orderType: config.orderType,
             };
 
-            console.log("REQUEST: ",request)
+            console.log("REQUEST: ", request)
 
             this.props.getEntities(request, this.props.app);
         }
@@ -51,21 +58,41 @@ class Management extends Component {
             return [
                 {
                     text: "Product",
-                    onClick: () => { this.getEntity(entityConfig.productConfig) }
+                    onClick: () => { this.loadEntityManagement(entityConfig.productConfig) }
                 },
                 {
                     text: "Supplier",
-                    onClick: () => { this.getEntity(entityConfig.supplierList) }
+                    onClick: () => { this.loadEntityManagement(entityConfig.supplierList) }
                 },
                 {
                     text: "Customer",
-                    onClick: () => { this.getEntity(entityConfig.customerList) }
+                    onClick: () => { this.loadEntityManagement(entityConfig.customerList) }
                 }
             ];
         }
 
+        this.updateEntity = (name, entity, flag) => {
+            if (!window.confirm("Are you sure will update " + name + "?")) {
+                return;
+            }
+
+            let newRecord = flag == "addNew";
+
+            this.props.updateEntity({ entityName: name, entity: entity, isNewRecord:newRecord }, this, function (ref) {
+                ref.callbackHandleUpdate();
+            });
+        }
+
         this.getEntityById = (name, id) => {
             this.props.getEntityById(name, id, this.props.app);
+        }
+        this.removeManagedEntity = () => {
+            this.props.removeManagedEntity();
+        }
+
+        this.callbackHandleUpdate = () => {
+            this.removeManagedEntity();
+            this.refresh();
         }
     }
 
@@ -90,10 +117,12 @@ class Management extends Component {
                     <EntityList currentPage={this.state.currentPage}
                         getEntityInPage={this.getEntityInPage}
                         entityConfig={this.props.entitiesData.entityConfig}
-                        entitiesData={this.props.entitiesData} 
-                        managedEntity = {this.props.managedEntity}
-                        getEntityById = {this.getEntityById}
-                        />
+                        entitiesData={this.props.entitiesData}
+                        managedEntity={this.props.managedEntity}
+                        getEntityById={this.getEntityById}
+                        removeManagedEntity={this.removeManagedEntity}
+                        updateEntity={this.updateEntity}
+                    />
                 </div>
             </div>
         )
@@ -111,7 +140,12 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
     getEntities: (request, app) => dispatch(actions.getEntityList(request, app)),
-    getEntityById: (name, id, app) => dispatch(actions.getEntityById(name, id, app))
+    getEntityById: (name, id, app) => {
+        let action = actions.getEntityById(name, id, app);
+        dispatch(action);
+    },
+    removeManagedEntity: () => dispatch(actions.removeManagedEntity()),
+    updateEntity: (request, referer, callback) => dispatch(actions.updateEntity(request, referer, callback))
 
 })
 export default withRouter(connect(

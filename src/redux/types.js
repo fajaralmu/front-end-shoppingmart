@@ -28,3 +28,6 @@ export const GET_MESSAGE = "GET_MESSAGE";
 export const UPDATE_CART = "update_cart";
 export const GET_ENTITY = "get_entity";
 export const GET_ENTITY_BY_ID = "get_entity_by_id";
+export const UPDATE_ENTITY = "update_entity";
+export const ADD_NEW_ENTITY = "add_new_entity";
+export const REMOVE_MANAGED_ENTITY = "rm_mng_entity";

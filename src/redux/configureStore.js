@@ -3,9 +3,9 @@ import { initialState, rootReducer } from './reducers'
 import * as actionCreator from './actionCreators';
 import * as types from './types';
 
-const commonHeader = () => {
+const commonAuthorizedHeader = () => {
     return {
-        'Content-Type': 'application/json', 'requestId':  localStorage.getItem("requestId")
+        'Content-Type': 'application/json', 'requestId': localStorage.getItem("requestId")
     }
 };
 const POST_METHOD = "POST";
@@ -50,7 +50,9 @@ export const configureStore = () => {
 
             /*enntity management*/
             getEntityListMiddleware,
-            getEntityByIdMiddleware
+            getEntityByIdMiddleware,
+            updateEntityMiddleware,
+            removeManagedEntityMiddleware
 
         )
     );
@@ -58,12 +60,38 @@ export const configureStore = () => {
     return store;
 }
 
+const updateEntityMiddleware = store => next => action => {
+    if (!action.meta || action.meta.type !== types.UPDATE_ENTITY) { return next(action); }
+
+    fetch(action.meta.url, {
+        method: POST_METHOD, body: JSON.stringify(action.payload),
+        headers: commonAuthorizedHeader()
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.debug("Response updateEntityMiddleware:", data);
+            if (data.code != "00") {
+                alert("Error Update Entity!");
+                return;
+            }
+            alert("Update Success!");
+            const callback = action.meta.callback;
+            const referer = action.meta.referer;
+            let newAction = Object.assign({}, action, { payload: data  });
+            delete newAction.meta;
+            store.dispatch(newAction);
+            callback(referer);
+        })
+        .catch(err => console.log(err))
+        .finally(param => action.meta.app.endLoading());
+}
+
 const getEntityByIdMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.GET_ENTITY_BY_ID) { return next(action); }
 
     fetch(action.meta.url, {
         method: POST_METHOD, body: JSON.stringify(action.payload),
-        headers: commonHeader()
+        headers: commonAuthorizedHeader()
     })
         .then(response => response.json())
         .then(data => {
@@ -71,7 +99,7 @@ const getEntityByIdMiddleware = store => next => action => {
             if (data.entities == null || data.entities.length == 0) {
                 alert("Data not found!");
                 return;
-            } 
+            }
             let newAction = Object.assign({}, action, {
                 payload: data
             });
@@ -87,7 +115,7 @@ const getEntityListMiddleware = store => next => action => {
 
     fetch(action.meta.url, {
         method: POST_METHOD, body: JSON.stringify(action.payload),
-        headers: commonHeader()
+        headers: commonAuthorizedHeader()
     })
         .then(response => response.json())
         .then(data => {
@@ -111,10 +139,10 @@ const getMessagesMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.GET_MESSAGE) { return next(action); }
     fetch(action.meta.url, {
         method: POST_METHOD, body: JSON.stringify(action.payload),
-        headers: { 'Content-Type': 'application/json','requestId': localStorage.getItem("requestId")  }
+        headers: { 'Content-Type': 'application/json', 'requestId': localStorage.getItem("requestId") }
     }).then(response => response.json())
         .then(data => {
-            console.debug("sendChatMessageMiddleware Response:", data); 
+            console.debug("sendChatMessageMiddleware Response:", data);
             let newAction = Object.assign({}, action, { payload: data });
             delete newAction.meta;
             store.dispatch(newAction);
@@ -126,10 +154,10 @@ const sendChatMessageMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.SEND_MESSAGE) { return next(action); }
     fetch(action.meta.url, {
         method: POST_METHOD, body: JSON.stringify(action.payload),
-        headers: { 'Content-Type': 'application/json','requestId': localStorage.getItem("requestId")  }
+        headers: { 'Content-Type': 'application/json', 'requestId': localStorage.getItem("requestId") }
     }).then(response => response.json())
         .then(data => {
-            console.debug("sendChatMessageMiddleware Response:", data); 
+            console.debug("sendChatMessageMiddleware Response:", data);
             data.username = action.payload.username;
             let newAction = Object.assign({}, action, { payload: data });
             delete newAction.meta;
@@ -138,7 +166,7 @@ const sendChatMessageMiddleware = store => next => action => {
         .catch(err => console.log(err)).finally(param => action.meta.app.endLoading());
 }
 
-const updateCartMiddleware= store => next => action => {
+const updateCartMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.UPDATE_CART) { return next(action); }
     let newAction = Object.assign({}, action, { payload: action.payload });
     delete newAction.meta;
@@ -152,11 +180,18 @@ const storeChatMessageLocallyMiddleware = store => next => action => {
     store.dispatch(newAction);
 }
 
+const removeManagedEntityMiddleware = store => next => action => {
+    if (!action.meta || action.meta.type !== types.REMOVE_MANAGED_ENTITY) { return next(action); }
+    let newAction = Object.assign({}, action, { payload: action.payload });
+    delete newAction.meta;
+    store.dispatch(newAction);
+}
+
 const requestAppIdMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.REQUEST_ID) { return next(action); }
     fetch(action.meta.url, {
         method: POST_METHOD, body: JSON.stringify(action.payload),
-        headers: { 'Content-Type': 'application/json'}
+        headers: { 'Content-Type': 'application/json' }
     }).then(response => response.json())
         .then(data => {
             console.debug("requestAppIdMiddleware Response:", data);
@@ -265,15 +300,15 @@ const getCashflowInfoMiddleware = store => next => action => {
                 return;
             }
 
-            if (data.entity == null  ) {
+            if (data.entity == null) {
                 alert("Data for cashflow: " + action.payload.filter.module + " in " + action.payload.filter.month + "/" + action.payload.filter.year + " period not found!");
                 return;
             }
-            
-            if(data.entity.amount == null){
+
+            if (data.entity.amount == null) {
                 data.entity.amount = 0;
                 data.entity.count = 0;
-                console.log("DATA:",data);
+                console.log("DATA:", data);
             }
             let newAction = Object.assign({}, action, { payload: data });
             delete newAction.meta;
@@ -293,7 +328,7 @@ const getProductListTrxMiddleware = store => next => action => {
         store.dispatch(newAction);
     } else
         fetch(action.meta.url, {
-            method: POST_METHOD, body: JSON.stringify(action.payload), headers: commonHeader()
+            method: POST_METHOD, body: JSON.stringify(action.payload), headers: commonAuthorizedHeader()
         })
             .then(response => response.json())
             .then(data => {
@@ -322,7 +357,7 @@ const getCustomerListMiddleware = store => next => action => {
         fetch(action.meta.url, {
             method: POST_METHOD,
             body: JSON.stringify(action.payload),
-            headers: commonHeader()
+            headers: commonAuthorizedHeader()
         })
             .then(response => response.json())
             .then(data => {
@@ -454,7 +489,7 @@ const getSupplierListMiddleware = store => next => action => {
 
     fetch(action.meta.url, {
         method: POST_METHOD, body: JSON.stringify(action.payload),
-        headers: commonHeader()
+        headers: commonAuthorizedHeader()
     })
         .then(response => response.json())
         .then(data => {
@@ -509,7 +544,7 @@ const performLoginMiddleware = store => next => action => {
     }
     const app = action.meta.app;
     fetch(action.meta.url, {
-        method: POST_METHOD, body: JSON.stringify(action.payload), headers: commonHeader()
+        method: POST_METHOD, body: JSON.stringify(action.payload), headers: commonAuthorizedHeader()
     })
         .then(response => { return Promise.all([response.json(), response]); })
         .then(([responseJson, response]) => {
@@ -548,7 +583,7 @@ const getAllProductCategoriesMiddleware = store => next => action => {
         return next(action);
     }
     fetch(action.meta.url, {
-        method: POST_METHOD, body: JSON.stringify(action.payload), headers: commonHeader()
+        method: POST_METHOD, body: JSON.stringify(action.payload), headers: commonAuthorizedHeader()
     })
         .then(response => response.json())
         .then(data => {
@@ -572,7 +607,7 @@ const loadMoreSupplierMiddleware = store => next => action => {
         return next(action);
     }
     fetch(action.meta.url, {
-        method: POST_METHOD, body: JSON.stringify(action.payload), headers: commonHeader()
+        method: POST_METHOD, body: JSON.stringify(action.payload), headers: commonAuthorizedHeader()
     })
         .then(response => response.json())
         .then(data => {
@@ -606,7 +641,7 @@ const getProductDetailMiddleWare = store => next => action => {
     }
     const app = action.meta.app;
     fetch(action.meta.url, {
-        method: POST_METHOD, body: JSON.stringify(action.payload), headers: commonHeader()
+        method: POST_METHOD, body: JSON.stringify(action.payload), headers: commonAuthorizedHeader()
     })
         .then(response => response.json())
         .then(data => {
@@ -631,7 +666,7 @@ const getProductListMiddleware = store => next => action => {
     }
 
     fetch(action.meta.url, {
-        method: POST_METHOD, body: JSON.stringify(action.payload), headers: commonHeader()
+        method: POST_METHOD, body: JSON.stringify(action.payload), headers: commonAuthorizedHeader()
     })
         .then(response => response.json())
         .then(data => {

@@ -87,9 +87,9 @@ export const customerList = {
             name:"address"
         },
         {
-            lableName:"Customer Contact",
+            lableName:"Customer Phone",
             inputType:"text",
-            name:"contace"
+            name:"phone"
         },
         {
             lableName:"Customer Email",
