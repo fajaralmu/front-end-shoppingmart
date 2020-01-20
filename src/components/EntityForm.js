@@ -19,7 +19,8 @@ class EntityForm extends Component {
             activeId: null,
             formValues: {},
             dropdownList: {},
-            dropdownValues: {}
+            dropdownValues: {},
+            selectedEntities: {}
         }
 
         this.handleSubmit = () => {
@@ -61,7 +62,12 @@ class EntityForm extends Component {
         }
 
         this.clear = () => {
-            this.setState({ managedEntity: null });
+            this.setState({
+                managedEntity: null,
+                dropdownList: {},
+                dropdownValues: {},
+                selectedEntities: {}
+            });
             if (this.props.removeManagedEntity) {
                 this.props.removeManagedEntity();
             }
@@ -80,6 +86,7 @@ class EntityForm extends Component {
         }
 
         this.onKeyUpDynamicDropdown = (value, id, propName, reffEntity) => {
+            if (value == null || value.trim() == "") { return; }
             const request = {
                 entityName: reffEntity,
                 fieldName: 'name',
@@ -97,24 +104,84 @@ class EntityForm extends Component {
         this.populateDropdownValues = (entities, propName) => {
             console.log("ENTITIES:", entities)
             let options = new Array();
+            const formDataItem = this.getFormDataItem(propName);
+            if (null == formDataItem) {
+                console.log("FORM DATA NOT FOUND");
+                return;
+            }
+
             for (let i = 0; i < entities.length; i++) {
                 const entity = entities[i];
                 options.push({
-                    value: entity.id,
-                    text: entity.name
+                    value: entity[formDataItem.idField],
+                    text: entity[formDataItem.displayField],
+                    entity: entity
                 })
             }
             let currentDropdownList = this.state.dropdownList;
             currentDropdownList[propName] = options;
-          //  this.setState({ dropdownList: currentDropdownList })
+            //  this.setState({ dropdownList: currentDropdownList })
             return options;
         }
 
+        this.getSelectedDropdownItem = (value, propName) => {
+            if (this.state.dropdownList[propName] == null) {
+                return null;
+            }
+            const dropdownList = this.state.dropdownList[propName];
+            for (let i = 0; i < dropdownList.length; i++) {
+                const option = dropdownList[i];
+                if (option.value == value) {
+                    return option;
+                }
+
+            }
+            return null;
+        }
+
+        this.getFormDataItem = (propName) => {
+            if (this.props.entityConfig && this.props.entityConfig.formData) {
+                const formDataList = this.props.entityConfig.formData;
+                for (let i = 0; i < formDataList.length; i++) {
+                    const formDataItem = formDataList[i];
+                    if (formDataItem.name == propName) {
+                        return formDataItem;
+                    }
+                }
+            }
+            return null;
+        }
+
         this.selectFromDynamicDropdown = (value, propName) => {
-            console.log(propName,":", value);
-            let currentDropdownList = this.state.dropdownList;
+            console.log(propName, ":", value);
+            const currentDropdownList = this.state.dropdownList;
+            const dropdownValues = this.state.dropdownValues;
+            const selectedEntities = this.state.selectedEntities;
+
+            const selectedOption = this.getSelectedDropdownItem(value, propName);
+            if (null == selectedOption) {
+                return;
+            }
+
+            dropdownValues[propName] = selectedOption.text;
             currentDropdownList[propName] = [];
-            this.setState({dropdownList:currentDropdownList});
+            selectedEntities[propName] = selectedOption.entity;
+
+            /**
+             * time to modify entity
+             */
+            const displayPropName = propName.split(".")[0];
+
+            if (this.props.managedEntity) {
+                this.props.managedEntity[displayPropName] = selectedOption.entity;
+            } else {
+                let managedEntity = this.state.managedEntity;
+                if (!managedEntity) managedEntity = {};
+                managedEntity[displayPropName] = selectedOption.entity;
+                this.setState({ managedEntity: managedEntity });
+            }
+
+            this.setState({ activeId: null, dropdownList: currentDropdownList, dropdownValues: dropdownValues, selectedEntities: selectedEntities });
         }
     }
 
@@ -135,9 +202,12 @@ class EntityForm extends Component {
                     if (entityExist) {
                         const entity = this.props.managedEntity ? this.props.managedEntity : this.state.managedEntity;
                         const propName = data.name;
-                        if (propName.split(".").length > 1) {
-                            value = entity[propName.split(".")[0]] ?
-                                entity[propName.split(".")[0]][propName.split(".")[1]] : null;
+
+                        if (propName.split(".").length > 1 && this.state.activeId != "input-for-" + data.name) {
+                            const valueAsObject = entity[propName.split(".")[0]];
+                            const objectPropName = propName.split(".")[1];
+
+                            value = valueAsObject ? valueAsObject[objectPropName] : null;
                         } else {
                             value = entity[propName];
                         }

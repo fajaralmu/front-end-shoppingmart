@@ -3,13 +3,18 @@ export const productConfig = {
     entityName:"product",
     id:"id",
     fieldNames:[
-        "name","description","unit.name","price","category.name"
+        "name","code","description","unit.name","price","category.name"
     ],
     formData:[
         {
             lableName:"Product Name",
             inputType:"text",
             name:"name"
+        },
+        {
+            lableName:"Product Code",
+            inputType:"text",
+            name:"code"
         },
         {
             lableName:"Product Description",
@@ -21,6 +26,8 @@ export const productConfig = {
             inputType:"dynamicDropdown",
             name:"unit.name",
             reffEntity:"Unit", 
+            idField:"id",
+            displayField:"name"
         },
         {
             lableName:"Product Price",
@@ -32,6 +39,8 @@ export const productConfig = {
             inputType:"dynamicDropdown",
             name:"category.name",
             reffEntity:"Category", 
+            idField:"id",
+            displayField:"name"
         }
     ]
 }
