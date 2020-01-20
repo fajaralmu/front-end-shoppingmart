@@ -35,7 +35,7 @@ class InputFile extends Component {
             </div>;
         }
         if (this.props.value && this.props.value.trim() != "") {
-            console.log("--this.props.value--",this.props.value);
+            
             displayImage = <div className="input-image-wrapper">
                 <img src={this.props.value} width="60" height="60" />
             </div>;

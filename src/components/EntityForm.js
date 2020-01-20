@@ -26,12 +26,33 @@ class EntityForm extends Component {
             base64Data: {}
         }
 
+        this.validateEntity = (entity) => {
+            const result = entity;
+            for(let key in entity){
+                console.log(key);
+                const formDataItem = this.getFormDataItemStartWith(key);
+                if(formDataItem){
+                    if(formDataItem.inputType == "singleImage"){
+                        /**
+                         * handle single Image
+                         */
+                        if(entity[key] && !entity[key].includes("base64")){
+                            result[key] = null;
+                        }
+                    }
+                }
+            }
+           
+            return result;
+        }
+
         this.handleSubmit = () => {
             const updateMode = this.props.managedEntity != null;
             if (updateMode) {
                 console.log("WILL UPDATE(props):", this.props.managedEntity);
                 if (this.props.updateEntity) {
-                    this.props.updateEntity(this.props.entityConfig.entityName, this.props.managedEntity, "update");
+                    this.props.updateEntity(this.props.entityConfig.entityName,
+                        this.validateEntity(this.props.managedEntity), "update");
                 }
             }
 
@@ -39,7 +60,8 @@ class EntityForm extends Component {
             if (addNewMod) {
                 console.log("WILL SUBMIT NEW(state):", this.state.managedEntity);
                 if (this.props.updateEntity) {
-                    this.props.updateEntity(this.props.entityConfig.entityName, this.state.managedEntity, "addNew");
+                    this.props.updateEntity(this.props.entityConfig.entityName,
+                        this.validateEntity(this.state.managedEntity), "addNew");
                 }
             }
             this.clear();
@@ -150,6 +172,24 @@ class EntityForm extends Component {
                     const formDataItem = formDataList[i];
                     if (formDataItem.name == propName) {
                         return formDataItem;
+                    }
+                }
+            }
+            return null;
+        }
+
+        this.getFormDataItemStartWith = (propName) => {
+            if (this.props.entityConfig && this.props.entityConfig.formData) {
+                const formDataList = this.props.entityConfig.formData;
+                for (let i = 0; i < formDataList.length; i++) {
+                    const formDataItem = formDataList[i];
+                    if (formDataItem.name == propName) {
+                        return formDataItem;
+                    }
+                    if(formDataItem.name.split(".").length > 1){
+                        if(formDataItem.name.split(".")[0] == propName){
+                            return formDataItem;
+                        }
                     }
                 }
             }
