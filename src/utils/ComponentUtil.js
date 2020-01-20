@@ -13,6 +13,15 @@ export const clearFields = (...ignore) => {
     }
 }
 
+export function toBase64(file, referer, callback){
+	const reader = new FileReader();
+    reader.readAsDataURL(file.files[0]);
+    reader.onload = () => callback(reader.result, referer);
+    reader.onerror = error => {
+    	alert("Error Loading File");
+    }
+}
+
 export const checkExistance = function (...ids) {
     for (let i = 0; i < ids.length; i++) {
         if (_byId(ids[i]) == null) {

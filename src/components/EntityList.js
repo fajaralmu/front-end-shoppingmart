@@ -10,6 +10,7 @@ import ActionButtons from './ActionButtons';
 import InputField from './InputField'
 import ActionButton from './ActionButton'
 import EntityForm from './EntityForm';
+import * as url from '../constant/Url'
 
 class EntityList extends Component {
     constructor(props) {
@@ -32,9 +33,9 @@ class EntityList extends Component {
             const headers = [];
             for (let i = 0; i < fieldNames.length; i++) {
                 const name = fieldNames[i];
-                let headerName = name;
-                if (name.split(".").length > 1) {
-                    headerName = name.split(".")[0];
+                let headerName = name.name;
+                if (headerName.split(".").length > 1) {
+                    headerName = headerName.split(".")[0];
                 }
                 headers.push(headerName.toUpperCase());
             }
@@ -78,9 +79,9 @@ class EntityList extends Component {
             let inputs = new Array();
             for (let i = 0; i < fieldNames.length; i++) {
                 const name = fieldNames[i];
-                let headerName = name;
-                if (name.split(".").length > 1) {
-                    headerName = name.split(".")[0];
+                let headerName = name.name;
+                if (headerName.split(".").length > 1) {
+                    headerName = headerName.split(".")[0];
                 }
 
                 let value = "";
@@ -171,18 +172,27 @@ class EntityList extends Component {
             const entity = entities[i];
             let rowValues = [];
             for (let j = 0; j < entityConfig.fieldNames.length; j++) {
-                const fieldName = entityConfig.fieldNames[j];
-                let entityProp = fieldName;
+                const fieldItem = entityConfig.fieldNames[j];
+                let entityProp = fieldItem.name;
                 let object = false
 
-                if (fieldName.split(".").length > 1) {
-                    entityProp = fieldName.split(".")[0];
+                if (entityProp.split(".").length > 1) {
+                    entityProp = entityProp.split(".")[0];
                     object = true;
                 }
 
-                const entityValue = entity[entityProp];
+                let entityValue = entity[entityProp];
+                if(fieldItem.type){
+                    if(fieldItem.type == "number"){
+                        entityValue = stringUtil.beautifyNominal(entityValue);
+                    }else if(fieldItem.type == "link"){
+                        entityValue = <a href={entityValue}><u>{entityValue}</u></a>
+                    }else if(fieldItem.type=="image"){
+                        entityValue = <img witdh="60" height="60" alt={url.baseImageUrl+entityValue} src={url.baseImageUrl+entityValue} />
+                    }
+                }
 
-                rowValues.push(object ? entityValue[fieldName.split(".")[1]] : entityValue);
+                rowValues.push(object ? entityValue[fieldItem.name.split(".")[1]] : entityValue);
             }
 
             rows.push(

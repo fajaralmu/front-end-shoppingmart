@@ -10,6 +10,8 @@ import * as stringUtil from '../utils/StringUtil'
 import { withRouter } from 'react-router';
 import * as actions from '../redux/actionCreators'
 import { connect } from 'react-redux'
+import InputFile from './InputFile'
+import * as url from '../constant/Url'
 
 class EntityForm extends Component {
     constructor(props) {
@@ -20,7 +22,8 @@ class EntityForm extends Component {
             formValues: {},
             dropdownList: {},
             dropdownValues: {},
-            selectedEntities: {}
+            selectedEntities: {},
+            base64Data: {}
         }
 
         this.handleSubmit = () => {
@@ -66,7 +69,8 @@ class EntityForm extends Component {
                 managedEntity: null,
                 dropdownList: {},
                 dropdownValues: {},
-                selectedEntities: {}
+                selectedEntities: {},
+                base64Data: {}
             });
             if (this.props.removeManagedEntity) {
                 this.props.removeManagedEntity();
@@ -152,6 +156,22 @@ class EntityForm extends Component {
             return null;
         }
 
+        this.handleChangeBase64Image = (base64, propName) => {
+            console.log("__base64__:", base64)
+
+            let base64Data = this.state.base64Data;
+            base64Data[propName] = base64;
+            if (this.props.managedEntity) {
+                this.props.managedEntity[propName] = base64;
+            } else {
+                let managedEntity = this.state.managedEntity;
+                if (!managedEntity) managedEntity = {};
+                managedEntity[propName] = base64;
+                this.setState({ managedEntity: managedEntity });
+            }
+            this.setState({ base64Data: base64Data });
+        }
+
         this.selectFromDynamicDropdown = (value, propName) => {
             console.log(propName, ":", value);
             const currentDropdownList = this.state.dropdownList;
@@ -232,7 +252,19 @@ class EntityForm extends Component {
                             dropdownList={this.state.dropdownList[data.name]}
                             onKeyUp={(value, id) => { this.onKeyUpDynamicDropdown(value, id, data.name, data.reffEntity) }} />
 
-                    } else {
+                    } if (data.inputType == "singleImage") {
+                        /**
+                         * handle image single
+                         */
+                        inputComponent = <InputFile
+                            onChange={(base64) => this.handleChangeBase64Image(base64, data.name)}
+                            value={value && value.includes("base64") ? value : value ? url.baseImageUrl + value : null}
+                            id={inputId}
+
+                        />
+                    }
+
+                    else {
                         /**
                          * regular
                          */
