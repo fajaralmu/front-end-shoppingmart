@@ -8,15 +8,20 @@ class ActionButtons extends Component {
     constructor(props) { super(props) }
 
     render() {
+        let className = "action-button-wrapper";
+        if(this.props.className){
+            className += " "+this.props.className;
+        }
         return (
-            <div className="action-button-wrapper"  >
+            <div style={this.props.style ? this.props.style : {}} className={className}  >
                 {this.props.buttonsData.map(buttonData => {
-                     let className = "action-button rounded";
-                     if(buttonData.status!= null ){
-                         className=className.concat(" ").concat(buttonData.status).concat(" ").concat(buttonData.className);
-                     }
-                    return(
-                        <button className={className} key={"btnKey-"+stringUtil.uniqueId()} onClick={buttonData.onClick}>{buttonData.text}</button>
+                    let className = "action-button rounded";
+                    if (buttonData.status != null) {
+                        className =
+                            className.concat(" ").concat(buttonData.status).concat(" ").concat(buttonData.className);
+                    }
+                    return (
+                        <button className={className} key={"btnKey-" + stringUtil.uniqueId()} onClick={buttonData.onClick}>{buttonData.text}</button>
                     )
                 })}
             </div>);

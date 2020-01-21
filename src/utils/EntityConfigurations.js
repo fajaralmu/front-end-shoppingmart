@@ -5,7 +5,8 @@ export const productConfig = {
     fieldNames: [
         { name: "name" }, { name: "code" },
         { name: "description" }, { name: "unit.name" },
-        { name: "price", type: "number" }, { name: "category.name" }
+        { name: "price", type: "number" }, { name: "category.name" },
+        { name: "imageUrl", type: "imageMultiple" }
     ],
     formData: [
         {
@@ -17,6 +18,11 @@ export const productConfig = {
             lableName: "Product Code",
             inputType: "text",
             name: "code"
+        },
+        {
+            lableName: "Product Image(s)",
+            inputType: "multipleImage",
+            name: "imageUrl"
         },
         {
             lableName: "Product Description",

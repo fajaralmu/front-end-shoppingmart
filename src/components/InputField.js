@@ -49,6 +49,7 @@ class InputField extends Component {
             onKeyUp={this.handleKeyup}
             placeholder={placeholder}
             checked={this.props.checked} 
+            onChange={this.onChange}
             
             />;
 
@@ -74,7 +75,7 @@ class InputField extends Component {
                 type={type}
                 onKeyUp={this.handleKeyup}
                 placeholder={placeholder}
-               
+                onChange={this.onChange}
                 checked={this.props.checked} />
         }
 

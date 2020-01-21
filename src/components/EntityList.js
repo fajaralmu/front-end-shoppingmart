@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import '../css/Common.css'
-import InstantTable from './InstantTable' 
+import InstantTable from './InstantTable'
 import { _byId } from '../utils/ComponentUtil'
 import * as stringUtil from '../utils/StringUtil'
 import '../css/Management.css'
@@ -182,13 +182,17 @@ class EntityList extends Component {
                 }
 
                 let entityValue = entity[entityProp];
-                if(fieldItem.type){
-                    if(fieldItem.type == "number"){
+                if (fieldItem.type) {
+                    if (fieldItem.type == "number") {
                         entityValue = stringUtil.beautifyNominal(entityValue);
-                    }else if(fieldItem.type == "link"){
+                    } else if (fieldItem.type == "link") {
                         entityValue = <a href={entityValue}><u>{entityValue}</u></a>
-                    }else if(fieldItem.type=="image"){
-                        entityValue = <img width="60" height="60" alt={url.baseImageUrl+entityValue} src={url.baseImageUrl+entityValue} />
+                    } else if (fieldItem.type == "image") {
+                        entityValue = <img width="60" height="60" alt={url.baseImageUrl + entityValue} src={url.baseImageUrl + entityValue} />
+                    } else if (fieldItem.type == "imageMultiple") {
+                        let imgName = entityValue.split("~")[0];
+
+                        entityValue = <img width="60" height="60"  src={url.baseImageUrl + imgName} />
                     }
                 }
 
@@ -213,7 +217,11 @@ class EntityList extends Component {
             }
         }
 
-        let navButtons = <ActionButtons buttonsData={buttonsData} />
+        let navButtons = <ActionButtons style={{
+            backgroundColor: 'white',
+            paddingTop: '15px',
+            margin: '10px'
+        }} className="paper-shadow" buttonsData={buttonsData} />
 
         let entityTable = <div style={{ width: '100%', overflow: 'scroll' }}>
 
@@ -230,12 +238,15 @@ class EntityList extends Component {
             <div style={{ textAlign: 'center' }}>
 
                 <div className="entity-container">
-                    <h2>{this.props.entityConfig.title}</h2>
+                    <div className="paper-shadow" style={{
+                        backgroundColor: 'white',
+                        margin: '10px'
+                    }} ><h2>{this.props.entityConfig.title}</h2></div>
                     {navButtons}
                     <div className="entityForm">
                         <EntityForm
-                            app = {this.props.app}
-                            updateEntity = {this.props.updateEntity}
+                            app={this.props.app}
+                            updateEntity={this.props.updateEntity}
                             removeManagedEntity={this.props.removeManagedEntity}
                             managedEntity={this.props.managedEntity}
                             entityConfig={entityConfig} />

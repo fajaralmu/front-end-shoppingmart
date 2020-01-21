@@ -166,9 +166,10 @@ class Catalog extends Component {
         }
 
         this.handleChangeEnableShoppingOption = (id) => {
+            console.log("ID: ", id)
             if (!componentUtil._byId(id))
                 return;
-            this.props.app.setEnableShopping(componentUtil._byId(id).checked )
+            this.props.app.setEnableShopping(componentUtil._byId(id).checked)
         }
 
     }
@@ -239,6 +240,11 @@ class Catalog extends Component {
 
             <ContentTitle title="Catalog Page" description="Choose your favourite products" />
             <div className="nav-containter">
+                <p>
+                    {"FILTER ORDER: " + (this.state.requestOrderBy ? this.state.requestOrderBy : "-")}
+                    {" | FILTER CATEGORY: " + (this.state.requestCategoryId ? this.state.requestCategoryId : "-")}
+                </p>
+
                 <NavButton id="btn-prv" buttonClick={this.prev} key="nav-prev" text="<" />
                 {buttonData.map(b => {
                     let active = (b.value == this.state.catalogPage)
@@ -305,7 +311,7 @@ const filterProductOption = [
     { value: "price-desc", text: "Price [expensive]" }
 ];
 
-const mapStateToProps = state => { 
+const mapStateToProps = state => {
     return {
         catalogData: state.shopState.catalogData,
         selectedProduct: state.shopState.entity,
