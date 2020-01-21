@@ -17,29 +17,15 @@ class CatalogItem extends Component {
         let product = this.props.product;
         let productImageUrl = product.imageUrl;
         let imageUrl = url.baseImageUrl + productImageUrl.split("~")[0];
-        let content = <InstantTable rows={[{
-            style: { textAlign: "center" },
-            id: "img-icon-" + product.id,
-            values: [
-                <Label  className="clickable catalog-item-title" text={product.name} onClick={() => this.props.getProductDetail(product.code)}
-                />
-            ], CS: [2]
-        },
-        {
-            id: "catalog-item-" + product.id,
-            values: [
-                "Price",
-                <Label style={{ fontFamily: "Arial Black" }} text={stringUtil.beautifyNominal(product.price) + ",00"} />
-            ]
-        }, {
-            id: "catalog-item-desc-" + product.id,
-            values: ["Available", <span className="quantity-label">{stringUtil.beautifyNominal(product.count)}</span>]
-        },
-        {
-            id: "catalog-item-cat-" + product.id,
-            values: ["Category", product.category.name]
-        }
-        ]} />;
+        let content = <div>
+            <Label
+                className="clickable " text={product.name}
+                onClick={() => this.props.getProductDetail(product.code)}
+            />
+            <Label style={{ fontFamily: "Arial Narrow" , fontWeight:'bolder'}} text={stringUtil.beautifyNominal(product.price) + ",00"} />
+            <span className="quantity-label">{stringUtil.beautifyNominal(product.count)}</span>{" "+product.unit.name}
+            <Label text={product.category.name} />
+        </div>
         return (
             <Card className="grid-item" icon={imageUrl} content={content} />
         )

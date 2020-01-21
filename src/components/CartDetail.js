@@ -20,7 +20,7 @@ class CartDetail extends Component {
         let cart = this.props.enableShopping ? this.props.cart : [];
         let grandTotalPrice = 0;
         let cartRows = [
-            { values: ["No", "Name", "Qty", "@Price", "Total Price"] }
+            { values: ["No", "Name", "Qty", "Unit", "@Price", "Total Price"] }
         ]
         let number = 0;
         for (let i = 0; i < cart.length; i++) {
@@ -40,7 +40,10 @@ class CartDetail extends Component {
             number++;
             cartRows.push({
                 values: [
-                    number, name, stringUtil.beautifyNominal(count),
+                    number, 
+                    name, 
+                    stringUtil.beautifyNominal(count),
+                    cartItem.product.unit.name,
                     stringUtil.beautifyNominal(price),
                     stringUtil.beautifyNominal(totalPrice)
                 ]
@@ -49,12 +52,13 @@ class CartDetail extends Component {
 
         cartRows.push({
             values: [
-                "Total Price", stringUtil.beautifyNominal(grandTotalPrice)
+                "Total Price", <b>{stringUtil.beautifyNominal(grandTotalPrice)}</b>
             ],
-            CS: [4, 1]
+            CS: [5, 1]
         })
 
-        let cartItemList = cart.length > 0 ? <InstantTable style={{ fontFamily: 'consolas', width: '100%' }} rows={cartRows} /> :
+        let cartItemList = cart.length > 0 ? <InstantTable style={{ fontFamily: 'Arial Narrow', width: '100%' }}
+            rows={cartRows} /> :
             <h3 style={{ margin: 'auto' }}>You don't have any list</h3>;
 
         return (
