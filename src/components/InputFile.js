@@ -51,7 +51,7 @@ class InputFile extends Component {
 
         return (
             <div className="input-field" >
-                <input onChange={this.onChange} type="file" key={"input_file_" + stringUtil.uniqueId()} />
+                <input accept="image/*" onChange={this.onChange} type="file" key={"input_file_" + stringUtil.uniqueId()} />
                 {displayImage}
             </div>
         )

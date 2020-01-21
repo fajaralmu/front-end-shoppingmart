@@ -182,7 +182,7 @@ class Catalog extends Component {
 
     }
 
-    componentDidUpdate() {
+    componentDidUpdate() { 
         if (this.state.firstLoad && this.props.catalogData.filter != null) {
             this.setState({
                 limit: this.props.catalogData.filter.limit,
