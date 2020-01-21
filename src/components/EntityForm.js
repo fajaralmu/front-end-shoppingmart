@@ -28,21 +28,21 @@ class EntityForm extends Component {
 
         this.validateEntity = (entity) => {
             const result = entity;
-            for(let key in entity){
+            for (let key in entity) {
                 console.log(key);
                 const formDataItem = this.getFormDataItemStartWith(key);
-                if(formDataItem){
-                    if(formDataItem.inputType == "singleImage"){
+                if (formDataItem) {
+                    if (formDataItem.inputType == "singleImage") {
                         /**
                          * handle single Image
                          */
-                        if(entity[key] && !entity[key].includes("base64")){
+                        if (entity[key] && !entity[key].includes("base64")) {
                             result[key] = null;
                         }
                     }
                 }
             }
-           
+
             return result;
         }
 
@@ -190,8 +190,8 @@ class EntityForm extends Component {
                     if (formDataItem.name == propName) {
                         return formDataItem;
                     }
-                    if(formDataItem.name.split(".").length > 1){
-                        if(formDataItem.name.split(".")[0] == propName){
+                    if (formDataItem.name.split(".").length > 1) {
+                        if (formDataItem.name.split(".")[0] == propName) {
                             return formDataItem;
                         }
                     }
@@ -205,15 +205,15 @@ class EntityForm extends Component {
             let base64Data = this.state.base64Data;
             base64Data[propName] = null;
 
-            this.updateSelectedEntity(propName, null);           
+            this.updateSelectedEntity(propName, null);
             this.setState({ base64Data: base64Data });
         }
 
-        this.handleChangeBase64Image = (base64, propName) => { 
+        this.handleChangeBase64Image = (base64, propName) => {
 
             let base64Data = this.state.base64Data;
             base64Data[propName] = base64;
-            
+
             this.updateSelectedEntity(propName, base64);
             this.setState({ base64Data: base64Data });
         }
@@ -238,7 +238,7 @@ class EntityForm extends Component {
              */
             const displayPropName = propName.split(".")[0];
 
-            this.updateSelectedEntity(displayPropName,selectedOption.entity);
+            this.updateSelectedEntity(displayPropName, selectedOption.entity);
             this.setState({ activeId: null, dropdownList: currentDropdownList, dropdownValues: dropdownValues, selectedEntities: selectedEntities });
         }
     }
@@ -252,6 +252,7 @@ class EntityForm extends Component {
         let formData = this.props.entityConfig && this.props.entityConfig.formData ? this.props.entityConfig.formData : [];
 
         const entityExist = this.props.managedEntity != null || this.state.managedEntity;
+
 
         let formFields = <div className="entity-form  paper-shadow">
             {formData.map(
@@ -299,7 +300,7 @@ class EntityForm extends Component {
                             onChange={(base64) => this.handleChangeBase64Image(base64, data.name)}
                             value={value && value.includes("base64") ? value : value ? url.baseImageUrl + value : null}
                             id={inputId}
-                            removeImage = {()=>this.handleRemoveImage(data.name)}
+                            removeImage={() => this.handleRemoveImage(data.name)}
 
                         />
                     }
@@ -322,9 +323,12 @@ class EntityForm extends Component {
                     )
                 }
             )}
+
+
+
             <ActionButtons buttonsData={[
                 {
-                    text: "Submit",
+                    text: this.props.managedEntity ? "Update" : "Add Record",
                     onClick: this.handleSubmit
                 },
                 {
