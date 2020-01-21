@@ -4,6 +4,7 @@ import '../css/Common.css'
 import * as stringUtil from '../utils/StringUtil'
 import * as componentUtil from '../utils/ComponentUtil'
 import * as url from '../constant/Url'
+import ActionButton from './ActionButton'
 
 class InputFile extends Component {
     constructor(props) {
@@ -17,6 +18,12 @@ class InputFile extends Component {
                 referer.setState({ base64Data: result });
 
             });
+        }
+
+        this.removeImage = () => {
+            if(this.props.removeImage){
+                this.props.removeImage();
+            }
         }
     }
 
@@ -38,6 +45,7 @@ class InputFile extends Component {
             
             displayImage = <div className="input-image-wrapper">
                 <img src={this.props.value} width="60" height="60" />
+                <ActionButton text="cancel" status="danger" onClick={this.removeImage} />
             </div>;
         }
 

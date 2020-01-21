@@ -188,7 +188,7 @@ class EntityList extends Component {
                     }else if(fieldItem.type == "link"){
                         entityValue = <a href={entityValue}><u>{entityValue}</u></a>
                     }else if(fieldItem.type=="image"){
-                        entityValue = <img witdh="60" height="60" alt={url.baseImageUrl+entityValue} src={url.baseImageUrl+entityValue} />
+                        entityValue = <img width="60" height="60" alt={url.baseImageUrl+entityValue} src={url.baseImageUrl+entityValue} />
                     }
                 }
 

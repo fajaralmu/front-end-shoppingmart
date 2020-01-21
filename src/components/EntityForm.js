@@ -75,14 +75,7 @@ class EntityForm extends Component {
 
         this.onKeyUp = (value, id, propName) => {
             this.setState({ activeId: id });
-            if (this.props.managedEntity) {
-                this.props.managedEntity[propName] = value;
-            } else {
-                let managedEntity = this.state.managedEntity;
-                if (!managedEntity) managedEntity = {};
-                managedEntity[propName] = value;
-                this.setState({ managedEntity: managedEntity });
-            }
+            this.updateSelectedEntity(propName, value);
 
         }
 
@@ -178,6 +171,17 @@ class EntityForm extends Component {
             return null;
         }
 
+        this.updateSelectedEntity = (propName, value) => {
+            if (this.props.managedEntity) {
+                this.props.managedEntity[propName] = value;
+            } else {
+                let managedEntity = this.state.managedEntity;
+                if (!managedEntity) managedEntity = {};
+                managedEntity[propName] = value;
+                this.setState({ managedEntity: managedEntity });
+            }
+        }
+
         this.getFormDataItemStartWith = (propName) => {
             if (this.props.entityConfig && this.props.entityConfig.formData) {
                 const formDataList = this.props.entityConfig.formData;
@@ -196,19 +200,21 @@ class EntityForm extends Component {
             return null;
         }
 
-        this.handleChangeBase64Image = (base64, propName) => {
-            console.log("__base64__:", base64)
+        this.handleRemoveImage = (propName) => {
+
+            let base64Data = this.state.base64Data;
+            base64Data[propName] = null;
+
+            this.updateSelectedEntity(propName, null);           
+            this.setState({ base64Data: base64Data });
+        }
+
+        this.handleChangeBase64Image = (base64, propName) => { 
 
             let base64Data = this.state.base64Data;
             base64Data[propName] = base64;
-            if (this.props.managedEntity) {
-                this.props.managedEntity[propName] = base64;
-            } else {
-                let managedEntity = this.state.managedEntity;
-                if (!managedEntity) managedEntity = {};
-                managedEntity[propName] = base64;
-                this.setState({ managedEntity: managedEntity });
-            }
+            
+            this.updateSelectedEntity(propName, base64);
             this.setState({ base64Data: base64Data });
         }
 
@@ -232,15 +238,7 @@ class EntityForm extends Component {
              */
             const displayPropName = propName.split(".")[0];
 
-            if (this.props.managedEntity) {
-                this.props.managedEntity[displayPropName] = selectedOption.entity;
-            } else {
-                let managedEntity = this.state.managedEntity;
-                if (!managedEntity) managedEntity = {};
-                managedEntity[displayPropName] = selectedOption.entity;
-                this.setState({ managedEntity: managedEntity });
-            }
-
+            this.updateSelectedEntity(displayPropName,selectedOption.entity);
             this.setState({ activeId: null, dropdownList: currentDropdownList, dropdownValues: dropdownValues, selectedEntities: selectedEntities });
         }
     }
@@ -288,11 +286,12 @@ class EntityForm extends Component {
                         inputComponent = <InputDropdown
                             onSelect={(value) => this.selectFromDynamicDropdown(value, data.name)}
                             id={inputId}
+                            placeholder={data.lableName}
                             value={value}
                             dropdownList={this.state.dropdownList[data.name]}
                             onKeyUp={(value, id) => { this.onKeyUpDynamicDropdown(value, id, data.name, data.reffEntity) }} />
 
-                    } if (data.inputType == "singleImage") {
+                    } else if (data.inputType == "singleImage") {
                         /**
                          * handle image single
                          */
@@ -300,6 +299,7 @@ class EntityForm extends Component {
                             onChange={(base64) => this.handleChangeBase64Image(base64, data.name)}
                             value={value && value.includes("base64") ? value : value ? url.baseImageUrl + value : null}
                             id={inputId}
+                            removeImage = {()=>this.handleRemoveImage(data.name)}
 
                         />
                     }
