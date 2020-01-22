@@ -28,7 +28,11 @@ class DetailProductPanel extends Component {
             }
         }
 
-        let imageUrl = url.baseImageUrl + product.imageUrl;
+        let productImageName =  product.imageUrl;
+        if(productImageName){
+            productImageName = productImageName.split("~")[0];
+        }
+        let imageUrl = url.baseImageUrl +productImageName;
 
         return (
             <div className="stock-detail" >

@@ -484,10 +484,12 @@ class EntityForm extends Component {
             <ActionButtons buttonsData={[
                 {
                     text: this.props.managedEntity ? "Update" : "Add Record",
-                    onClick: this.handleSubmit
+                    onClick: this.handleSubmit,
+                    status:"success"
                 },
                 {
                     text: "Clear",
+                    status:"warning",
                     onClick: this.clear
                 }
             ]} />

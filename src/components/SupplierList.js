@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import NavButton from './NavButton'
+import { connect } from 'react-redux' 
 import '../css/Catalog.css'
 import { BrowserRouter as Router, Route, Link, Switch, withRouter } from 'react-router-dom'
 import * as actions from '../redux/actionCreators'

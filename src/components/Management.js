@@ -55,20 +55,24 @@ class Management extends Component {
             this.props.getEntities(request, this.props.app);
         }
 
+        this.checkIfCurrentMenuName = (name) => {
+            return this.state.entityConfig.entityName == name || (this.props.entitiesData.entityConfig && this.props.entitiesData.entityConfig.entityName == name);
+        }
+
         this.getButtonsData = () => {
             return [
                 {
                     text: "Product",
-                    active: this.state.entityConfig.entityName == "product",
+                    active: this.checkIfCurrentMenuName("product"),
                     onClick: () => { this.loadEntityManagement(entityConfig.productConfig) }
                 },
                 {
-                    active: this.state.entityConfig.entityName == "supplier",
+                    active: this.checkIfCurrentMenuName("supplier"),
                     text: "Supplier",
                     onClick: () => { this.loadEntityManagement(entityConfig.supplierList) }
                 },
                 {
-                    active: this.state.entityConfig.entityName == "customer",
+                    active: this.checkIfCurrentMenuName("customer"),
                     text: "Customer",
                     onClick: () => { this.loadEntityManagement(entityConfig.customerList) }
                 }
@@ -115,7 +119,12 @@ class Management extends Component {
 
         return (
             <div className="section-container">
-                <ContentTitle title={"Management "+(this.state.entityConfig.title?this.state.entityConfig.title:"")} />
+                <ContentTitle title={"Management " + (this.state.entityConfig.title ?
+                    this.state.entityConfig.title :
+                    this.props.entitiesData && this.props.entitiesData.entityConfig ?
+                        this.props.entitiesData.entityConfig.title : "")}
+                        
+                        description="manage master data"/>
                 <div className="management-container">
                     <Tab tabsData={buttonsData} />
                     <EntityList currentPage={this.state.currentPage}

@@ -24,7 +24,12 @@ class DetailStockPanel extends Component {
             }
         }
 
-        let imageUrl = url.baseImageUrl + productFlowStock.productFlow.product.imageUrl;
+        let productImageName = productFlowStock.productFlow.product.imageUrl;
+        if(productImageName){
+            productImageName = productImageName.split("~")[0];
+        }
+
+        let imageUrl = url.baseImageUrl + productImageName;
 
         return (
             <div className="stock-detail" >

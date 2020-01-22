@@ -196,7 +196,7 @@ class EntityList extends Component {
                     }
                 }
 
-                rowValues.push(object ? entityValue[fieldItem.name.split(".")[1]] : entityValue);
+                rowValues.push(object&&entityValue ? entityValue[fieldItem.name.split(".")[1]] : entityValue);
             }
 
             rows.push(

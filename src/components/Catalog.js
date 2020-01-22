@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import CatalogItem from './CatalogItem'
-import NavButton from './NavButton'
 import '../css/Catalog.css'
 import { BrowserRouter as Router, Route, Link, Switch, withRouter } from 'react-router-dom'
 import * as actions from '../redux/actionCreators'
@@ -10,11 +9,9 @@ import * as menus from '../constant/Menus'
 import ActionButtons from './ActionButtons'
 import InputField from './InputField'
 import * as componentUtil from '../utils/ComponentUtil'
-import ComboBoxes from './ComboBoxes'
 import ContentTitle from './ContentTitle'
 import * as stringUtil from '../utils/StringUtil'
 import NavButtons from './NavButtons'
-import InstantTable from './InstantTable'
 import ComboBox from './ComboBox'
 import GridComponent from './GridComponent'
 
@@ -266,7 +263,7 @@ class Catalog extends Component {
                     onKeyUp={this.handleInputNameChange}
                     type="search" id="input-product-name" />
                 ,
-                <ComboBox 
+                <ComboBox
                     defaultValue={this.state.requestOrderBy + "-" + this.state.requestOrderType}
                     onChange={this.handleOrderChange}
                     options={filterProductOption} id={"select-order"}
@@ -285,7 +282,7 @@ class Catalog extends Component {
                 , <div></div>,
                 <ActionButtons style={{ margin: '5px' }} buttonsData={actionButtons} />
 
-            ]} /> 
+            ]} />
             <p></p>
         </div>;
 
@@ -310,7 +307,10 @@ class Catalog extends Component {
                             const cartButtonsData = [
                                 { text: "x", status: "danger", onClick: () => this.addToCart(product, (qty * (-1))), id: "btn-add-cart-" + product.id },
                                 { text: "-", status: "warning", onClick: () => this.addToCart(product, -1), id: "btn-add-cart-" + product.id },
-                                { text: qty, status: 'success', id: "info-cart-" + product.id },
+                                {
+                                    text: qty, id: "info-cart-" + product.id,
+                                    style: { backgroundColor: 'white', border: 'none' ,color:'black',fontSize:'1.2em'}
+                                },
                                 { text: "+", status: 'success', onClick: () => this.addToCart(product, 1), id: "btn-reduce-cart-" + product.id }
                             ];
 

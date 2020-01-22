@@ -9,7 +9,7 @@
 }
 
 .nav-button:hover{
-    background-color: darkturquoise;
+    background-color: lightsteelblue;
     color:white;
     cursor: pointer;
 }
@@ -22,5 +22,5 @@
 .nav-button-wrapper{
     margin:5px;
     padding:3px;
-    background-color: darkcyan
+   
 }

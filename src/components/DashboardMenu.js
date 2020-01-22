@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import '../css/Menu.css'
 import '../css/Common.css'
+import Tab from './Tab'
 import InstantTable from './InstantTable';
 
 class DashboardMenu extends Component {
@@ -10,6 +11,10 @@ class DashboardMenu extends Component {
         this.goToMenu = (menuCode_) => {
 
             this.props.goToMenu(menuCode_);
+        }
+
+        this.isActive = (code) => {
+            return this.props.currentMenu == code;
         }
     }
 
@@ -21,12 +26,13 @@ class DashboardMenu extends Component {
 
         return (
             <div className="dashboard-menu" >
-                <div className="menu-container">
-                    <MenuItem key="menu-trxIn" onClick={() => this.goToMenu('trxIn')} text="Product Supply" />
-                    <MenuItem key="menu-trxOut" onClick={() => this.goToMenu('trxOut')} text="Purchase" />
-                    <MenuItem key="menu-cashflow" onClick={() => this.goToMenu('cashflow')} text="Cashflow" />
-                    <MenuItem key="menu-productSales" onClick={() => this.goToMenu('productSales')} text="Product Sales" />
-                </div>
+                <Tab style={{whiteSpace: 'nowrap'}} tabsData={[
+                    { onClick: () => this.goToMenu('main'), active: this.isActive('main'), text: "Home" },
+                    { onClick: () => this.goToMenu('trxIn'), active: this.isActive('trxIn'), text: "Product Supply" }
+                    , { onClick: () => this.goToMenu('trxOut'), active: this.isActive('trxOut'), text: "Purchase" },
+                    { onClick: () => this.goToMenu('cashflow'), active: this.isActive('cashflow'), text: "Cashflow" },
+                    { onClick: () => this.goToMenu('productSales'), active: this.isActive('productSales'), text: "Product Sales" }]}
+                />
             </div >
         )
     }
@@ -35,8 +41,8 @@ class DashboardMenu extends Component {
 
 const MenuItem = (props) => {
     return (
-        <div onClick={props.onClick} className="dashboard-menu-item  paper-shadow  "> 
-           <h3>{props.text}</h3></div>
+        <div onClick={props.onClick} className="dashboard-menu-item  paper-shadow  ">
+            <h3>{props.text}</h3></div>
     )
 }
 

@@ -21,7 +21,7 @@ class ActionButtons extends Component {
                             className.concat(" ").concat(buttonData.status).concat(" ").concat(buttonData.className);
                     }
                     return (
-                        <button className={className} key={"btnKey-" + stringUtil.uniqueId()} onClick={buttonData.onClick}>{buttonData.text}</button>
+                        <button style={{...buttonData.style}} className={className} key={"btnKey-" + stringUtil.uniqueId()} onClick={buttonData.onClick}>{buttonData.text}</button>
                     )
                 })}
             </div>);

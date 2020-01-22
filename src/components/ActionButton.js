@@ -19,8 +19,8 @@ class ActionButton extends Component {
             className=className.concat(" ").concat(this.props.status);
         }
         return (
-            <div style={this.props.style}>
-                <button className={className} id={this.props.id} onClick={this.onClick}>{this.props.text}</button>
+            <div >
+                <button style={{...this.props.style}} className={className} id={this.props.id} onClick={this.onClick}>{this.props.text}</button>
             </div>
         )
     }

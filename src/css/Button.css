@@ -6,3 +6,31 @@
 .action-button{
     margin:1px
 }
+
+button{ 
+    padding-right:7px;
+    padding-left:7px;
+    padding-top:5px;
+    padding-bottom:5px;
+    border:none;
+    border-width : 2px ;
+    color: white;
+    background-color: dimgray; 
+}
+
+ button:hover{
+    cursor: pointer;
+    background-color: dimgray;
+    color: khaki
+}
+.danger{ background-color:  red; color:white }
+.danger:hover{  background-color:  red; }
+
+.warning{  background-color:  orange; color:white}
+.warning:hover{  background-color:  orange; }
+
+.success{  background-color: green  ; color:white}
+.success:hover{  background-color:  green; }
+
+.submit{  background-color:  royalblue; color: white}
+.submit:hover{  background-color:  royalblue; }

@@ -25,7 +25,7 @@ class Dashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            featureCode: null
+            featureCode: 'main'
         }
 
         this.setFeatureCode = (code) => {
@@ -83,7 +83,7 @@ class Dashboard extends Component {
             <Label text={stringUtil.beautifyNominal(cashflowInfoIn.count)} />
         </div>
 
-        let mainComponent = <div><DashboardMenu goToMenu={this.setFeatureCode} />
+        let mainComponent = <div>
             <div className="cashflow-info">
                 <h3>Cashflow Info</h3>
                 <ComboBoxes values={[
@@ -133,6 +133,7 @@ class Dashboard extends Component {
             return (
                 <div className="section-container"> 
                     <ContentTitle title="Admin Page" description = "Have a Nice Shop Keeping!" />
+                    <DashboardMenu currentMenu={this.state.featureCode} goToMenu={this.setFeatureCode} />
                     {mainComponent}
                 </div>
             )
