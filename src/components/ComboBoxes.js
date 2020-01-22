@@ -21,8 +21,13 @@ class ComboBoxes extends Component {
 
     render() {
         let comboBoxes = [];
+         
+
         if (this.props.values) { comboBoxes = this.props.values; }
-        return (<div className="input-field ">
+
+        const gridAutoColumns = "auto ".repeat(comboBoxes.length);
+
+        return (<div style={{ width:'min-content',display:'grid', gridTemplateColumns:gridAutoColumns}} >
             {comboBoxes.map(comboBox => {
                 let options = [];
                 if (comboBox.options) { options = comboBox.options; }

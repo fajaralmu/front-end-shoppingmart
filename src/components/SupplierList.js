@@ -13,6 +13,9 @@ import * as stringUtil from '../utils/StringUtil'
 import * as url from '../constant/Url'
 import Card from './Card'
 import ContentTitle from './ContentTitle'
+import NavButtons from './NavButtons'
+import InstantTable from './InstantTable'
+import GridComponent from './GridComponent'
 
 class SupplierList extends Component {
 
@@ -79,6 +82,38 @@ class SupplierList extends Component {
             this.getSupplierList(supplierPage);
         }
 
+        this.generateNavButtonsData = () => {
+            let suppliers = this.props.suppliersData.entities == null ? [] : this.props.suppliersData.entities;
+            let buttonData = [];
+            if (suppliers.length > 0) {
+                buttonData = componentUtil.createNavButtons(this.props.suppliersData.totalData / this.state.limit, this.state.supplierPage);
+
+            }
+
+            const navButtonsData = [{
+                id: "btn-prev",
+                buttonClick: this.prev,
+                text: "previous"
+            }];
+            for (let i = 0; i < buttonData.length; i++) {
+                const b = buttonData[i];
+                let active = (b.value == this.state.supplierPage)
+                navButtonsData.push({
+                    id: b.value,
+                    active: active,
+                    buttonClick: () => this.getSupplierList(b.value),
+                    text: b.text
+                });
+            }
+
+            navButtonsData.push({
+                id: "btn-next",
+                buttonClick: this.next,
+                text: "next"
+            });
+            return navButtonsData;
+        }
+
     }
 
     componentWillMount() {
@@ -102,40 +137,36 @@ class SupplierList extends Component {
     render() {
 
         let suppliers = this.props.suppliersData.entities == null ? [] : this.props.suppliersData.entities;
-        let buttonData = [];
-        if (suppliers.length > 0) {
-            buttonData = componentUtil.createNavButtons(this.props.suppliersData.totalData / this.state.limit ,this.state.supplierPage);
-           
-        }
+
 
 
         let filterBox = <div className="filter-box">
-            <InputField placeholder="search by supplier name" onKeyUp={this.handleInputNameChange} type="search"
-                id="input-supplier-name" />
-            <div className="input-field">
-                <ComboBox defaultValue="00" onChange={this.handleOrderChange}
-                    options={filterSupplierOptions} key="k-select-order" id="select-order" />
-            </div>
-            <ActionButtons key="btns" buttonsData={[{
-                text: "Search", status: "success", onClick: () => this.getSupplierList(0), id: "btn-search"
-            }, {
-                text: "Clear", status: 'warning', onClick: this.clearField, id: "Clear"
-            }]} />
+            <GridComponent cols={2} style={{width:'min-content'}} items={
+                [
+                    <InputField placeholder="search by supplier name" onKeyUp={this.handleInputNameChange} type="search"
+                        id="input-supplier-name" />,
+                    <ComboBox defaultValue="00" onChange={this.handleOrderChange}
+                        options={filterSupplierOptions} key="k-select-order" id="select-order" />,
+                    <ActionButtons style={{ margin: '5px' }} key="btns" buttonsData={[{
+                        text: "Search", status: "success", onClick: () => this.getSupplierList(0), id: "btn-search"
+                    }, {
+                        text: "Clear", status: 'warning', onClick: this.clearField, id: "Clear"
+                    }]} />
+                ]
+            } />
+
+
 
             <p></p>
         </div>;
 
         let supplierCatalog = (<div className="section-container" id="catalog-main" key="catalog-main">
-            <ContentTitle title="Supplier List Page" description="List of our partners"/>
-            <div className="nav-containter">
-                <NavButton id="btn-prv-" key={stringUtil.uniqueId()} buttonClick={this.prev} key="nav-prev" text="<" />
-                {buttonData.map(b => {
-                    let active = (b.value == this.state.supplierPage)
-                    return <NavButton id={b.value} key={stringUtil.uniqueId()} active={active} buttonClick={() => this.getSupplierList(b.value)} value={b.value} text={b.text} />
-                })}
-                <NavButton id="btn-nxt" key={stringUtil.uniqueId()} buttonClick={this.next} key="nav-next" text=">" />
-            </div>
+            <ContentTitle title="Supplier List Page" description="List of our partners" />
+
+            <NavButtons buttonsData={this.generateNavButtonsData()} />
+
             {filterBox}
+
             <div className="supplier-panel  grid-container">
                 {suppliers.map(
                     supplier => {
@@ -148,7 +179,7 @@ class SupplierList extends Component {
 
                         return <Card
                             icon={imageUrl}
-                            style={{ float: 'left' }}
+                            style={{ float: 'left', color: 'dimgrey' }}
                             key={supplier.id}
                             content={content}
                         />
@@ -157,10 +188,10 @@ class SupplierList extends Component {
             </div>
         </div>);
 
-        return ( supplierCatalog )
+        return (supplierCatalog)
     }
 }
- 
+
 
 const filterSupplierOptions = [
     { value: "00", text: "-Select Order-" },

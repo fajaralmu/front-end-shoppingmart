@@ -25,7 +25,7 @@ class Card extends Component {
             }
         }
 
-        let className= "card  paper-shadow";
+        let className= "card ";
         if(this.props.className){
             className+=" "+this.props.className;
         }

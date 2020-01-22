@@ -71,25 +71,19 @@ class ProductDetail extends Component {
 
         }
 
-        const loadingChars = ".".repeat(20);
+         
 
         if (product == null) {
-            product = {
-                name: loadingChars,
-                price: loadingChars,
-                count: loadingChars,
-                description: loadingChars,
-                category: {
-                    name: loadingChars
-                }
-            }
+           return(
+            <ContentTitle title="Please wait.."/>
+           )
         }
         let supplierListPanel = <p></p>
         let supplierShown = this.state.supplierShown ? true : false;
         if (supplierShown && product.suppliers) {
-            supplierListPanel = <div className="detail-container">
+            supplierListPanel = <div className="detail-supplier-container">
                 <h3>Supplier List</h3>
-                <table className="suppllier-container">
+                <table className="supplier-container">
                     <tbody>
                         {product.suppliers.map(
                             supplier => {
@@ -110,16 +104,15 @@ class ProductDetail extends Component {
         return (
             <div className="section-container" >
 
-                <ContentTitle title={product.name} />
+                <ContentTitle title={product.name} 
+                 description={product.description}/>
                 <div className="product-desc">
                     <InstantTable disabled={true}
                         rows={[
-                            { id: "row-img", values: [imageComponent], CS: [2] },
-                            { id: "row-name", values: ["Name", product.name] },
-                            { id: "row-price", values: ["Price", beautifyNominal(product.price)] },
-                            { id: "row-count", values: ["Item(s)", beautifyNominal(product.count) + " " + (product.unit ? product.unit.name : "")] },
-                            { id: "row-cat", values: ["Category", product.category.name] },
-                            { id: "row-desc", values: ["Description", product.description] }
+                            { values: [imageComponent], CS: [2] },
+                            { values: ["Price", beautifyNominal(product.price)] },
+                            { values: ["Item(s)", beautifyNominal(product.count) + " " + (product.unit ? product.unit.name : "")] },
+                            { values: ["Category", product.category.name] } 
                         ]} />
 
                     <ActionButtons buttonsData={[{

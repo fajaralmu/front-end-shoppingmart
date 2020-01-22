@@ -75,7 +75,7 @@ class Login extends Component {
                     <InputField id="username-field" onKeyUp={this.handleUsername} />
                     <Label text="Password" />
                     <InputField id="password-field" type="password" onKeyUp={this.handlePassword} />
-                    <ActionButton id="btn-login" status="submit" onClick={this.doLogin} text="Login" />
+                    <ActionButton style={{margin:'5px'}} id="btn-login" status="submit" onClick={this.doLogin} text="Login" />
                 </div>
             </div>
         )

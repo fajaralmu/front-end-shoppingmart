@@ -1,18 +1,30 @@
 .chat-item{
-    margin: 5px;
-    background-color: wheat;
+    margin-right: 15px;
+    margin-bottom: 10px;
+    background-color: lightgreen;
     color:darkblue;
     text-align: left;
     padding:3px;
 }
 
 .admin{
-    background-color: cadetblue;
+    background-color: lightyellow;
+    margin-right: 40px;
+}
+
+.user{
+    margin-left: 40px;
 }
 .chat-container{
-    background-color: white;
+    
   /*  max-height: 600px;
      overflow: scroll;*/
       width: 50%;
       margin: 5px;
+}
+
+#chat-room{
+    background-color: lightsteelblue;
+    padding:3px;
+    margin:5px
 }

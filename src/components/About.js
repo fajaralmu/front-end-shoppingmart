@@ -22,7 +22,7 @@ class About extends Component {
         return (
             <div  className="section-container about-section  " > 
                 <ContentTitle title="About Us" />
-                <div className="rounded box-shadow abount-content" style={{padding:'5px',  
+                <div className=" abount-content" style={{padding:'5px',  
                     width: '500px',
                     fontFamily: 'Consolas', margin:'5px'}}>
                 <InstantTable

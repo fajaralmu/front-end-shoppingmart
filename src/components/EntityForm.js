@@ -379,7 +379,7 @@ class EntityForm extends Component {
         const entityExist = this.props.managedEntity != null || this.state.managedEntity;
 
 
-        let formFields = <div className="entity-form  paper-shadow">
+        let formFields = <div className="entity-form  ">
             {formData.map(
                 data => {
                     const parentPropName = data.name.split(".")[0];

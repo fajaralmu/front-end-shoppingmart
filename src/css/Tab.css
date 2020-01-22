@@ -1,0 +1,19 @@
+.tab-item-active{
+    border-top: solid 1px lightgray;
+    border-left: solid 1px lightgray;
+    border-right: solid 1px lightgray;
+}
+.tab-item{
+    border-bottom: solid 1px lightgray;
+}
+.tab-item:hover{
+    cursor: pointer;
+    border: solid 1px lightgray;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.tab-element{
+    padding: 10px;
+    text-align: center
+}

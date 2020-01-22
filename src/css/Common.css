@@ -32,16 +32,14 @@ h1{
 }
 
 .panel-title{
-    background-color: darkolivegreen;
-    color:lemonchiffon;
+    background-color: darkcyan;
+    color:lightyellow;
     font-size: 1.1em; 
     padding: 5px;
 } 
 .section-container{
-    margin-left: 5%;
-    text-align: left;
-    padding-bottom: 10px;
-    width: 80%
+    margin:3%;
+    text-align: left; 
 } 
 .clickable:hover{
     cursor: pointer;
@@ -67,5 +65,5 @@ h1{
 }
 
 body{
-    background-color: wheat
+    background-color: lightgrey
 }

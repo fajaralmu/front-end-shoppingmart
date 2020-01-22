@@ -23,6 +23,7 @@ import ChatRoom from './components/ChatRoom';
 import CartInfo from './components/CartInfo';
 import CartDetail from './components/CartDetail';
 import Management from './components/Management';
+import ContentTitle from './components/ContentTitle';
 
 
 class App extends Component {
@@ -171,8 +172,7 @@ class App extends Component {
               menus={menus} />
           </div>
          
-          <div id="main-content">
-         
+          <div id="main-content" > 
             <Switch>
               <Route exact path="/" render={
                 (renderProps) =>

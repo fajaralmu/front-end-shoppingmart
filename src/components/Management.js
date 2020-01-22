@@ -8,6 +8,7 @@ import ContentTitle from './ContentTitle'
 import ActionButtons from './ActionButtons';
 import * as entityConfig from '../utils/EntityConfigurations'
 import EntityList from './EntityList';
+import Tab from './Tab';
 
 class Management extends Component {
     constructor(props) {
@@ -15,7 +16,7 @@ class Management extends Component {
         this.state = {
             entityList: [],
             currentPage: 0,
-            entityConfig: null
+            entityConfig: { name: "" }
         }
         this.validateLoginStatus = () => {
             if (this.props.loginStatus != true) this.props.history.push("/login");
@@ -58,13 +59,16 @@ class Management extends Component {
             return [
                 {
                     text: "Product",
+                    active: this.state.entityConfig.entityName == "product",
                     onClick: () => { this.loadEntityManagement(entityConfig.productConfig) }
                 },
                 {
+                    active: this.state.entityConfig.entityName == "supplier",
                     text: "Supplier",
                     onClick: () => { this.loadEntityManagement(entityConfig.supplierList) }
                 },
                 {
+                    active: this.state.entityConfig.entityName == "customer",
                     text: "Customer",
                     onClick: () => { this.loadEntityManagement(entityConfig.customerList) }
                 }
@@ -78,7 +82,7 @@ class Management extends Component {
 
             let newRecord = flag == "addNew";
 
-            this.props.updateEntity({ entityName: name, entity: entity, isNewRecord:newRecord }, this, function (ref) {
+            this.props.updateEntity({ entityName: name, entity: entity, isNewRecord: newRecord }, this, function (ref) {
                 ref.callbackHandleUpdate();
             });
         }
@@ -111,11 +115,11 @@ class Management extends Component {
 
         return (
             <div className="section-container">
-                <ContentTitle title="Management" />
+                <ContentTitle title={"Management "+(this.state.entityConfig.title?this.state.entityConfig.title:"")} />
                 <div className="management-container">
-                    <ActionButtons buttonsData={buttonsData} />
+                    <Tab tabsData={buttonsData} />
                     <EntityList currentPage={this.state.currentPage}
-                        app = {this.props.app}
+                        app={this.props.app}
                         getEntityInPage={this.getEntityInPage}
                         entityConfig={this.props.entitiesData.entityConfig}
                         entitiesData={this.props.entitiesData}

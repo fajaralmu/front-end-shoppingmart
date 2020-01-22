@@ -42,7 +42,7 @@ class StockListTable extends Component {
         let tableStyle = { fontFamily: 'consolas', fontSize: '0.8em' }
 
         return (
-            <div className="entity-list">
+            <div className="entity-list-container">
                 <table className="entity-list-table" style={tableStyle}>
                     <thead>
                         <tr key={stringUtil.uniqueId() + "-stock"}>

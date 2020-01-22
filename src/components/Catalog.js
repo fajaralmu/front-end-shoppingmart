@@ -13,6 +13,10 @@ import * as componentUtil from '../utils/ComponentUtil'
 import ComboBoxes from './ComboBoxes'
 import ContentTitle from './ContentTitle'
 import * as stringUtil from '../utils/StringUtil'
+import NavButtons from './NavButtons'
+import InstantTable from './InstantTable'
+import ComboBox from './ComboBox'
+import GridComponent from './GridComponent'
 
 class Catalog extends Component {
 
@@ -34,9 +38,16 @@ class Catalog extends Component {
             requestCategoryId: null,
             selectedProduct: null,
             buttonCount: 0,
-            enableShopping: false
+            enableShopping: false,
+            activeId: null
 
         };
+
+        this.focusToActiveField = () => {
+            if (componentUtil._byId(this.state.activeId)) {
+                componentUtil._byId(this.state.activeId).focus();
+            }
+        }
 
         this.getProductInCart = (id) => {
             for (let i = 0; i < this.props.cart.length; i++) {
@@ -92,6 +103,7 @@ class Catalog extends Component {
         }
 
         this.handleOrderChange = (value) => {
+
             if (value == null || value == "00" || value.length == 0 || value.split("-").length != 2) {
                 this.setState({ requestOrderBy: null });
                 this.setState({ requestOrderType: null });
@@ -104,9 +116,9 @@ class Catalog extends Component {
 
         }
 
-        this.handleInputNameChange = (value) => {
-            console.log("==input name changed==");
-            this.setState({ requestProductName: value });
+        this.handleInputNameChange = (value, id) => {
+            console.log("==input name changed==", id);
+            this.setState({ requestProductName: value, activeId: id });
         }
 
         this.clearField = () => {
@@ -172,6 +184,37 @@ class Catalog extends Component {
             this.props.app.setEnableShopping(componentUtil._byId(id).checked)
         }
 
+        this.generateNavButtonsData = () => {
+            let products = this.props.catalogData.entities == null ? [] : this.props.catalogData.entities;
+            let buttonData = [];
+            if (products.length > 0)
+                buttonData = componentUtil.createNavButtons(this.props.catalogData.totalData / this.state.limit,
+                    this.state.catalogPage);
+
+            const navButtonsData = [{
+                id: "btn-prev",
+                buttonClick: this.prev,
+                text: "previous"
+            }];
+            for (let i = 0; i < buttonData.length; i++) {
+                const b = buttonData[i];
+                let active = (b.value == this.state.catalogPage);
+                navButtonsData.push({
+                    id: b.value,
+                    active: active,
+                    buttonClick: () => this.getProductCatalog(b.value),
+                    text: b.text
+                });
+            }
+
+            navButtonsData.push({
+                id: "btn-next",
+                buttonClick: this.next,
+                text: "next"
+            });
+            return navButtonsData;
+        }
+
     }
 
     componentWillMount() {
@@ -182,7 +225,7 @@ class Catalog extends Component {
 
     }
 
-    componentDidUpdate() { 
+    componentDidUpdate() {
         if (this.state.firstLoad && this.props.catalogData.filter != null) {
             this.setState({
                 limit: this.props.catalogData.filter.limit,
@@ -190,16 +233,14 @@ class Catalog extends Component {
                 firstLoad: false
             });
         }
+        this.focusToActiveField();
     }
 
 
     render() {
 
         let products = this.props.catalogData.entities == null ? [] : this.props.catalogData.entities;
-        let buttonData = [];
-        if (products.length > 0)
-            buttonData = componentUtil.createNavButtons(this.props.catalogData.totalData / this.state.limit,
-                this.state.catalogPage);
+
 
         let categories = baseCategoryValues;
 
@@ -219,40 +260,41 @@ class Catalog extends Component {
         }
 
         let filterBox = <div className="filter-box">
-            <InputField placeholder="search by product name" onKeyUp={this.handleInputNameChange} type="search" id="input-product-name" />
-            <ComboBoxes
-                values={[{
-                    defaultValue: this.state.requestOrderBy, handleOnChange: this.handleOrderChange,
-                    options: filterProductOption, id: "select-order"
-                }, {
-                    defaultValue: this.state.requestCategoryId, handleOnChange: this.handleCategoryChange,
-                    options: categories, id: "select-category"
-                }]}
+            <GridComponent style={{ width: '50%' }} cols={3} items={[
+                <InputField placeholder="search by product name"
+                    value={this.state.requestProductName}
+                    onKeyUp={this.handleInputNameChange}
+                    type="search" id="input-product-name" />
+                ,
+                <ComboBox 
+                    defaultValue={this.state.requestOrderBy + "-" + this.state.requestOrderType}
+                    onChange={this.handleOrderChange}
+                    options={filterProductOption} id={"select-order"}
+                />,
+                <ComboBox
+                    defaultValue={this.state.requestCategoryId}
+                    onChange={this.handleCategoryChange}
+                    options={categories} id="select-category"
+                />,
+                <InputField checked={this.state.requestWithStock} onChange={this.handleChangeWithStockOption}
+                    type="checkbox" id="checkbox-with-stock"
+                    text="Inculde Remaining Stock" />
+                , <InputField checked={this.props.enableShopping} onChange={this.handleChangeEnableShoppingOption}
+                    type="checkbox" id="checkbox-enable-cart"
+                    text="I Want to List My Needs" />
+                , <div></div>,
+                <ActionButtons style={{ margin: '5px' }} buttonsData={actionButtons} />
 
-            />
-            <InputField onChange={this.handleChangeWithStockOption} type="checkbox" id="checkbox-with-stock" text="Inculde Remaining Stock" />
-            <InputField onChange={this.handleChangeEnableShoppingOption} type="checkbox" id="checkbox-enable-cart" text="I Want to List My Needs" />
-            <ActionButtons buttonsData={actionButtons} />
+            ]} /> 
             <p></p>
         </div>;
 
+
+
         let productCatalog = (<div className="section-container" id="catalog-main" key="catalog-main">
-
             <ContentTitle title="Catalog Page" description="Choose your favourite products" />
-            <div className="nav-containter">
-                <p>
-                    {"FILTER ORDER: " + (this.state.requestOrderBy ? this.state.requestOrderBy : "-")}
-                    {" | FILTER CATEGORY: " + (this.state.requestCategoryId ? this.state.requestCategoryId : "-")}
-                </p>
+            <NavButtons buttonsData={this.generateNavButtonsData()} />
 
-                <NavButton id="btn-prv" buttonClick={this.prev} key="nav-prev" text="<" />
-                {buttonData.map(b => {
-                    let active = (b.value == this.state.catalogPage)
-                    return <NavButton id={b.value} active={active} buttonClick={() => this.getProductCatalog(b.value)} key={b.value} text={b.text} />
-                })}
-                <NavButton id="btn-nxt" buttonClick={this.next} key="nav-next" text=">" />
-
-            </div>
             {filterBox}
             <div className="grid-container" >
                 {products.map(

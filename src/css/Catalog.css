@@ -11,9 +11,8 @@
 }
 .filter-box{
   
-    background-color: antiquewhite;
-    padding: 5px;
-    margin:5px
+    border:     solid 1px lightgray;
+    margin:     5px;
 }
 
 .catalog-item-title{

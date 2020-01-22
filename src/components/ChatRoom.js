@@ -4,16 +4,18 @@ import * as actions from '../redux/actionCreators'
 import { _byId } from '../utils/ComponentUtil'
 import InputField from './InputField';
 import ActionButton from './ActionButton';
-import SockJsClient from 'react-stomp'; 
+import SockJsClient from 'react-stomp';
 import ChatList from './CharList';
 import ContentTitle from './ContentTitle';
+import Label from './Label';
+import GridComponent from './GridComponent'
 
 class ChatRoom extends Component {
     constructor(props) {
         super(props);
-        this.state = { messages: null , username:null, activeId:null}
+        this.state = { messages: null, username: null, activeId: null }
         this.sendChatMessage = () => {
-            if(!_byId("input-msg").value){
+            if (!_byId("input-msg").value) {
                 alert("Message must not be null");
                 return;
             }
@@ -23,7 +25,7 @@ class ChatRoom extends Component {
 
         this.handleMessage = (response) => {
             console.log("Responses handleMessage: ", response.code);
-            console.log("LOCAL STORAGE:",localStorage.getItem("requestId"))
+            console.log("LOCAL STORAGE:", localStorage.getItem("requestId"))
             if (response.code != localStorage.getItem("requestId")) {
                 return;
             }
@@ -31,8 +33,8 @@ class ChatRoom extends Component {
             // this.setState({ messages: response.entities });
         }
 
-        this.changeUsername = (value,id)=>{
-            this.setState({username:value, activeId:id});
+        this.changeUsername = (value, id) => {
+            this.setState({ username: value, activeId: id });
         }
 
     }
@@ -41,36 +43,45 @@ class ChatRoom extends Component {
         this.props.setMenuCode('chatroom');
         document.title = "Chat Room";
         this.props.getMessages(this.props.app);
-        if(this.props.userAlias){
-            this.setState({username:this.props.userAlias})
+        if (this.props.userAlias) {
+            this.setState({ username: this.props.userAlias })
         }
     }
 
-    componentDidUpdate(){
-        if(this.state.activeId && _byId(this.state.activeId)){
+    componentDidUpdate() {
+        if (this.state.activeId && _byId(this.state.activeId)) {
             _byId(this.state.activeId).focus();
         }
     }
 
     render() {
-        let userAlias = this.props.userAlias?this.props.userAlias:"";
+        let userAlias = this.props.userAlias ? this.props.userAlias : "";
 
         return (
             <div className="section-container">
-            <div style={{textAlign:'left'}} id="chat-room">
                 <ContentTitle title="What Do You Feel?" description=
-                "Please Give Us Any Feedback!" />
-                <InputField value={userAlias} onKeyUp={this.changeUsername} id="input-username" placeholder="identify your name" />
-                <div className="chat-container"  >
-                    <ChatList username={this.state.username} messages={this.props.messages} />
-                </div>
-                <InputField style={{ width: '50%' }}  placeholder="input message" id="input-msg" />
-                <ActionButton onClick={this.sendChatMessage} text="send" /> 
+                    {"Identified as [" + this.state.username + "]"} />
+                <InputField
+                    value={userAlias}
+                    onKeyUp={this.changeUsername}
+                    id="input-username"
+                    placeholder="identify your name" />
+                <div style={{ textAlign: 'left' }} id="chat-room">
 
-                <SockJsClient url='http://localhost:8080/universal-good-shop/shop-app' topics={['/wsResp/messages']}
-                    onMessage={(msg) => { this.handleMessage(msg) }}
-                    ref={(client) => { this.clientRef = client }} />
-            </div>
+                    <div className="chat-container"  >
+                        <ChatList username={this.state.username} messages={this.props.messages} />
+                    </div>
+
+                    <GridComponent style={{ width: '50%', textAlign: 'right' }} items={[
+                        <InputField style={{ width: '130%' }} type="textarea" placeholder="input message" id="input-msg" />,
+                        <ActionButton style={{ margin: '5px' }} status="success" onClick={this.sendChatMessage} text="send" />
+
+                    ]} />
+
+                    <SockJsClient url='http://localhost:8080/universal-good-shop/shop-app' topics={['/wsResp/messages']}
+                        onMessage={(msg) => { this.handleMessage(msg) }}
+                        ref={(client) => { this.clientRef = client }} />
+                </div>
             </div>
         )
     }
@@ -87,7 +98,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
     sendChatMessage: (message, username, app) => dispatch(actions.sendChatMessage(message, username, app)),
     storeChatMessageLocally: (messages) => dispatch(actions.storeMessageLocally(messages)),
-    getMessages : (app)=> dispatch(actions.getMessageList(app))
+    getMessages: (app) => dispatch(actions.getMessageList(app))
 
 })
 export default connect(

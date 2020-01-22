@@ -1,12 +1,17 @@
 .entity-list {
-    margin :5px;
-   
+    margin :5px; 
+}
 
+.entity-list-container{
+      width: 100%;
+      overflow: scroll;
+      border:solid 1px lightgray;
+      margin: 5px
 }
 
 .entity-list-table{
     table-layout: fixed; 
-    background-color: antiquewhite
+    background-color:  white
 }
 
 .entity-list-table  tr{
@@ -33,7 +38,8 @@
 
 .entity-form{
     text-align: left;
-    background-color: antiquewhite;
+    border: solid 1px lightgray;
+    background-color: white;
     padding: 5px;
     margin: 5px
 }

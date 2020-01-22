@@ -57,10 +57,13 @@
 }
 .dropdown-item{
     margin : 10px;  
+    font-size: 0.6em;
+    transition-duration: 100ms;
     color:gray
 }
 .dropdown-item-hovered{
     margin : 10px; 
-    color:blue;
+    font-size: 0.8em;
+    color:black;
     cursor: pointer;
 }

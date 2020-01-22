@@ -218,8 +218,8 @@ class TransactionOut extends Component {
         let detailStock = "", message = "", totalPrice = this.calculateTotalPrice();
 
         if (this.props.productFlowStock != null) {
-            detailStock = <div className="form-panel rounded">
-                <div className="panel-title rounded-top">Product Detail</div>
+            detailStock = <div className="form-panel  ">
+                <div className="panel-title ">Product Detail</div>
                 <DetailStockPanel productFlowStock={this.props.productFlowStock} />
             </div>;
         }
@@ -248,8 +248,8 @@ class TransactionOut extends Component {
 
         let formComponent = <table><tbody>
             <tr valign="top"><td>
-                <div className="form-panel rounded">
-                    <div className="panel-title rounded-top">Transaction Detail</div>
+                <div className="form-panel ">
+                    <div className="panel-title ">Transaction Detail</div>
                     <InstantTable
                         disabled={true} rows={[
                             {

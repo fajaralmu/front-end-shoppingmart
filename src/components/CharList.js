@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import InstantTable from './InstantTable';
 import Label from './Label';
 import '../css/Chat.css'
+import GridComponent from './GridComponent';
 
 class ChatList extends Component {
     constructor(props) {
@@ -14,26 +15,24 @@ class ChatList extends Component {
         let chatRows = [];
         for (let i = 0; i < chats.length; i++) {
             const chat = chats[i];
-            chatRows.push({
-                values: [
-                    <ChatItem message={chat} username={this.props.username} />
-                ]
-            })
+            chatRows.push(
+                <ChatItem message={chat} username={this.props.username} />
+            )
         }
         return (
-            <InstantTable  rows={chatRows} />)
+            <GridComponent cols={1} items={chatRows} />)
     }
 }
 
 const ChatItem = props => {
-    let className = "chat-item rounded " + (props.message.admin == 1 ? " admin " : "user");
+    let className = "chat-item rounded paper-shadow  " + (props.message.admin == 1 ? " admin " : "user");
     let username = "";
-    if(props.username){
-        username= " ["+props.username+"]";
+    if (props.username) {
+        username = " [" + props.username + "]";
     }
-    let sender = props.message.admin == 1 ? "Admin" : "You"+username;
+    let sender = props.message.admin == 1 ? "Admin" : "You" + username;
     let senderComponent = <span>
-        {sender}<span style={{ marginLeft:'11px',fontSize: '0.7em' , float:'right'}} >     {props.message.date}</span>
+        {sender}<span style={{ marginLeft: '11px', fontSize: '0.7em', float: 'right' }} >{props.message.date}</span>
     </span>
     return (
         <div className={className}>

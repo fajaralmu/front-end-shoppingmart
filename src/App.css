@@ -19,17 +19,19 @@
   table-layout: fixed;
   width: 100%;
   min-height: 85vh;
-  display: grid;
+  display: grid; 
   grid-template-columns: 160px auto;
 }
 
-#main-menu{
-  /**
-  */
+#main-menu{ 
+  background-color: darkcyan;
 }
 
 #main-content{
- 
+  margin-left:10px;
+  margin-right:10px;
+  margin-bottom:10px;
+  background-color: white
 }
 
 /* .App-header {
@@ -43,8 +45,8 @@
   color: white;
 } */
 
-.App-link {
-  color: rgba(165, 42, 42);
+a {
+  color: black;
 }
 
 

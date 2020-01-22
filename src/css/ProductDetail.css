@@ -1,17 +1,16 @@
-.detail-container{
+.detail-supplier-container{
     max-height: 500px;
     overflow: scroll;
     width: 400px;
-    background-color: antiquewhite;
+    background-color: white;
     padding:5px;
-    margin:5px
+    margin:5px;
+    border:solid 1px lightgray
 }
 
-.suppllier-container{
-    background-color: antiquewhite
-}
+ 
 .product-desc{
-    background-color: antiquewhite;
+    background-color: white;
     width: min-content;
     margin:5px
 }

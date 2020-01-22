@@ -38,7 +38,7 @@ class InputField extends Component {
         let type = this.props.type ? this.props.type : "text";
         let placeholder = this.props.placeholder ? this.props.placeholder : "";
         let name = this.props.name ? this.props.name : "";
-        let style = this.props.style ? this.props.style : {}; 
+        let style = this.props.style ? this.props.style : {};
 
         let inputField = <input style={style}
             className="rounded"
@@ -48,10 +48,10 @@ class InputField extends Component {
             type={type}
             onKeyUp={this.handleKeyup}
             placeholder={placeholder}
-            checked={this.props.checked} 
+            checked={this.props.checked}
             onChange={this.onChange}
-            
-            />;
+
+        />;
 
         if (this.props.disabled == true) {
             inputField = <input style={style}
@@ -62,7 +62,7 @@ class InputField extends Component {
                 id={this.props.id}
                 type={type} onKeyUp={this.handleKeyup}
                 placeholder={placeholder}
-                 
+
                 disabled />
         }
 
@@ -82,7 +82,9 @@ class InputField extends Component {
         return (
             <div className="input-field ">
                 {inputField}
-                {this.props.type == "radio" || this.props.type == "checkbox" ? this.props.text : ""}
+                {this.props.type == "radio" || this.props.type == "checkbox" ? <span style={{ fontSize: '0.9em' }}>
+
+                    {this.props.text} </span> : ""}
             </div>
         )
     }

@@ -221,15 +221,14 @@ class EntityList extends Component {
             backgroundColor: 'white',
             paddingTop: '15px',
             margin: '10px'
-        }} className="paper-shadow" buttonsData={buttonsData} />
+        }}  buttonsData={buttonsData} />
 
-        let entityTable = <div style={{ width: '100%', overflow: 'scroll' }}>
+        let entityTable = <div className="entity-list-container">
 
             <InstantTable
                 style={{
                     width: "100%",
-                    margin: "5px",
-                    backgroundColor: "khaki"
+                    margin: "5px", 
                 }}
                 disabled={false} rows={rows} />
         </div>
@@ -238,10 +237,10 @@ class EntityList extends Component {
             <div style={{ textAlign: 'center' }}>
 
                 <div className="entity-container">
-                    <div className="paper-shadow" style={{
+                    <div   style={{
                         backgroundColor: 'white',
                         margin: '10px'
-                    }} ><h2>{this.props.entityConfig.title}</h2></div>
+                    }} > </div>
                     {navButtons}
                     <div className="entityForm">
                         <EntityForm
