@@ -157,7 +157,9 @@ class App extends Component {
 
     let menus = this.setMenus();
  
-
+    let cloudHost = "https://nuswantoroshop.herokuapp.com/";
+    let localHost = "http://localhost:8080/universal-good-shop/";
+    const usedHost = localHost;
     return (
       <div className="App">
         {loadingComponent}
@@ -231,7 +233,7 @@ class App extends Component {
           </div>
          
         </div>
-        <SockJsClient url='http://localhost:8080/universal-good-shop/shop-app' topics={['/wsResp/progress']}
+        <SockJsClient url={usedHost+'shop-app'} topics={['/wsResp/progress']}
           onMessage={(msg) => { this.handleMessage(msg) }}
           ref={(client) => { this.clientRef = client }} />
         <Footer />

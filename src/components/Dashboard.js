@@ -25,7 +25,9 @@ class Dashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            featureCode: 'main'
+            featureCode: 'main',
+            cashflowYear: componentUtil.getCurrentMMYY()[1],
+            cashflowMonth: componentUtil.getCurrentMMYY()[0]
         }
 
         this.setFeatureCode = (code) => {
@@ -35,8 +37,8 @@ class Dashboard extends Component {
             if (this.props.loginStatus != true) this.props.history.push("/login");
         }
         this.getCashflowInfo = () => {
-            let month = document.getElementById("select-month") ? document.getElementById("select-month").value : componentUtil.getCurrentMMYY()[0];
-            let year = document.getElementById("select-year") ? document.getElementById("select-year").value : componentUtil.getCurrentMMYY()[1];
+            let month =  this.state.cashflowMonth;
+            let year = this.state.cashflowYear;
             this.props.getCashflowInfo(month, year, "OUT", this.props.app);
             this.props.getCashflowInfo(month, year, "IN", this.props.app);
 
@@ -57,14 +59,10 @@ class Dashboard extends Component {
     }
 
     render() {
-        let minYear, maxYear = new Date().getFullYear();
-
-        console.log("-trx year-", this.props.transactionYears);
-
+        let minYear, maxYear = new Date().getFullYear();  
 
         minYear = this.props.transactionYears[0];
-        maxYear = this.props.transactionYears[1];
-
+        maxYear = this.props.transactionYears[1]; 
 
         let cashflowInfoIn = this.props.cashflowInfoIn ? this.props.cashflowInfoIn : { amount: "loading...", count: "loading..." };
         let cashflowInfoOut = this.props.cashflowInfoOut ? this.props.cashflowInfoOut : { amount: "loading...", count: "loading..." };
@@ -89,13 +87,15 @@ class Dashboard extends Component {
                 <ComboBoxes values={[
                     {
                         id: "select-month",
-                        defaultValue: componentUtil.getCurrentMMYY()[0],
-                        options: componentUtil.getDropdownOptionsMonth()
+                        defaultValue:  this.state.cashflowMonth? this.state.cashflowMonth: componentUtil.getCurrentMMYY()[0],
+                        options: componentUtil.getDropdownOptionsMonth(),
+                        handleOnChange: (value)=>this.setState({cashflowMonth:value})
                     },
                     {
                         id: "select-year",
-                        defaultValue: componentUtil.getCurrentMMYY()[1],
-                        options: componentUtil.getDropdownOptionsYear(minYear, maxYear)
+                        defaultValue: this.state.cashflowYear? this.state.cashflowYear: componentUtil.getCurrentMMYY()[1],
+                        options: componentUtil.getDropdownOptionsYear(minYear, maxYear),
+                        handleOnChange: (value)=>this.setState({cashflowYear:value})
                     }
                 ]} />
                 <ActionButton status="success" id="btn-get-cashflow-info" text="Search" onClick={this.getCashflowInfo} />

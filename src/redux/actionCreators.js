@@ -1,9 +1,12 @@
 import * as types from './types'
-const apiBaseUrl = "http://localhost:8080/universal-good-shop/api/public/"
-const apiEntityBaseUrl = "http://localhost:8080/universal-good-shop/api/entity/"
-const apiAccount = "http://localhost:8080/universal-good-shop/api/account/"
-const apiAdmin = "http://localhost:8080/universal-good-shop/api/admin/"
-const apiTransaction = "http://localhost:8080/universal-good-shop/api/transaction/";
+const hostCloud = "https://nuswantoroshop.herokuapp.com/";
+const hostLocal = "http://localhost:8080/universal-good-shop/";
+const usedHost = hostLocal;
+const apiBaseUrl = usedHost + "api/public/"
+const apiEntityBaseUrl = usedHost + "api/entity/"
+const apiAccount = usedHost + "api/account/"
+const apiAdmin = usedHost + "api/admin/"
+const apiTransaction = usedHost + "api/transaction/";
 
 export const resetProductStocks = () => {
     return { type: types.RESET_PRODUCT_STOCKS, payload: {}, meta: { type: types.RESET_PRODUCT_STOCKS } };
@@ -50,7 +53,7 @@ export const updateEntity = (request, referer, callback) => {
     return requested;
 }
 
-export const getEntitiesWithCallback = (request, referer, callback) => { 
+export const getEntitiesWithCallback = (request, referer, callback) => {
     referer.props.app.startLoading();
     let requested = {
         type: types.GET_ENTITY_WITH_CALLBACK,
@@ -58,7 +61,7 @@ export const getEntitiesWithCallback = (request, referer, callback) => {
             "entity": request.entityName,
             "filter": {
                 "limit": 10,
-                'fieldsFilter':{}
+                'fieldsFilter': {}
             }
         },
         meta: {

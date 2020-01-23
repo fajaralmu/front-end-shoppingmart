@@ -99,8 +99,9 @@ class Management extends Component {
         }
 
         this.callbackHandleUpdate = () => {
-            this.removeManagedEntity();
             this.refresh();
+            this.removeManagedEntity();
+           
         }
     }
 

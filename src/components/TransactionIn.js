@@ -219,6 +219,8 @@ class TransactionIn
         }
     }
     componentDidMount() {
+        if(this.props.resetPurchaseTransaction)
+            this.props.resetPurchaseTransaction();
         document.title = "Transaction::In";
 
     }

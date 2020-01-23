@@ -3,6 +3,7 @@ import '../css/About.css'
 import '../css/Common.css'
 import * as menus from '../constant/Menus'
 import InstantTable from './InstantTable'
+import * as url from '../constant/Url'
 import '../css/Common.css'
 import ContentTitle from './ContentTitle'
 
@@ -20,24 +21,25 @@ class About extends Component {
 
     render() {
         return (
-            <div  className="section-container about-section  " > 
+            <div className="section-container about-section  " >
                 <ContentTitle title="About Us" />
-                <div className=" abount-content" style={{padding:'5px',  
-                    width: '500px',
-                    fontFamily: 'Consolas', margin:'5px'}}>
-                <InstantTable
-                    rows={[
-                        { values: ["Name","Universal Good Shop"] },
-                        { values: ["Version","1.0.0"] },
-                        { values: ["Description","Friendly shopping mart application"] },
-                        { values: ["Front End Technology","React Js "+React.version +" [Javascript]"] },
-                        { values: ["Back End Technology","Spring Framework [Java]"] },
-                        { values: ["Database","MySql"] },
-                        { values: ["Address","Trikarso, Sruweng, Kebumen"] },
-                        { values: ["Contact","somabangsa@gmail.com"] },
+                <div className=" abount-content" style={{
+                    padding: '5px',
+                    width: '90%',
+                    fontFamily: 'Consolas', margin: '5px'
+                }}>
+                    <InstantTable
+                        rows={[
+                            { values: ["Name", "Universal Good Shop"] },
+                            { values: ["Version", "1.0.0"] },
+                            { values: ["Description", "Friendly shopping mart application"] },
 
-                    ]} /></div>
-            </div>
+
+                        ]} />
+                    <h2>Powered By</h2>
+                    <img style={{ width: '80%' }} src={url.baseResUrl + "POWERED_BY.png"} />
+                </div></div>
+ 
         )
     }
 }

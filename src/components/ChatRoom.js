@@ -56,7 +56,9 @@ class ChatRoom extends Component {
 
     render() {
         let userAlias = this.props.userAlias ? this.props.userAlias : "";
-
+        let cloudHost = "https://nuswantoroshop.herokuapp.com/";
+        let localHost = "http://localhost:8080/universal-good-shop/";
+        const usedHost = localHost;
         return (
             <div className="section-container">
                 <ContentTitle title="What Do You Feel?" description=
@@ -78,7 +80,7 @@ class ChatRoom extends Component {
 
                     ]} />
 
-                    <SockJsClient url='http://localhost:8080/universal-good-shop/shop-app' topics={['/wsResp/messages']}
+                    <SockJsClient url={usedHost+'shop-app'} topics={['/wsResp/messages']}
                         onMessage={(msg) => { this.handleMessage(msg) }}
                         ref={(client) => { this.clientRef = client }} />
                 </div>
