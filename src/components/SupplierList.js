@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux' 
+import { connect } from 'react-redux'
 import '../css/Catalog.css'
 import { BrowserRouter as Router, Route, Link, Switch, withRouter } from 'react-router-dom'
 import * as actions from '../redux/actionCreators'
@@ -22,7 +22,9 @@ class SupplierList extends Component {
         super(props);
         this.state = {
             suppliersData: { entities: [] },
-            limit: 10, totalData: 0, suppliers: [], supplierPage: 0, firstLoad: true, requestOrderBy: null, requestOrderType: null,
+            limit: 10, totalData: 0, suppliers: [],
+            supplierPage: 0, firstLoad: true,
+            requestOrderBy: null, requestOrderType: null,
             requestSupplierName: "",
         };
 
@@ -140,11 +142,11 @@ class SupplierList extends Component {
 
 
         let filterBox = <div className="filter-box">
-            <GridComponent cols={2} style={{width:'min-content'}} items={
+            <GridComponent cols={2} style={{ width: 'min-content' }} items={
                 [
                     <InputField placeholder="search by supplier name" onKeyUp={this.handleInputNameChange} type="search"
                         id="input-supplier-name" />,
-                    <ComboBox defaultValue="00" onChange={this.handleOrderChange}
+                    <ComboBox defaultValue={this.state.requestOrderBy+"-"+this.state.requestOrderType} onChange={this.handleOrderChange}
                         options={filterSupplierOptions} key="k-select-order" id="select-order" />,
                     <ActionButtons style={{ margin: '5px' }} key="btns" buttonsData={[{
                         text: "Search", status: "success", onClick: () => this.getSupplierList(0), id: "btn-search"
