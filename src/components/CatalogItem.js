@@ -15,6 +15,12 @@ class CatalogItem extends Component {
 
     render() {
         let product = this.props.product;
+
+        //check if null
+        if(!product || !product.category || !product.unit){
+            return <h3>Please wait..</h3>
+        }
+
         let productImageUrl = product.imageUrl;
         let imageUrl = url.baseImageUrl + productImageUrl.split("~")[0];
         let content = <div>

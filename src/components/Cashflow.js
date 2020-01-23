@@ -162,8 +162,8 @@ class Cashflow
             cashflowDataRows = cashflowsDataRowsVert;
         }
 
-        let tableStyle = { fontFamily: 'consolas', fontSize: '0.8em' }
-        let cashflowListComponent = <div className="cashflow-list">
+        let tableStyle = { fontFamily: 'consolas', fontSize: '0.8em'}
+        let cashflowListComponent = <div className="cashflow-list" style={{ width:'60vw', overflow: 'scroll' }}>
             <InstantTable valign={chartOrientation == "horizontal" ? "middle" : null} style={tableStyle} rows={cashflowDataRows} />
         </div>
         return (

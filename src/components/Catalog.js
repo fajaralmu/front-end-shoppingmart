@@ -239,8 +239,7 @@ class Catalog extends Component {
         let products = this.props.catalogData.entities == null ? [] : this.props.catalogData.entities;
 
 
-        let categories = baseCategoryValues;
-
+        let categories = [{ value: "00", text: "-all category-" }]; 
         this.props.productCategories.map(category => {
             categories.push({ value: category.id, text: category.name });
         })
@@ -341,9 +340,7 @@ class Catalog extends Component {
 
         return (rendered)
     }
-}
-
-const baseCategoryValues = [{ value: "00", text: "-all category-" }];
+} 
 
 const filterProductOption = [
     { value: "00", text: "-all order-" },

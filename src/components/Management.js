@@ -105,6 +105,10 @@ class Management extends Component {
         }
     }
 
+    componentDidUpdate(){
+        this.validateLoginStatus();
+    }
+
     componentWillMount() {
         this.validateLoginStatus();
         document.title = "Management";
