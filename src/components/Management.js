@@ -75,6 +75,11 @@ class Management extends Component {
                     active: this.checkIfCurrentMenuName("customer"),
                     text: "Customer",
                     onClick: () => { this.loadEntityManagement(entityConfig.customerList) }
+                },
+                {
+                    active: this.checkIfCurrentMenuName("transaction"),
+                    text: "Transaction",
+                    onClick: () => { this.loadEntityManagement(entityConfig.transactionConfig) }
                 }
             ];
         }

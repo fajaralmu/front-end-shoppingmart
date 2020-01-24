@@ -44,6 +44,13 @@ class EntityList extends Component {
         }
 
         this.goToPage = (page, orderObject) => {
+            if (page > this.props.entitiesData.totalData / 10) {
+                page = 0;
+            }
+            if (page < 0) {
+                page = Math.ceil(this.props.entitiesData.totalData / 10 - 1);
+            }
+
             let config = this.props.entityConfig;
             config.filter = this.state.filter;
             if (orderObject != null) {
@@ -192,11 +199,11 @@ class EntityList extends Component {
                     } else if (fieldItem.type == "imageMultiple") {
                         let imgName = entityValue.split("~")[0];
 
-                        entityValue = <img width="60" height="60"  src={url.baseImageUrl + imgName} />
+                        entityValue = <img width="60" height="60" src={url.baseImageUrl + imgName} />
                     }
                 }
 
-                rowValues.push(object&&entityValue ? entityValue[fieldItem.name.split(".")[1]] : entityValue);
+                rowValues.push(object && entityValue ? entityValue[fieldItem.name.split(".")[1]] : entityValue);
             }
 
             rows.push(
@@ -209,35 +216,50 @@ class EntityList extends Component {
             )
         }
 
-        let buttonsData = this.createNavButtons();
+        const buttonsData = this.createNavButtons();
+        const fixButtonData = new Array();
+
+        fixButtonData.push({
+            onClick: () => { this.goToPage(this.props.currentPage + -1) },
+            text: 'previous'
+        })
+
         for (let i = 0; i < buttonsData.length; i++) {
-            buttonsData[i].onClick = () => { this.goToPage(i) }
-            if (i == this.props.currentPage) {
+            buttonsData[i].onClick = () => { this.goToPage(buttonsData[i].value) }
+            if (buttonsData[i].value == this.props.currentPage) {
                 buttonsData[i].status = " btn-active";
             }
+            buttonsData[i].text = buttonsData[i].text;
+
+
+            fixButtonData.push(buttonsData[i]);
         }
+
+        fixButtonData.push({
+            onClick: () => { this.goToPage(this.props.currentPage + 1) },
+            text: 'next'
+        });
 
         let navButtons = <ActionButtons style={{
             backgroundColor: 'white',
             paddingTop: '15px',
             margin: '10px'
-        }}  buttonsData={buttonsData} />
+        }} buttonsData={fixButtonData} />
 
         let entityTable = <div className="entity-list-container">
 
             <InstantTable
                 style={{
                     width: "100%",
-                    margin: "5px", 
+                    margin: "5px",
                 }}
                 disabled={false} rows={rows} />
         </div>
 
         return (
             <div style={{ textAlign: 'center' }}>
-
                 <div className="entity-container">
-                    <div   style={{
+                    <div style={{
                         backgroundColor: 'white',
                         margin: '10px'
                     }} > </div>

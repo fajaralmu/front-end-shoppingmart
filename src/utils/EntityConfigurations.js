@@ -52,6 +52,8 @@ export const productConfig = {
         }
     ]
 }
+
+
 export const supplierList = {
     title: "Supplier",
     entityName: "supplier",
@@ -124,3 +126,41 @@ export const customerList = {
     ]
 }
 
+export const transactionConfig = {
+    title: "Transaction",
+    entityName: "transaction",
+    id: "id",
+    fieldNames: [
+        { name: "code" }, { name: "transactionDate" },
+        { name: "type" }, { name: "supplier.name" },
+        { name: "customer.name" }
+    ],
+    formData: [
+        {
+            lableName: "Transaction Code",
+            inputType: "text",
+            name: "code"
+        },
+        {
+            lableName: "Date",
+            inputType: "text",
+            name: "transactionDate"
+        },
+        {
+            lableName: "Transaction Type",
+            inputType: "text",
+            name: "type"
+        },
+        {
+            lableName: "Supplier",
+            inputType: "text",
+            name: "supplier.name"
+        },
+        {
+            lableName: "Customer",
+            inputType: "text",
+            name: "customer.name", 
+        },
+         
+    ]
+}

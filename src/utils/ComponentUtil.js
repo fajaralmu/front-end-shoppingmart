@@ -56,7 +56,7 @@ export const createNavButtons = (totalButton, currentPage) => {
     if (max != totalButton  ) {
         buttonData.push({
             text: totalButton,
-            value: totalButton  
+            value: totalButton -1 
         });
     }
 
