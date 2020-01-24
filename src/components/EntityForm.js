@@ -379,6 +379,22 @@ class EntityForm extends Component {
         const entityExist = this.props.managedEntity != null || this.state.managedEntity;
 
 
+        let actionButtons = null;
+        if(!this.props.entityConfig.disabled){
+            actionButtons  =   <ActionButtons buttonsData={[
+                {
+                    text: this.props.managedEntity ? "Update" : "Add Record",
+                    onClick: this.handleSubmit,
+                    status:"success"
+                },
+                {
+                    text: "Clear",
+                    status:"warning",
+                    onClick: this.clear
+                }
+            ]} />;
+        }
+
         let formFields = <div className="entity-form  ">
             {formData.map(
                 data => {
@@ -479,20 +495,7 @@ class EntityForm extends Component {
                 }
             )}
 
-
-
-            <ActionButtons buttonsData={[
-                {
-                    text: this.props.managedEntity ? "Update" : "Add Record",
-                    onClick: this.handleSubmit,
-                    status:"success"
-                },
-                {
-                    text: "Clear",
-                    status:"warning",
-                    onClick: this.clear
-                }
-            ]} />
+            {actionButtons}                
         </div>
 
         return (

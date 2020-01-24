@@ -253,7 +253,7 @@ class EntityList extends Component {
                     width: "100%",
                     margin: "5px",
                 }}
-                disabled={false} rows={rows} />
+                disabled={entityConfig.disabled} rows={rows} />
         </div>
 
         return (
@@ -265,7 +265,7 @@ class EntityList extends Component {
                     }} > </div>
                     {navButtons}
                     <div className="entityForm">
-                        <EntityForm
+                        <EntityForm 
                             app={this.props.app}
                             updateEntity={this.props.updateEntity}
                             removeManagedEntity={this.props.removeManagedEntity}

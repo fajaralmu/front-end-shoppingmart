@@ -129,6 +129,7 @@ export const customerList = {
 export const transactionConfig = {
     title: "Transaction",
     entityName: "transaction",
+    disabled:true,
     id: "id",
     fieldNames: [
         { name: "code" }, { name: "transactionDate" },
