@@ -132,7 +132,7 @@ export const transactionConfig = {
     disabled:true,
     id: "id",
     fieldNames: [
-        { name: "code" }, { name: "transactionDate" },
+        { name: "code" }, { name: "transactionDate", type:"longDate" },
         { name: "type" }, { name: "supplier.name" },
         { name: "customer.name" }
     ],

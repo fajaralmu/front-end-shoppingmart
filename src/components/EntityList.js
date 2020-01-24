@@ -11,6 +11,7 @@ import InputField from './InputField'
 import ActionButton from './ActionButton'
 import EntityForm from './EntityForm';
 import * as url from '../constant/Url'
+import Label from './Label'
 
 class EntityList extends Component {
     constructor(props) {
@@ -200,6 +201,9 @@ class EntityList extends Component {
                         let imgName = entityValue.split("~")[0];
 
                         entityValue = <img width="60" height="60" src={url.baseImageUrl + imgName} />
+                    } else if(fieldItem.type == "longDate") {
+                        const dateStr  = new Date(entityValue).toDateString();
+                        entityValue = <Label text={dateStr}/>;
                     }
                 }
 
