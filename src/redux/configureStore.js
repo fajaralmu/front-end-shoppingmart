@@ -25,6 +25,7 @@ export const configureStore = () => {
             //user related
             performLoginMiddleware,
             performLogoutMiddleware,
+            refreshLoginStatusMiddleware,
 
             //transaction
             getStockInfoMiddleware,
@@ -70,12 +71,12 @@ const getEntitiesWithCallbackMiddleware = store => next => action => {
         headers: commonAuthorizedHeader()
     })
         .then(response => response.json())
-        .then(data => { 
+        .then(data => {
             if (data.entities == null || data.entities.length == 0) {
                 alert("Data not found!");
                 return;
-            } 
-            
+            }
+
             action.meta.callback(data, action.meta.referer);
 
             let newAction = Object.assign({}, action, {
@@ -217,9 +218,16 @@ const removeManagedEntityMiddleware = store => next => action => {
 
 const requestAppIdMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.REQUEST_ID) { return next(action); }
+
+    let headers = commonAuthorizedHeader();
+    const loginKey = localStorage.getItem("loginKey");
+    if (loginKey) {
+        headers['loginKey'] = loginKey;
+    }
+
     fetch(action.meta.url, {
         method: POST_METHOD, body: JSON.stringify(action.payload),
-        headers: { 'Content-Type': 'application/json' }
+        headers: headers
     }).then(response => response.json())
         .then(data => {
             console.debug("requestAppIdMiddleware Response:", data);
@@ -239,7 +247,11 @@ const getProductStocksMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.GET_PRODUCT_STOCKS) { return next(action); }
     fetch(action.meta.url, {
         method: POST_METHOD, body: JSON.stringify(action.payload),
-        headers: { 'Content-Type': 'application/json', 'requestId': localStorage.getItem("requestId"), 'loginKey': localStorage.getItem("loginKey") }
+        headers: {
+            'Content-Type': 'application/json',
+            'requestId': localStorage.getItem("requestId"),
+            'loginKey': localStorage.getItem("loginKey")
+        }
     }).then(response => response.json())
         .then(data => {
             console.debug("getProductSalesMiddleware Response:", data, "load more:", action.meta.loadMore);
@@ -589,7 +601,7 @@ const performLoginMiddleware = store => next => action => {
                 }
                 console.log("loginKey: ", loginKey);
                 loginSuccess = true;
-                localStorage.setItem("loginKey", loginKey);
+
             }
             let newAction = Object.assign({}, action, {
                 payload: {
@@ -603,6 +615,28 @@ const performLoginMiddleware = store => next => action => {
         })
         .catch(err => { console.log(err) })
         .finally(param => app.endLoading());
+
+}
+
+const refreshLoginStatusMiddleware = store => next => action => {
+    if (!action.meta || action.meta.type !== types.REFRESH_LOGIN) {
+        return next(action);
+    }
+
+    let loggedUser = null;
+    if (localStorage.getItem("loggedUser")) {
+        loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+    }
+
+    let newAction = Object.assign({}, action, {
+        payload: {
+            loginStatus: loggedUser ? true : false,
+            loginKey: localStorage.getItem("loginKey"),
+            loggedUser: loggedUser
+        }
+    });
+    delete newAction.meta;
+    store.dispatch(newAction);
 
 }
 

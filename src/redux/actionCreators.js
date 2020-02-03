@@ -335,6 +335,16 @@ export const performLogin = (username, password, app) => {
     return loginRequest;
 }
 
+export const refreshLoginStatus = ( ) => {
+   
+    let loginRequest = {
+        type: types.REFRESH_LOGIN,
+        payload: { },
+        meta: { type: types.REFRESH_LOGIN  }
+    };
+    return loginRequest;
+}
+
 export const getAllProductCategories = () => ({
     type: types.FETCH_PRODUCT_CATEGORIES_ALL,
     payload: {

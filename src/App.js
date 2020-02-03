@@ -102,6 +102,7 @@ class App extends Component {
     if (this.props.requestId != this.state.requestId) {
       this.setState({ requestId: this.props.requestId });
       localStorage.setItem("requestId", this.props.requestId);
+      this.props.refreshLogin();
     }
   }
 
@@ -263,7 +264,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
   performLogin: (username, password, app) => dispatch(actions.performLogin(username, password, app)),
   performLogout: (app) => dispatch(actions.performLogout(app)),
-  requestAppId: (app) => dispatch(actions.requestAppId(app))
+  requestAppId: (app) => dispatch(actions.requestAppId(app)),
+  refreshLogin: () => dispatch(actions.refreshLoginStatus())
   // getProductCatalog: (page) => dispatch(actions.getProductList(page))
 
 })

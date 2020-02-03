@@ -31,3 +31,4 @@ export const GET_ENTITY_BY_ID = "get_entity_by_id";
 export const UPDATE_ENTITY = "update_entity";
 export const GET_ENTITY_WITH_CALLBACK = "GET_ENTITY_WITH_CALLBACK";
 export const REMOVE_MANAGED_ENTITY = "rm_mng_entity";
+export const REFRESH_LOGIN = "refresh_login";

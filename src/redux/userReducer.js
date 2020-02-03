@@ -43,6 +43,12 @@ export const reducer = (state = initState, action) => {
                 menus: updatedMenus,
                 loggedUser: action.payload.loggedUser
             };
+
+            if(result.loginStatus == true){
+                localStorage.setItem("loginKey", result.loginKey);
+                localStorage.setItem("loggedUser", JSON.stringify(result.loggedUser));
+            }
+
             console.log("logged user: ",result.loggedUser);
             return result;
         case types.DO_LOGOUT:
@@ -51,6 +57,17 @@ export const reducer = (state = initState, action) => {
                 loginStatus: action.payload.loginStatus,
                 menus: updatedMenus,
                 loggedUser: null
+            };
+            localStorage.removeItem("loginKey" );
+            localStorage.removeItem("loggedUser");
+            return result;
+        case types.REFRESH_LOGIN:
+                
+            result = {
+                ...state,
+                loginStatus: action.payload.loginStatus,
+                menus: updatedMenus,
+                loggedUser:  action.payload.loggedUser
             };
             return result;
         default:
