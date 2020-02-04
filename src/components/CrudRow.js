@@ -63,7 +63,7 @@ class CrudRow extends Component {
             actionButton = null;
             trStyle = this.props.style ? this.props.style : {};
         }
-
+      
         return (
             <tr style={trStyle} key={stringUtil.uniqueId()}
                 valign={this.props.valign}>

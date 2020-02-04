@@ -215,7 +215,8 @@ class EntityList extends Component {
                     identifier: entity[idField],
                     values: rowValues,
                     handleDelete: this.handleDelete,
-                    handleEdit: this.handleEdit
+                    handleEdit: this.handleEdit,
+                    disabled: entityConfig.disabled == true?true:false
                 }
             )
         }
@@ -257,7 +258,7 @@ class EntityList extends Component {
                     width: "100%",
                     margin: "5px",
                 }}
-                disabled={entityConfig.disabled} rows={rows} />
+               rows={rows} />
         </div>
 
         return (

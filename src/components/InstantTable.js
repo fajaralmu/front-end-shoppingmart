@@ -18,6 +18,9 @@ class InstantTable extends Component {
         return (
             <table style={tableStyle} className={className}><tbody>
                 {rows.map(row => {
+                    let disabled = row.disabled == false? false:true;
+                  
+                    
                     return (
                         <CrudRow
                             style={row.style}
@@ -29,8 +32,7 @@ class InstantTable extends Component {
                             CS={row.CS}
                             values={row.values ? row.values : []}
                             key={stringUtil.uniqueId()}
-                            disabled={row.disabled == null ? this.props.disabled == null ? true : this.props.disabled :
-                                row.disabled}
+                            disabled={disabled}
                         />
                     )
                 })}
