@@ -2,11 +2,11 @@ import React, { Component } from 'react'
 import * as menus from '../../../constant/Menus'
 import { withRouter } from 'react-router';
 import ContentTitle from '../../ContentTitle';
-import Label from '../../Label';
-import InputField from '../../InputField';
+import Label from '../../Label'; 
 import ActionButton from '../../ActionButton';
 import Message from '../../Message';
 import '../login/Login.css'
+import InputField from '../../inputs/InputField';
 
 class Login extends Component {
 

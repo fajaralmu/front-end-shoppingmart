@@ -18,7 +18,7 @@ class Header extends Component{
 
         return (
             <div className="App-header">
-                {this.props.title}
+                <h2>{this.props.applicationProfile.name}</h2>
                 {cartInfo}
             </div>
         )

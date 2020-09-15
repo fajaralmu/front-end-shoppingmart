@@ -1,11 +1,8 @@
-import React, { Component } from 'react'
-import '../css/About.css'
-import '../css/Common.css'
-import * as menus from '../constant/Menus'
-import InstantTable from './InstantTable'
-import * as url from '../constant/Url'
-import '../css/Common.css'
-import ContentTitle from './ContentTitle'
+import React, { Component } from 'react' 
+import * as menus from '../../../constant/Menus'
+import InstantTable from '../../InstantTable'
+import * as url from '../../../constant/Url' 
+import ContentTitle from '../../ContentTitle'
 
 class About extends Component {
 
@@ -20,6 +17,8 @@ class About extends Component {
     }
 
     render() {
+        const profile = this.props.applicationProfile;
+
         return (
             <div className="section-container about-section  " >
                 <ContentTitle title="About Us" />
@@ -30,9 +29,9 @@ class About extends Component {
                 }}>
                     <InstantTable
                         rows={[
-                            { values: ["Name", "Universal Good Shop"] },
+                            { values: ["Name", profile.name] },
                             { values: ["Version", "1.0.0"] },
-                            { values: ["Description", "Friendly shopping mart application"] },
+                            { values: ["Description", profile.shortDescription] },
 
 
                         ]} />

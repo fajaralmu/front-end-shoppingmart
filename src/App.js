@@ -2,24 +2,24 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
- 
+
 import Menu from './components/Menu'
-import Home from './components/Home'
-import About from './components/About'
+import Home from './components/pages/index/Home'
+import About from './components/pages/about/About'
 import { BrowserRouter as Router, Route, Link, Switch, withRouter } from 'react-router-dom'
 import * as actions from './redux/actionCreators'
-import { connect } from 'react-redux' 
+import { connect } from 'react-redux'
 import Catalog from './components/pages/catalog/Catalog'
 import Login from './components/pages/login/Login'
-import Dashboard from './components/Dashboard';
+import Dashboard from './components/pages/dashboard/Dashboard';
 import * as menus from './constant/Menus'
 import SupplierList from './components/pages/supplier_list/SupplierList';
 import Message from './components/Message';
 import Footer from './components/layout/footer/Footer';
 import SockJsClient from 'react-stomp';
-import ChatRoom from './components/ChatRoom'; 
+import ChatRoom from './components/pages/chat_room/ChatRoom';
 import CartDetail from './components/CartDetail';
-import Management from './components/Management'; 
+import Management from './components/Management';
 import Header from './components/layout/header/Header';
 
 
@@ -35,14 +35,14 @@ class App extends Component {
       loadingPercentage: 0,
       requestId: null,
       enableShopping: false,
-      mainAppUpdated:new Date()
+      mainAppUpdated: new Date()
     };
 
     this.setDetailMode = (detailMode) => {
       this.setState({ detailMode: detailMode });
     }
 
-    this.setMenuCode = (code) => { 
+    this.setMenuCode = (code) => {
       this.setState({ menuCode: code });
     }
 
@@ -66,7 +66,7 @@ class App extends Component {
 
         default:
           break;
-      } 
+      }
 
     }
 
@@ -92,8 +92,6 @@ class App extends Component {
     }
   }
 
-
-
   componentDidUpdate() {
     if (this.props.requestId != this.state.requestId) {
       this.setState({ requestId: this.props.requestId });
@@ -114,7 +112,7 @@ class App extends Component {
 
       let menu = additionalMenus[i];
 
-      if(!this.state.enableShopping && menu.code == 'cart')
+      if (!this.state.enableShopping && menu.code == 'cart')
         continue;
 
       if (this.props.loginStatus != true && menu.authenticated == true)
@@ -123,7 +121,7 @@ class App extends Component {
       menus.push(menu);
 
     }
- 
+
     return menus;
 
   }
@@ -150,19 +148,20 @@ class App extends Component {
     let loadingComponent = "";
     if (this.state.loading == true) {
       loadingComponent = <Message realtime={this.state.realtime} progress={this.state.loadingPercentage} text="Please wait..." type="loading" />;
+        
     }
 
     let menus = this.setMenus();
- 
+
     let cloudHost = "https://nuswantoroshop.herokuapp.com/";
     let localHost = "http://localhost:8080/universal-good-shop/";
     const usedHost = localHost;
     return (
       <div className="App">
         {loadingComponent}
-        <Header title="Universal Good Shop" enableShopping={this.state.enableShopping} cart={this.props.cart} />
+        <Header applicationProfile={this.props.applicationProfile} enableShopping={this.state.enableShopping} cart={this.props.cart} />
         {/*this.props.loginStatus == true?"Logged In":"Un Logged"*/}
-      
+
         <div id="main-layout">
           <div id="main-menu">
             <Menu loggedUser={this.props.loggedUser}
@@ -170,8 +169,8 @@ class App extends Component {
               activeCode={this.state.menuCode}
               menus={menus} />
           </div>
-         
-          <div id="main-content" > 
+
+          <div id="main-content" >
             <Switch>
               <Route exact path="/" render={
                 (renderProps) =>
@@ -179,7 +178,7 @@ class App extends Component {
               } />
               <Route exact path="/home" render={
                 (renderProps) =>
-                  <Home setMenuCode={this.setMenuCode} content="hello, this is home page" />
+                  <Home applicationProfile={this.props.applicationProfile} setMenuCode={this.setMenuCode} />
               } />
               <Route exact path="/suppliers" render={
                 (renderProps) =>
@@ -191,7 +190,7 @@ class App extends Component {
               } />
               <Route exact path="/about" render={
                 (renderProps) =>
-                  <About setMenuCode={this.setMenuCode} />
+                  <About applicationProfile={this.props.applicationProfile} setMenuCode={this.setMenuCode} />
               }></Route>
               <Route exact path="/catalog" render={
                 (renderProps) =>
@@ -205,7 +204,7 @@ class App extends Component {
                 (renderProps) => <CartDetail enableShopping={this.state.enableShopping} cart={this.props.cart} app={this} setMenuCode={this.setMenuCode} />
 
               }></Route>
-               <Route exact path="/login" render={
+              <Route exact path="/login" render={
                 (renderProps) => loginComponent
 
               }></Route>
@@ -220,17 +219,17 @@ class App extends Component {
                   <Dashboard app={this} loginStatus={this.props.loginStatus} setMenuCode={this.setMenuCode} />
 
               }></Route>
-               <Route exact path="/management" render={
+              <Route exact path="/management" render={
                 (renderProps) =>
                   <Management app={this} loginStatus={this.props.loginStatus} setMenuCode={this.setMenuCode} />
 
               }></Route>
             </Switch>
-           
+
           </div>
-         
+
         </div>
-        <SockJsClient url={usedHost+'realtime-app'} topics={['/wsResp/progress/'+localStorage.getItem("requestId")]}
+        <SockJsClient url={usedHost + 'realtime-app'} topics={['/wsResp/progress/' + localStorage.getItem("requestId")]}
           onMessage={(msg) => { this.handleMessage(msg) }}
           ref={(client) => { this.clientRef = client }} />
         <Footer />
@@ -253,6 +252,9 @@ const mapStateToProps = state => {
     loggedUser: state.userState.loggedUser,
     loginAttempt: state.userState.loginAttempt,
     requestId: state.userState.requestId,
+    applicationProfile: state.userState.applicationProfile,
+
+
     cart: state.shopState.cart
   }
 }

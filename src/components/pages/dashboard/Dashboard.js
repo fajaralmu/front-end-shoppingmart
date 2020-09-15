@@ -1,24 +1,24 @@
 import React, { Component } from 'react'
-import '../css/Common.css'
-import '../css/Dashboard.css'
-import * as menus from '../constant/Menus'
+ 
+import '../dashboard/Dashboard.css'
+import * as menus from '../../../constant/Menus'
 import DashboardMenu from './DashboardMenu';
-import TransactionOut from './TransactionOut';
-import ErrorPage from './ErrorPage';
+import TransactionOut from '../../TransactionOut';
+import ErrorPage from '../../ErrorPage';
 import { withRouter } from 'react-router';
-import TransactionIn from './TransactionIn';
-import Cashflow from './Cashflow';
-import ComboBoxes from './ComboBoxes';
-import * as componentUtil from '../utils/ComponentUtil'
-import ActionButton from './ActionButton';
+import TransactionIn from '../../TransactionIn';
+import Cashflow from '../../Cashflow';
+import ComboBoxes from '../../ComboBoxes';
+import * as componentUtil from '../../../utils/ComponentUtil'
+import ActionButton from '../../ActionButton';
 import { connect } from 'react-redux'
-import * as actions from '../redux/actionCreators'
-import InstantTable from './InstantTable';
-import Card from './Card'
-import * as stringUtil from '../utils/StringUtil'
-import Label from './Label';
-import ProductSales from './ProductSales';
-import ContentTitle from './ContentTitle';
+import * as actions from '../../../redux/actionCreators'
+import InstantTable from '../../InstantTable';
+import Card from '../../Card'
+import * as stringUtil from '../../../utils/StringUtil'
+import Label from '../../Label';
+import ProductSales from '../../ProductSales';
+import ContentTitle from '../../ContentTitle';
 
 class Dashboard extends Component {
 

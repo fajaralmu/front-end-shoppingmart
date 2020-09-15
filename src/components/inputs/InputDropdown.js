@@ -1,7 +1,6 @@
-import React, { Component } from 'react'
-import '../css/Common.css' 
-import * as stringUtil from '../utils/StringUtil'
+import React, { Component } from 'react'   
 import DropdownItem from './DropdownItem';
+import * as stringUtil from '../../utils/StringUtil';
 /**
  * JUST FOR INPUT !!!
  */
@@ -69,7 +68,7 @@ class InputDropdown extends Component {
         }
 
         let placeholder = this.props.placeholder ? this.props.placeholder : "";
-        let inputClassName = "rounded";
+        let inputClassName = "form-control";
         return (
             <div
                 onMouseOver={() => this.setState({ focus: true })}

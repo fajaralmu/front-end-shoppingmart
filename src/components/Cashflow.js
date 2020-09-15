@@ -4,23 +4,15 @@ import * as actions from '../redux/actionCreators'
 
 import '../css/Common.css'
 import '../css/Cashflow.css'
-import '../css/CatalogItem.css'
-import ActionButton from './ActionButton'
-import Label from './Label';
-import InputField from './InputField';
-import DetailProductPanel from './DetailProductPanel';
-import StockListTable from './StockListTable'
-import Message from './Message'
-import TransactionReceipt from './TransactionReceipt'
+import '../css/CatalogItem.css'  
 import * as stringUtil from '../utils/StringUtil'
 import ActionButtons from './ActionButtons'
-import InstantTable from './InstantTable'
-import InputDropdown from './InputDropdown'
+import InstantTable from './InstantTable' 
 import * as componentUtil from '../utils/ComponentUtil'
-import { _byId } from '../utils/ComponentUtil'
-import ComboBoxes from './ComboBoxes'
+import { _byId } from '../utils/ComponentUtil' 
 import Chart from './Chart'
 import * as creator from '../utils/ComponentCreator'
+import InputField from './inputs/InputField'
 
 class Cashflow
     extends Component {

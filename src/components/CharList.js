@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import InstantTable from './InstantTable';
 import Label from './Label';
 import '../css/Chat.css'
-import GridComponent from './GridComponent';
+import GridComponent from './container/GridComponent';
 
 class ChatList extends Component {
     constructor(props) {

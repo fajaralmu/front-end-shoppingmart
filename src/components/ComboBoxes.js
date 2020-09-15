@@ -25,7 +25,7 @@ class ComboBoxes extends Component {
 
         const gridAutoColumns = "auto ".repeat(comboBoxes.length);
 
-        return (<div style={{ width:'min-content',display:'grid', gridTemplateColumns:gridAutoColumns}} >
+        return (<div style={{ width:'max-content', display:'grid', gridTemplateColumns:gridAutoColumns}} >
             {comboBoxes.map(comboBox => {
                 let options = [];
                 if (comboBox.options) { options = comboBox.options; }

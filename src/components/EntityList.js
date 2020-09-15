@@ -7,7 +7,7 @@ import '../css/Management.css'
 import '../css/Entity.css'
 import * as componentUtil from '../utils/ComponentUtil'
 import ActionButtons from './ActionButtons';
-import InputField from './InputField'
+import InputField from './inputs/InputField'
 import ActionButton from './ActionButton'
 import EntityForm from './EntityForm';
 import * as url from '../constant/Url'

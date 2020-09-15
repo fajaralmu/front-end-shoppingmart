@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import '../css/DetailProductPanel.css'
-import Label from './Label';
 import * as url from '../constant/Url'
-import InputField from './InputField';
 import * as stringUtil from '../utils/StringUtil'
 import InstantTable from './InstantTable';
 

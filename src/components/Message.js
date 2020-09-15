@@ -34,16 +34,21 @@ class Message extends Component {
 
         let msgStyle = {};
         if (this.props.realtime == true) {
-            let progress = Math.floor( this.props.progress);
+            let progress = Math.floor(this.props.progress);
             msgStyle = {
-                width:progress + "%",
+                width: progress + "%",
                 textAlign: 'left'
             };
-            className+=" rounded";
-            messageText =  <span className="loader">{this.props.progress + "%"}</span>          
+            className += " rounded";
+            messageText = <span className="loader">{this.props.progress + "%"}</span>
         }
         return (
-            <div style={msgStyle} className={className} >{messageText}</div>
+            <div style={msgStyle} className={className} >
+                <button class="btn btn-primary" type="button" disabled>
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    <span class=" ">Loading...</span>
+                </button>
+            </div>
         )
     }
 

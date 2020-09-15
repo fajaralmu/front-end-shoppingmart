@@ -13,7 +13,7 @@ import * as componentUtil from '../utils/ComponentUtil'
 import { _byId } from '../utils/ComponentUtil'
 import Chart from './Chart'
 import * as creator from '../utils/ComponentCreator'
-import InputField from './InputField'
+import InputField from './inputs/InputField'
 import Label from './Label'
 import ProductSalesDetail from './ProductSalesDetail'
 

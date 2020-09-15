@@ -1,8 +1,7 @@
-import React, { Component } from 'react' 
-import '../css/Common.css'
-import * as stringUtil from '../utils/StringUtil'
-import * as componentUtil from '../utils/ComponentUtil' 
-import ActionButton from './ActionButton'
+import React, { Component } from 'react'  
+import * as stringUtil from '../../utils/StringUtil'
+import * as componentUtil from '../../utils/ComponentUtil'   
+import ActionButton from '../ActionButton';
 
 class InputFile extends Component {
     constructor(props) {

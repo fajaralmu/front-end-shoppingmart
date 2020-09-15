@@ -1,5 +1,5 @@
 import React, { Component } from 'react' 
-import { _byId } from '../utils/ComponentUtil'
+import { _byId } from '../../utils/ComponentUtil'
 
 /**
  * JUST FOR INPUT !!!

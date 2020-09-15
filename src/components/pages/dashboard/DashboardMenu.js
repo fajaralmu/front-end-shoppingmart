@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
-import '../css/Menu.css'
-import '../css/Common.css'
-import Tab from './Tab'
-import InstantTable from './InstantTable';
+import * as menuCss from '../../../css/Menu.css' 
+import Tab from '../../Tab';
 
 class DashboardMenu extends Component {
     constructor(props) {

@@ -7,17 +7,17 @@ import '../css/Transaction.css'
 import '../css/CatalogItem.css'
 import ActionButton from './ActionButton'
 import Label from './Label';
-import InputField from './InputField';
+import InputField from './inputs/InputField';
 import DetailProductPanel from './DetailProductPanel';
 import StockListTable from './StockListTable'
 import Message from './Message'
 import TransactionReceipt from './TransactionReceipt'
 import * as stringUtil from '../utils/StringUtil'
 import ActionButtons from './ActionButtons'
-import InstantTable from './InstantTable'
-import InputDropdown from './InputDropdown'
+import InstantTable from './InstantTable' 
 import * as componentUtil from '../utils/ComponentUtil'
 import { _byId } from '../utils/ComponentUtil'
+import InputDropdown from './inputs/InputDropdown'
 
 class TransactionIn
     extends Component {

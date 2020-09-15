@@ -7,13 +7,13 @@ import * as actions from '../../../redux/actionCreators'
 import ProductDetail from '../../ProductDetail'
 import * as menus from '../../../constant/Menus'
 import ActionButtons from '../../ActionButtons'
-import InputField from '../../InputField'
+import InputField from '../../inputs/InputField'
 import * as componentUtil from '../../../utils/ComponentUtil'
 import ContentTitle from '../../ContentTitle'
 import * as stringUtil from '../../../utils/StringUtil'
 import NavButtons from '../../NavButtons'
 import ComboBox from '../../ComboBox'
-import GridComponent from '../../GridComponent'
+import GridComponent from '../../container/GridComponent'
 
 class Catalog extends Component {
 
