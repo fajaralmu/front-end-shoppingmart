@@ -1,8 +1,8 @@
-import React, {Component} from 'react'
-import InstantTable from "../components/InstantTable"
+import React, {Component} from 'react' 
 import Label from '../components/Label'
 import ComboBoxes from '../components/ComboBoxes'
 import * as componentUtil from './ComponentUtil'
+import InstantTable from './../components/container/InstantTable';
 
 export const FilterBox = props => {
     return(

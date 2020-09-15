@@ -1,5 +1,4 @@
-import React, { Component } from 'react'
-import InstantTable from './InstantTable';
+import React, { Component } from 'react' 
 import Label from './Label';
 import '../css/Chat.css'
 import GridComponent from './container/GridComponent';

@@ -3,7 +3,7 @@ import '../css/Common.css'
 import '../css/Cart.css'
 import ContentTitle from './ContentTitle';
 import * as stringUtil from '../utils/StringUtil'
-import InstantTable from './InstantTable';
+import InstantTable from '../components/container/InstantTable';
 
 class CartDetail extends Component {
     constructor(props) {

@@ -1,8 +1,7 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react' 
+import * as tableCss from '../../components/container/InstantTable.css'
+import * as stringUtil from '../../utils/StringUtil' 
 import CrudRow from './CrudRow';
-import '../css/Common.css'
-import '../css/InstantTable.css'
-import * as stringUtil from '../utils/StringUtil'
 
 class InstantTable extends Component {
     constructor(props) { super(props) }

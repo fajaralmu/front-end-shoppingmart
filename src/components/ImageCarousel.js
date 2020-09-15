@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import '../css/Common.css'
-import '../css/ImageCarousel.css'
-import ActionButtons from './ActionButtons';
-import InstantTable from './InstantTable';
+import '../css/ImageCarousel.css' 
+import InstantTable from '../components/container/InstantTable';
 import Label from './Label';
 import ActionButton from './ActionButton';
 

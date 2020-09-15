@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import '../css/Common.css'
-import InstantTable from './InstantTable'
+import InstantTable from '../components/container/InstantTable'
 import { _byId } from '../utils/ComponentUtil'
 import * as stringUtil from '../utils/StringUtil'
 import '../css/Management.css'

@@ -1,9 +1,7 @@
-import React, { Component } from 'react'
-import '../css/Common.css'
+import React, { Component } from 'react' 
 import '../css/Transaction.css'
-import '../css/Entity.css'
-import CrudRow from './CrudRow';
-import InstantTable from './InstantTable';
+import '../css/Entity.css' 
+import InstantTable from '../components/container/InstantTable';
 
 class TransactionReceipt extends Component {
     constructor(props) {

@@ -1,8 +1,8 @@
 import React, { Component } from 'react' 
-import * as menus from '../../../constant/Menus'
-import InstantTable from '../../InstantTable'
+import * as menus from '../../../constant/Menus' 
 import * as url from '../../../constant/Url' 
 import ContentTitle from '../../ContentTitle'
+import InstantTable from '../../container/InstantTable'
 
 class About extends Component {
 

@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
-import ActionButtons from './ActionButtons';
-import * as stringUtil from '../utils/StringUtil'
+import React, { Component } from 'react' 
+import * as stringUtil from '../../utils/StringUtil'
+import ActionButtons from '../ActionButtons';
 
 class CrudRow extends Component {
     constructor(props) {
