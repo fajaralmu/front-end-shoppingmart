@@ -251,12 +251,12 @@ const mapStateToProps = state => {
 
     //user
     loginStatus: state.userState.loginStatus,
-    loginKey: state.userState.loginStatus,
+    loginKey: state.userState.loginJey,
     loginFailed: state.userState.loginFailed,
     menus: state.userState.menus,
     loggedUser: state.userState.loggedUser,
     loginAttempt: state.userState.loginAttempt,
-    requestId: state.shopState.requestId,
+    requestId: state.userState.requestId,
     cart: state.shopState.cart
   }
 }

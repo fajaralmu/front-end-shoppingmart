@@ -238,7 +238,7 @@ const requestAppIdMiddleware = store => next => action => {
                 return;
             }
 
-            let newAction = Object.assign({}, action, { payload: data });
+            let newAction = Object.assign({}, action, { payload: {loginStatus: data.loggedIn, ...data }});
             delete newAction.meta;
             store.dispatch(newAction);
         })
@@ -636,7 +636,8 @@ const refreshLoginStatusMiddleware = store => next => action => {
         payload: {
             loginStatus: loggedUser ? true : false,
             loginKey: localStorage.getItem("loginKey"),
-            loggedUser: loggedUser
+            loggedUser: loggedUser,
+            requestId: '1234', //TODO: no hard code
         }
     });
     delete newAction.meta;

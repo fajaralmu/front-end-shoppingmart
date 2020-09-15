@@ -36,8 +36,9 @@ export const reducer = (state = initState, action) => {
             return { ...state, entity: currentProduct };
         case types.FETCH_PRODUCT_CATEGORIES_ALL:
             return { ...state, categories: action.payload.entities };
-        case types.REQUEST_ID:
-            return { ...state, requestId: action.payload.message };
+        // case types.REQUEST_ID:
+
+        //     return { ...state, requestId: action.payload.message };
         case types.SEND_MESSAGE:
             return { ...state, messages: action.payload.entities, userAlias: action.payload.username };
         case types.STORE_MESSAGE:
@@ -49,6 +50,8 @@ export const reducer = (state = initState, action) => {
                 action.payload.app.refresh();
             }
             return { ...state, cart: action.payload.cart };
+
+       
         default:
             return state;
     }
