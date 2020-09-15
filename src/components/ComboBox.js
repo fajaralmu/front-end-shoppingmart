@@ -1,4 +1,4 @@
-import React, { Component } from 'react' 
+import React, { Component } from 'react'
 import { _byId } from '../utils/ComponentUtil'
 import * as stringUtil from '../utils/StringUtil'
 
@@ -28,10 +28,11 @@ class ComboBox extends Component {
         if (this.props.options) {
             options = this.props.options;
         }
-        console.log("this.props.defaultValue: ",this.props.defaultValue)
+        console.log("this.props.defaultValue: ", this.props.defaultValue)
         return (
             <div className="input-field ">
-                <select value={this.props.defaultValue ? this.props.defaultValue : ""} className="form-control" id={this.props.id}
+                <select value={this.props.defaultValue ? this.props.defaultValue : ""} 
+                    className="form-control" id={this.props.id}
                     onChange={this.handleOnChange} >
                     {options.map(
                         option => {

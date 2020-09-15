@@ -1,20 +1,18 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import '../components/pages/catalog/Catalog.css'
+import * as x from '../catalog/Catalog.css';
 import { BrowserRouter as Router, Route, Link, Switch, withRouter } from 'react-router-dom'
-import * as actions from '../redux/actionCreators'
-import * as menus from '../constant/Menus'
-import ActionButtons from './ActionButtons'
-import InputField from './InputField'
-import ComboBox from './ComboBox'
-import * as componentUtil from '../utils/ComponentUtil'
-import * as stringUtil from '../utils/StringUtil'
-import * as url from '../constant/Url'
-import Card from './Card'
-import ContentTitle from './ContentTitle'
-import NavButtons from './NavButtons'
-import InstantTable from './InstantTable'
-import GridComponent from './GridComponent'
+import * as actions from '../../../redux/actionCreators'
+import * as menus from '../../../constant/Menus'
+import ActionButtons from '../../ActionButtons'
+import InputField from '../../InputField'
+import ComboBox from '../../ComboBox'
+import * as componentUtil from '../../../utils/ComponentUtil' 
+import * as url from '../../../constant/Url'
+import Card from '../../Card'
+import ContentTitle from '../../ContentTitle'
+import NavButtons from '../../NavButtons' 
+import GridComponent from '../../GridComponent'
 
 class SupplierList extends Component {
 
@@ -142,14 +140,14 @@ class SupplierList extends Component {
 
 
         let filterBox = <div className="filter-box">
-            <GridComponent cols={2} style={{ width: 'min-content' }} items={
+            <GridComponent cols={2} style={{ width: 'max-content' }} items={
                 [
                     <InputField placeholder="search by supplier name" onKeyUp={this.handleInputNameChange} type="search"
                         id="input-supplier-name" />,
                     <ComboBox defaultValue={this.state.requestOrderBy+"-"+this.state.requestOrderType} onChange={this.handleOrderChange}
                         options={filterSupplierOptions} key="k-select-order" id="select-order" />,
                     <ActionButtons style={{ margin: '5px' }} key="btns" buttonsData={[{
-                        text: "Search", status: "success", onClick: () => this.getSupplierList(0), id: "btn-search"
+                        text: <i class="fas fa-search"></i>, status: "success", onClick: () => this.getSupplierList(0), id: "btn-search"
                     }, {
                         text: "Clear", status: 'warning', onClick: this.clearField, id: "Clear"
                     }]} />

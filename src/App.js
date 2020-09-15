@@ -13,7 +13,7 @@ import Catalog from './components/pages/catalog/Catalog'
 import Login from './components/pages/login/Login'
 import Dashboard from './components/Dashboard';
 import * as menus from './constant/Menus'
-import SupplierList from './components/SupplierList';
+import SupplierList from './components/pages/supplier_list/SupplierList';
 import Message from './components/Message';
 import Footer from './components/layout/footer/Footer';
 import SockJsClient from 'react-stomp';
