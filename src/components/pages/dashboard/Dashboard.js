@@ -3,10 +3,10 @@ import React, { Component } from 'react'
 import '../dashboard/Dashboard.css'
 import * as menus from '../../../constant/Menus'
 import DashboardMenu from './DashboardMenu';
-import TransactionOut from '../../TransactionOut';
+import TransactionOut from '../transaction/TransactionOut';
 import ErrorPage from '../../ErrorPage';
 import { withRouter } from 'react-router';
-import TransactionIn from '../../TransactionIn';
+import TransactionIn from '../transaction/TransactionIn';
 import Cashflow from '../../Cashflow'; 
 import * as componentUtil from '../../../utils/ComponentUtil'
 import ActionButton from '../../buttons/ActionButton';

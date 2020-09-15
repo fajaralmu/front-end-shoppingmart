@@ -5,7 +5,6 @@ import ActionButton from '../buttons/ActionButton';
 class NavButtons extends Component {
     constructor(props) {
         super(props);
-
     }
 
     render() {
@@ -20,10 +19,10 @@ class NavButtons extends Component {
                 {buttonsData.map(
                     buttonData => {
                         return (
-                            <ActionButton style={{
-                                backgroundColor: buttonData.active ? 'lightsteelblue' : 'darkcyan'
-                            }}
-
+                            <ActionButton 
+                                style={{
+                                    backgroundColor: buttonData.active ? 'lightsteelblue' : 'darkcyan'
+                                }}
                                 id={buttonData.id} onClick={buttonData.buttonClick}
                                 key={stringUtil.uniqueId() + "_nav"} text={buttonData.text} />
                         )

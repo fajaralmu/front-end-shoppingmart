@@ -1,7 +1,6 @@
 import React, { Component } from 'react' 
-import '../css/Transaction.css'
-import * as entityCss from '../components/pages/management/Entity.css'
-import InstantTable from '../components/container/InstantTable';
+import './Transaction.css' 
+import InstantTable from '../../container/InstantTable';
 
 class TransactionReceipt extends Component {
     constructor(props) {

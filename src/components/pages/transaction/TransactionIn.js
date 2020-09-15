@@ -1,23 +1,23 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import * as actions from '../redux/actionCreators'
+import * as actions from '../../../redux/actionCreators'
 
-import '../css/Common.css'
-import '../css/Transaction.css'
-import '../css/CatalogItem.css'
-import ActionButton from './buttons/ActionButton'
-import Label from './Label';
-import InputField from './inputs/InputField';
-import DetailProductPanel from './DetailProductPanel';
-import StockListTable from './StockListTable'
-import Message from './Message'
+import * as trxCss from './Transaction.css'
+import * as CatalogItemCss from '../../../css/CatalogItem.css'
+import ActionButton from '../../buttons/ActionButton'
+import Label from '../../Label';
+import InputField from '../../inputs/InputField';
+import DetailProductPanel from '../../DetailProductPanel';
+import StockListTable from '../../StockListTable'
+import Message from '../../Message'
 import TransactionReceipt from './TransactionReceipt'
-import * as stringUtil from '../utils/StringUtil'
-import ActionButtons from './buttons/ActionButtons'
-import InstantTable from '../components/container/InstantTable' 
-import * as componentUtil from '../utils/ComponentUtil'
-import { _byId } from '../utils/ComponentUtil'
-import InputDropdown from './inputs/InputDropdown'
+import * as stringUtil from '../../../utils/StringUtil'
+import ActionButtons from '../../buttons/ActionButtons'
+import InstantTable from '../../container/InstantTable' 
+import * as componentUtil from '../../../utils/ComponentUtil'
+import { _byId } from '../../../utils/ComponentUtil'
+import InputDropdown from '../../inputs/InputDropdown'
+import CatalogItem from './../../CatalogItem';
 
 class TransactionIn
     extends Component {

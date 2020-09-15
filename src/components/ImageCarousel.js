@@ -51,8 +51,6 @@ class ImageCarousel extends Component {
                         <ActionButton text=">" id="btn-next" onClick={this.next} />
                     ]
                 }]} />
-
-
             </div>
         )
     }

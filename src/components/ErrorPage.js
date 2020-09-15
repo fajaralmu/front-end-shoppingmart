@@ -1,14 +1,14 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import '../css/Error.css'
 import '../css/Common.css'
 
-class ErrorPage extends Component{
+class ErrorPage extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
     }
-    
-    render(){
+
+    render() {
         document.title = "Error Page";
         return (
             <div className="section-container">
