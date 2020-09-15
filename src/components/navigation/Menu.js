@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import '../css/Menu.css'
-import '../css/Common.css'
+import './Menu.css' 
 import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'
 
 class Menu extends Component {

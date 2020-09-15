@@ -11,8 +11,8 @@ import InputField from '../../inputs/InputField'
 import * as componentUtil from '../../../utils/ComponentUtil'
 import ContentTitle from '../../ContentTitle'
 import * as stringUtil from '../../../utils/StringUtil'
-import NavButtons from '../../NavButtons'
-import ComboBox from '../../ComboBox'
+import NavButtons from '../../navigation/NavButtons'
+import ComboBox from '../../inputs/ComboBox'
 import GridComponent from '../../container/GridComponent'
 
 class Catalog extends Component {

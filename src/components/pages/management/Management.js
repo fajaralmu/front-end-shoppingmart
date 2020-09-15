@@ -1,14 +1,13 @@
-import React, { Component } from 'react'
-import '../css/Common.css'
-import '../css/Management.css'
+import React, { Component } from 'react' 
+import './Management.css'
 import { withRouter } from 'react-router';
-import * as actions from '../redux/actionCreators'
+import * as actions from '../../../redux/actionCreators'
 import { connect } from 'react-redux'
-import ContentTitle from './ContentTitle'
-import ActionButtons from './buttons/ActionButtons';
-import * as entityConfig from '../utils/EntityConfigurations'
+import ContentTitle from '../../ContentTitle'
+import ActionButtons from '../../buttons/ActionButtons';
+import * as entityConfig from '../../../utils/EntityConfigurations'
 import EntityList from './EntityList';
-import Tab from './Tab';
+import Tab from '../../navigation/Tab';
 
 class Management extends Component {
     constructor(props) {

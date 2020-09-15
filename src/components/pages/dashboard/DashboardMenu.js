@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import * as menuCss from '../../../css/Menu.css' 
-import Tab from '../../Tab';
+import * as menuCss from '../../../components/navigation/Menu.css'
+import Tab from '../../navigation/Tab';
 
 class DashboardMenu extends Component {
     constructor(props) {
@@ -26,8 +26,8 @@ class DashboardMenu extends Component {
             <div className="dashboard-menu" >
                 <Tab style={{whiteSpace: 'nowrap'}} tabsData={[
                     { onClick: () => this.goToMenu('main'), active: this.isActive('main'), text: "Home" },
-                    { onClick: () => this.goToMenu('trxIn'), active: this.isActive('trxIn'), text: "Product Supply" }
-                    , { onClick: () => this.goToMenu('trxOut'), active: this.isActive('trxOut'), text: "Purchase" },
+                    { onClick: () => this.goToMenu('trxIn'), active: this.isActive('trxIn'), text: "Product Supply" },
+                    { onClick: () => this.goToMenu('trxOut'), active: this.isActive('trxOut'), text: "Purchase" },
                     { onClick: () => this.goToMenu('cashflow'), active: this.isActive('cashflow'), text: "Cashflow" },
                     { onClick: () => this.goToMenu('productSales'), active: this.isActive('productSales'), text: "Product Sales" }]}
                 />

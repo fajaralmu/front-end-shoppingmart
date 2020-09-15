@@ -1,17 +1,16 @@
 import React, { Component } from 'react'
-import '../css/Common.css'
-import InstantTable from '../components/container/InstantTable'
-import { _byId } from '../utils/ComponentUtil'
-import * as stringUtil from '../utils/StringUtil'
-import '../css/Management.css'
-import '../css/Entity.css'
-import * as componentUtil from '../utils/ComponentUtil'
-import ActionButtons from './buttons/ActionButtons';
-import InputField from './inputs/InputField'
-import ActionButton from './buttons/ActionButton'
+import InstantTable from '../../container/InstantTable'
+import { _byId } from '../../../utils/ComponentUtil'
+import * as stringUtil from '../../../utils/StringUtil'
+import './Management.css'
+import './Entity.css'
+import * as componentUtil from '../../../utils/ComponentUtil'
+import ActionButtons from '../../buttons/ActionButtons';
+import InputField from '../../inputs/InputField'
+import ActionButton from '../../buttons/ActionButton'
 import EntityForm from './EntityForm';
-import * as url from '../constant/Url'
-import Label from './Label'
+import * as url from '../../../constant/Url'
+import Label from '../../Label'
 
 class EntityList extends Component {
     constructor(props) {

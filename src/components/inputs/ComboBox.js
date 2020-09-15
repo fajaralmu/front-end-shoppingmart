@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { _byId } from '../utils/ComponentUtil'
-import * as stringUtil from '../utils/StringUtil'
+import { _byId } from '../../utils/ComponentUtil'
+import * as stringUtil from '../../utils/StringUtil'
 
 class ComboBox extends Component {
     constructor(props) {

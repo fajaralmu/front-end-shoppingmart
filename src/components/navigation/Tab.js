@@ -1,6 +1,5 @@
 import React from 'react';
-import '../css/Tab.css'
-import * as stringUtil from '../utils/StringUtil'
+import './Tab.css'
 
 class Tab extends React.Component {
     constructor(props) {

@@ -1,18 +1,18 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import * as x from '../catalog/Catalog.css';
+import * as x from '../catalog/Catalog.css'
 import { BrowserRouter as Router, Route, Link, Switch, withRouter } from 'react-router-dom'
 import * as actions from '../../../redux/actionCreators'
 import * as menus from '../../../constant/Menus'
-import ActionButtons from '../../buttons/ActionButtons' 
-import ComboBox from '../../ComboBox'
-import * as componentUtil from '../../../utils/ComponentUtil' 
+import ActionButtons from '../../buttons/ActionButtons'
+import ComboBox from '../../inputs/ComboBox'
+import * as componentUtil from '../../../utils/ComponentUtil'
 import * as url from '../../../constant/Url'
 import Card from '../../Card'
 import ContentTitle from '../../ContentTitle'
-import NavButtons from '../../NavButtons' 
+import NavButtons from '../../navigation/NavButtons'
 import GridComponent from '../../container/GridComponent'
-import InputField from '../../inputs/InputField';
+import InputField from '../../inputs/InputField'
 
 class SupplierList extends Component {
 

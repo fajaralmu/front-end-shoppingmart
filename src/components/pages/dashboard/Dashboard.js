@@ -7,8 +7,7 @@ import TransactionOut from '../../TransactionOut';
 import ErrorPage from '../../ErrorPage';
 import { withRouter } from 'react-router';
 import TransactionIn from '../../TransactionIn';
-import Cashflow from '../../Cashflow';
-import ComboBoxes from '../../ComboBoxes';
+import Cashflow from '../../Cashflow'; 
 import * as componentUtil from '../../../utils/ComponentUtil'
 import ActionButton from '../../buttons/ActionButton';
 import { connect } from 'react-redux'
@@ -19,6 +18,7 @@ import Label from '../../Label';
 import ProductSales from '../../ProductSales';
 import ContentTitle from '../../ContentTitle';
 import InstantTable from '../../container/InstantTable';
+import ComboBoxes from './../../inputs/ComboBoxes';
 
 class Dashboard extends Component {
 

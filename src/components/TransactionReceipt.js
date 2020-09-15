@@ -1,6 +1,6 @@
 import React, { Component } from 'react' 
 import '../css/Transaction.css'
-import '../css/Entity.css' 
+import * as entityCss from '../components/pages/management/Entity.css'
 import InstantTable from '../components/container/InstantTable';
 
 class TransactionReceipt extends Component {

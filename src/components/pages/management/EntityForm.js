@@ -1,17 +1,17 @@
 import React, { Component } from 'react'
-import '../css/Entity.css'   
-import { _byId } from '../utils/ComponentUtil'
-import * as stringUtil from '../utils/StringUtil'
-import { withRouter } from 'react-router';
-import * as actions from '../redux/actionCreators'
-import { connect } from 'react-redux' 
-import * as url from '../constant/Url' 
-import InputDropdown from './inputs/InputDropdown';
-import InputField from './inputs/InputField';
-import InputFile from './inputs/InputFile';
-import InputFileMultiple from './inputs/InputFileMultiple';
-import Label from './Label';
-import ActionButtons from './buttons/ActionButtons';
+import './Entity.css'
+import { _byId } from '../../../utils/ComponentUtil'
+import * as stringUtil from '../../../utils/StringUtil'
+import { withRouter } from 'react-router'
+import * as actions from '../../../redux/actionCreators'
+import { connect } from 'react-redux'
+import * as url from '../../../constant/Url' 
+import InputDropdown from '../../inputs/InputDropdown'
+import InputField from '../../inputs/InputField'
+import InputFile from '../../inputs/InputFile'
+import InputFileMultiple from '../../inputs/InputFileMultiple'
+import Label from '../../Label'
+import ActionButtons from '../../buttons/ActionButtons'
 
 class EntityForm extends Component {
     constructor(props) {

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-import Menu from './components/Menu'
+import Menu from './components/navigation/Menu'
 import Home from './components/pages/index/Home'
 import About from './components/pages/about/About'
 import { BrowserRouter as Router, Route, Link, Switch, withRouter } from 'react-router-dom'
@@ -19,7 +19,7 @@ import Footer from './components/layout/footer/Footer';
 import SockJsClient from 'react-stomp';
 import ChatRoom from './components/pages/chat_room/ChatRoom';
 import CartDetail from './components/cart/CartDetail';
-import Management from './components/Management';
+import Management from './components/pages/management/Management';
 import Header from './components/layout/header/Header';
 
 
