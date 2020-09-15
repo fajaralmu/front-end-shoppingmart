@@ -80,7 +80,7 @@ class ChatRoom extends Component {
 
                     ]} />
 
-                    <SockJsClient url={usedHost+'shop-app'} topics={['/wsResp/messages']}
+                    <SockJsClient url={usedHost+'realtime-app'} topics={['/wsResp/messages']}
                         onMessage={(msg) => { this.handleMessage(msg) }}
                         ref={(client) => { this.clientRef = client }} />
                 </div>

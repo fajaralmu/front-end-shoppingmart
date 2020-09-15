@@ -5,7 +5,9 @@ import * as types from './types';
 
 const commonAuthorizedHeader = () => {
     return {
-        'Content-Type': 'application/json', 'requestId': localStorage.getItem("requestId")
+        'Content-Type': 'application/json', 
+        'requestId':  '1234',//'localStorage.getItem("requestId")',
+        'loginKey': localStorage.getItem('loginKey')
     }
 };
 const POST_METHOD = "POST";
@@ -563,6 +565,8 @@ const performLogoutMiddleware = store => next => action => {
             let logoutSuccess = false;
             if (responseJson.code == "00") {
                 logoutSuccess = true;
+            }else{
+                alert("Logout Failed");
             }
 
             let newAction = Object.assign({}, action, {
