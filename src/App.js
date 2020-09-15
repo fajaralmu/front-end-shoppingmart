@@ -18,7 +18,7 @@ import Message from './components/Message';
 import Footer from './components/layout/footer/Footer';
 import SockJsClient from 'react-stomp';
 import ChatRoom from './components/pages/chat_room/ChatRoom';
-import CartDetail from './components/CartDetail';
+import CartDetail from './components/cart/CartDetail';
 import Management from './components/Management';
 import Header from './components/layout/header/Header';
 

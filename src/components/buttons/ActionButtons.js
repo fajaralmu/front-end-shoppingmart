@@ -1,5 +1,5 @@
 import React, { Component } from 'react' 
-import * as stringUtil from '../utils/StringUtil'
+import * as stringUtil from '../../utils/StringUtil'
 
 class ActionButtons extends Component {
     constructor(props) { super(props) }

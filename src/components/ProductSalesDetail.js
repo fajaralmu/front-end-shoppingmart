@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import * as stringUtil from '../utils/StringUtil'
 import InstantTable from '../components/container/InstantTable';
 import Chart from './Chart';
-import ActionButton from './ActionButton'; 
+import ActionButton from './buttons/ActionButton'; 
 
 class ProductSalesDetail extends Component {
     constructor(props) {

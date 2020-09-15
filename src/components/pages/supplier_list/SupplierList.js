@@ -4,7 +4,7 @@ import * as x from '../catalog/Catalog.css';
 import { BrowserRouter as Router, Route, Link, Switch, withRouter } from 'react-router-dom'
 import * as actions from '../../../redux/actionCreators'
 import * as menus from '../../../constant/Menus'
-import ActionButtons from '../../ActionButtons' 
+import ActionButtons from '../../buttons/ActionButtons' 
 import ComboBox from '../../ComboBox'
 import * as componentUtil from '../../../utils/ComponentUtil' 
 import * as url from '../../../constant/Url'

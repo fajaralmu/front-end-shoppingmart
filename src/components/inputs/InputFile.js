@@ -1,7 +1,7 @@
 import React, { Component } from 'react'  
 import * as stringUtil from '../../utils/StringUtil'
 import * as componentUtil from '../../utils/ComponentUtil'   
-import ActionButton from '../ActionButton';
+import ActionButton from '../buttons/ActionButton';
 
 class InputFile extends Component {
     constructor(props) {

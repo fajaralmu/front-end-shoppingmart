@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import * as url from '../../constant/Url'
 import * as stringUtil from '../../utils/StringUtil'
 import InputFile from './InputFile'; 
-import ActionButton from '../ActionButton';
+import ActionButton from '../buttons/ActionButton';
 
 class InputFileMultiple extends Component {
     constructor(props) {

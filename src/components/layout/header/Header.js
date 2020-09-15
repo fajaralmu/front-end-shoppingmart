@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import '../header/Header.css' 
-import CartInfo from '../../CartInfo';
+import CartInfo from '../../cart/CartInfo';
 
 class Header extends Component{
 

@@ -10,7 +10,7 @@ import TransactionIn from '../../TransactionIn';
 import Cashflow from '../../Cashflow';
 import ComboBoxes from '../../ComboBoxes';
 import * as componentUtil from '../../../utils/ComponentUtil'
-import ActionButton from '../../ActionButton';
+import ActionButton from '../../buttons/ActionButton';
 import { connect } from 'react-redux'
 import * as actions from '../../../redux/actionCreators' 
 import Card from '../../Card'

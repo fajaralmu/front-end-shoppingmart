@@ -1,9 +1,8 @@
-import React, { Component } from 'react'
-import '../css/Common.css'
-import '../css/Cart.css'
-import ContentTitle from './ContentTitle';
-import * as stringUtil from '../utils/StringUtil'
-import InstantTable from '../components/container/InstantTable';
+import React, { Component } from 'react' 
+import * as cartCss from './Cart.css' 
+import ContentTitle from '../ContentTitle';
+import * as stringUtil from '../../utils/StringUtil'
+import InstantTable from '../container/InstantTable';
 
 class CartDetail extends Component {
     constructor(props) {

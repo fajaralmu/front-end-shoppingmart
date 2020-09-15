@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Route, Link, Switch, withRouter } from 'react-
 import * as actions from '../../../redux/actionCreators'
 import ProductDetail from '../../ProductDetail'
 import * as menus from '../../../constant/Menus'
-import ActionButtons from '../../ActionButtons'
+import ActionButtons from '../../buttons/ActionButtons'
 import InputField from '../../inputs/InputField'
 import * as componentUtil from '../../../utils/ComponentUtil'
 import ContentTitle from '../../ContentTitle'

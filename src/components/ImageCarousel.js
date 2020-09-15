@@ -3,7 +3,7 @@ import '../css/Common.css'
 import '../css/ImageCarousel.css' 
 import InstantTable from '../components/container/InstantTable';
 import Label from './Label';
-import ActionButton from './ActionButton';
+import ActionButton from './buttons/ActionButton';
 
 class ImageCarousel extends Component {
     constructor(props) {

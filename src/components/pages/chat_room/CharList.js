@@ -1,7 +1,7 @@
-import React, { Component } from 'react' 
-import Label from './Label';
-import '../css/Chat.css'
-import GridComponent from './container/GridComponent';
+import React, { Component } from 'react'  
+import './Chat.css'
+import GridComponent from '../../container/GridComponent';
+import Label from './../../Label';
 
 class ChatList extends Component {
     constructor(props) {

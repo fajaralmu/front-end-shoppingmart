@@ -3,12 +3,11 @@ import { connect } from 'react-redux'
 import * as actions from '../../../redux/actionCreators'
 import { _byId } from '../../../utils/ComponentUtil'
 import InputField from '../../inputs/InputField';
-import ActionButton from '../../ActionButton';
-import SockJsClient from 'react-stomp';
-import ChatList from '../../CharList';
-import ContentTitle from '../../ContentTitle';
-import Label from '../../Label';
+import ActionButton from '../../buttons/ActionButton';
+import SockJsClient from 'react-stomp'; 
+import ContentTitle from '../../ContentTitle'; 
 import GridComponent from '../../container/GridComponent'
+import ChatList from './CharList';
 
 class ChatRoom extends Component {
     constructor(props) {

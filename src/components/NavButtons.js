@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import * as stringUtil from '../utils/StringUtil'
-import ActionButton from './ActionButton';
+import ActionButton from './buttons/ActionButton';
 
 class NavButtons extends Component {
     constructor(props) {
