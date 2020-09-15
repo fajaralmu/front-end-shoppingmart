@@ -2,28 +2,25 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-
-import Header from './components/Header'
+ 
 import Menu from './components/Menu'
 import Home from './components/Home'
 import About from './components/About'
 import { BrowserRouter as Router, Route, Link, Switch, withRouter } from 'react-router-dom'
 import * as actions from './redux/actionCreators'
-import { connect } from 'react-redux'
-import * as hardCoded from './utils/HardCodedEntites'
-import Catalog from './components/Catalog'
-import Login from './components/Login';
+import { connect } from 'react-redux' 
+import Catalog from './components/pages/catalog/Catalog'
+import Login from './components/pages/login/Login'
 import Dashboard from './components/Dashboard';
 import * as menus from './constant/Menus'
 import SupplierList from './components/SupplierList';
 import Message from './components/Message';
-import Footer from './components/Footer';
+import Footer from './components/layout/footer/Footer';
 import SockJsClient from 'react-stomp';
-import ChatRoom from './components/ChatRoom';
-import CartInfo from './components/CartInfo';
+import ChatRoom from './components/ChatRoom'; 
 import CartDetail from './components/CartDetail';
-import Management from './components/Management';
-import ContentTitle from './components/ContentTitle';
+import Management from './components/Management'; 
+import Header from './components/layout/header/Header';
 
 
 class App extends Component {
@@ -69,8 +66,7 @@ class App extends Component {
 
         default:
           break;
-      }
-
+      } 
 
     }
 

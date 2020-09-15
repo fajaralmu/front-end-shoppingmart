@@ -1,6 +1,4 @@
-import React, { Component } from 'react'
-import '../css/Common.css'
-import '../css/Input.css'
+import React, { Component } from 'react' 
 import ComboBox from './ComboBox';
 
 class ComboBoxes extends Component {

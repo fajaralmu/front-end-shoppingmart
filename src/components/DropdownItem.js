@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-
-import '../css/Input.css'
+ 
 
 class DropdownItem extends Component {
     constructor(props) {

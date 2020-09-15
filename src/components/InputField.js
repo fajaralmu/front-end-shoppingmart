@@ -1,6 +1,4 @@
-import React, { Component } from 'react'
-import '../css/Common.css'
-import '../css/Input.css'
+import React, { Component } from 'react' 
 import { _byId } from '../utils/ComponentUtil'
 
 /**
@@ -41,7 +39,7 @@ class InputField extends Component {
         let style = this.props.style ? this.props.style : {};
 
         let inputField = <input style={style}
-            className="rounded"
+            className= {type == 'checkbox'?'':"form-control"}
             name={name}
             key={"KEY-input-" + this.props.id}
             id={this.props.id}
@@ -55,7 +53,7 @@ class InputField extends Component {
 
         if (this.props.disabled == true) {
             inputField = <input style={style}
-                className="rounded"
+                className="form-control"
                 onChange={this.onChange}
                 name={name} key={"KEY-input-" + this.props.id}
                 checked={this.props.checked}
@@ -68,7 +66,7 @@ class InputField extends Component {
 
         if (type == "textarea") {
             inputField = <textarea style={style}
-                className="rounded"
+                className="form-control"
                 name={name}
                 key={"KEY-input-" + this.props.id}
                 id={this.props.id}
@@ -82,9 +80,8 @@ class InputField extends Component {
         return (
             <div className="input-field ">
                 {inputField}
-                {this.props.type == "radio" || this.props.type == "checkbox" ? <span style={{ fontSize: '0.9em' }}>
-
-                    {this.props.text} </span> : ""}
+                {this.props.type == "radio" || this.props.type == "checkbox" ?
+                 <span style={{ fontSize: '0.9em' }}>{this.props.text} </span> : ""}
             </div>
         )
     }

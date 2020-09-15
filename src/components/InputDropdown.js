@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import '../css/Common.css'
-import '../css/Input.css'
+import '../css/Common.css' 
 import * as stringUtil from '../utils/StringUtil'
 import DropdownItem from './DropdownItem';
 /**

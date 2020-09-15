@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import '../css/Catalog.css'
+import '../components/pages/catalog/Catalog.css'
 import { BrowserRouter as Router, Route, Link, Switch, withRouter } from 'react-router-dom'
 import * as actions from '../redux/actionCreators'
 import * as menus from '../constant/Menus'

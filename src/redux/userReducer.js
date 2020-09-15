@@ -1,7 +1,6 @@
 import * as types from './types'
 import * as menus from '../utils/HardCodedEntites'
 import * as menuCodes from '../constant/Menus'
-import { initialState } from './reducers';
 
 export const initState = {
     loginKey: null,

@@ -1,9 +1,7 @@
-import React, { Component } from 'react'
-import '../css/Input.css'
+import React, { Component } from 'react' 
 import '../css/Common.css'
 import * as stringUtil from '../utils/StringUtil'
-import * as componentUtil from '../utils/ComponentUtil'
-import * as url from '../constant/Url'
+import * as componentUtil from '../utils/ComponentUtil' 
 import ActionButton from './ActionButton'
 
 class InputFile extends Component {
@@ -51,7 +49,8 @@ class InputFile extends Component {
 
         return (
             <div className="input-field" >
-                <input accept="image/*" onChange={this.onChange} type="file" key={"input_file_" + stringUtil.uniqueId()} />
+                <input className="form-control" accept="image/*" onChange={this.onChange} 
+                    type="file" key={"input_file_" + stringUtil.uniqueId()} />
                 {displayImage}
             </div>
         )

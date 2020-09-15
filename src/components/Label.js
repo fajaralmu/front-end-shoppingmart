@@ -1,5 +1,4 @@
-import React, {Component} from 'react'
-import '../css/Input.css'
+import React, {Component} from 'react' 
 
 class Label extends Component{
     constructor(props){

@@ -1,6 +1,4 @@
-import React, { Component } from 'react'
-import '../css/Common.css'
-import '../css/Input.css'
+import React, { Component } from 'react' 
 
 class ActionButton extends Component {
     constructor(props) {
@@ -14,13 +12,13 @@ class ActionButton extends Component {
     }
 
     render() {
-        let className = "action-button rounded";
+        let className = "btn btn-secondary";
         if(this.props.status!= null ){
-            className=className.concat(" ").concat(this.props.status);
+            className= "btn ".concat("btn-").concat(this.props.status);
         }
         return (
             <div >
-                <button style={{...this.props.style}} className={className} id={this.props.id} onClick={this.onClick}>{this.props.text}</button>
+                <button style={{...this.props.style, margin:'1px'}} className={className} id={this.props.id} onClick={this.onClick}>{this.props.text}</button>
             </div>
         )
     }

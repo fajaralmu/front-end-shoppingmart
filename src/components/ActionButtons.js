@@ -1,7 +1,4 @@
-import React, { Component } from 'react'
-import '../css/Common.css'
-import '../css/Input.css'
-import '../css/Button.css'
+import React, { Component } from 'react' 
 import * as stringUtil from '../utils/StringUtil'
 
 class ActionButtons extends Component {
@@ -15,10 +12,10 @@ class ActionButtons extends Component {
         return (
             <div style={this.props.style ? this.props.style : {}} className={className}  >
                 {this.props.buttonsData.map(buttonData => {
-                    let className = "action-button rounded";
+                    let className = "btn btn-default";
                     if (buttonData.status != null) {
                         className =
-                            className.concat(" ").concat(buttonData.status).concat(" ").concat(buttonData.className);
+                            "btn btn".concat("-").concat(buttonData.status).concat(" ").concat(buttonData.className);
                     }
                     return (
                         <button style={{...buttonData.style}} className={className} key={"btnKey-" + stringUtil.uniqueId()} onClick={buttonData.onClick}>{buttonData.text}</button>
