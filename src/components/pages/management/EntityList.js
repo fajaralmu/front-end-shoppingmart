@@ -251,7 +251,7 @@ class EntityList extends Component {
         });
 
         let navButtons = <ActionButtons style={{
-            
+            width:'min-content',
             paddingTop: '15px',
             margin: '10px'
         }} buttonsData={fixButtonData} />
