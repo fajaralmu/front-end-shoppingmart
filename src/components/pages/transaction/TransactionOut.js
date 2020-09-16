@@ -7,7 +7,7 @@ import * as catalogItemCss from '../../../css/CatalogItem.css'
 import ActionButton from '../../buttons/ActionButton'
 import Label from '../../container/Label';
 import InputField from '../../inputs/InputField';
-import DetailStockPanel from '../../DetailStockPanel';
+import DetailStockPanel from './DetailStockPanel';
 import StockListTable from './StockListTable'
 import Message from '../../container/Message'
 import TransactionReceipt from './TransactionReceipt'
@@ -16,8 +16,7 @@ import ActionButtons from '../../buttons/ActionButtons'
 import InstantTable from '../../container/InstantTable'
 import InputDropdown from '../../inputs/InputDropdown'
 import { _byId } from '../../../utils/ComponentUtil'
-import * as componentUtil from '../../../utils/ComponentUtil'
-import CatalogItem from './../../CatalogItem';
+import * as componentUtil from '../../../utils/ComponentUtil' 
 
 class TransactionOut extends Component {
 
@@ -42,9 +41,9 @@ class TransactionOut extends Component {
         }
 
 
-        this.isExistInTheChart = (flowId) => {
+        this.isExistInTheChart = (productId) => {
             if (this.state.productFlows == null) return false;
-            return this.getProductFlow(flowId) != null;
+            return this.getProductFlow(productId) != null;
         }
 
         this.addToCart = () => {
@@ -53,25 +52,25 @@ class TransactionOut extends Component {
             }
             let quantity = this.state.quantity;
             let productFlowStock = this.props.productFlowStock;
-            if (quantity > productFlowStock.remainingStock) {
+            if (quantity > productFlowStock.count) {
                 alert("Stock unavailable!"); return;
             }
 
-            let productFlow = productFlowStock.productFlow;
-            if (this.isExistInTheChart(productFlow.id))
+            // let productFlow = productFlowStock.id;
+            if (this.isExistInTheChart(productFlowStock.id))
                 if (!window.confirm("The product already exist in the chart, do you want to override it?"))
                     return;
 
             let ID = Math.floor(Math.random() * 1000);
             let newProductFlow = {
                 "id": ID,
-                "product": productFlow.product,
-                "price": productFlow.product.price,
+                "product": productFlowStock,
+                "price": productFlowStock.price,
                 "count": quantity,
-                "expiryDate": productFlow.expiryDate,
-                "flowReferenceId": productFlow.id,
+                // "expiryDate": productFlow.expiryDate,
+                "flowReferenceId": 0,//productFlow.id,
                 //stock list table identifier
-                "entityId": productFlow.id,
+                "entityId": productFlowStock.id,
             };
 
             //update list in the state
@@ -94,10 +93,10 @@ class TransactionOut extends Component {
             componentUtil.clearFields("input-customer-name");
         }
 
-        this.getProductFlow = (flowId) => {
+        this.getProductFlow = (productId) => {
             if (this.state.productFlows == null) return null;
             for (let index = 0; index < this.state.productFlows.length; index++) {
-                if (this.state.productFlows[index].flowReferenceId == flowId) return this.state.productFlows[index];
+                if (this.state.productFlows[index].product.id == productId) return this.state.productFlows[index];
             }
             return null;
         }
@@ -190,18 +189,18 @@ class TransactionOut extends Component {
 
         }
 
-        this.selectproduct = (id) => {
+        this.selectproduct = (productCode) => {
             if (this.props.products == null) {
                 alert("Data not found!");
                 return;
             }
             for (let i = 0; i < this.props.products.length; i++)
-                if (this.props.products[i].id == id) {
+                if (this.props.products[i].code == productCode) {
                     this.setState({ productName: this.props.products[i].name });
                 }
 
-            this.setState({ stockId: id });
-            this.getStockInfo(id);
+            this.setState({ stockId: productCode });
+            this.getStockInfo(productCode);
             this.props.resetProductStocks();
         }
     }
@@ -220,7 +219,7 @@ class TransactionOut extends Component {
         if (this.props.productFlowStock != null) {
             detailStock = <div className="form-panel  ">
                 <div className="panel-title ">Product Detail</div>
-                <DetailStockPanel productFlowStock={this.props.productFlowStock} />
+                <DetailStockPanel product={this.props.productFlowStock}  />
             </div>;
         }
         if (this.state.messageShow == true) {
@@ -238,12 +237,8 @@ class TransactionOut extends Component {
 
         if (this.props.products != null)
             for (let i = 0; i < this.props.products.length; i++) {
-                const product = this.props.products[i];
-                let productItem = <div>
-                    <span>{product.name}</span>
-                    <p>ID: {product.id}, stock: {product.count}</p>
-                </div>
-                productList.push({ value: product.id, text: productItem });
+                const product = this.props.products[i]; 
+                productList.push({ value: product.code, text: product.name });
             }
 
         let formComponent = <table><tbody>
@@ -260,12 +255,12 @@ class TransactionOut extends Component {
                                 values: [<InputDropdown value={this.state.productName} onSelect={this.selectproduct} dropdownList={productList}
                                     onKeyUp={this.getProductStockList} id="input-product-name" placeholder="product name" />]
                             },
-                            {
-                                values: [<InputField id="input-stock-id"
-                                    value={this.state.stockId} onKeyUp={(value, id) => this.setState({ activeField: id, stockId: value })}
-                                    type="number" placeholder="input stock id" />,
-                                <ActionButton id="btn-search-stock" text="Search" onClick={this.getStockInfo} />]
-                            },
+                            // {
+                            //     values: [<InputField id="input-stock-id"
+                            //         value={this.state.stockId} onKeyUp={(value, id) => this.setState({ activeField: id, stockId: value })}
+                            //         type="number" placeholder="input stock id" />,
+                            //     <ActionButton id="btn-search-stock" text="Search" onClick={this.getStockInfo} />]
+                            // },
                             {
                                 values: [<InputField id="input-quantity"
                                     value={this.state.quantity} onKeyUp={(value, id) => this.setState({ activeField: id, quantity: value })}

@@ -130,7 +130,7 @@ export const getProductStocks = (name, app) => {
         type: types.GET_PRODUCT_STOCKS,
         payload: {
             entity: 'product',
-            filer: {
+            filter: {
                 limit: 20,
                 fieldsFilter: { name: name }
             }
@@ -308,13 +308,20 @@ export const submitSupplyTrx = (request, app) => {
     return requested;
 }
 
-export const getStockInfo = (stockId, app) => {
+export const getStockInfo = (productCode, app) => {
     app.startLoading();
     return {
         type: types.GET_STOCK_INFO,
-        payload: { productFlow: { id: stockId } },
+        payload: {
+            entity: "product",
+            filter: {
+                limit: 1,
+                fieldsFilter:
+                    { "code[EXACTS]": productCode, withStock: true }
+            }
+        },
         meta: {
-            app: app, type: types.GET_STOCK_INFO, url: apiTransaction.concat("stockinfo")
+            app: app, type: types.GET_STOCK_INFO, url: apiBaseUrl.concat("get")
         }
     }
 }

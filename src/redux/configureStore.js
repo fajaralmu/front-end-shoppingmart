@@ -509,12 +509,12 @@ const getStockInfoMiddleware = store => next => action => {
         .then(response => response.json())
         .then(data => {
             console.debug("Response:", data);
-            if (data.productFlowStock == null) {
+            if (data.entities == null || data.entities.length == 0) {
                 alert("Data not found!");
                 return;
             }
             let newAction = Object.assign({}, action, {
-                payload: data.productFlowStock
+                payload: data
             });
             delete newAction.meta;
             store.dispatch(newAction);

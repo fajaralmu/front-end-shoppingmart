@@ -26,7 +26,7 @@ export const reducer = (state = initState, action) => {
     switch (action.type) {
 
         case types.GET_STOCK_INFO:
-            let result = { ...state, productFlowStock: action.payload };
+            let result = { ...state, productFlowStock: action.payload.entities[0] };
             return result;
 
         case types.SUBMIT_TRX_PURCHASE:
