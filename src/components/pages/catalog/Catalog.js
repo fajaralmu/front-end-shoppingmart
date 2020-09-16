@@ -233,29 +233,23 @@ class Catalog extends Component {
         this.focusToActiveField();
     }
 
-
-    render() {
-
-        let products = this.props.catalogData.entities == null ? [] : this.props.catalogData.entities;
-
-
+    filterBox(){
         let categories = [{ value: "00", text: "-all category-" }];
-        this.props.productCategories.map(category => {
-            categories.push({ value: category.id, text: category.name });
-        })
-
         let actionButtons = [
             { text: <i class="fa fa-search" ></i>, status: "success", onClick: () => this.getProductCatalog(0), id: "btn-search" },
             { text: "Clear Filter", status: 'warning', onClick: this.clearField, id: "Clear-filter" }
         ];
-
+        this.props.productCategories.map(category => {
+            categories.push({ value: category.id, text: category.name });
+        }) 
+       
         if (this.props.enableShopping) {
             actionButtons.push({
                 text: <span><i class="fa fa-cart-arrow-down" ></i>&nbsp;Clear Shopping List</span>, onClick: () => { this.clearCart() }, status: 'danger', id: "clear-list"
             });
         }
 
-        let filterBox = <div className="filter-box">
+        return <div className="filter-box">
             <GridComponent cols={3} style={{ width: 'max-content' }} items={[
                 <InputField placeholder="search by product name"
                     value={this.state.requestProductName}
@@ -284,13 +278,17 @@ class Catalog extends Component {
             ]} />
             <p></p>
         </div>;
+    }
 
+    render() {
+
+        let products = this.props.catalogData.entities == null ? [] : this.props.catalogData.entities;    
 
         let productCatalog = (<div className="section-container" id="catalog-main" key="catalog-main">
             <ContentTitle title="Catalog Page" iconClass="fas fa-store-alt" description="Choose your favourite products" />
             <NavButtons buttonsData={this.generateNavButtonsData()} />
 
-            {filterBox}
+            {this.filterBox()}
             <div className="grid-container" >
                 {products.map(
                     product => {
@@ -299,8 +297,7 @@ class Catalog extends Component {
                         if (this.props.enableShopping) {
 
                             const cartItem = this.getProductInCart(product.id);
-                            const qty = cartItem.count;
-
+                            const qty = cartItem.count; 
 
                             const cartButtonsData = [
                                 { text: <i class="fas fa-sync"></i>, status: "danger btn-sm", onClick: () => this.addToCart(product, (qty * (-1))), id: "btn-add-cart-" + product.id },

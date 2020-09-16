@@ -59,24 +59,15 @@ class ProductDetail extends Component {
     render() {
 
         let product = this.props.product;
-        let imageComponent = "";
-        if (product && product.imageUrl) {
-
-            let imageUrls = new Array();
-            for (let index = 0; index < product.imageUrl.split("~").length; index++) {
-                imageUrls.push(url.baseImageUrl + product.imageUrl.split("~")[index]);
-            }
-            imageComponent = <ImageCarousel imageUrls={imageUrls} />
-
-        }
-
-
 
         if (product == null) {
             return (
                 <ContentTitle title="Please wait.." iconClass="fas fa-info-circle" />
             )
         }
+
+        /////////////////////////
+
         let supplierListPanel = <p></p>
         let supplierShown = this.state.supplierShown ? true : false;
         if (supplierShown && product.suppliers) {
@@ -107,7 +98,7 @@ class ProductDetail extends Component {
                 <div className="product-desc">
                     <InstantTable disabled={true}
                         rows={[
-                            { values: [imageComponent], CS: [2] },
+                            { values: [<ProductImage product={product} />], CS: [2] },
                             { values: ["Price", beautifyNominal(product.price)] },
                             { values: ["Item(s)", beautifyNominal(product.count) + " " + (product.unit ? product.unit.name : "")] },
                             { values: ["Category", product.category.name] }
@@ -126,6 +117,20 @@ class ProductDetail extends Component {
             </div>
         )
     }
+}
+
+function ProductImage(props) {
+    const product = props.product;
+
+    if (product && product.imageUrl) {
+
+        let imageUrls = new Array();
+        for (let index = 0; index < product.imageUrl.split("~").length; index++) {
+            imageUrls.push(url.baseImageUrl + product.imageUrl.split("~")[index]);
+        }
+        return <ImageCarousel imageUrls={imageUrls} />
+    }
+    return null;
 }
 
 const mapStateToProps = state => {

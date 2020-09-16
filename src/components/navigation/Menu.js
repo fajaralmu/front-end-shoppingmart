@@ -40,20 +40,7 @@ class Menu extends Component {
                     {
                         renderedMenus.map(
                             e => {
-                                let menuClass = "fa fa-store-alt";
-                                if (e.menuClass) {
-                                    menuClass = e.menuClass;
-                                }
-                                if (e.url == "#") {
-                                    return (<li onClick={() => this.props.handleMenuCLick(e)} className={this.props.activeCode == e.code ? "active" : ""} key={e.name}
-                                        id={e.name}> <Link key={e.name} className="App-link"
-                                            to="#" ><div className="fill" ><i class={menuClass}></i>&nbsp;{e.name} </div></Link></li >
-                                    )
-                                }
-                                return (<li className={this.props.activeCode == e.code ? "menu-active" : ""} key={e.name}
-                                    id={e.name}> <Link key={e.name} className="App-link"
-                                        to={e.url} ><div className="fill" ><i class={menuClass}></i>&nbsp;{e.name} </div></Link></li >
-                                )
+                               return <MenuItem menu={e} activeCode={this.props.activeCode} handleMenuCLick={this.props.handleMenuCLick} />
                             }
                         )
                     } </ul>
@@ -62,6 +49,23 @@ class Menu extends Component {
 
         )
     }
+}
+
+function MenuItem(props){
+    let menuClass = "fa fa-store-alt";
+    const menu = props.menu;
+    if (menu.menuClass) {
+        menuClass = menu.menuClass;
+    }
+    if (menu.url == "#") {
+        return (<li onClick={() => props.handleMenuCLick(menu)} className={props.activeCode == menu.code ? "active" : ""} key={menu.name}
+            id={menu.name}> <Link key={menu.name} className="App-link"
+                to="#" ><div className="fill" ><i class={menuClass}></i>&nbsp;{menu.name} </div></Link></li >)
+    }
+    return (<li className={ props.activeCode == menu.code ? "menu-active" : ""} key={menu.name}
+        id={menu.name}> <Link key={menu.name} className="App-link"
+            to={menu.url} ><div className="fill" ><i class={menuClass}></i>&nbsp;{menu.name} </div></Link></li >
+    )
 }
 
 export default Menu;
