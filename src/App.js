@@ -21,7 +21,7 @@ import ChatRoom from './components/pages/chat_room/ChatRoom';
 import CartDetail from './components/cart/CartDetail';
 import Management from './components/pages/management/Management';
 import Header from './components/layout/header/Header';
-
+import * as url from './constant/Url';
 
 class App extends Component {
 
@@ -98,6 +98,23 @@ class App extends Component {
       localStorage.setItem("requestId", this.props.requestId);
       this.props.refreshLogin();
     }
+
+    if (this.props.applicationProfile) {
+      this.updateIcon(this.props.applicationProfile);
+    }
+  }
+
+  updateIcon(profile) {
+    let link = document.querySelector('link[rel="shortcut icon"]') ||
+      document.querySelector('link[rel="icon"]');
+    if (!link) {
+      link = document.createElement('link');
+      link.id = 'favicon';
+      link.rel = 'shortcut icon';
+      document.head.appendChild(link);
+    }
+
+    link.href = url.baseImageUrl+'/'+profile.iconUrl;
   }
 
   componentDidMount() {
@@ -130,9 +147,7 @@ class App extends Component {
 
     if (!this.state.requestId) {
       return (
-        <div>
-          Please wait..
-        </div>
+        <div>Please wait.. </div>
       )
     }
 
@@ -148,7 +163,7 @@ class App extends Component {
     let loadingComponent = "";
     if (this.state.loading == true) {
       loadingComponent = <Message realtime={this.state.realtime} progress={this.state.loadingPercentage} text="Please wait..." type="loading" />;
-        
+
     }
 
     let menus = this.setMenus();

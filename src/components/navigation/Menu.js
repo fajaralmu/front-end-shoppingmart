@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
-import './Menu.css' 
+import './Menu.css'
+import * as url from '../../constant/Url'
 import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'
+import { baseImageUrl } from './../../constant/Url';
 
 class Menu extends Component {
     constructor(props) {
@@ -8,13 +10,20 @@ class Menu extends Component {
 
     }
 
-    componentDidUpdate() { 
+    componentDidUpdate() {
     }
 
     render() {
         let userLink = "";
         if (this.props.loggedUser != null) {
             userLink = <li id="user-link">
+                <div style={{
+                    margin: 'auto',
+                    textAlign: 'center',
+                    backgroundImage: 'url('+url.baseImageUrl + "/" + this.props.loggedUser.profileImage +')',
+                    backgroundSize: '50px 50px',
+                    width: '50px', height: '50px', borderRadius: '25px'
+                }}> </div>
                 <div className="fill" >Welcome, {this.props.loggedUser.displayName} </div>
             </li>
         }
@@ -23,7 +32,7 @@ class Menu extends Component {
         if (this.props.menus != null) {
             renderedMenus = this.props.menus;
         }
-        
+
         return (
 
             <div className="side-menu" >
@@ -33,12 +42,12 @@ class Menu extends Component {
                         renderedMenus.map(
                             e => {
                                 let menuClass = "fa fa-store-alt";
-                                if(e.menuClass){
+                                if (e.menuClass) {
                                     menuClass = e.menuClass;
                                 }
                                 if (e.url == "#") {
                                     return (<li onClick={() => this.props.handleMenuCLick(e)} className={this.props.activeCode == e.code ? "active" : ""} key={e.name}
-                                        id={e.name}> <Link key={e.name}  className="App-link"
+                                        id={e.name}> <Link key={e.name} className="App-link"
                                             to="#" ><div className="fill" ><i class={menuClass}></i>&nbsp;{e.name} </div></Link></li >
                                     )
                                 }

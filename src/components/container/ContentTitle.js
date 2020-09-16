@@ -15,6 +15,7 @@ class ContentTitle extends Component {
             <div className="content-title">
                 <h2>{title}</h2>
                 <p>{description}</p>
+                {this.props.children}
             </div>
         )
     }
