@@ -23,16 +23,12 @@ class TransactionReceipt extends Component {
             }
 
             transactionReceiptComponent =
-                <InstantTable disabled={true} rows={[
-                    { values: [line], CS: [2] },
-                    { id: "trx_code", values: ["Code", transaction.code] },
-                    { values: [line], CS: [2] },
-                    { id: "trx_date", values: ["Date", new String(new Date(transaction.transactionDate))] },
-                    { values: [line], CS: [2] },
-                    { id: "trx_type", values: ["Type", transaction.type] },
-                    { values: [line], CS: [2] },
+                <InstantTable disabled={true} rows={[ 
+                    { id: "trx_code", values: ["Code", transaction.code] }, 
+                    { id: "trx_date", values: ["Date", new String(new Date(transaction.transactionDate))] }, 
+                    { id: "trx_type", values: ["Type", transaction.type] }, 
                     stakeHolder,
-                    { values: [line], CS: [2] },
+                    
                 ]} />;
         }
 

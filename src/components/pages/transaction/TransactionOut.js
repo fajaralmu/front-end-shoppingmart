@@ -6,8 +6,7 @@ import * as trxCss from './Transaction.css'
 import * as catalogItemCss from '../../../css/CatalogItem.css'
 import ActionButton from '../../buttons/ActionButton'
 import Label from '../../container/Label';
-import InputField from '../../inputs/InputField';
-import DetailStockPanel from './DetailStockPanel';
+import InputField from '../../inputs/InputField'; 
 import StockListTable from './StockListTable'
 import Message from '../../container/Message'
 import TransactionReceipt from './TransactionReceipt'
@@ -16,7 +15,9 @@ import ActionButtons from '../../buttons/ActionButtons'
 import InstantTable from '../../container/InstantTable'
 import InputDropdown from '../../inputs/InputDropdown'
 import { _byId } from '../../../utils/ComponentUtil'
-import * as componentUtil from '../../../utils/ComponentUtil' 
+import * as componentUtil from '../../../utils/ComponentUtil'
+import AddToCartButton from './AddToCartButton';
+import DetailProductPanel from './DetailProductPanel';
 
 class TransactionOut extends Component {
 
@@ -219,7 +220,7 @@ class TransactionOut extends Component {
         if (this.props.productFlowStock != null) {
             detailStock = <div className="form-panel  ">
                 <div className="panel-title ">Product Detail</div>
-                <DetailStockPanel product={this.props.productFlowStock}  />
+                <DetailProductPanel stockView={true} product={this.props.productFlowStock} />
             </div>;
         }
         if (this.state.messageShow == true) {
@@ -237,7 +238,7 @@ class TransactionOut extends Component {
 
         if (this.props.products != null)
             for (let i = 0; i < this.props.products.length; i++) {
-                const product = this.props.products[i]; 
+                const product = this.props.products[i];
                 productList.push({ value: product.code, text: product.name });
             }
 
@@ -268,13 +269,13 @@ class TransactionOut extends Component {
                             }
                         ]}
                     />
-                    {this.props.productFlowStock != null ? <ActionButton text="Save" onClick={this.addToCart} /> : ""}
+                    {this.props.productFlowStock != null ? <AddToCartButton  onClick={this.addToCart} /> : ""}
                 </div>
             </td><td>{detailStock}</td></tr>
         </tbody></table>;
 
         let buttonsData = [
-            { text: "Back", onClick: () => this.props.setFeatureCode(null), id: "btn-back" },
+            { text: "Back", status: "secondary", onClick: () => this.props.setFeatureCode(null), id: "btn-back" },
             { text: "Back And Reset", status: "warning btn-sm", onClick: () => { this.props.setFeatureCode(null); this.reset() }, id: "btn-back" },
             { text: "Reset", status: 'danger btn-sm', id: "btn-reset-trx", onClick: this.reset }];
 

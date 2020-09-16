@@ -7,7 +7,7 @@ import * as CatalogItemCss from '../../../css/CatalogItem.css'
 import ActionButton from '../../buttons/ActionButton'
 import Label from '../../container/Label';
 import InputField from '../../inputs/InputField';
-import DetailProductPanel from '../../DetailProductPanel';
+import DetailProductPanel from './DetailProductPanel';
 import StockListTable from './StockListTable'
 import Message from '../../container/Message'
 import TransactionReceipt from './TransactionReceipt'
@@ -18,6 +18,7 @@ import * as componentUtil from '../../../utils/ComponentUtil'
 import { _byId } from '../../../utils/ComponentUtil'
 import InputDropdown from '../../inputs/InputDropdown'
 import CatalogItem from './../../CatalogItem';
+import AddToCartButton from './AddToCartButton';
 
 class TransactionIn
     extends Component {
@@ -301,15 +302,15 @@ class TransactionIn
                             }
                         ]}
                     />
-                    {this.state.product != null ? <ActionButton text="Save" onClick={this.addToCart} /> : ""}
+                    {this.state.product != null ? <AddToCartButton  onClick={this.addToCart} /> : ""}
                 </div>
             </td><td>{detailStock}</td></tr>
         </tbody></table>;
 
         let buttonsData = [
-            { text: "Back", onClick: () => this.props.setFeatureCode(null), id: "btn-back" },
-            { text: "Back And Reset", status: "warning btn-sm", onClick: () => { this.props.setFeatureCode(null); this.reset() }, id: "btn-back-reset" }, 
-            { text: "Reset", status: 'danger btn-sm', id: "btn-reset-trx", onClick: this.reset }];
+            { text: "Back", status:"secondary", onClick: () => this.props.setFeatureCode(null), id: "btn-back" },
+            { text: "Back And Reset", status: "warning", onClick: () => { this.props.setFeatureCode(null); this.reset() }, id: "btn-back-reset" }, 
+            { text: "Reset", status: 'danger', id: "btn-reset-trx", onClick: this.reset }];
 
         if (this.props.successTransaction) {
             formComponent =
