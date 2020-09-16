@@ -113,6 +113,26 @@ class SupplierList extends Component {
             return navButtonsData;
         }
 
+        this.filterBox = () => {
+            let actionButtons = [
+                { text: <i class="fas fa-search"></i>, status: "success", onClick: () => this.getSupplierList(0), id: "btn-search"}, 
+                { text: "Clear Filter", status: 'warning', onClick: this.clearField, id: "Clear" }
+            ];
+    
+           return (<div className="filter-box">
+                <GridComponent cols={2} style={{ width: 'max-content' }} items={
+                    [
+                        <InputField placeholder="search by supplier name" onKeyUp={this.handleInputNameChange} type="search"
+                            id="input-supplier-name" />,
+                        <ComboBox defaultValue={this.state.requestOrderBy+"-"+this.state.requestOrderType} onChange={this.handleOrderChange}
+                            options={filterSupplierOptions} key="k-select-order" id="select-order" />,
+                        <ActionButtons style={{ margin: '5px' }} key="btns" buttonsData={actionButtons} />
+                    ]
+                } />  
+                <p></p>
+            </div>);
+        }
+
     }
 
     componentWillMount() {
@@ -135,37 +155,12 @@ class SupplierList extends Component {
 
     render() {
 
-        let suppliers = this.props.suppliersData.entities == null ? [] : this.props.suppliersData.entities;
-
-        let actionButtons = [
-            { text: <i class="fas fa-search"></i>, status: "success", onClick: () => this.getSupplierList(0), id: "btn-search"}, 
-            { text: "Clear Filter", status: 'warning', onClick: this.clearField, id: "Clear" }
-        ];
-
-        let filterBox = <div className="filter-box">
-            <GridComponent cols={2} style={{ width: 'max-content' }} items={
-                [
-                    <InputField placeholder="search by supplier name" onKeyUp={this.handleInputNameChange} type="search"
-                        id="input-supplier-name" />,
-                    <ComboBox defaultValue={this.state.requestOrderBy+"-"+this.state.requestOrderType} onChange={this.handleOrderChange}
-                        options={filterSupplierOptions} key="k-select-order" id="select-order" />,
-
-                    <ActionButtons style={{ margin: '5px' }} key="btns" buttonsData={actionButtons} />
-                ]
-            } />
-
-
-
-            <p></p>
-        </div>;
+        let suppliers = this.props.suppliersData.entities == null ? [] : this.props.suppliersData.entities; 
 
         let supplierCatalog = (<div className="section-container" id="catalog-main" key="catalog-main">
-            <ContentTitle title="Supplier List Page" iconClass="fas fa-warehouse" description="List of our partners" />
-
-            <NavButtons buttonsData={this.generateNavButtonsData()} />
-
-            {filterBox}
-
+            <ContentTitle title="Supplier List Page" iconClass="fas fa-warehouse" description="List of our partners" /> 
+            <NavButtons buttonsData={this.generateNavButtonsData()} /> 
+            <this.filterBox /> 
             <div className="supplier-panel  grid-container">
                 {suppliers.map(
                     supplier => {

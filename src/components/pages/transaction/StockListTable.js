@@ -1,28 +1,33 @@
-import React, { Component } from 'react'  
-import * as stringUtil from '../../../utils/StringUtil' 
+import React, { Component } from 'react'
+import * as stringUtil from '../../../utils/StringUtil'
 import CrudRow from '../../container/CrudRow'
- 
+
 
 class StockListTable extends Component {
     constructor(props) {
         super(props);
+
+        this.headers = () => {
+            let headers; 
+            if (this.props.disabled == true) {
+                headers = [
+                    "No", "Flow ID", "Product Name", "Expiry Date", "Quantity", "Price @Item", "Total Price", "Reff Stock ID"
+                ];
+            } else {
+                headers = [
+                    "No", "Flow ID", "Product Name", "Expiry Date", "Quantity", "Price @Item", "Total Price", "Reff Stock ID", "Option"
+                ];
+            };
+            return headers;
+        }
     }
 
-    render() {
-
-        let headers = [
-            "No", "Flow ID", "Product Name", "Expiry Date", "Quantity", "Price @Item", "Total Price", "Reff Stock ID", "Option"
-        ];
-
-        if (this.props.disabled == true) {
-            headers = [
-                "No", "Flow ID", "Product Name", "Expiry Date", "Quantity", "Price @Item", "Total Price", "Reff Stock ID"
-            ];
-        }
-
-        let productFlows = this.props.productFlows;
+    render() { 
+        
         let i = 1;
-        let stockListRow =
+        const headers = this.headers(); 
+        const productFlows = this.props.productFlows;
+        const stockListRow =
             productFlows.map(
                 productFlow => {
                     let product = productFlow.product ? productFlow.product : {};

@@ -59,16 +59,19 @@ class Login extends Component {
         // }
     }
 
-    render() {
-
+    message(){
         let message = <p>
             {this.props.loginFailed ? <Message endMessage={this.endMessage} type="failed" text="Login Failed" /> : ""}
         </p>
+        return message;
+    }
+
+    render() { 
 
         return (
             <div className="section-container">
                 < ContentTitle title="Login Page" iconClass="fas fa-sign-in-alt"/>
-                {message}
+                {this.message()}
                 <div className="login-container card">
                     <div className="card-header">Login</div>
                     <div className="card-body">
