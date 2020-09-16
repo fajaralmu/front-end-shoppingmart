@@ -45,25 +45,30 @@ class CartInfo extends Component {
             const cartItem = cart[i];
             count += cartItem.count
         }
-        let totalPrice = this.caculateTotalPrice();
-    let content = <div><Label text={<span><i class="fas fa-shopping-cart"></i>Listed Product</span>} />
-            <span style={{ margin: '5px' }} className="quantity-label">{count}</span>
-            <span style={{ margin: '5px', color: 'yellow', backgroundColor: 'blue' }}
-                className="quantity-label">{totalPrice}</span>
-        </div>
-
-        if (this.state.detail) {
-            content = <h3 style={{ paddingLeft: '5px' }}>See Detail</h3>
-        }
+        let totalPrice = this.caculateTotalPrice(); 
 
         return (
             <div onClick={this.handleClick} onMouseOver={this.showCartList} onMouseLeave={this.hideCartList} className="cart-info" >
-                {content}
-
-
+               <CartInfoContent detail={this.state.detail} count={count} totalPrice={totalPrice} />
             </div>
         )
     }
+}
+
+function CartInfoContent(props) {
+    let content;
+
+    if (props.detail) {
+        content = <h3 style={{ paddingLeft: '5px' }}>See Detail</h3>
+    } else {
+        content = <div>
+            <Label text={<span><i class="fas fa-shopping-cart"></i>Listed Product</span>} />
+            <span style={{ margin: '5px' }} className="quantity-label">{props.count}</span>
+            <span style={{ margin: '5px', color: 'yellow', backgroundColor: 'blue' }} className="quantity-label">{props.totalPrice}</span>
+        </div>
+    }
+
+    return content;
 }
 
 export default CartInfo;

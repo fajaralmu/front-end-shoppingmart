@@ -9,8 +9,10 @@ class InstantTable extends Component {
     render() {
         let rows = [];
         if (this.props.rows) { rows = this.props.rows; }
+        
         let className = "table";
         let tableStyle = this.props.style ? this.props.style : {};
+        
         if (this.props.className) {
             className += " " + this.props.className;
         }

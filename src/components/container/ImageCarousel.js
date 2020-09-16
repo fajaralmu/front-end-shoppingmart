@@ -8,6 +8,7 @@ class ImageCarousel extends Component {
     constructor(props) {
         super(props);
         this.state = { index: 0 }
+
         this.prev = () => {
             if (this.props.imageUrls == null) return;
             let currentIndex = this.state.index;
@@ -45,10 +46,7 @@ class ImageCarousel extends Component {
             }
         }
         return (
-            <div className="carousel rounded" style={{
-                backgroundImage: 'url('+bgUrl+')',
-                backgroundSize: '400px 300px'
-            }}> 
+            <div className="carousel rounded" style={carouselStyle(bgUrl)}> 
                  
                 <InstantTable style={{backgroundColor:'rgba(150,150,150,0.5'}} className="carousel-navigation" rows={[{
                     values: [
@@ -60,6 +58,13 @@ class ImageCarousel extends Component {
             </div>
         )
     }
+}
+
+function carouselStyle(bgUrl){
+    return {
+        backgroundImage: 'url('+bgUrl+')',
+        backgroundSize: '400px 300px'
+    };
 }
 
 export default ImageCarousel;
