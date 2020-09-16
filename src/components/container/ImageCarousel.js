@@ -32,22 +32,29 @@ class ImageCarousel extends Component {
 
     render() {
         let image = "";
+        let bgUrl = null;
         if (this.props.imageUrls) {
-            for (let index = 0; index < this.props.imageUrls.length; index++) {
-                const imageUrl = this.props.imageUrls[index];
-                if (index == this.state.index) {
+           
+            for (let i = 0; i < this.props.imageUrls.length; i++) {
+                const imageUrl = this.props.imageUrls[i];
+                console.debug(i, "this.state.index: ",this.state.index, "Image carousel URL", imageUrl);
+                if (i == this.state.index) {
                     image = <img src={imageUrl} className="carousel-item" />
+                    bgUrl = imageUrl;
                 }
             }
         }
         return (
-            <div className="carousel rounded"> 
-                {image}
-                <InstantTable className="carousel-navigation" rows={[{
+            <div className="carousel rounded" style={{
+                backgroundImage: 'url('+bgUrl+')',
+                backgroundSize: '400px 300px'
+            }}> 
+                 
+                <InstantTable style={{backgroundColor:'rgba(150,150,150,0.5'}} className="carousel-navigation" rows={[{
                     values: [
-                        <ActionButton text="<" id="btn-prev" onClick={this.prev} />,
+                        <ActionButton text={<i className="fas fa-chevron-left"></i>} id="btn-prev-img" onClick={this.prev} />,
                         <Label text={this.state.index + 1 + "/" + (this.props.imageUrls ? this.props.imageUrls.length : 1)} />,
-                        <ActionButton text=">" id="btn-next" onClick={this.next} />
+                        <ActionButton text={<i className="fas fa-chevron-right"></i>} id="btn-next-img" onClick={this.next} />
                     ]
                 }]} />
             </div>
