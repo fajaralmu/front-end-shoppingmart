@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import * as stringUtil from '../../utils/StringUtil'
-import ActionButton from '../buttons/ActionButton';
+import * as stringUtil from '../../utils/StringUtil' 
+import ActionButtons from './../buttons/ActionButtons';
 
 class NavButtons extends Component {
     constructor(props) {
@@ -13,22 +13,17 @@ class NavButtons extends Component {
         if (this.props.buttonsData) {
             buttonsData = this.props.buttonsData;
         }
-        const gridTemplateColumns = "auto ".repeat(buttonsData.length);
+        for (let i = 0; i < buttonsData.length; i++) {
+            const buttonData = buttonsData[i];
+            buttonsData[i].onClick = buttonData.buttonClick;
+            buttonsData[i].key = stringUtil.uniqueId() + "_nav";
+
+            if(buttonData.active){
+                buttonsData[i].style = {backgroundColor:'lightsteelblue'}
+            }
+        } 
         return (
-            <div className="nav-button-wrapper" style={{ width: 'min-content', display: 'grid', gridTemplateColumns: gridTemplateColumns }}>
-                {buttonsData.map(
-                    buttonData => {
-                        return (
-                            <ActionButton 
-                                style={{
-                                    backgroundColor: buttonData.active ? 'lightsteelblue' : 'darkcyan'
-                                }}
-                                id={buttonData.id} onClick={buttonData.buttonClick}
-                                key={stringUtil.uniqueId() + "_nav"} text={buttonData.text} />
-                        )
-                    }
-                )}
-            </div>
+            <ActionButtons buttonsData={buttonsData} />
         )
     }
 }
