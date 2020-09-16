@@ -16,7 +16,7 @@ import Card from '../../Card'
 import * as stringUtil from '../../../utils/StringUtil'
 import Label from '../../Label';
 import ProductSales from '../../ProductSales';
-import ContentTitle from '../../ContentTitle';
+import ContentTitle from '../../container/ContentTitle';
 import InstantTable from '../../container/InstantTable';
 import ComboBoxes from './../../inputs/ComboBoxes';
 

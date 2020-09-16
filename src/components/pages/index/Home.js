@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import  * as homeCss from './Home.css'
 import * as menus from '../../../constant/Menus'
-import ContentTitle from '../../ContentTitle';
+import ContentTitle from '../../container/ContentTitle';
 
 class Home extends Component {
     constructor(props) {
@@ -10,15 +10,17 @@ class Home extends Component {
     }
 
     componentDidMount() {
-        document.title = this.props.applicationProfile.name;
+        const profile = this.props.applicationProfile ? this.props.applicationProfile : {};
+        document.title = profile.name;
         this.props.setMenuCode(menus.HOME);
     }
 
     render() {
+        const profile = this.props.applicationProfile ? this.props.applicationProfile : {};
         return (
             <div className="section-container">
-                <ContentTitle title={this.props.applicationProfile.name} description=
-                    {this.props.applicationProfile.shortDescription} />
+                <ContentTitle title={profile.name} description=
+                    {profile.shortDescription} />
                 <div className="article-content">
                     <h2  >Tanpo Waton</h2>
                     <p style={{ fontFamily: 'Times New Roman' }} >Ngawiti ingsun nglaras syi’iran # Kelawan muji maring pengeran<br />

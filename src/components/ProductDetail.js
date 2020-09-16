@@ -10,7 +10,7 @@ import ActionButton from './buttons/ActionButton'
 import InstantTable from '../components/container/InstantTable'
 import ImageCarousel from './ImageCarousel'
 import { beautifyNominal } from '../utils/StringUtil'
-import ContentTitle from './ContentTitle'
+import ContentTitle from './container/ContentTitle'
 
 
 class ProductDetail extends Component {

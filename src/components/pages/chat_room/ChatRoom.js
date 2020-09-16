@@ -5,7 +5,7 @@ import { _byId } from '../../../utils/ComponentUtil'
 import InputField from '../../inputs/InputField';
 import ActionButton from '../../buttons/ActionButton';
 import SockJsClient from 'react-stomp'; 
-import ContentTitle from '../../ContentTitle'; 
+import ContentTitle from '../../container/ContentTitle'; 
 import GridComponent from '../../container/GridComponent'
 import ChatList from './CharList';
 

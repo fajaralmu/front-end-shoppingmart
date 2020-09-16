@@ -1,6 +1,5 @@
-import React, { Component } from 'react'
-import '../css/Common.css'
-import '../css/Content.css'
+import React, { Component } from 'react' 
+import './Content.css'
 
 class ContentTitle extends Component {
     constructor(props) {

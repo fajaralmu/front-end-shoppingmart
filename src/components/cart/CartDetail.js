@@ -1,6 +1,6 @@
 import React, { Component } from 'react' 
 import * as cartCss from './Cart.css' 
-import ContentTitle from '../ContentTitle';
+import ContentTitle from '../container/ContentTitle';
 import * as stringUtil from '../../utils/StringUtil'
 import InstantTable from '../container/InstantTable';
 

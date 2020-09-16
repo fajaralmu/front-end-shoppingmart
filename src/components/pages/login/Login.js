@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import * as menus from '../../../constant/Menus'
 import { withRouter } from 'react-router';
-import ContentTitle from '../../ContentTitle';
+import ContentTitle from '../../container/ContentTitle';
 import Label from '../../Label'; 
 import ActionButton from '../../buttons/ActionButton';
 import Message from '../../Message';
