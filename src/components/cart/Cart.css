@@ -9,6 +9,7 @@
     font-size: 17px;
     transition-duration: 200ms;
     border-left: solid 3px ;
+    z-index: 3;
 }
 .cart-info:hover{
     background-color: goldenrod;

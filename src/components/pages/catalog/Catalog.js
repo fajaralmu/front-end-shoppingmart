@@ -245,18 +245,18 @@ class Catalog extends Component {
         })
 
         let actionButtons = [
-            { text: "Search", status: "success", onClick: () => this.getProductCatalog(0), id: "btn-search" },
-            { text: "Clear", status: 'warning', onClick: this.clearField, id: "Clear-filter" }
+            { text: <i class="fa fa-search" ></i>, status: "success", onClick: () => this.getProductCatalog(0), id: "btn-search" },
+            { text: "Clear Filter", status: 'warning', onClick: this.clearField, id: "Clear-filter" }
         ];
 
         if (this.props.enableShopping) {
             actionButtons.push({
-                text: "Clear Shopping List", onClick: () => { this.clearCart() }, status: 'danger', id: "clear-list"
+                text: <span><i class="fa fa-cart-arrow-down" ></i>&nbsp;Clear Shopping List</span> , onClick: () => { this.clearCart() }, status: 'danger', id: "clear-list"
             });
         }
 
         let filterBox = <div className="filter-box">
-            <GridComponent style={{ width: '50%' }} cols={3} items={[
+            <GridComponent style={{ width: 'max-content' }}  items={[
                 <InputField placeholder="search by product name"
                     value={this.state.requestProductName}
                     onKeyUp={this.handleInputNameChange}
@@ -272,19 +272,17 @@ class Catalog extends Component {
                     onChange={this.handleCategoryChange}
                     options={categories} id="select-category"
                 />,
-                <InputField checked={this.state.requestWithStock} onChange={this.handleChangeWithStockOption}
+                <div><InputField checked={this.state.requestWithStock} onChange={this.handleChangeWithStockOption}
                     type="checkbox" id="checkbox-with-stock"
                     text="Inculde Remaining Stock" />
-                , <InputField checked={this.props.enableShopping} onChange={this.handleChangeEnableShoppingOption}
+                 <InputField checked={this.props.enableShopping} onChange={this.handleChangeEnableShoppingOption}
                     type="checkbox" id="checkbox-enable-cart"
-                    text="I Want to List My Needs" />
-                , <div></div>,
+                    text="I Want to List My Needs" /></div>,
                 <ActionButtons style={{ margin: '5px' }} buttonsData={actionButtons} />
 
             ]} />
             <p></p>
         </div>;
-
 
 
         let productCatalog = (<div className="section-container" id="catalog-main" key="catalog-main">
@@ -304,13 +302,10 @@ class Catalog extends Component {
 
 
                             const cartButtonsData = [
-                                { text: "x", status: "danger", onClick: () => this.addToCart(product, (qty * (-1))), id: "btn-add-cart-" + product.id },
-                                { text: "-", status: "warning", onClick: () => this.addToCart(product, -1), id: "btn-add-cart-" + product.id },
-                                {
-                                    text: qty, id: "info-cart-" + product.id,
-                                    style: { backgroundColor: 'white', border: 'none' ,color:'black',fontSize:'1.2em'}
-                                },
-                                { text: "+", status: 'success', onClick: () => this.addToCart(product, 1), id: "btn-reduce-cart-" + product.id }
+                                { text: <i class="fas fa-sync"></i>, status: "danger btn-sm", onClick: () => this.addToCart(product, (qty * (-1))), id: "btn-add-cart-" + product.id },
+                                { text: <i class="fa fa-minus-circle"></i>, status: "warning btn-sm", onClick: () => this.addToCart(product, -1), id: "btn-add-cart-" + product.id },
+                                { text: qty, id: "info-cart-" + product.id,  status: 'light btn-sm' },
+                                { text: <i class="fa fa-plus-circle"></i>, status: 'success btn-sm', onClick: () => this.addToCart(product, 1), id: "btn-reduce-cart-" + product.id }
                             ];
 
                             shoppingInfo = <div>

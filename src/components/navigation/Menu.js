@@ -32,15 +32,19 @@ class Menu extends Component {
                     {
                         renderedMenus.map(
                             e => {
+                                let menuClass = "fa fa-store-alt";
+                                if(e.menuClass){
+                                    menuClass = e.menuClass;
+                                }
                                 if (e.url == "#") {
                                     return (<li onClick={() => this.props.handleMenuCLick(e)} className={this.props.activeCode == e.code ? "active" : ""} key={e.name}
                                         id={e.name}> <Link key={e.name}  className="App-link"
-                                            to="#" ><div className="fill" >{e.name} </div></Link></li >
+                                            to="#" ><div className="fill" ><i class={menuClass}></i>&nbsp;{e.name} </div></Link></li >
                                     )
                                 }
                                 return (<li className={this.props.activeCode == e.code ? "menu-active" : ""} key={e.name}
                                     id={e.name}> <Link key={e.name} className="App-link"
-                                        to={e.url} ><div className="fill" >{e.name} </div></Link></li >
+                                        to={e.url} ><div className="fill" ><i class={menuClass}></i>&nbsp;{e.name} </div></Link></li >
                                 )
                             }
                         )

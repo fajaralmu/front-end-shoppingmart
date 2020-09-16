@@ -289,7 +289,7 @@ class TransactionOut extends Component {
             <div className="transaction-container">
                 {message}
                 {/* {stateInfo} */}
-                <h2>Customer Purchase {this.state.customer && this.state.customer.name ? "[" + this.state.customer.name + "]" : ""}</h2>
+                <h2>Selling {this.state.customer && this.state.customer.name ? "[" + this.state.customer.name + "]" : ""}</h2>
                 {formComponent}
                 <div>
                     <ActionButtons buttonsData={buttonsData} />

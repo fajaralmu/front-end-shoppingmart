@@ -46,7 +46,7 @@ class CartInfo extends Component {
             count += cartItem.count
         }
         let totalPrice = this.caculateTotalPrice();
-        let content = <div><Label text="Listed Product" />
+    let content = <div><Label text={<span><i class="fas fa-shopping-cart"></i>Listed Product</span>} />
             <span style={{ margin: '5px' }} className="quantity-label">{count}</span>
             <span style={{ margin: '5px', color: 'yellow', backgroundColor: 'blue' }}
                 className="quantity-label">{totalPrice}</span>
