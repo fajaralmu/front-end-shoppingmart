@@ -8,7 +8,7 @@ import { connect } from 'react-redux'
 import ActionButtons from './buttons/ActionButtons'
 import ActionButton from './buttons/ActionButton'
 import InstantTable from '../components/container/InstantTable'
-import ImageCarousel from './ImageCarousel'
+import ImageCarousel from './container/ImageCarousel'
 import { beautifyNominal } from '../utils/StringUtil'
 import ContentTitle from './container/ContentTitle'
 

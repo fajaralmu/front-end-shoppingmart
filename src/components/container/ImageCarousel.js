@@ -1,9 +1,8 @@
-import React, { Component } from 'react'
-import '../css/Common.css'
-import '../css/ImageCarousel.css' 
-import InstantTable from '../components/container/InstantTable';
+import React, { Component } from 'react' 
+import './ImageCarousel.css' 
+import InstantTable from './InstantTable';
 import Label from './Label';
-import ActionButton from './buttons/ActionButton';
+import ActionButton from '../buttons/ActionButton';
 
 class ImageCarousel extends Component {
     constructor(props) {

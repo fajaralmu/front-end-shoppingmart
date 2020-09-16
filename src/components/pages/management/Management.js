@@ -4,7 +4,6 @@ import { withRouter } from 'react-router';
 import * as actions from '../../../redux/actionCreators'
 import { connect } from 'react-redux'
 import ContentTitle from '../../container/ContentTitle'
-import ActionButtons from '../../buttons/ActionButtons';
 import * as entityConfig from '../../../utils/EntityConfigurations'
 import EntityList from './EntityList';
 import Tab from '../../navigation/Tab';

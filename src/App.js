@@ -14,7 +14,7 @@ import Login from './components/pages/login/Login'
 import Dashboard from './components/pages/dashboard/Dashboard';
 import * as menus from './constant/Menus'
 import SupplierList from './components/pages/supplier_list/SupplierList';
-import Message from './components/Message';
+import Message from './components/container/Message';
 import Footer from './components/layout/footer/Footer';
 import SockJsClient from 'react-stomp';
 import ChatRoom from './components/pages/chat_room/ChatRoom';

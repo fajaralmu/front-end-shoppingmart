@@ -1,5 +1,4 @@
-import React, { Component } from 'react'
-import '../css/Common.css'
+import React, { Component } from 'react' 
 import '../css/Chart.css'
 
 class Chart extends Component {

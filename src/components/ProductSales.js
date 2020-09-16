@@ -14,7 +14,7 @@ import { _byId } from '../utils/ComponentUtil'
 import Chart from './Chart'
 import * as creator from '../utils/ComponentCreator'
 import InputField from './inputs/InputField'
-import Label from './Label'
+import Label from './container/Label'
 import ProductSalesDetail from './ProductSalesDetail'
 
 class ProductSales

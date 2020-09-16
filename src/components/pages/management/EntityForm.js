@@ -10,7 +10,7 @@ import InputDropdown from '../../inputs/InputDropdown'
 import InputField from '../../inputs/InputField'
 import InputFile from '../../inputs/InputFile'
 import InputFileMultiple from '../../inputs/InputFileMultiple'
-import Label from '../../Label'
+import Label from '../../container/Label'
 import ActionButtons from '../../buttons/ActionButtons'
 
 class EntityForm extends Component {

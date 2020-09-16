@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import '../css/Common.css'
-import '../css/Message.css'
+import './Message.css'
 
 class Message extends Component {
     constructor(props) {

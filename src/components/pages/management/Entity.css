@@ -29,7 +29,8 @@
 
  .filter-wrapper{
      display: grid;
-     grid-template-columns: auto auto;
+     width: max-content;
+     grid-template-columns: auto auto auto;
  }
  .filter-wrapper .input-field{
     margin:0px;

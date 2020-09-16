@@ -14,11 +14,12 @@ import { connect } from 'react-redux'
 import * as actions from '../../../redux/actionCreators' 
 import Card from '../../Card'
 import * as stringUtil from '../../../utils/StringUtil'
-import Label from '../../Label';
+import Label from '../../container/Label';
 import ProductSales from '../../ProductSales';
 import ContentTitle from '../../container/ContentTitle';
 import InstantTable from '../../container/InstantTable';
 import ComboBoxes from './../../inputs/ComboBoxes';
+import GridComponent from './../../container/GridComponent';
 
 class Dashboard extends Component {
 
@@ -84,21 +85,24 @@ class Dashboard extends Component {
         let mainComponent = <div>
             <div className="cashflow-info">
                 <h3>Cashflow Info</h3>
-                <ComboBoxes values={[
-                    {
-                        id: "select-month",
-                        defaultValue:  this.state.cashflowMonth? this.state.cashflowMonth: componentUtil.getCurrentMMYY()[0],
-                        options: componentUtil.getDropdownOptionsMonth(),
-                        handleOnChange: (value)=>this.setState({cashflowMonth:value})
-                    },
-                    {
-                        id: "select-year",
-                        defaultValue: this.state.cashflowYear? this.state.cashflowYear: componentUtil.getCurrentMMYY()[1],
-                        options: componentUtil.getDropdownOptionsYear(minYear, maxYear),
-                        handleOnChange: (value)=>this.setState({cashflowYear:value})
-                    }
+                <GridComponent style={{width:'min-content'}} items={[
+                     <ComboBoxes values={[
+                        {
+                            id: "select-month",
+                            defaultValue:  this.state.cashflowMonth? this.state.cashflowMonth: componentUtil.getCurrentMMYY()[0],
+                            options: componentUtil.getDropdownOptionsMonth(),
+                            handleOnChange: (value)=>this.setState({cashflowMonth:value})
+                        },
+                        {
+                            id: "select-year",
+                            defaultValue: this.state.cashflowYear? this.state.cashflowYear: componentUtil.getCurrentMMYY()[1],
+                            options: componentUtil.getDropdownOptionsYear(minYear, maxYear),
+                            handleOnChange: (value)=>this.setState({cashflowYear:value})
+                        }
+                    ]} />,
+                    <ActionButton status="success" id="btn-get-cashflow-info" text={<i class="fa fa-search"></i>} onClick={this.getCashflowInfo} />
+                   
                 ]} />
-                <ActionButton status="success" id="btn-get-cashflow-info" text="Search" onClick={this.getCashflowInfo} />
                 <div className="cashflow-info-wrapper">
                     <InstantTable disabled={true}
                         rows={[{

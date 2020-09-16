@@ -10,7 +10,7 @@ import InputField from '../../inputs/InputField'
 import ActionButton from '../../buttons/ActionButton'
 import EntityForm from './EntityForm';
 import * as url from '../../../constant/Url'
-import Label from '../../Label'
+import Label from '../../container/Label'
 
 class EntityList extends Component {
     constructor(props) {
@@ -100,20 +100,24 @@ class EntityList extends Component {
                     onKeyUp={this.handleFilterChange} key={"input_field_" + stringUtil.uniqueId()}
                     placeholder={headerName} />
 
-                let orderType = "asc";
+                let orderType = "desc";
                 if (this.state.orderBy && this.state.orderBy == headerName) {
                     if (this.state.orderType == "asc") {
-                        orderType = "desc";
+                        orderType = "asc";
                     }
                 }
 
-
-                const orderButton = <ActionButton
-                    onClick={() => { this.setOrderBy(headerName, orderType) }}
-                    text={orderType} />
+                const orderButtonUp = <ActionButton
+                    status={'outline-secondary'}
+                    onClick={() => { this.setOrderBy(headerName, 'asc') }}
+                    text={<i class={"fa fa-angle-up"} aria-hidden="true"></i>} />
+                const orderButtonDown = <ActionButton
+                    status={'outline-secondary'}
+                    onClick={() => { this.setOrderBy(headerName, 'desc') }}
+                    text={<i class={"fa fa-angle-down"} aria-hidden="true"></i>} /> 
 
                 inputs.push(<div className="filter-wrapper">
-                    {input}{orderButton}
+                    {input}{orderButtonUp}{orderButtonDown}
                 </div>);
             }
             inputs.push("");
@@ -231,7 +235,9 @@ class EntityList extends Component {
         for (let i = 0; i < buttonsData.length; i++) {
             buttonsData[i].onClick = () => { this.goToPage(buttonsData[i].value) }
             if (buttonsData[i].value == this.props.currentPage) {
-                buttonsData[i].status = " btn-active";
+                buttonsData[i].status = "info btn-sm";
+            }else{
+                buttonsData[i].status = "outline-info btn-sm";
             }
             buttonsData[i].text = buttonsData[i].text;
 
@@ -245,7 +251,7 @@ class EntityList extends Component {
         });
 
         let navButtons = <ActionButtons style={{
-            backgroundColor: 'white',
+            
             paddingTop: '15px',
             margin: '10px'
         }} buttonsData={fixButtonData} />

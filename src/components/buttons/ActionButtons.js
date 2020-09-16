@@ -12,7 +12,7 @@ class ActionButtons extends Component {
         return (
             <div style={this.props.style ? this.props.style : {}} className={className}  >
                 {this.props.buttonsData.map(buttonData => {
-                    let className = "btn btn-default";
+                    let className = "btn btn-outline-secondary btn-sm";
                     if (buttonData.status != null) {
                         className =
                             "btn btn".concat("-").concat(buttonData.status).concat(" ").concat(buttonData.className);

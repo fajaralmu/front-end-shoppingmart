@@ -5,11 +5,11 @@ import * as actions from '../../../redux/actionCreators'
 import * as trxCss from './Transaction.css'
 import * as catalogItemCss from '../../../css/CatalogItem.css'
 import ActionButton from '../../buttons/ActionButton'
-import Label from '../../Label';
+import Label from '../../container/Label';
 import InputField from '../../inputs/InputField';
 import DetailStockPanel from '../../DetailStockPanel';
 import StockListTable from '../../StockListTable'
-import Message from '../../Message'
+import Message from '../../container/Message'
 import TransactionReceipt from './TransactionReceipt'
 import * as stringUtil from '../../../utils/StringUtil'
 import ActionButtons from '../../buttons/ActionButtons'

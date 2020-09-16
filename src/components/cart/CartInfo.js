@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import * as cartCss from './Cart.css'
-import Label from '../Label';
+import Label from '../container/Label';
 import * as stringUtil from '../../utils/StringUtil'
 
 class CartInfo extends Component {

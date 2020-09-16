@@ -1,7 +1,7 @@
 import React, { Component } from 'react'  
 import './Chat.css'
 import GridComponent from '../../container/GridComponent';
-import Label from './../../Label';
+import Label from '../../container/Label';
 
 class ChatList extends Component {
     constructor(props) {

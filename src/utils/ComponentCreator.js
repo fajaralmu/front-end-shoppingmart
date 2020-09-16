@@ -1,5 +1,5 @@
 import React, {Component} from 'react' 
-import Label from '../components/Label' 
+import Label from '../components/container/Label' 
 import * as componentUtil from './ComponentUtil'
 import InstantTable from './../components/container/InstantTable';
 import ComboBoxes from './../components/inputs/ComboBoxes';

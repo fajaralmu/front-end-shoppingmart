@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import * as menus from '../../../constant/Menus'
 import { withRouter } from 'react-router';
 import ContentTitle from '../../container/ContentTitle';
-import Label from '../../Label'; 
+import Label from '../../container/Label'; 
 import ActionButton from '../../buttons/ActionButton';
-import Message from '../../Message';
+import Message from '../../container/Message';
 import '../login/Login.css'
 import InputField from '../../inputs/InputField';
 
