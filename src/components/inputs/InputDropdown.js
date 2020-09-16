@@ -1,6 +1,7 @@
 import React, { Component } from 'react'   
 import DropdownItem from './DropdownItem';
 import * as stringUtil from '../../utils/StringUtil';
+import './Inputs.css'
 /**
  * JUST FOR INPUT !!!
  */
@@ -59,6 +60,7 @@ class InputDropdown extends Component {
                                 id={stringUtil.uniqueId()}
                                 key={"dropdown-xx-" + stringUtil.uniqueId()}
                                 onClick={() => this.onSelect(data.value, data.text)}
+                                style={{position:"relative", backgroundColor: '#cccccc'}}
                                 className={className}>
                                 <DropdownItem onHover={this.onHover} index={i} text={data.text} />
                             </div>
@@ -73,6 +75,7 @@ class InputDropdown extends Component {
             <div
                 onMouseOver={() => this.setState({ focus: true })}
                 onMouseLeave={this.onBlur}
+                
                 className="dropdown-wrapper input-field">
                 <input
                     className={inputClassName}

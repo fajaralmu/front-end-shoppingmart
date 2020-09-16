@@ -3,7 +3,7 @@ import { nullLiteral } from '@babel/types';
 
 export const initState = {
     productFlowStock: null,
-    productFlowStocks: null,
+    products: null,
     transactionData: null,
     successTransaction: false,
     customersData: null,
@@ -77,9 +77,9 @@ export const reducer = (state = initState, action) => {
             action.referrer.refresh();
             return result;
         case types.GET_PRODUCT_STOCKS:
-            return { ...state, productFlowStocks: action.payload.entities };
+            return { ...state, products: action.payload.entities };
         case types.RESET_PRODUCT_STOCKS:
-            return { ...state, productFlowStocks: null };
+            return { ...state, products: null };
         case types.GET_PRODUCT_SALES_DETAIL:
             return { ...state, productSalesDetails: action.payload };
         default:

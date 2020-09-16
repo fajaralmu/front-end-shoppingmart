@@ -249,14 +249,10 @@ const getProductStocksMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.GET_PRODUCT_STOCKS) { return next(action); }
     fetch(action.meta.url, {
         method: POST_METHOD, body: JSON.stringify(action.payload),
-        headers: {
-            'Content-Type': 'application/json',
-            'requestId': localStorage.getItem("requestId"),
-            'loginKey': localStorage.getItem("loginKey")
-        }
+        headers: commonAuthorizedHeader(),
     }).then(response => response.json())
         .then(data => {
-            console.debug("getProductSalesMiddleware Response:", data, "load more:", action.meta.loadMore);
+            console.debug("getProductStocksMiddleware Response:", data, "load more:", action.meta.loadMore);
             if (data.code != "00") {
                 alert("Data not found");
                 return;

@@ -1,0 +1,7 @@
+.dropdown-item-hovered{
+    cursor: pointer;
+}
+.dropdown{
+    z-index: 3;
+    position: absolute;
+}

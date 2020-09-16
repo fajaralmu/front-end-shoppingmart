@@ -10,7 +10,7 @@ class ActionButtons extends Component {
             className += " "+this.props.className;
         }
         return (
-            <div style={this.props.style ? this.props.style : {}} className={className}  >
+            <div style={this.props.style ? this.props.style : {}} className={"btn-group "+className} role="group"  >
                 {this.props.buttonsData.map(buttonData => {
                     let className = "btn btn-outline-secondary btn-sm";
                     if (buttonData.status != null) {

@@ -128,10 +128,16 @@ export const getProductStocks = (name, app) => {
     app.startLoading(true);
     return {
         type: types.GET_PRODUCT_STOCKS,
-        payload: { product: { name: name } },
+        payload: {
+            entity: 'product',
+            filer: {
+                limit: 20,
+                fieldsFilter: { name: name }
+            }
+        },
         meta: {
             app: app, type: types.GET_PRODUCT_STOCKS,
-            url: apiTransaction.concat("stocks")
+            url: apiEntityBaseUrl.concat("get")
         }
     };
 }
@@ -281,7 +287,7 @@ export const submitPurchaseTransaction = (request, app) => {
             productFlows: request.productFlows
         },
         meta: {
-            app: app, type: types.SUBMIT_TRX_PURCHASE, url: apiTransaction.concat("purchase")
+            app: app, type: types.SUBMIT_TRX_PURCHASE, url: apiTransaction.concat("selling")
         }
     };
     return requested;
@@ -296,7 +302,7 @@ export const submitSupplyTrx = (request, app) => {
             productFlows: request.productFlows
         },
         meta: {
-            app: app, type: types.SUBMIT_TRX_SUPPLY, url: apiTransaction.concat("supply")
+            app: app, type: types.SUBMIT_TRX_SUPPLY, url: apiTransaction.concat("purchasing")
         }
     };
     return requested;
@@ -335,12 +341,12 @@ export const performLogin = (username, password, app) => {
     return loginRequest;
 }
 
-export const refreshLoginStatus = ( ) => {
-   
+export const refreshLoginStatus = () => {
+
     let loginRequest = {
         type: types.REFRESH_LOGIN,
-        payload: { },
-        meta: { type: types.REFRESH_LOGIN  }
+        payload: {},
+        meta: { type: types.REFRESH_LOGIN }
     };
     return loginRequest;
 }

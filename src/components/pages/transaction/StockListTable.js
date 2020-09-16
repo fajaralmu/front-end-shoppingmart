@@ -1,7 +1,6 @@
-import React, { Component } from 'react' 
-import * as entityCss from '../components/pages/management/Entity.css'
-import * as stringUtil from '../utils/StringUtil' 
-import CrudRow from '../components/container/CrudRow'
+import React, { Component } from 'react'  
+import * as stringUtil from '../../../utils/StringUtil' 
+import CrudRow from '../../container/CrudRow'
  
 
 class StockListTable extends Component {

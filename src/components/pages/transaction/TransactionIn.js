@@ -8,7 +8,7 @@ import ActionButton from '../../buttons/ActionButton'
 import Label from '../../container/Label';
 import InputField from '../../inputs/InputField';
 import DetailProductPanel from '../../DetailProductPanel';
-import StockListTable from '../../StockListTable'
+import StockListTable from './StockListTable'
 import Message from '../../container/Message'
 import TransactionReceipt from './TransactionReceipt'
 import * as stringUtil from '../../../utils/StringUtil'
@@ -308,14 +308,14 @@ class TransactionIn
 
         let buttonsData = [
             { text: "Back", onClick: () => this.props.setFeatureCode(null), id: "btn-back" },
-            { text: "Back And Reset", status: "warning", onClick: () => { this.props.setFeatureCode(null); this.reset() }, id: "btn-back-reset" }, 
-            { text: "Reset", status: 'danger', id: "btn-reset-trx", onClick: this.reset }];
+            { text: "Back And Reset", status: "warning btn-sm", onClick: () => { this.props.setFeatureCode(null); this.reset() }, id: "btn-back-reset" }, 
+            { text: "Reset", status: 'danger btn-sm', id: "btn-reset-trx", onClick: this.reset }];
 
         if (this.props.successTransaction) {
             formComponent =
                 <TransactionReceipt status="Success" transactionData={this.props.transactionData} /> 
         }else{
-            buttonsData.push({ id: "btn-submit-trx", status: 'submit', text: "Submit Transaction", onClick: this.submitTransaction });
+            buttonsData.push({ id: "btn-submit-trx", status: 'success btn-sm', text: "Submit Transaction", onClick: this.submitTransaction });
         }
 
         return (

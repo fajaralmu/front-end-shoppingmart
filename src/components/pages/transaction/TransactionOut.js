@@ -8,7 +8,7 @@ import ActionButton from '../../buttons/ActionButton'
 import Label from '../../container/Label';
 import InputField from '../../inputs/InputField';
 import DetailStockPanel from '../../DetailStockPanel';
-import StockListTable from '../../StockListTable'
+import StockListTable from './StockListTable'
 import Message from '../../container/Message'
 import TransactionReceipt from './TransactionReceipt'
 import * as stringUtil from '../../../utils/StringUtil'
@@ -191,13 +191,13 @@ class TransactionOut extends Component {
         }
 
         this.selectproduct = (id) => {
-            if (this.props.productFlowStocks == null) {
+            if (this.props.products == null) {
                 alert("Data not found!");
                 return;
             }
-            for (let i = 0; i < this.props.productFlowStocks.length; i++)
-                if (this.props.productFlowStocks[i].id == id) {
-                    this.setState({ productName: this.props.productFlowStocks[i].product.name });
+            for (let i = 0; i < this.props.products.length; i++)
+                if (this.props.products[i].id == id) {
+                    this.setState({ productName: this.props.products[i].name });
                 }
 
             this.setState({ stockId: id });
@@ -236,14 +236,14 @@ class TransactionOut extends Component {
             }
         let productList = [];
 
-        if (this.props.productFlowStocks != null)
-            for (let i = 0; i < this.props.productFlowStocks.length; i++) {
-                const productFlowStock = this.props.productFlowStocks[i];
+        if (this.props.products != null)
+            for (let i = 0; i < this.props.products.length; i++) {
+                const product = this.props.products[i];
                 let productItem = <div>
-                    <h3>{productFlowStock.product.name}</h3>
-                    <p>ID: {productFlowStock.id}, stock: {productFlowStock.count}</p>
+                    <span>{product.name}</span>
+                    <p>ID: {product.id}, stock: {product.count}</p>
                 </div>
-                productList.push({ value: productFlowStock.id, text: productItem });
+                productList.push({ value: product.id, text: productItem });
             }
 
         let formComponent = <table><tbody>
@@ -280,13 +280,13 @@ class TransactionOut extends Component {
 
         let buttonsData = [
             { text: "Back", onClick: () => this.props.setFeatureCode(null), id: "btn-back" },
-            { text: "Back And Reset", status: "warning", onClick: () => { this.props.setFeatureCode(null); this.reset() }, id: "btn-back" },
-            { text: "Reset", status: 'danger', id: "btn-reset-trx", onClick: this.reset }];
+            { text: "Back And Reset", status: "warning btn-sm", onClick: () => { this.props.setFeatureCode(null); this.reset() }, id: "btn-back" },
+            { text: "Reset", status: 'danger btn-sm', id: "btn-reset-trx", onClick: this.reset }];
 
         if (this.props.successTransaction) {
             formComponent = <TransactionReceipt status="Success" transactionData={this.props.transactionData} />
         } else {
-            buttonsData.push({ id: "btn-submit-trx", status: 'submit', text: "Submit Transaction", onClick: this.submitTransaction });
+            buttonsData.push({ id: "btn-submit-trx", status: 'success btn-sm', text: "Submit Transaction", onClick: this.submitTransaction });
         }
 
         return (
@@ -313,7 +313,7 @@ const mapStateToProps = state => {
         transactionData: state.transactionState.transactionData,
         successTransaction: state.transactionState.successTransaction,
         customersData: state.transactionState.customersData,
-        productFlowStocks: state.transactionState.productFlowStocks
+        products: state.transactionState.products
     }
 }
 
