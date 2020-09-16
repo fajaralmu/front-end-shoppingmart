@@ -29,7 +29,9 @@ class CatalogItem extends Component {
             />
             <Label style={{ fontFamily: "Arial Narrow" , fontWeight:'bolder'}} 
                     text={<span><i class="fas fa-tags"></i>&nbsp;{stringUtil.beautifyNominal(product.price) + ",00"}</span>} />
-            <span className="quantity-label">{stringUtil.beautifyNominal(product.count)}</span>{" "+product.unit.name}
+            <div>
+                <i className="fas fa-cubes"></i>&nbsp;{stringUtil.beautifyNominal(product.count)}&nbsp;{product.unit.name}
+            </div>
             <Label text={product.category.name} />
         </div>
         return (

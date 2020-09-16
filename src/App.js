@@ -247,7 +247,7 @@ class App extends Component {
         <SockJsClient url={usedHost + 'realtime-app'} topics={['/wsResp/progress/' + localStorage.getItem("requestId")]}
           onMessage={(msg) => { this.handleMessage(msg) }}
           ref={(client) => { this.clientRef = client }} />
-        <Footer />
+        <Footer applicationProfile={this.props.applicationProfile}/>
 
       </div>
     )

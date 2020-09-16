@@ -1,16 +1,15 @@
 import React, { Component } from 'react'
-import '../css/Common.css'
-import '../css/ProductDetail.css'
-import DetailRow from './DetailRow'
-import * as url from '../constant/Url'
-import * as actions from '../redux/actionCreators'
+import './ProductDetail.css'
+import DetailRow from '../../DetailRow'
+import * as url from '../../../constant/Url'
+import * as actions from '../../../redux/actionCreators'
 import { connect } from 'react-redux'
-import ActionButtons from './buttons/ActionButtons'
-import ActionButton from './buttons/ActionButton'
-import InstantTable from '../components/container/InstantTable'
-import ImageCarousel from './container/ImageCarousel'
-import { beautifyNominal } from '../utils/StringUtil'
-import ContentTitle from './container/ContentTitle'
+import ActionButtons from '../../buttons/ActionButtons'
+import ActionButton from '../../buttons/ActionButton'
+import InstantTable from '../../container/InstantTable'
+import ImageCarousel from '../../container/ImageCarousel'
+import { beautifyNominal } from '../../../utils/StringUtil'
+import ContentTitle from '../../container/ContentTitle'
 
 
 class ProductDetail extends Component {
@@ -71,12 +70,12 @@ class ProductDetail extends Component {
 
         }
 
-         
+
 
         if (product == null) {
-           return(
-            <ContentTitle title="Please wait.."/>
-           )
+            return (
+                <ContentTitle title="Please wait.." iconClass="fas fa-info-circle" />
+            )
         }
         let supplierListPanel = <p></p>
         let supplierShown = this.state.supplierShown ? true : false;
@@ -104,15 +103,14 @@ class ProductDetail extends Component {
         return (
             <div className="section-container" >
 
-                <ContentTitle title={product.name} 
-                 description={product.description}/>
+                <ContentTitle title={product.name} iconClass="fas fa-info-circle" description={product.description} />
                 <div className="product-desc">
                     <InstantTable disabled={true}
                         rows={[
                             { values: [imageComponent], CS: [2] },
                             { values: ["Price", beautifyNominal(product.price)] },
                             { values: ["Item(s)", beautifyNominal(product.count) + " " + (product.unit ? product.unit.name : "")] },
-                            { values: ["Category", product.category.name] } 
+                            { values: ["Category", product.category.name] }
                         ]} />
 
                     <ActionButtons buttonsData={[{

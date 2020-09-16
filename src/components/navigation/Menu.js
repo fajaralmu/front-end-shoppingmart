@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import './Menu.css'
 import * as url from '../../constant/Url'
-import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'
-import { baseImageUrl } from './../../constant/Url';
+import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom' 
 
 class Menu extends Component {
     constructor(props) {

@@ -67,7 +67,7 @@ class Login extends Component {
 
         return (
             <div className="section-container">
-                < ContentTitle title="Login Page" />
+                < ContentTitle title="Login Page" iconClass="fas fa-sign-in-alt"/>
                 {message}
                 <div className="login-container card">
                     <div className="card-header">Login</div>

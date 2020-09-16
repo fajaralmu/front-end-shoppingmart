@@ -127,7 +127,7 @@ class Management extends Component {
 
         return (
             <div className="section-container">
-                <ContentTitle title={"Management " + (this.state.entityConfig.title ?
+                <ContentTitle iconClass="fas fa-database" title={"Management " + (this.state.entityConfig.title ?
                     this.state.entityConfig.title :
                     this.props.entitiesData && this.props.entitiesData.entityConfig ?
                         this.props.entitiesData.entityConfig.title : "")}

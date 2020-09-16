@@ -136,7 +136,7 @@ class Dashboard extends Component {
         if (this.props.loginStatus == true)
             return (
                 <div className="section-container"> 
-                    <ContentTitle title="Admin Page" description = "Have a Nice Shop Keeping!" />
+                    <ContentTitle title="Dashboard" iconClass="fas fa-tachometer-alt" description = "Have a Nice Shop Keeping!" />
                     <DashboardMenu currentMenu={this.state.featureCode} goToMenu={this.setFeatureCode} />
                     {mainComponent}
                 </div>

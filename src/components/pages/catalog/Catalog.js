@@ -4,7 +4,7 @@ import CatalogItem from '../../CatalogItem'
 import '../catalog/Catalog.css'
 import { BrowserRouter as Router, Route, Link, Switch, withRouter } from 'react-router-dom'
 import * as actions from '../../../redux/actionCreators'
-import ProductDetail from '../../ProductDetail'
+import ProductDetail from './ProductDetail'
 import * as menus from '../../../constant/Menus'
 import ActionButtons from '../../buttons/ActionButtons'
 import InputField from '../../inputs/InputField'
@@ -239,7 +239,7 @@ class Catalog extends Component {
         let products = this.props.catalogData.entities == null ? [] : this.props.catalogData.entities;
 
 
-        let categories = [{ value: "00", text: "-all category-" }]; 
+        let categories = [{ value: "00", text: "-all category-" }];
         this.props.productCategories.map(category => {
             categories.push({ value: category.id, text: category.name });
         })
@@ -251,12 +251,12 @@ class Catalog extends Component {
 
         if (this.props.enableShopping) {
             actionButtons.push({
-                text: <span><i class="fa fa-cart-arrow-down" ></i>&nbsp;Clear Shopping List</span> , onClick: () => { this.clearCart() }, status: 'danger', id: "clear-list"
+                text: <span><i class="fa fa-cart-arrow-down" ></i>&nbsp;Clear Shopping List</span>, onClick: () => { this.clearCart() }, status: 'danger', id: "clear-list"
             });
         }
 
         let filterBox = <div className="filter-box">
-            <GridComponent style={{ width: 'max-content' }}  items={[
+            <GridComponent cols={3} style={{ width: 'max-content' }} items={[
                 <InputField placeholder="search by product name"
                     value={this.state.requestProductName}
                     onKeyUp={this.handleInputNameChange}
@@ -272,21 +272,22 @@ class Catalog extends Component {
                     onChange={this.handleCategoryChange}
                     options={categories} id="select-category"
                 />,
-                <div><InputField checked={this.state.requestWithStock} onChange={this.handleChangeWithStockOption}
+                <ActionButtons style={{ margin: '5px' }} buttonsData={actionButtons} />,
+                <div>
+                <InputField checked={this.state.requestWithStock} onChange={this.handleChangeWithStockOption}
                     type="checkbox" id="checkbox-with-stock"
                     text="Inculde Remaining Stock" />
-                 <InputField checked={this.props.enableShopping} onChange={this.handleChangeEnableShoppingOption}
+                <InputField checked={this.props.enableShopping} onChange={this.handleChangeEnableShoppingOption}
                     type="checkbox" id="checkbox-enable-cart"
-                    text="I Want to List My Needs" /></div>,
-                <ActionButtons style={{ margin: '5px' }} buttonsData={actionButtons} />
-
+                    text="I Want to List My Needs" />
+            </div>,
             ]} />
             <p></p>
         </div>;
 
 
         let productCatalog = (<div className="section-container" id="catalog-main" key="catalog-main">
-            <ContentTitle title="Catalog Page" description="Choose your favourite products" />
+            <ContentTitle title="Catalog Page" iconClass="fas fa-store-alt" description="Choose your favourite products" />
             <NavButtons buttonsData={this.generateNavButtonsData()} />
 
             {filterBox}
@@ -304,7 +305,7 @@ class Catalog extends Component {
                             const cartButtonsData = [
                                 { text: <i class="fas fa-sync"></i>, status: "danger btn-sm", onClick: () => this.addToCart(product, (qty * (-1))), id: "btn-add-cart-" + product.id },
                                 { text: <i class="fa fa-minus-circle"></i>, status: "warning btn-sm", onClick: () => this.addToCart(product, -1), id: "btn-add-cart-" + product.id },
-                                { text: qty, id: "info-cart-" + product.id,  status: 'light btn-sm' },
+                                { text: qty, id: "info-cart-" + product.id, status: 'light btn-sm' },
                                 { text: <i class="fa fa-plus-circle"></i>, status: 'success btn-sm', onClick: () => this.addToCart(product, 1), id: "btn-reduce-cart-" + product.id }
                             ];
 
@@ -334,7 +335,7 @@ class Catalog extends Component {
 
         return (rendered)
     }
-} 
+}
 
 const filterProductOption = [
     { value: "00", text: "-all order-" },

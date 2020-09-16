@@ -61,7 +61,7 @@ class ChatRoom extends Component {
         return (
             <div className="section-container">
                 <ContentTitle title="What Do You Feel?" description=
-                    {"Identified as [" + this.state.username + "]"} />
+                    {"Identified as [" + this.state.username + "]"}  iconClass="fas fa-comments"/>
                 <InputField
                     value={userAlias}
                     onKeyUp={this.changeUsername}

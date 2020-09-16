@@ -137,7 +137,10 @@ class SupplierList extends Component {
 
         let suppliers = this.props.suppliersData.entities == null ? [] : this.props.suppliersData.entities;
 
-
+        let actionButtons = [
+            { text: <i class="fas fa-search"></i>, status: "success", onClick: () => this.getSupplierList(0), id: "btn-search"}, 
+            { text: "Clear Filter", status: 'warning', onClick: this.clearField, id: "Clear" }
+        ];
 
         let filterBox = <div className="filter-box">
             <GridComponent cols={2} style={{ width: 'max-content' }} items={
@@ -146,11 +149,8 @@ class SupplierList extends Component {
                         id="input-supplier-name" />,
                     <ComboBox defaultValue={this.state.requestOrderBy+"-"+this.state.requestOrderType} onChange={this.handleOrderChange}
                         options={filterSupplierOptions} key="k-select-order" id="select-order" />,
-                    <ActionButtons style={{ margin: '5px' }} key="btns" buttonsData={[{
-                        text: <i class="fas fa-search"></i>, status: "success", onClick: () => this.getSupplierList(0), id: "btn-search"
-                    }, {
-                        text: "Clear", status: 'warning', onClick: this.clearField, id: "Clear"
-                    }]} />
+
+                    <ActionButtons style={{ margin: '5px' }} key="btns" buttonsData={actionButtons} />
                 ]
             } />
 
@@ -160,7 +160,7 @@ class SupplierList extends Component {
         </div>;
 
         let supplierCatalog = (<div className="section-container" id="catalog-main" key="catalog-main">
-            <ContentTitle title="Supplier List Page" description="List of our partners" />
+            <ContentTitle title="Supplier List Page" iconClass="fas fa-warehouse" description="List of our partners" />
 
             <NavButtons buttonsData={this.generateNavButtonsData()} />
 

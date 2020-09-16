@@ -21,7 +21,7 @@ class About extends Component {
 
         return (
             <div className="section-container about-section  " >
-                <ContentTitle title="About Us" />
+                <ContentTitle title="About Us" iconClass="fas fa-address-book"/>
                 <div className=" abount-content" style={{
                     padding: '5px',
                     width: '90%',
