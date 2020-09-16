@@ -151,9 +151,8 @@ const getEntityListMiddleware = store => next => action => {
         .then(response => response.json())
         .then(data => {
             console.debug("Response:", data);
-            if (data.entities == null || data.entities.length == 0) {
-                alert("Data not found!");
-                return;
+            if (data.entities == null ) {
+                data.entities = [];
             }
             data.entityConfig = action.meta.entityConfig;
             let newAction = Object.assign({}, action, {

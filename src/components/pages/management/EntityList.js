@@ -11,6 +11,7 @@ import ActionButton from '../../buttons/ActionButton'
 import EntityForm from './EntityForm';
 import * as url from '../../../constant/Url'
 import Label from '../../container/Label'
+import GridComponent from './../../container/GridComponent';
 
 class EntityList extends Component {
     constructor(props) {
@@ -84,21 +85,47 @@ class EntityList extends Component {
 
         this.createFilterInputs = (fieldNames) => {
             let inputs = new Array();
+
+            if (!fieldNames) {
+                return inputs;
+            }
+
             for (let i = 0; i < fieldNames.length; i++) {
-                const name = fieldNames[i];
-                let headerName = name.name;
+                const fieldName  = fieldNames[i];
+                let headerName = fieldName .name;
                 if (headerName.split(".").length > 1) {
                     headerName = headerName.split(".")[0];
                 }
 
                 let value = "";
+
                 if (this.state.filter[headerName] != null) {
                     value = this.state.filter[headerName];
                 }
 
-                const input = <InputField value={value} id={headerName + "_filter_id"}
+                let input = <InputField value={value} id={headerName + "_filter_id"}
                     onKeyUp={this.handleFilterChange} key={"input_field_" + stringUtil.uniqueId()}
                     placeholder={headerName} />
+
+                if ( fieldName.type == "longDate") {
+                    const valueDay = this.state.filter[headerName + "-day"];
+                    const valueMonth = this.state.filter[headerName + "-month"];
+                    const valueYear = this.state.filter[headerName + "-year"];
+
+                    const style = {width:'60px', fontSize: '0.7em'};
+
+                    const inputDay = <InputField style={style} value={valueDay} id={headerName + "-day_filter_id"}
+                        onKeyUp={this.handleFilterChange} key={"input_field_d" + stringUtil.uniqueId()}
+                        placeholder={"day"} />;
+                    const inputMonth = <InputField style={style} value={valueMonth} id={headerName + "-month_filter_id"}
+                        onKeyUp={this.handleFilterChange} key={"input_field_m" + stringUtil.uniqueId()}
+                        placeholder={"month"} />;
+                    const inputYear = <InputField style={style} value={valueYear} id={headerName + "-year_filter_id"}
+                        onKeyUp={this.handleFilterChange} key={"input_field_y" + stringUtil.uniqueId()}
+                        placeholder={"year"} />;
+
+                    input = <GridComponent items={[inputDay, inputMonth, inputYear]} />
+                }
 
                 let orderType = "desc";
                 if (this.state.orderBy && this.state.orderBy == headerName) {
@@ -107,17 +134,20 @@ class EntityList extends Component {
                     }
                 }
 
-                const orderButtonUp = <ActionButton
-                    status={'outline-secondary'}
-                    onClick={() => { this.setOrderBy(headerName, 'asc') }}
-                    text={<i class={"fa fa-angle-up"} aria-hidden="true"></i>} />
-                const orderButtonDown = <ActionButton
-                    status={'outline-secondary'}
-                    onClick={() => { this.setOrderBy(headerName, 'desc') }}
-                    text={<i class={"fa fa-angle-down"} aria-hidden="true"></i>} /> 
+                const sortingButtons = <ActionButtons buttonsData={[{
+                    status: 'outline-secondary btn-sm',
+                    onClick:() => { this.setOrderBy(headerName, 'asc') },
+                    text:<i class={"fa fa-angle-up"} aria-hidden="true"></i>
+                },
+                {
+                    status:'outline-secondary btn-sm',
+                    onClick : () => { this.setOrderBy(headerName, 'desc') },
+                    text:<i class={"fa fa-angle-down"} aria-hidden="true"></i>
+                }
+                ]}  />
 
                 inputs.push(<div className="filter-wrapper">
-                    {input}{orderButtonUp}{orderButtonDown}
+                    {input}{sortingButtons}
                 </div>);
             }
             inputs.push("");
