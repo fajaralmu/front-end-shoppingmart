@@ -14,7 +14,7 @@ class Management extends Component {
         this.state = {
             entityList: [],
             currentPage: 0,
-            entityConfig: { name: "" }
+            entityConfig: { entityName: "product" }
         }
         this.validateLoginStatus = () => {
             if (this.props.loginStatus != true) this.props.history.push("/login");
@@ -116,6 +116,7 @@ class Management extends Component {
         this.validateLoginStatus();
         document.title = "Management";
         this.props.setMenuCode("management");
+        this.loadEntityManagement(entityConfig.productConfig);
     }
 
     render() {

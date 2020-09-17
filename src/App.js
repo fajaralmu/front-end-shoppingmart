@@ -186,7 +186,7 @@ class App extends Component {
             <Switch>
               <Route exact path="/" render={
                 (renderProps) =>
-                  <Home  applicationProfile={this.props.applicationProfile}  setMenuCode={this.setMenuCode} content="hello, this is default page" />
+                  <Home  applicationProfile={this.props.applicationProfile}  setMenuCode={this.setMenuCode} />
               } />
               <Route exact path="/home" render={
                 (renderProps) =>
