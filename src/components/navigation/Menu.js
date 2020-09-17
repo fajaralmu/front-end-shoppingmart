@@ -40,7 +40,7 @@ class Menu extends Component {
                     {
                         renderedMenus.map(
                             e => {
-                               return <MenuItem menu={e} activeCode={this.props.activeCode} handleMenuCLick={this.props.handleMenuCLick} />
+                               return <MenuItem key={e.code} menu={e} activeCode={this.props.activeCode} handleMenuCLick={this.props.handleMenuCLick} />
                             }
                         )
                     } </ul>
@@ -60,11 +60,11 @@ function MenuItem(props){
     if (menu.url == "#") {
         return (<li onClick={() => props.handleMenuCLick(menu)} className={props.activeCode == menu.code ? "active" : ""} key={menu.name}
             id={menu.name}> <Link key={menu.name} className="App-link"
-                to="#" ><div className="fill" ><i class={menuClass}></i>&nbsp;{menu.name} </div></Link></li >)
+                to="#" ><div className="fill" ><i className={menuClass}></i>&nbsp;{menu.name} </div></Link></li >)
     }
     return (<li className={ props.activeCode == menu.code ? "menu-active" : ""} key={menu.name}
         id={menu.name}> <Link key={menu.name} className="App-link"
-            to={menu.url} ><div className="fill" ><i class={menuClass}></i>&nbsp;{menu.name} </div></Link></li >
+            to={menu.url} ><div className="fill" ><i className={menuClass}></i>&nbsp;{menu.name} </div></Link></li >
     )
 }
 

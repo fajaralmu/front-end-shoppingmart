@@ -70,8 +70,6 @@ class App extends Component {
 
     }
 
-
-
     this.requestAppId = () => {
       this.props.requestAppId(this);
     }
@@ -152,13 +150,12 @@ class App extends Component {
     }
 
     let loginComponent = <Login main={this} setMenuCode={this.setMenuCode}
-      setDetailMode={this.setDetailMode}
-      detailMode={this.state.detailMode}
-      doLogin={this.props.performLogin}
-      loginFailed={this.props.loginFailed}
-      loginAttempt={this.props.loginAttempt}
-      loginStatus={this.props.loginStatus}
-    />;
+                        setDetailMode={this.setDetailMode}
+                        detailMode={this.state.detailMode}
+                        doLogin={this.props.performLogin}
+                        loginFailed={this.props.loginFailed}
+                        loginAttempt={this.props.loginAttempt}
+                        loginStatus={this.props.loginStatus} />;
 
     let loadingComponent = "";
     if (this.state.loading == true) {
@@ -189,7 +186,7 @@ class App extends Component {
             <Switch>
               <Route exact path="/" render={
                 (renderProps) =>
-                  <Home setMenuCode={this.setMenuCode} content="hello, this is default page" />
+                  <Home  applicationProfile={this.props.applicationProfile}  setMenuCode={this.setMenuCode} content="hello, this is default page" />
               } />
               <Route exact path="/home" render={
                 (renderProps) =>

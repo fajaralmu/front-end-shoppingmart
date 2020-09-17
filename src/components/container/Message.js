@@ -43,9 +43,9 @@ class Message extends Component {
         }
         return (
             <div style={msgStyle} className={className} >
-                <button class="btn btn-primary" type="button" disabled>
-                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                    <span class=" ">Loading...</span>
+                <button className="btn btn-primary" type="button" disabled>
+                    <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    <span className=" ">Loading...</span>
                 </button>
             </div>
         )
