@@ -19,7 +19,7 @@ class CartDetail extends Component {
        
         return (
             <div className="section-container">
-                <ContentTitle title="My Cart" />
+                <ContentTitle title="My Cart" iconClass="fas fa-shopping-cart"/>
                 <div className=" cart-bg">
                     <div className="cart-container paper-shadow" >
                        <CartItemList cart={cart} />

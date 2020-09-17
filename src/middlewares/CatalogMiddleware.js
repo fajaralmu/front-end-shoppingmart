@@ -135,4 +135,10 @@ export const getAllProductCategoriesMiddleware = store => next => action => {
 
 }
 
+export const updateCartMiddleware = store => next => action => {
+    if (!action.meta || action.meta.type !== types.UPDATE_CART) { return next(action); }
+    let newAction = Object.assign({}, action, { payload: action.payload });
+    delete newAction.meta;
+    store.dispatch(newAction);
+}
 

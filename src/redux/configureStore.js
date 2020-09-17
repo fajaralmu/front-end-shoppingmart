@@ -27,12 +27,13 @@ export const configureStore = () => {
             catalogMiddleware.loadMoreSupplierMiddleware,
             catalogMiddleware.getAllProductCategoriesMiddleware,
             catalogMiddleware.getSupplierListMiddleware,
+            catalogMiddleware.updateCartMiddleware,
 
             //user related
             userMiddleware.performLoginMiddleware,
             userMiddleware.performLogoutMiddleware,
             userMiddleware.refreshLoginStatusMiddleware,
-            userMiddleware.requestAppIdMiddleware,
+            userMiddleware.requestAppIdMiddleware, 
 
             //transaction
             getStockInfoMiddleware,
@@ -50,7 +51,6 @@ export const configureStore = () => {
             getProductStocksMiddleware,
             resetProductStocksMiddleware,
             getProductSalesDetailMiddleware,  
-            updateCartMiddleware,
 
             /*enntity management*/
             managementMiddleware.getEntityListMiddleware,
@@ -69,14 +69,7 @@ export const configureStore = () => {
 
     return store;
 }
- 
- 
-const updateCartMiddleware = store => next => action => {
-    if (!action.meta || action.meta.type !== types.UPDATE_CART) { return next(action); }
-    let newAction = Object.assign({}, action, { payload: action.payload });
-    delete newAction.meta;
-    store.dispatch(newAction);
-}
+  
  
 const getProductStocksMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.GET_PRODUCT_STOCKS) { return next(action); }
@@ -264,6 +257,7 @@ const resetProductsMiddleware = store => next => action => {
     delete newAction.meta;
     store.dispatch(newAction);
 }
+
 const resetSuppliersMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.RESET_SUPPLIERS) { return next(action); }
     let newAction = Object.assign({}, action, { payload: null });
@@ -303,7 +297,6 @@ const submitSupplyTransactionMiddleware = store => next => action => {
         })
         .catch(err => console.log(err)).finally(param => action.meta.app.endLoading());
 }
-
 
 const submitPurchaseTransactionMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.SUBMIT_TRX_PURCHASE) {
