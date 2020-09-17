@@ -42,6 +42,13 @@ class Login extends Component {
         this.validateLoginStatus = () => {
             if (this.props.loginStatus == true) this.props.history.push("/dashboard");
         }
+
+        this.message = () => {
+            let message = <p>
+                {this.props.loginFailed ? <Message endMessage={this.endMessage} type="failed" text="Login Failed" /> : ""}
+            </p>
+            return message;
+        }
     }
 
 
@@ -59,19 +66,14 @@ class Login extends Component {
         // }
     }
 
-    message(){
-        let message = <p>
-            {this.props.loginFailed ? <Message endMessage={this.endMessage} type="failed" text="Login Failed" /> : ""}
-        </p>
-        return message;
-    }
+  
 
     render() { 
 
         return (
             <div className="section-container">
                 < ContentTitle title="Login Page" iconClass="fas fa-sign-in-alt"/>
-                {this.message()}
+                <this.message/>
                 <div className="login-container card">
                     <div className="card-header">Login</div>
                     <div className="card-body">

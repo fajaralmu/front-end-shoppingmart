@@ -7,15 +7,15 @@ import TransactionOut from '../transaction/TransactionOut';
 import ErrorPage from '../../ErrorPage';
 import { withRouter } from 'react-router';
 import TransactionIn from '../transaction/TransactionIn';
-import Cashflow from '../../Cashflow';
+import Cashflow from './Cashflow';
 import * as componentUtil from '../../../utils/ComponentUtil'
 import ActionButton from '../../buttons/ActionButton';
 import { connect } from 'react-redux'
 import * as actions from '../../../redux/actionCreators'
-import Card from '../../Card'
+import Card from '../../card/Card'
 import * as stringUtil from '../../../utils/StringUtil'
 import Label from '../../container/Label';
-import ProductSales from '../../ProductSales';
+import ProductSales from './ProductSales';
 import ContentTitle from '../../container/ContentTitle';
 import InstantTable from '../../container/InstantTable';
 import ComboBoxes from './../../inputs/ComboBoxes';

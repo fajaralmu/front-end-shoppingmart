@@ -2,8 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import * as actions from '../../../redux/actionCreators'
 
-import * as trxCss from './Transaction.css'
-import * as CatalogItemCss from '../../../css/CatalogItem.css'
+import * as trxCss from './Transaction.css' 
 import ActionButton from '../../buttons/ActionButton'
 import Label from '../../container/Label';
 import InputField from '../../inputs/InputField';
@@ -17,7 +16,7 @@ import InstantTable from '../../container/InstantTable'
 import * as componentUtil from '../../../utils/ComponentUtil'
 import { _byId } from '../../../utils/ComponentUtil'
 import InputDropdown from '../../inputs/InputDropdown'
-import CatalogItem from './../../CatalogItem';
+import CatalogItem from '../../container/CatalogItem';
 import AddToCartButton from './AddToCartButton';
 
 class TransactionIn

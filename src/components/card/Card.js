@@ -1,6 +1,5 @@
-import React, { Component } from 'react'
-import '../css/Common.css'
-import '../css/Card.css'
+import React, { Component } from 'react' 
+import './Card.css'
 
 
 class Card extends Component {

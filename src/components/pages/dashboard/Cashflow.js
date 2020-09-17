@@ -1,18 +1,15 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import * as actions from '../redux/actionCreators'
-
-import '../css/Common.css'
-import '../css/Cashflow.css'
-import '../css/CatalogItem.css'  
-import * as stringUtil from '../utils/StringUtil'
-import ActionButtons from './buttons/ActionButtons'
-import InstantTable from '../components/container/InstantTable' 
-import * as componentUtil from '../utils/ComponentUtil'
-import { _byId } from '../utils/ComponentUtil' 
-import Chart from './Chart'
-import * as creator from '../utils/ComponentCreator'
-import InputField from './inputs/InputField'
+import * as actions from '../../../redux/actionCreators'
+ 
+import * as stringUtil from '../../../utils/StringUtil'
+import ActionButtons from '../../buttons/ActionButtons'
+import InstantTable from '../../container/InstantTable' 
+import * as componentUtil from '../../../utils/ComponentUtil'
+import { _byId } from '../../../utils/ComponentUtil' 
+import Chart from '../../Chart'
+import * as creator from '../../../utils/ComponentCreator'
+import InputField from '../../inputs/InputField'
 
 class Cashflow
     extends Component {

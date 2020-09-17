@@ -2,6 +2,10 @@ import { createStore, applyMiddleware } from 'redux'
 import { initialState, rootReducer } from './reducers'
 import * as actionCreator from './actionCreators';
 import * as types from './types';
+import * as userMiddleware from '../middlewares/UserMiddleware'
+import * as managementMiddleware from '../middlewares/ManagementMiddleware'
+import * as realtimeChatMiddleware from '../middlewares/RealtimeChatMiddleware'
+import * as catalogMiddleware from '../middlewares/CatalogMiddleware'
 
 const commonAuthorizedHeader = () => {
     return {
@@ -17,17 +21,18 @@ export const configureStore = () => {
         rootReducer,
         initialState,
         applyMiddleware(
-            getProductListMiddleware,
-            getProductDetailMiddleWare,
-            removeEntityMiddleware,
-            loadMoreSupplierMiddleware,
-            getAllProductCategoriesMiddleware,
-            getSupplierListMiddleware,
+            catalogMiddleware.getProductListMiddleware,
+            catalogMiddleware.getProductDetailMiddleWare,
+            catalogMiddleware.removeEntityMiddleware,
+            catalogMiddleware.loadMoreSupplierMiddleware,
+            catalogMiddleware.getAllProductCategoriesMiddleware,
+            catalogMiddleware.getSupplierListMiddleware,
 
             //user related
-            performLoginMiddleware,
-            performLogoutMiddleware,
-            refreshLoginStatusMiddleware,
+            userMiddleware.performLoginMiddleware,
+            userMiddleware.performLogoutMiddleware,
+            userMiddleware.refreshLoginStatusMiddleware,
+            userMiddleware.requestAppIdMiddleware,
 
             //transaction
             getStockInfoMiddleware,
@@ -44,206 +49,35 @@ export const configureStore = () => {
             resetCustomersMiddleware,
             getProductStocksMiddleware,
             resetProductStocksMiddleware,
-            getProductSalesDetailMiddleware,
-            requestAppIdMiddleware,
-            sendChatMessageMiddleware,
-            storeChatMessageLocallyMiddleware,
-            getMessagesMiddleware,
+            getProductSalesDetailMiddleware,  
             updateCartMiddleware,
 
             /*enntity management*/
-            getEntityListMiddleware,
-            getEntityByIdMiddleware,
-            updateEntityMiddleware,
-            removeManagedEntityMiddleware,
+            managementMiddleware.getEntityListMiddleware,
+            managementMiddleware.getEntityByIdMiddleware,
+            managementMiddleware.updateEntityMiddleware,
+            managementMiddleware.removeManagedEntityMiddleware, 
+            managementMiddleware.getEntitiesWithCallbackMiddleware,
 
-            getEntitiesWithCallbackMiddleware
+            /*realtime chat*/
+            realtimeChatMiddleware.sendChatMessageMiddleware,
+            realtimeChatMiddleware.storeChatMessageLocallyMiddleware,
+            realtimeChatMiddleware.getMessagesMiddleware,
 
         )
     );
 
     return store;
 }
-
-const getEntitiesWithCallbackMiddleware = store => next => action => {
-    if (!action.meta || action.meta.type !== types.GET_ENTITY_WITH_CALLBACK) { return next(action); }
-
-    fetch(action.meta.url, {
-        method: POST_METHOD, body: JSON.stringify(action.payload),
-        headers: commonAuthorizedHeader()
-    })
-        .then(response => response.json())
-        .then(data => {
-            if (data.entities == null || data.entities.length == 0) {
-                alert("Data not found!");
-                return;
-            }
-
-            action.meta.callback(data, action.meta.referer);
-
-            let newAction = Object.assign({}, action, {
-                payload: data
-            });
-            delete newAction.meta;
-            store.dispatch(newAction);
-        })
-        .catch(err => console.log(err))
-        .finally(param => action.meta.app.endLoading());
-}
-
-const updateEntityMiddleware = store => next => action => {
-    if (!action.meta || action.meta.type !== types.UPDATE_ENTITY) { return next(action); }
-
-    fetch(action.meta.url, {
-        method: POST_METHOD, body: JSON.stringify(action.payload),
-        headers: commonAuthorizedHeader()
-    })
-        .then(response => response.json())
-        .then(data => {
-            console.debug("Response updateEntityMiddleware:", data);
-            if (data.code != "00") {
-                alert("Error Update Entity!");
-                return;
-            }
-            alert("Update Success!");
-            const callback = action.meta.callback;
-            const referer = action.meta.referer;
-            let newAction = Object.assign({}, action, { payload: data });
-            delete newAction.meta;
-            store.dispatch(newAction);
-            callback(referer);
-        })
-        .catch(err => console.log(err))
-        .finally(param => action.meta.app.endLoading());
-}
-
-const getEntityByIdMiddleware = store => next => action => {
-    if (!action.meta || action.meta.type !== types.GET_ENTITY_BY_ID) { return next(action); }
-
-    fetch(action.meta.url, {
-        method: POST_METHOD, body: JSON.stringify(action.payload),
-        headers: commonAuthorizedHeader()
-    })
-        .then(response => response.json())
-        .then(data => {
-            console.debug("Response:", data);
-            if (data.entities == null || data.entities.length == 0) {
-                alert("Data not found!");
-                return;
-            }
-            let newAction = Object.assign({}, action, {
-                payload: data
-            });
-            delete newAction.meta;
-            store.dispatch(newAction);
-        })
-        .catch(err => console.log(err))
-        .finally(param => action.meta.app.endLoading());
-}
-
-const getEntityListMiddleware = store => next => action => {
-    if (!action.meta || action.meta.type !== types.GET_ENTITY) { return next(action); }
-
-    fetch(action.meta.url, {
-        method: POST_METHOD, body: JSON.stringify(action.payload),
-        headers: commonAuthorizedHeader()
-    })
-        .then(response => response.json())
-        .then(data => {
-            console.debug("Response:", data);
-            if (data.entities == null ) {
-                data.entities = [];
-            }
-            data.entityConfig = action.meta.entityConfig;
-            let newAction = Object.assign({}, action, {
-                payload: data
-            });
-            delete newAction.meta;
-            store.dispatch(newAction);
-        })
-        .catch(err => console.log(err))
-        .finally(param => action.meta.app.endLoading());
-}
-
-const getMessagesMiddleware = store => next => action => {
-    if (!action.meta || action.meta.type !== types.GET_MESSAGE) { return next(action); }
-    fetch(action.meta.url, {
-        method: POST_METHOD, body: JSON.stringify(action.payload),
-        headers: { 'Content-Type': 'application/json', 'requestId': localStorage.getItem("requestId") }
-    }).then(response => response.json())
-        .then(data => {
-            console.debug("sendChatMessageMiddleware Response:", data);
-            let newAction = Object.assign({}, action, { payload: data });
-            delete newAction.meta;
-            store.dispatch(newAction);
-        })
-        .catch(err => console.log(err)).finally(param => action.meta.app.endLoading());
-}
-
-const sendChatMessageMiddleware = store => next => action => {
-    if (!action.meta || action.meta.type !== types.SEND_MESSAGE) { return next(action); }
-    fetch(action.meta.url, {
-        method: POST_METHOD, body: JSON.stringify(action.payload),
-        headers: { 'Content-Type': 'application/json', 'requestId': localStorage.getItem("requestId") }
-    }).then(response => response.json())
-        .then(data => {
-            console.debug("sendChatMessageMiddleware Response:", data);
-            data.username = action.payload.username;
-            let newAction = Object.assign({}, action, { payload: data });
-            delete newAction.meta;
-            store.dispatch(newAction);
-        })
-        .catch(err => console.log(err)).finally(param => action.meta.app.endLoading());
-}
-
+ 
+ 
 const updateCartMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.UPDATE_CART) { return next(action); }
     let newAction = Object.assign({}, action, { payload: action.payload });
     delete newAction.meta;
     store.dispatch(newAction);
 }
-
-const storeChatMessageLocallyMiddleware = store => next => action => {
-    if (!action.meta || action.meta.type !== types.STORE_MESSAGE) { return next(action); }
-    let newAction = Object.assign({}, action, { payload: action.payload });
-    delete newAction.meta;
-    store.dispatch(newAction);
-}
-
-const removeManagedEntityMiddleware = store => next => action => {
-    if (!action.meta || action.meta.type !== types.REMOVE_MANAGED_ENTITY) { return next(action); }
-    let newAction = Object.assign({}, action, { payload: action.payload });
-    delete newAction.meta;
-    store.dispatch(newAction);
-}
-
-const requestAppIdMiddleware = store => next => action => {
-    if (!action.meta || action.meta.type !== types.REQUEST_ID) { return next(action); }
-
-    let headers = commonAuthorizedHeader();
-    const loginKey = localStorage.getItem("loginKey");
-    if (loginKey) {
-        headers['loginKey'] = loginKey;
-    }
-
-    fetch(action.meta.url, {
-        method: POST_METHOD, body: JSON.stringify(action.payload),
-        headers: headers
-    }).then(response => response.json())
-        .then(data => {
-            console.debug("requestAppIdMiddleware Response:", data);
-            if (data.code != "00") {
-                alert("Error requesting app ID");
-                return;
-            }
-
-            let newAction = Object.assign({}, action, { payload: {loginStatus: data.loggedIn, ...data }});
-            delete newAction.meta;
-            store.dispatch(newAction);
-        })
-        .catch(err => console.log(err)).finally(param => action.meta.app.endLoading());
-}
-
+ 
 const getProductStocksMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.GET_PRODUCT_STOCKS) { return next(action); }
     fetch(action.meta.url, {
@@ -520,230 +354,6 @@ const getStockInfoMiddleware = store => next => action => {
         })
         .catch(err => console.log(err)).finally(param => action.meta.app.endLoading());
 }
-
-const getSupplierListMiddleware = store => next => action => {
-    if (!action.meta || action.meta.type !== types.FETCH_SUPPLIER_LIST) { return next(action); }
-
-    fetch(action.meta.url, {
-        method: POST_METHOD, body: JSON.stringify(action.payload),
-        headers: commonAuthorizedHeader()
-    })
-        .then(response => response.json())
-        .then(data => {
-            console.debug("Response:", data);
-            if (data.entities == null || data.entities.length == 0) {
-                alert("Data not found!");
-                return;
-            }
-            let newAction = Object.assign({}, action, {
-                payload: data
-            });
-            delete newAction.meta;
-            store.dispatch(newAction);
-        })
-        .catch(err => console.log(err))
-        .finally(param => action.meta.app.endLoading());
-}
-
-const performLogoutMiddleware = store => next => action => {
-    if (!action.meta || action.meta.type !== types.DO_LOGOUT) {
-        return next(action);
-    }
-    const app = action.meta.app;
-
-    fetch(action.meta.url, {
-        method: POST_METHOD, body: JSON.stringify(action.payload),
-        headers: { 'Content-Type': 'application/json', 'requestId': localStorage.getItem("requestId"), 'loginKey': localStorage.getItem("loginKey") }
-    })
-        .then(response => { return Promise.all([response.json(), response]); })
-        .then(([responseJson, response]) => {
-            let logoutSuccess = false;
-            if (responseJson.code == "00") {
-                logoutSuccess = true;
-            }else{
-                alert("Logout Failed");
-            }
-
-            let newAction = Object.assign({}, action, {
-                payload: {
-                    loginStatus: !logoutSuccess
-                }
-            });
-            delete newAction.meta;
-            store.dispatch(newAction);
-        })
-        .catch(err => { console.log(err) })
-        .finally(param => app.endLoading());
-
-}
-
-const performLoginMiddleware = store => next => action => {
-    if (!action.meta || action.meta.type !== types.DO_LOGIN) {
-        return next(action);
-    }
-    const app = action.meta.app;
-    fetch(action.meta.url, {
-        method: POST_METHOD, body: JSON.stringify(action.payload), headers: commonAuthorizedHeader()
-    })
-        .then(response => { return Promise.all([response.json(), response]); })
-        .then(([responseJson, response]) => {
-
-            let loginKey = "";
-            let loginSuccess = false;
-
-            if (responseJson.code != null && responseJson.code == "00") {
-                for (var pair of response.headers.entries()) {
-                    if (pair[0] == "loginkey") {
-                        loginKey = pair[1];
-                        break;
-                    }
-                }
-                console.log("loginKey: ", loginKey);
-                loginSuccess = true;
-
-            }
-            let newAction = Object.assign({}, action, {
-                payload: {
-                    loginStatus: loginSuccess,
-                    loginKey: loginKey,
-                    loggedUser: responseJson.entity
-                }
-            });
-            delete newAction.meta;
-            store.dispatch(newAction);
-        })
-        .catch(err => { console.log(err) })
-        .finally(param => app.endLoading());
-
-}
-
-const refreshLoginStatusMiddleware = store => next => action => {
-    if (!action.meta || action.meta.type !== types.REFRESH_LOGIN) {
-        return next(action);
-    }
-
-    let loggedUser = null;
-    if (localStorage.getItem("loggedUser")) {
-        loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
-    }
-
-    let newAction = Object.assign({}, action, {
-        payload: {
-            loginStatus: loggedUser ? true : false,
-            loginKey: localStorage.getItem("loginKey"),
-            loggedUser: loggedUser,
-            requestId: '1234', //TODO: no hard code
-        }
-    });
-    delete newAction.meta;
-    store.dispatch(newAction);
-
-}
-
-const getAllProductCategoriesMiddleware = store => next => action => {
-    if (!action.meta || action.meta.type !== types.FETCH_PRODUCT_CATEGORIES_ALL) {
-        return next(action);
-    }
-    fetch(action.meta.url, {
-        method: POST_METHOD, body: JSON.stringify(action.payload), headers: commonAuthorizedHeader()
-    })
-        .then(response => response.json())
-        .then(data => {
-            console.debug("Response:", data);
-            if (data.entities == null || data.entities.length == 0) {
-                alert("Data not found!");
-                return;
-            }
-            let newAction = Object.assign({}, action, {
-                payload: data
-            });
-            delete newAction.meta;
-            store.dispatch(newAction);
-        })
-        .catch(err => console.log(err));
-
-}
-
-const loadMoreSupplierMiddleware = store => next => action => {
-    if (!action.meta || action.meta.type !== types.LOAD_MORE_SUPPLIER) {
-        return next(action);
-    }
-    fetch(action.meta.url, {
-        method: POST_METHOD, body: JSON.stringify(action.payload), headers: commonAuthorizedHeader()
-    })
-        .then(response => response.json())
-        .then(data => {
-            console.debug("Response:", data);
-            if (data.entities == null || data.entities.length == 0) {
-                alert("Data not found!");
-                return;
-            }
-            let newAction = Object.assign({}, action, {
-                payload: data, referrer: action.meta.referrer
-            });
-            delete newAction.meta;
-            store.dispatch(newAction);
-        })
-        .catch(err => console.log(err))
-        .finally(parap => action.meta.referrer.props.app.endLoading());
-
-}
-
-const removeEntityMiddleware = store => next => action => {
-    if (!action.meta || action.meta.type !== types.REMOVE_SHOP_ENTITY) { return next(action); }
-    let newAction = Object.assign({}, action, { payload: null });
-    delete newAction.meta;
-    store.dispatch(newAction);
-
-}
-
-const getProductDetailMiddleWare = store => next => action => {
-    if (!action.meta || action.meta.type !== types.FETCH_PRODUCT_DETAIL) {
-        return next(action);
-    }
-    const app = action.meta.app;
-    fetch(action.meta.url, {
-        method: POST_METHOD, body: JSON.stringify(action.payload), headers: commonAuthorizedHeader()
-    })
-        .then(response => response.json())
-        .then(data => {
-            console.debug("Response:", data);
-            if (data.entities == null || data.entities.length == 0) {
-                alert("Data not found!");
-                return;
-            }
-            let newAction = Object.assign({}, action, {
-                payload: data
-            });
-            delete newAction.meta;
-            store.dispatch(newAction);
-        })
-        .catch(err => console.log(err))
-        .finally(param => app.endLoading());
-}
-
-const getProductListMiddleware = store => next => action => {
-    if (!action.meta || action.meta.type !== types.FETCH_PRODUCT_LIST) {
-        return next(action);
-    }
-
-    fetch(action.meta.url, {
-        method: POST_METHOD, body: JSON.stringify(action.payload), headers: commonAuthorizedHeader()
-    })
-        .then(response => response.json())
-        .then(data => {
-            console.debug("Response:", data);
-            if (data.entities == null || data.entities.length == 0) {
-                alert("Data not found!");
-                return;
-            }
-            let newAction = Object.assign({}, action, {
-                payload: data
-            });
-            delete newAction.meta;
-            store.dispatch(newAction);
-        })
-        .catch(err => console.log(err)).finally(param => action.meta.app.endLoading());
-}
+ 
 
 export default configureStore;
