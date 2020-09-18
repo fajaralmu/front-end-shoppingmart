@@ -88,7 +88,7 @@ class Dashboard extends Component {
                             handleOnChange: (value) => this.setState({ cashflowYear: value })
                         }
                     ]} />,
-                    <ActionButton status="success" id="btn-get-cashflow-info" text={<i class="fa fa-search"></i>} onClick={this.getCashflowInfo} />
+                    <ActionButton status="success" id="btn-get-cashflow-info" text={<i className="fa fa-search"></i>} onClick={this.getCashflowInfo} />
 
                 ]} />
                 <div className="cashflow-info-wrapper">

@@ -19,8 +19,8 @@ class Tab extends React.Component {
                 gridTemplateColumns: autoColumns
             }} >
                  <div style={{width:'100%', borderBottom:'solid 1px lightgray'}}></div>
-                {tabsData.map(tabData => {
-                    return <div className={tabData.active ? "tab-element tab-item-active rounded-top" : "tab-element tab-item"} onClick={tabData.onClick ? tabData.onClick : () => { }}>
+                {tabsData.map((tabData,i) => {
+                    return <div key={"tab"+i} className={tabData.active ? "tab-element tab-item-active rounded-top" : "tab-element tab-item"} onClick={tabData.onClick ? tabData.onClick : () => { }}>
                         {tabData.text}
                     </div>
                 })}

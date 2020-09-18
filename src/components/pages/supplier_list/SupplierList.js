@@ -115,7 +115,7 @@ class SupplierList extends Component {
 
         this.filterBox = () => {
             let actionButtons = [
-                { text: <i class="fas fa-search"></i>, status: "success", onClick: () => this.getSupplierList(0), id: "btn-search"}, 
+                { text: <i className="fas fa-search"></i>, status: "success", onClick: () => this.getSupplierList(0), id: "btn-search"}, 
                 { text: "Clear Filter", status: 'warning', onClick: this.clearField, id: "Clear" }
             ];
     

@@ -236,7 +236,7 @@ class Catalog extends Component {
     filterBox(){
         let categories = [{ value: "00", text: "-all category-" }];
         let actionButtons = [
-            { text: <i class="fa fa-search" ></i>, status: "success", onClick: () => this.getProductCatalog(0), id: "btn-search" },
+            { text: <i className="fa fa-search" ></i>, status: "success", onClick: () => this.getProductCatalog(0), id: "btn-search" },
             { text: "Clear Filter", status: 'warning', onClick: this.clearField, id: "Clear-filter" }
         ];
         this.props.productCategories.map(category => {
@@ -245,7 +245,7 @@ class Catalog extends Component {
        
         if (this.props.enableShopping) {
             actionButtons.push({
-                text: <span><i class="fa fa-cart-arrow-down" ></i>&nbsp;Clear Shopping List</span>, onClick: () => { this.clearCart() }, status: 'danger', id: "clear-list"
+                text: <span><i claclassNamess="fa fa-cart-arrow-down" ></i>&nbsp;Clear Shopping List</span>, onClick: () => { this.clearCart() }, status: 'danger', id: "clear-list"
             });
         }
 
@@ -300,10 +300,10 @@ class Catalog extends Component {
                             const qty = cartItem.count; 
 
                             const cartButtonsData = [
-                                { text: <i class="fas fa-sync"></i>, status: "danger btn-sm", onClick: () => this.addToCart(product, (qty * (-1))), id: "btn-add-cart-" + product.id },
-                                { text: <i class="fa fa-minus-circle"></i>, status: "warning btn-sm", onClick: () => this.addToCart(product, -1), id: "btn-add-cart-" + product.id },
+                                { text: <i className="fas fa-sync"></i>, status: "danger btn-sm", onClick: () => this.addToCart(product, (qty * (-1))), id: "btn-add-cart-" + product.id },
+                                { text: <i className="fa fa-minus-circle"></i>, status: "warning btn-sm", onClick: () => this.addToCart(product, -1), id: "btn-add-cart-" + product.id },
                                 { text: qty, id: "info-cart-" + product.id, status: 'light btn-sm' },
-                                { text: <i class="fa fa-plus-circle"></i>, status: 'success btn-sm', onClick: () => this.addToCart(product, 1), id: "btn-reduce-cart-" + product.id }
+                                { text: <i className="fa fa-plus-circle"></i>, status: 'success btn-sm', onClick: () => this.addToCart(product, 1), id: "btn-reduce-cart-" + product.id }
                             ];
 
                             shoppingInfo = <div>

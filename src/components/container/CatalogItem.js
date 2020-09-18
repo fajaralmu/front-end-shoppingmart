@@ -27,7 +27,7 @@ class CatalogItem extends Component {
                 onClick={() => this.props.getProductDetail(product.code)}
             />
             <Label style={{ fontFamily: "Arial Narrow" , fontWeight:'bolder'}} 
-                    text={<span><i class="fas fa-tags"></i>&nbsp;{stringUtil.beautifyNominal(product.price) + ",00"}</span>} />
+                    text={<span><i className="fas fa-tags"></i>&nbsp;{stringUtil.beautifyNominal(product.price) + ",00"}</span>} />
             <div>
                 <i className="fas fa-cubes"></i>&nbsp;{stringUtil.beautifyNominal(product.count)}&nbsp;{product.unit.name}
             </div>

@@ -48,13 +48,13 @@ class CrudRow extends Component {
                     id: "k-btn-edit-" + this.props.identifier,
                     status: 'warning btn-sm',
                     onClick: this.handleEdit,
-                    text: <i class="fas fa-edit"></i>
+                    text: <i className="fas fa-edit"></i>
                 },
                 {
                     id: "k-btn-dlt-" + this.props.identifier,
                     status: 'danger btn-sm',
                     onClick: this.handleDelete,
-                    text: <i class="fas fa-trash"></i>
+                    text: <i className="fas fa-trash"></i>
                 }
             ]} />
         </td>;

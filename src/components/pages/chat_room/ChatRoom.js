@@ -75,7 +75,7 @@ class ChatRoom extends Component {
 
                     <GridComponent style={{ width: '50%', textAlign: 'right' }} items={[
                         <InputField style={{ width: '130%' }} type="textarea" placeholder="input message" id="input-msg" />,
-                        <ActionButton style={{ margin: '5px' }} status="success" onClick={this.sendChatMessage} text={<i class="fas fa-paper-plane"></i>} />
+                        <ActionButton style={{ margin: '5px' }} status="success" onClick={this.sendChatMessage} text={<i className="fas fa-paper-plane"></i>} />
 
                     ]} />
 

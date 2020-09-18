@@ -62,7 +62,7 @@ function CartInfoContent(props) {
         content = <h3 style={{ paddingLeft: '5px' }}>See Detail</h3>
     } else {
         content = <div>
-            <Label text={<span><i class="fas fa-shopping-cart"></i>Listed Product</span>} />
+            <Label text={<span><i className="fas fa-shopping-cart"></i>Listed Product</span>} />
             <span style={{ margin: '5px' }} className="quantity-label">{props.count}</span>
             <span style={{ margin: '5px', color: 'yellow', backgroundColor: 'blue' }} className="quantity-label">{props.totalPrice}</span>
         </div>

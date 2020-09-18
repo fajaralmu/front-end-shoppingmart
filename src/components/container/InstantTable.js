@@ -1,5 +1,4 @@
-import React, { Component } from 'react' 
-import * as tableCss from '../../components/container/InstantTable.css'
+import React, { Component } from 'react'  
 import * as stringUtil from '../../utils/StringUtil' 
 import CrudRow from './CrudRow';
 

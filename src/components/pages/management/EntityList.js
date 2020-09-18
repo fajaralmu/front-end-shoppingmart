@@ -137,12 +137,12 @@ class EntityList extends Component {
                 const sortingButtons = <ActionButtons buttonsData={[{
                     status: 'outline-secondary btn-sm',
                     onClick: () => { this.setOrderBy(headerName, 'asc') },
-                    text: <i class={"fa fa-angle-up"} aria-hidden="true"></i>
+                    text: <i className={"fa fa-angle-up"} aria-hidden="true"></i>
                 },
                 {
                     status: 'outline-secondary btn-sm',
                     onClick: () => { this.setOrderBy(headerName, 'desc') },
-                    text: <i class={"fa fa-angle-down"} aria-hidden="true"></i>
+                    text: <i className={"fa fa-angle-down"} aria-hidden="true"></i>
                 }
                 ]} />
 
