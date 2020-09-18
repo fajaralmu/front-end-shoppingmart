@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import * as actions from '../../../redux/actionCreators'
 
-import * as trxCss from './Transaction.css' 
+import * as trxCss from './Transaction.css'
 import ActionButton from '../../buttons/ActionButton'
 import Label from '../../container/Label';
 import InputField from '../../inputs/InputField';
@@ -12,12 +12,14 @@ import Message from '../../container/Message'
 import TransactionReceipt from './TransactionReceipt'
 import * as stringUtil from '../../../utils/StringUtil'
 import ActionButtons from '../../buttons/ActionButtons'
-import InstantTable from '../../container/InstantTable' 
+import InstantTable from '../../container/InstantTable'
 import * as componentUtil from '../../../utils/ComponentUtil'
 import { _byId } from '../../../utils/ComponentUtil'
 import InputDropdown from '../../inputs/InputDropdown'
 import CatalogItem from '../../container/CatalogItem';
 import AddToCartButton from './AddToCartButton';
+import GridComponent from './../../container/GridComponent';
+import Card from '../../card/Card'
 
 class TransactionIn
     extends Component {
@@ -59,7 +61,7 @@ class TransactionIn
                 "count": quantity,
                 "expiryDate": expDate,
                 //for stock list table identifier
-                "entityId":product.id
+                "entityId": product.id
             };
 
             //update list in the state
@@ -153,11 +155,12 @@ class TransactionIn
 
         this.reset = () => {
             componentUtil.clearFields(null);
-            this.setState({supplier:null,
+            this.setState({
+                supplier: null,
                 productFlows: [], showDetail: false, product: null,
                 supplierName: null, productName: null, expiryDate: null, quantity: null, price: null
             });
-           
+
             this.props.resetPurchaseTransaction();
         }
 
@@ -182,7 +185,7 @@ class TransactionIn
         }
 
         this.getSupplierList = (value, id) => {
-            if(value == null || value.trim() == ""){ return; } 
+            if (value == null || value.trim() == "") { return; }
             this.setState({ supplierName: value });
             this.props.getSupplierList(value, this.props.app);
             this.setActiveField(id);
@@ -200,7 +203,7 @@ class TransactionIn
         }
 
         this.getProductList = (value, id) => {
-            if(value == null || value.trim() == ""){ return; }
+            if (value == null || value.trim() == "") { return; }
             this.setState({ showDetail: true, productName: value })
             this.props.getProductList(value, this.props.app);
             this.setActiveField(id);
@@ -219,7 +222,7 @@ class TransactionIn
         }
     }
     componentDidMount() {
-        if(this.props.resetPurchaseTransaction)
+        if (this.props.resetPurchaseTransaction)
             this.props.resetPurchaseTransaction();
         document.title = "Transaction::In";
 
@@ -231,14 +234,10 @@ class TransactionIn
     }
 
     render() {
-        let detailStock = "", message = "", totalPrice = this.calculateTotalPrice();
+        let message = "", totalPrice = this.calculateTotalPrice();
 
-        if (this.state.product != null) {
-            detailStock = <div className="form-panel  ">
-                <div className="panel-title  ">Product Detail</div>
-                <DetailProductPanel product={this.state.product} />
-            </div>;
-        }
+        const detailStock = this.state.product ? <DetailProductPanel product={this.state.product} /> : null;
+
         if (this.state.messageShow == true) {
             message = <Message withTimer={true} text={this.state.messageText} endMessage={this.endMessage} type={this.state.messageType} />
         }
@@ -267,61 +266,52 @@ class TransactionIn
 
         let formComponent = <table><tbody>
             <tr valign="top"><td>
-                <div className="form-panel  ">
-                    <div className="panel-title  ">Transaction Detail</div>
-                    <InstantTable
-                        disabled={true} rows={[
-                            {
-                                values: [<InputDropdown onSelect={this.selectSupplier} dropdownList={supplierList}
-                                    value={this.state.supplierName}
-                                    onKeyUp={this.getSupplierList} id="input-supplier-name" placeholder="supplier name" />]
-                            },
-                            {
-                                values: [<InputDropdown onSelect={this.selectProduct} id="input-product-name" dropdownList={productList}
-                                    value={this.state.productName}
-                                    onKeyUp={this.getProductList} placeholder="input product name" />]
-                            },
-                            {
-                                values: [<InputField id="input-product-price"
-                                    value={this.state.price} onKeyUp={(value, id) => this.setState({ activeField: id, price: value })}
-                                    type="number" placeholder="input product price" />]
-                            },
-                            {
-                                values: [<InputField id="input-quantity"
-                                    value={this.state.quantity} onKeyUp={(value, id) => this.setState({ activeField: id, quantity: value })}
-                                    type="number" placeholder="quantity" />]
-                            },
-                            {
-                                values:[<Label text="Expiry Date"/>]
-                            },
-                            {
-                                values: [<InputField id="input-exp-date"
-                                    value={this.state.expiryDate} onKeyUp={(value, id) => this.setState({ activeField: id, expiryDate: value })}
-                                    type="date" placeholder="input product exp date" />]
-                            }
+                <Card title="Transaction Detail" content={<>
+                    <GridComponent cols={1}
+                        items={[
+                            <Label text="Supplier" />,
+                            <InputDropdown onSelect={this.selectSupplier} dropdownList={supplierList}
+                                value={this.state.supplierName}
+                                onKeyUp={this.getSupplierList} id="input-supplier-name" placeholder="supplier name" />,
+                            <Label text="Product" />,
+                            <InputDropdown onSelect={this.selectProduct} id="input-product-name" dropdownList={productList}
+                                value={this.state.productName}
+                                onKeyUp={this.getProductList} placeholder="input product name" />,
+                            <Label text="Price" />,
+                            <InputField id="input-product-price"
+                                value={this.state.price} onKeyUp={(value, id) => this.setState({ activeField: id, price: value })}
+                                type="number" placeholder="input product price" />,
+                            <Label text="Quantity" />,
+                            <InputField id="input-quantity"
+                                value={this.state.quantity} onKeyUp={(value, id) => this.setState({ activeField: id, quantity: value })}
+                                type="number" placeholder="quantity" />,
+                            <Label text="Expiry Date" />,
+                            <InputField id="input-exp-date"
+                                value={this.state.expiryDate} onKeyUp={(value, id) => this.setState({ activeField: id, expiryDate: value })}
+                                type="date" placeholder="input product exp date" />
                         ]}
                     />
-                    {this.state.product != null ? <AddToCartButton  onClick={this.addToCart} /> : ""}
-                </div>
+                    {this.state.product != null ? <AddToCartButton onClick={this.addToCart} /> : ""}
+                </>} />
             </td><td>{detailStock}</td></tr>
         </tbody></table>;
 
         let buttonsData = [
-            { text: "Back", status:"secondary", onClick: () => this.props.setFeatureCode(null), id: "btn-back" },
-            { text: "Back And Reset", status: "warning", onClick: () => { this.props.setFeatureCode(null); this.reset() }, id: "btn-back-reset" }, 
+            { text: "Back", status: "secondary", onClick: () => this.props.setFeatureCode(null), id: "btn-back" },
+            { text: "Back And Reset", status: "warning", onClick: () => { this.props.setFeatureCode(null); this.reset() }, id: "btn-back-reset" },
             { text: "Reset", status: 'danger', id: "btn-reset-trx", onClick: this.reset }];
 
         if (this.props.successTransaction) {
             formComponent =
-                <TransactionReceipt status="Success" transactionData={this.props.transactionData} /> 
-        }else{
+                <TransactionReceipt status="Success" transactionData={this.props.transactionData} />
+        } else {
             buttonsData.push({ id: "btn-submit-trx", status: 'success btn-sm', text: "Submit Transaction", onClick: this.submitTransaction });
         }
 
         return (
             <div className="transaction-container">
                 {message}
-                <h2>Purchasing {this.state.supplier && this.state.supplier.name ? "["+this.state.supplier.name+"]" : null}</h2>
+                <h2>Purchasing {this.state.supplier && this.state.supplier.name ? "[" + this.state.supplier.name + "]" : null}</h2>
                 {/* {stateInfo} */}
                 {formComponent}
                 <div>

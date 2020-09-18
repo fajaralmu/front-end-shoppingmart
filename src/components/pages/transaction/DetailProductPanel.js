@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import * as url from '../../../constant/Url'
 import * as stringUtil from '../../../utils/StringUtil'
 import InstantTable from '../../container/InstantTable';
+import Card from '../../card/Card';
 
 class DetailProductPanel extends Component {
     constructor(props) {
@@ -56,14 +57,14 @@ class DetailProductPanel extends Component {
         let imageUrl = url.baseImageUrl + productImageName;
 
         return (
-            <div className="stock-detail" >
+           <Card title="Product Detail" content={
                 <table><tbody><tr valign="top">
                     <td>
                         <InstantTable disabled={true} rows={this.getRowData()} />
                     </td>
                     <td><div className="img-panel rounded box-shadow"><img src={imageUrl} width="300" height="200" /></div>
                     </td></tr></tbody></table>
-            </div>
+           } /> 
         )
     }
 

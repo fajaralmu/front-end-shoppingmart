@@ -2,10 +2,10 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import * as actions from '../../../redux/actionCreators'
 
-import * as trxCss from './Transaction.css' 
+import * as trxCss from './Transaction.css'
 import ActionButton from '../../buttons/ActionButton'
 import Label from '../../container/Label';
-import InputField from '../../inputs/InputField'; 
+import InputField from '../../inputs/InputField';
 import StockListTable from './StockListTable'
 import Message from '../../container/Message'
 import TransactionReceipt from './TransactionReceipt'
@@ -17,6 +17,8 @@ import { _byId } from '../../../utils/ComponentUtil'
 import * as componentUtil from '../../../utils/ComponentUtil'
 import AddToCartButton from './AddToCartButton';
 import DetailProductPanel from './DetailProductPanel';
+import GridComponent from '../../container/GridComponent'
+import Card from './../../card/Card';
 
 class TransactionOut extends Component {
 
@@ -214,14 +216,10 @@ class TransactionOut extends Component {
     }
 
     render() {
-        let detailStock = "", message = "", totalPrice = this.calculateTotalPrice();
+        let message = "", totalPrice = this.calculateTotalPrice();
 
-        if (this.props.productFlowStock != null) {
-            detailStock = <div className="form-panel  ">
-                <div className="panel-title ">Product Detail</div>
-                <DetailProductPanel stockView={true} product={this.props.productFlowStock} />
-            </div>;
-        }
+        const detailStock = this.props.productFlowStock ? <DetailProductPanel stockView={true} product={this.props.productFlowStock} /> : null;
+
         if (this.state.messageShow == true) {
             message = <Message withTimer={true} text={this.state.messageText} endMessage={this.endMessage} type={this.state.messageType} />
         }
@@ -243,33 +241,25 @@ class TransactionOut extends Component {
 
         let formComponent = <table><tbody>
             <tr valign="top"><td>
-                <div className="form-panel ">
-                    <div className="panel-title ">Transaction Detail</div>
-                    <InstantTable
-                        disabled={true} rows={[
-                            {
-                                values: [<InputDropdown value={this.state.customerName} onSelect={this.selectCustomer} dropdownList={customerList}
-                                    onKeyUp={this.getCustomerList} id="input-customer-name" placeholder="customer name" />]
-                            },
-                            {
-                                values: [<InputDropdown value={this.state.productName} onSelect={this.selectproduct} dropdownList={productList}
-                                    onKeyUp={this.getProductStockList} id="input-product-name" placeholder="product name" />]
-                            },
-                            // {
-                            //     values: [<InputField id="input-stock-id"
-                            //         value={this.state.stockId} onKeyUp={(value, id) => this.setState({ activeField: id, stockId: value })}
-                            //         type="number" placeholder="input stock id" />,
-                            //     <ActionButton id="btn-search-stock" text="Search" onClick={this.getStockInfo} />]
-                            // },
-                            {
-                                values: [<InputField id="input-quantity"
-                                    value={this.state.quantity} onKeyUp={(value, id) => this.setState({ activeField: id, quantity: value })}
-                                    type="number" placeholder="quantity" />]
-                            }
-                        ]}
-                    />
-                    {this.props.productFlowStock != null ? <AddToCartButton  onClick={this.addToCart} /> : ""}
-                </div>
+                <Card title="Transaction Detail" content={<>
+                    <GridComponent cols={1} items={[
+                        <Label text="Customer" />,
+                        <InputDropdown value={this.state.customerName} onSelect={this.selectCustomer} dropdownList={customerList}
+                            onKeyUp={this.getCustomerList} id="input-customer-name" placeholder="customer name" />,
+                        <Label text="Product" />,
+                        <InputDropdown value={this.state.productName} onSelect={this.selectproduct} dropdownList={productList}
+                            onKeyUp={this.getProductStockList} id="input-product-name" placeholder="product name" />,
+                        <Label text="Quantity" />,
+                        <InputField id="input-quantity"
+                            value={this.state.quantity} onKeyUp={(value, id) => this.setState({ activeField: id, quantity: value })}
+                            type="number" placeholder="quantity" />
+                    ]}
+                    />,
+                    {this.props.productFlowStock != null ? <AddToCartButton onClick={this.addToCart} /> : ""}
+
+                </>}
+                />
+
             </td><td>{detailStock}</td></tr>
         </tbody></table>;
 
