@@ -1,6 +1,4 @@
-import React, { Component } from 'react' 
-import './Card.css'
-
+import React, { Component } from 'react'
 
 class Card extends Component {
     constructor(props) {
@@ -12,29 +10,29 @@ class Card extends Component {
         }
     }
 
-    render() {
-        let titleStyle = {height:'auto'}
-        if (this.props.icon) {
-            titleStyle = {
-                backgroundRepeat: 'no-repeat',
-                backgroundColor: 'white',
-                backgroundImage: "url(" + this.props.icon + ")",
-                backgroundSize: '200px 160px',
-                
-            }
+    render() { 
+
+        let className;
+        if (this.props.className) {
+            className = "card " + this.props.className;
+        } else {
+            className = "card";
         }
 
-        let className= "card ";
-        if(this.props.className){
-            className+=" "+this.props.className;
+        let titleComponent;
+        if (this.props.icon) {
+            titleComponent = <img src={this.props.icon} height="200" className="card-img-top" />
+        } else {
+            titleComponent = <div className="card-header">
+                {this.props.title}
+            </div>
         }
 
         return (
-            <div onClick={this.onClick} style={this.props.style} className={className}>
-                <div className="card-title  " style={titleStyle}>
-                    {this.props.title}
-                </div>
-                <div className="card-content">
+            <div onClick={this.onClick} style={{ ...this.props.style, marginRight: '5px' }} className={className}>
+                {titleComponent}
+                <div className="card-body">
+                    {this.props.icon? <div className="card-title">{this.props.title}</div>:null}
                     {this.props.content}
                 </div>
             </div>

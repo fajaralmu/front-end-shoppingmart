@@ -59,8 +59,7 @@ class DetailProductPanel extends Component {
             <div className="stock-detail" >
                 <table><tbody><tr valign="top">
                     <td>
-                        <InstantTable disabled={true}
-                            rows={this.getRowData()} />
+                        <InstantTable disabled={true} rows={this.getRowData()} />
                     </td>
                     <td><div className="img-panel rounded box-shadow"><img src={imageUrl} width="300" height="200" /></div>
                     </td></tr></tbody></table>

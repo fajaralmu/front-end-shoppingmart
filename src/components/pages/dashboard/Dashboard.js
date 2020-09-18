@@ -68,12 +68,13 @@ class Dashboard extends Component {
         let cashflowInfoIn = this.props.cashflowInfoIn ? this.props.cashflowInfoIn : { amount: "loading...", count: "loading..." };
         let cashflowInfoOut = this.props.cashflowInfoOut ? this.props.cashflowInfoOut : { amount: "loading...", count: "loading..." };
 
-        console.log("this.props.cashflowInfoIn ", this.props.cashflowInfoIn); 
+        console.log("this.props.cashflowInfoIn ", this.props.cashflowInfoIn);
 
         let mainComponent = <div>
             <div className="cashflow-info">
                 <h3>Cashflow Info</h3>
-                <GridComponent style={{ width: 'min-content' }} items={[
+                <GridComponent style={{ backgroundColor:'#cccccc', padding:'5px', borderRadius:'3px', width: 'max-content', gridColumnGap: '10px' }} items={[
+                    <h3 style={{marginRight:'4px', color:'#555' }}><i  className="fas fa-calendar-alt"></i></h3>,
                     <ComboBoxes key="cb" values={[
                         {
                             id: "select-month",
@@ -88,17 +89,15 @@ class Dashboard extends Component {
                             handleOnChange: (value) => this.setState({ cashflowYear: value })
                         }
                     ]} />,
-                    <ActionButton status="success" id="btn-get-cashflow-info" text={<i className="fa fa-search"></i>} onClick={this.getCashflowInfo} />
+                    <ActionButton status="secondary" id="btn-get-cashflow-info" text={<i className="fa fa-search"></i>} onClick={this.getCashflowInfo} />
 
                 ]} />
                 <div className="cashflow-info-wrapper">
-                    <InstantTable disabled={true}
-                        rows={[{
-                            values: [
-                                <EarningContent cashflowInfoOut={cashflowInfoOut} />,
-                                <SpendingContent cashflowInfoIn={cashflowInfoIn} />
-                            ]
-                        }]} />
+                    <GridComponent style={{width:'50%'}}
+                        items={[
+                            <EarningContent cashflowInfoOut={cashflowInfoOut} />,
+                            <SpendingContent cashflowInfoIn={cashflowInfoIn} />
+                        ]} />
                 </div>
             </div>
         </div>;
@@ -137,25 +136,25 @@ class Dashboard extends Component {
 
 function EarningContent(props) {
     const cashflowInfoOut = props.cashflowInfoOut;
-    const content = <div>
-        <Label text="Value" />
-        <Label style={{ fontFamily: "Arial Black" }} text={stringUtil.beautifyNominal(cashflowInfoOut.amount) + ",00"} />
+    const value = <><i className="fas fa-money-bill-wave"></i>&nbsp;{stringUtil.beautifyNominal(cashflowInfoOut.amount) + ",00"}</>;
+    const content = <div> 
+        <Label style={{ fontFamily: "TNR" }} text={value} />
         <Label text="Item" />
         <Label text={stringUtil.beautifyNominal(cashflowInfoOut.count)} />
     </div>;
 
-    return (<Card title={"My earning in " + stringUtil.monthYearString(cashflowInfoOut.month, cashflowInfoOut.year)} content={content} />);
+    return (<Card style={{marginTop:'3px'}} title={"Total Earning " + stringUtil.monthYearString(cashflowInfoOut.month, cashflowInfoOut.year)} content={content} />);
 }
 
 function SpendingContent(props) {
     const cashflowInfoIn = props.cashflowInfoIn;
-    const content = <div>
-        <Label text="Value" />
-        <Label style={{ fontFamily: "Arial Black" }} text={stringUtil.beautifyNominal(cashflowInfoIn.amount) + ",00"} />
+    const value = <><i className="fas fa-comments-dollar"></i>&nbsp;{stringUtil.beautifyNominal(cashflowInfoIn.amount) + ",00"}</>;
+    const content = <div> 
+        <Label style={{ fontFamily: "TNR" }} text={value} />
         <Label text="Item" />
-        <Label text={stringUtil.beautifyNominal(cashflowInfoIn.count)} />
+        <Label text={<>{stringUtil.beautifyNominal(cashflowInfoIn.count)}</>} />
     </div>
-    return (<Card title={"My spending in " + stringUtil.monthYearString(cashflowInfoIn.month, cashflowInfoIn.year)} content={content} />);
+    return (<Card style={{marginTop:'3px'}} title={"Total Spending " + stringUtil.monthYearString(cashflowInfoIn.month, cashflowInfoIn.year)} content={content} />);
 }
 
 const mapStateToProps = state => {
