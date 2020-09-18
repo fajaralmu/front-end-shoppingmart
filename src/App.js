@@ -88,6 +88,84 @@ class App extends Component {
       }
       this.setState({ loadingPercentage: percentage });
     }
+
+    this.loginComponent = () => {
+      return <Login main={this} setMenuCode={this.setMenuCode}
+        setDetailMode={this.setDetailMode}
+        detailMode={this.state.detailMode}
+        doLogin={this.props.performLogin}
+        loginFailed={this.props.loginFailed}
+        loginAttempt={this.props.loginAttempt}
+        loginStatus={this.props.loginStatus} />;
+    }
+
+    this.mainContent = () => {
+      return (<div id="main-content" >
+        <Switch>
+          <Route exact path="/" render={
+            (renderProps) =>
+              <Home applicationProfile={this.props.applicationProfile} setMenuCode={this.setMenuCode} />
+          } />
+          <Route exact path="/home" render={
+            (renderProps) =>
+              <Home applicationProfile={this.props.applicationProfile} setMenuCode={this.setMenuCode} />
+          } />
+          <Route exact path="/suppliers" render={
+            (renderProps) =>
+              <SupplierList app={this} setMenuCode={this.setMenuCode} />
+          } />
+          <Route exact path="/chatroom" render={
+            (renderProps) =>
+              <ChatRoom app={this} setMenuCode={this.setMenuCode} />
+          } />
+          <Route exact path="/about" render={
+            (renderProps) =>
+              <About applicationProfile={this.props.applicationProfile} setMenuCode={this.setMenuCode} />
+          }></Route>
+          <Route exact path="/catalog" render={
+            (renderProps) =>
+              <Catalog app={this}
+                enableShopping={this.state.enableShopping}
+                setMenuCode={this.setMenuCode}
+                setDetailMode={this.setDetailMode} detailMode={this.state.detailMode} />
+
+          }></Route>
+          <Route exact path="/cart" render={
+            (renderProps) => <CartDetail enableShopping={this.state.enableShopping} cart={this.props.cart} app={this} setMenuCode={this.setMenuCode} />
+
+          }></Route>
+          <Route exact path="/login" render={
+            (renderProps) => <this.loginComponent />
+
+          }></Route>
+
+          {/*
+               =============================
+               ======== need login =========
+               =============================
+               */}
+          <Route exact path="/dashboard" render={
+            (renderProps) =>
+              <Dashboard app={this} loginStatus={this.props.loginStatus} setMenuCode={this.setMenuCode} />
+
+          }></Route>
+          <Route exact path="/management" render={
+            (renderProps) =>
+              <Management app={this} loginStatus={this.props.loginStatus} setMenuCode={this.setMenuCode} />
+
+          }></Route>
+        </Switch>
+
+      </div>);
+    }
+
+    this.loadingComponent = () => {
+      if (this.state.loading == true) {
+        return <Message realtime={this.state.realtime} progress={this.state.loadingPercentage} text="Please wait..." type="loading" />;
+
+      }
+      return null;
+    }
   }
 
   componentDidUpdate() {
@@ -112,7 +190,7 @@ class App extends Component {
       document.head.appendChild(link);
     }
 
-    link.href = url.baseImageUrl+'/'+profile.iconUrl;
+    link.href = url.baseImageUrl + '/' + profile.iconUrl;
   }
 
   componentDidMount() {
@@ -147,33 +225,19 @@ class App extends Component {
       return (
         <div>Please wait.. </div>
       )
-    }
-
-    let loginComponent = <Login main={this} setMenuCode={this.setMenuCode}
-                        setDetailMode={this.setDetailMode}
-                        detailMode={this.state.detailMode}
-                        doLogin={this.props.performLogin}
-                        loginFailed={this.props.loginFailed}
-                        loginAttempt={this.props.loginAttempt}
-                        loginStatus={this.props.loginStatus} />;
-
-    let loadingComponent = "";
-    if (this.state.loading == true) {
-      loadingComponent = <Message realtime={this.state.realtime} progress={this.state.loadingPercentage} text="Please wait..." type="loading" />;
-
-    }
+    } 
 
     let menus = this.setMenus();
 
     let cloudHost = "https://nuswantoroshop.herokuapp.com/";
     let localHost = "http://localhost:8080/universal-good-shop/";
     const usedHost = localHost;
+
     return (
       <div className="App">
-        {loadingComponent}
+        <this.loadingComponent />
         <Header applicationProfile={this.props.applicationProfile} enableShopping={this.state.enableShopping} cart={this.props.cart} />
-        {/*this.props.loginStatus == true?"Logged In":"Un Logged"*/}
-
+       
         <div id="main-layout">
           <div id="main-menu">
             <Menu loggedUser={this.props.loggedUser}
@@ -181,70 +245,13 @@ class App extends Component {
               activeCode={this.state.menuCode}
               menus={menus} />
           </div>
-
-          <div id="main-content" >
-            <Switch>
-              <Route exact path="/" render={
-                (renderProps) =>
-                  <Home  applicationProfile={this.props.applicationProfile}  setMenuCode={this.setMenuCode} />
-              } />
-              <Route exact path="/home" render={
-                (renderProps) =>
-                  <Home applicationProfile={this.props.applicationProfile} setMenuCode={this.setMenuCode} />
-              } />
-              <Route exact path="/suppliers" render={
-                (renderProps) =>
-                  <SupplierList app={this} setMenuCode={this.setMenuCode} />
-              } />
-              <Route exact path="/chatroom" render={
-                (renderProps) =>
-                  <ChatRoom app={this} setMenuCode={this.setMenuCode} />
-              } />
-              <Route exact path="/about" render={
-                (renderProps) =>
-                  <About applicationProfile={this.props.applicationProfile} setMenuCode={this.setMenuCode} />
-              }></Route>
-              <Route exact path="/catalog" render={
-                (renderProps) =>
-                  <Catalog app={this}
-                    enableShopping={this.state.enableShopping}
-                    setMenuCode={this.setMenuCode}
-                    setDetailMode={this.setDetailMode} detailMode={this.state.detailMode} />
-
-              }></Route>
-              <Route exact path="/cart" render={
-                (renderProps) => <CartDetail enableShopping={this.state.enableShopping} cart={this.props.cart} app={this} setMenuCode={this.setMenuCode} />
-
-              }></Route>
-              <Route exact path="/login" render={
-                (renderProps) => loginComponent
-
-              }></Route>
-
-              {/*
-                     =============================
-                     ======== need login =========
-                     =============================
-                     */}
-              <Route exact path="/dashboard" render={
-                (renderProps) =>
-                  <Dashboard app={this} loginStatus={this.props.loginStatus} setMenuCode={this.setMenuCode} />
-
-              }></Route>
-              <Route exact path="/management" render={
-                (renderProps) =>
-                  <Management app={this} loginStatus={this.props.loginStatus} setMenuCode={this.setMenuCode} />
-
-              }></Route>
-            </Switch>
-
-          </div>
-
+          <this.mainContent />
         </div>
+        
         <SockJsClient url={usedHost + 'realtime-app'} topics={['/wsResp/progress/' + localStorage.getItem("requestId")]}
           onMessage={(msg) => { this.handleMessage(msg) }}
           ref={(client) => { this.clientRef = client }} />
-        <Footer applicationProfile={this.props.applicationProfile}/>
+        <Footer applicationProfile={this.props.applicationProfile} />
 
       </div>
     )
