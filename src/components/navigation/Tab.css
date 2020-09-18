@@ -1,4 +1,4 @@
-.tab-item-active{
+/* .tab-item-active{
     border-top: solid 1px lightgray;
     border-left: solid 1px lightgray;
     border-right: solid 1px lightgray;
@@ -16,4 +16,7 @@
 .tab-element{
     padding: 10px;
     text-align: center
+} */
+.nav-item:hover{
+    cursor: pointer;
 }

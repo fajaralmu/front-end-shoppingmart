@@ -11,21 +11,31 @@ class Tab extends React.Component {
 
         let autoColumns = "5% "+("min-content ".repeat(tabsData.length ))+" auto";
         return (
-            <div className="tab-container" style={{
-                ...this.props.style,
-                width:'auto',
-                gap:'0px',
-                display: 'grid',
-                gridTemplateColumns: autoColumns
-            }} >
-                 <div style={{width:'100%', borderBottom:'solid 1px lightgray'}}></div>
+            // <div className="tab-container" style={{
+            //     ...this.props.style,
+            //     width:'auto',
+            //     gap:'0px',
+            //     display: 'grid',
+            //     gridTemplateColumns: autoColumns
+            // }} >
+            //      <div style={{width:'100%', borderBottom:'solid 1px lightgray'}}></div>
+            <ul class="nav nav-tabs">
+  
                 {tabsData.map((tabData,i) => {
-                    return <div key={"tab"+i} className={tabData.active ? "tab-element tab-item-active rounded-top" : "tab-element tab-item"} onClick={tabData.onClick ? tabData.onClick : () => { }}>
-                        {tabData.text}
-                    </div>
+                    return (
+                        <li key={"tab"+i} className="nav-item">
+                            <a href="#" className={tabData.active ? "nav-link active" : "nav-link"} onClick={tabData.onClick ? tabData.onClick : () => { }}>
+                                {tabData.text}
+                            </a>
+                        </li>
+                    // <div key={"tab"+i} className={tabData.active ? "tab-element tab-item-active rounded-top" : "tab-element tab-item"} onClick={tabData.onClick ? tabData.onClick : () => { }}>
+                    //     {tabData.text}
+                    // </div>
+                    )
                 })}
-                <div style={{width:'100%', borderBottom:'solid 1px lightgray'}}></div>
-            </div>
+            </ul>
+            //     <div style={{width:'100%', borderBottom:'solid 1px lightgray'}}></div>
+            // </div>
         )
     }
 }

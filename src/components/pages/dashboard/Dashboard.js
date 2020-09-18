@@ -74,7 +74,7 @@ class Dashboard extends Component {
             <div className="cashflow-info">
                 <h3>Cashflow Info</h3>
                 <GridComponent style={{ width: 'min-content' }} items={[
-                    <ComboBoxes values={[
+                    <ComboBoxes key="cb" values={[
                         {
                             id: "select-month",
                             defaultValue: this.state.cashflowMonth ? this.state.cashflowMonth : componentUtil.getCurrentMMYY()[0],

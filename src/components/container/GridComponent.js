@@ -16,8 +16,8 @@ class GridComponent extends Component {
 
         return (
             <div style={{ ...this.props.style, display: 'grid', verticalAlign: 'middle', gridTemplateColumns: gridAutoColumns }} >
-                {items.map(item => {
-                    return item;
+                {items.map((item, i)=> {
+                    return <div key={"div-"+i}>{item}</div>;
                 })}
             </div>
         )
