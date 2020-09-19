@@ -243,12 +243,12 @@ class TransactionOut extends Component {
                     <GridComponent cols={1} items={[
                         <Label text="Customer" />,
                         <InputDropdown value={this.state.customerName} onSelect={this.selectCustomer} dropdownList={customerList}
-                            onKeyUp={this.getCustomerList} id="input-customer-name" placeholder="customer name" />,
+                            onKeyUp={this.getCustomerList} id="input-customer-name-sell" placeholder="customer name" />,
                         <Label text="Product" />,
                         <InputDropdown value={this.state.productName} onSelect={this.selectproduct} dropdownList={productList}
-                            onKeyUp={this.getProductStockList} id="input-product-name" placeholder="product name" />,
+                            onKeyUp={this.getProductStockList} id="input-product-name-sell" placeholder="product name" />,
                         <Label text="Quantity" />,
-                        <InputField id="input-quantity"
+                        <InputField id="input-quantity-sell"
                             value={this.state.quantity} onKeyUp={(value, id) => this.setState({ activeField: id, quantity: value })}
                             type="number" placeholder="quantity" />
                     ]}

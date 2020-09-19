@@ -273,27 +273,27 @@ class TransactionPurchasing
                             <Label text="Supplier" />,
                             <InputDropdown onSelect={this.selectSupplier} dropdownList={supplierList}
                                 value={this.state.supplierName}
-                                onKeyUp={this.getSupplierList} id="input-supplier-name" placeholder="supplier name" />,
+                                onKeyUp={this.getSupplierList} id="input-supplier-name-purc" placeholder="supplier name" />,
                             <Label text="Product" />,
-                            <InputDropdown onSelect={this.selectProduct} id="input-product-name" dropdownList={productList}
+                            <InputDropdown onSelect={this.selectProduct} id="input-product-name-purc" dropdownList={productList}
                                 value={this.state.productName}
                                 onKeyUp={this.getProductList} placeholder="input product name" />,
                             <Label text="Price" />,
-                            <InputField id="input-product-price"
+                            <InputField id="input-product-price-purc"
                                 value={this.state.price} onKeyUp={(value, id) => {
                                     this.setState({ activeField: id, price: value });
                                     this.addFormFieldId(id);
                                 }}
                                 type="number" placeholder="input product price" />,
                             <Label text="Quantity" />,
-                            <InputField id="input-quantity"
+                            <InputField id="input-quantity-purc"
                                 value={this.state.quantity} onKeyUp={(value, id) => {
                                     this.setState({ activeField: id, quantity: value });
                                     this.addFormFieldId(id);
                                 }}
                                 type="number" placeholder="quantity" />,
                             <Label text="Expiry Date" />,
-                            <InputField id="input-exp-date"
+                            <InputField id="input-exp-date-purc"
                                 value={this.state.expiryDate} onKeyUp={(value, id) => {
                                     this.setState({ activeField: id, expiryDate: value });
                                     this.addFormFieldId(id);
