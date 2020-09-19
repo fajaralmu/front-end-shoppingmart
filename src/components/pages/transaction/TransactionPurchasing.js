@@ -30,7 +30,7 @@ class TransactionPurchasing
             quantity: 0, price: 0, expiryDate: "2020-01-01",
             activeField: ""
         }
- 
+
         this.isExistInTheChart = (productId) => {
             if (this.state.productFlows == null) return false;
             return this.getProductFlow(productId) != null;
@@ -48,7 +48,7 @@ class TransactionPurchasing
             if (this.isExistInTheChart(product.id))
                 if (!window.confirm("The product already exist in the chart, do you want to override it?"))
                     return;
-            alert("PRICE: " + price);
+
             let ID = Math.floor(Math.random() * 1000);
             let newProductFlow = {
                 "id": ID,
@@ -166,7 +166,7 @@ class TransactionPurchasing
                 productName: null, expiryDate: null, quantity: null, price: null
             });
 
-           this.emptyFormValues();
+            this.emptyFormValues();
         }
 
         this.setActiveField = (id) => {
@@ -234,37 +234,41 @@ class TransactionPurchasing
         }
     }
 
-    render() {
-        let message = "", totalPrice = this.calculateTotalPrice();
-
-        const detailStock = this.state.product ? <DetailProductPanel product={this.state.product} /> : null;
-
-        if (this.state.messageShow == true) {
-            message = <Message withTimer={true} text={this.state.messageText} endMessage={this.endMessage} type={this.state.messageType} />
-        }
-
-        let supplierList = [];
-
+    getSupplierListView() {
+        const supplierList = []; 
         if (this.props.suppliers != null)
             for (let index = 0; index < this.props.suppliers.length; index++) {
                 const supplier = this.props.suppliers[index];
                 supplierList.push({ value: supplier.id, text: supplier.name });
             }
+        return supplierList;
+    }
 
-        let productList = [];
-        console.log("==========Products=======:", this.props.products)
+    getProductListView() {
+        const productList = [];
         if (this.props.products != null)
             for (let index = 0; index < this.props.products.length; index++) {
                 const product = this.props.products[index];
                 productList.push({ value: product.id, text: product.name });
             }
 
-        // let stateInfo = <div>
-        //     qty: {this.state.quantity},
-        //     price: {this.state.price},
-        //     exp: {this.state.expiryDate}
-        // </div>
-         
+        return productList;
+    }
+
+    messageComponent() {
+        if (this.state.messageShow == true) {
+            return <Message withTimer={true} text={this.state.messageText} endMessage={this.endMessage} type={this.state.messageType} />
+        }
+        return <></>
+    }
+
+    render() {
+        let totalPrice = this.calculateTotalPrice();
+
+        const detailStock = this.state.product ? <DetailProductPanel product={this.state.product} /> : null;
+        const supplierList = this.getSupplierListView();
+        const productList = this.getProductListView(); 
+
         let formComponent = <table><tbody>
             <tr valign="top"><td>
                 <Card title="Transaction Detail" content={<>
@@ -320,9 +324,9 @@ class TransactionPurchasing
 
         return (
             <div className="transaction-container">
-                {message}
+                <this.messageComponent />
                 <h2>Purchasing {this.state.supplier && this.state.supplier.name ? "[" + this.state.supplier.name + "]" : null}</h2>
-                {/* {stateInfo} */}
+
                 {formComponent}
                 <div>
                     <ActionButtons buttonsData={buttonsData} />

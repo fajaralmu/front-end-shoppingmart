@@ -2,14 +2,14 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import * as actions from '../../../redux/actionCreators'
 
-import * as trxCss from './Transaction.css' 
+import * as trxCss from './Transaction.css'
 import Label from '../../container/Label';
 import InputField from '../../inputs/InputField';
 import StockListTable from './StockListTable'
 import Message from '../../container/Message'
 import TransactionReceipt from './TransactionReceipt'
 import * as stringUtil from '../../../utils/StringUtil'
-import ActionButtons from '../../buttons/ActionButtons' 
+import ActionButtons from '../../buttons/ActionButtons'
 import InputDropdown from '../../inputs/InputDropdown'
 import { _byId } from '../../../utils/ComponentUtil'
 import * as componentUtil from '../../../utils/ComponentUtil'
@@ -203,9 +203,24 @@ class TransactionOut extends Component {
             this.getStockInfo(productCode);
             this.props.resetProductStocks();
         }
+
+        this.detailStockComponent = () => {
+            if (this.props.productFlowStock) {
+                return (<DetailProductPanel stockView={true} product={this.props.productFlowStock} />);
+            }
+            return <></>
+
+        }
+
+        this.buttonAddToCart = () => {
+            if (this.props.productFlowStock != null)
+                return <AddToCartButton onClick={this.addToCart} />
+            else
+                return <></>
+        }
     }
     componentDidMount() {
-        document.title = "Transaction::Out";
+        document.title = "Selling";
     }
     componentDidUpdate() {
         if (_byId(this.state.activeField) != null) {
@@ -213,29 +228,41 @@ class TransactionOut extends Component {
         }
     }
 
-    render() {
-        let message = "", totalPrice = this.calculateTotalPrice();
-
-        const detailStock = this.props.productFlowStock ? <DetailProductPanel stockView={true} product={this.props.productFlowStock} /> : null;
-
-        if (this.state.messageShow == true) {
-            message = <Message withTimer={true} text={this.state.messageText} endMessage={this.endMessage} type={this.state.messageType} />
-        }
-
-        let customerList = [];
-
-        if (this.props.customersData != null)
-            for (let i = 0; i < this.props.customersData.length; i++) {
-                const customer = this.props.customersData[i];
-                customerList.push({ value: customer.id, text: customer.name });
-            }
-        let productList = [];
+    getProductListView() {
+        const productList = [];
 
         if (this.props.products != null)
             for (let i = 0; i < this.props.products.length; i++) {
                 const product = this.props.products[i];
                 productList.push({ value: product.code, text: product.name });
             }
+        return productList;
+    }
+
+    getCustomerListView(){
+        const customerList = [];
+
+        if (this.props.customersData != null)
+            for (let i = 0; i < this.props.customersData.length; i++) {
+                const customer = this.props.customersData[i];
+                customerList.push({ value: customer.id, text: customer.name });
+            }
+        return customerList;
+    }
+
+    messageComponent(){
+        let message = <></>;
+        if (this.state.messageShow == true) {
+            message = <Message withTimer={true} text={this.state.messageText} endMessage={this.endMessage} type={this.state.messageType} />
+        }
+        return message;
+    }
+
+    render() {
+        let totalPrice = this.calculateTotalPrice(); 
+
+        let customerList = this.getCustomerListView();
+        let productList = this.getProductListView();
 
         let formComponent = <table><tbody>
             <tr valign="top"><td>
@@ -252,13 +279,13 @@ class TransactionOut extends Component {
                             value={this.state.quantity} onKeyUp={(value, id) => this.setState({ activeField: id, quantity: value })}
                             type="number" placeholder="quantity" />
                     ]}
-                    />,
-                    {this.props.productFlowStock != null ? <AddToCartButton onClick={this.addToCart} /> : ""}
+                    />
+                    <this.buttonAddToCart />
 
                 </>}
                 />
 
-            </td><td>{detailStock}</td></tr>
+            </td><td><this.detailStockComponent /></td></tr>
         </tbody></table>;
 
         let buttonsData = [
@@ -274,8 +301,8 @@ class TransactionOut extends Component {
 
         return (
             <div className="transaction-container">
-                {message}
-                {/* {stateInfo} */}
+                <this.messageComponent />
+                 
                 <h2>Selling {this.state.customer && this.state.customer.name ? "[" + this.state.customer.name + "]" : ""}</h2>
                 {formComponent}
                 <div>
