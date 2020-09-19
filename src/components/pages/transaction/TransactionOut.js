@@ -218,6 +218,13 @@ class TransactionOut extends Component {
             else
                 return <></>
         }
+
+        this.messageComponent = () => {
+            if (this.state.messageShow == true) {
+                return <Message withTimer={true} text={this.state.messageText} endMessage={this.endMessage} type={this.state.messageType} />
+            }
+            return <></>
+        }
     }
     componentDidMount() {
         document.title = "Selling";
@@ -249,14 +256,7 @@ class TransactionOut extends Component {
             }
         return customerList;
     }
-
-    messageComponent(){
-        let message = <></>;
-        if (this.state.messageShow == true) {
-            message = <Message withTimer={true} text={this.state.messageText} endMessage={this.endMessage} type={this.state.messageType} />
-        }
-        return message;
-    }
+ 
 
     render() {
         let totalPrice = this.calculateTotalPrice(); 

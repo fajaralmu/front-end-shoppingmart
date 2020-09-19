@@ -220,6 +220,13 @@ class TransactionPurchasing
             this.props.resetProducts();
 
         }
+
+        this.messageComponent = () => {
+            if (this.state.messageShow == true) {
+                return <Message withTimer={true} text={this.state.messageText} endMessage={this.endMessage} type={this.state.messageType} />
+            }
+            return <></>
+        }
     }
     componentDidMount() {
         if (this.props.resetPurchaseTransaction)
@@ -253,15 +260,7 @@ class TransactionPurchasing
             }
 
         return productList;
-    }
-
-    messageComponent() {
-        if (this.state.messageShow == true) {
-            return <Message withTimer={true} text={this.state.messageText} endMessage={this.endMessage} type={this.state.messageType} />
-        }
-        return <></>
-    }
-
+    } 
     render() {
         let totalPrice = this.calculateTotalPrice();
 

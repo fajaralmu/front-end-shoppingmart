@@ -1,7 +1,11 @@
-import React, { Component } from 'react' 
-import './Transaction.css' 
+import React, { Component } from 'react'
+import './Transaction.css'
 import InstantTable from '../../container/InstantTable';
-
+function Spinner(props) {
+    return <div className="spinner-border text-primary" role="status">
+        <span className="sr-only">Loading...</span>
+    </div>
+}
 class TransactionReceipt extends Component {
     constructor(props) {
         super(props);
@@ -9,7 +13,7 @@ class TransactionReceipt extends Component {
 
     render() {
         const line = "-".repeat(77);
-        let transactionReceiptComponent = <p>Loading data ...</p>;
+        let transactionReceiptComponent = <Spinner />;
         let stakeHolder = {};
 
         if (this.props.transactionData &&
@@ -23,12 +27,12 @@ class TransactionReceipt extends Component {
             }
 
             transactionReceiptComponent =
-                <InstantTable disabled={true} rows={[ 
-                    { id: "trx_code", values: ["Code", transaction.code] }, 
-                    { id: "trx_date", values: ["Date", new String(new Date(transaction.transactionDate))] }, 
-                    { id: "trx_type", values: ["Type", transaction.type] }, 
+                <InstantTable disabled={true} rows={[
+                    { id: "trx_code", values: ["Code", transaction.code] },
+                    { id: "trx_date", values: ["Date", new String(new Date(transaction.transactionDate))] },
+                    { id: "trx_type", values: ["Type", transaction.type] },
                     stakeHolder,
-                    
+
                 ]} />;
         }
 

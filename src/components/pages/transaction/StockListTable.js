@@ -30,13 +30,13 @@ class StockListTable extends Component {
         const stockListRow =
             productFlows.map(
                 productFlow => {
-                    let product = productFlow.product ? productFlow.product : {};
-                    let price = this.props.purchasing ?  productFlow.price : product.price;
-                    let totalPrice = productFlow.count * product.price;
-                    let count = stringUtil.beautifyNominal(productFlow.count);
-                    let priceString = stringUtil.beautifyNominal(price) + ",00";
-                    let totalPriceString = stringUtil.beautifyNominal(totalPrice) + ",00";
-                    let values = [
+                    const product = productFlow.product ? productFlow.product : {};
+                    const price = this.props.purchasing ?  productFlow.price : product.price;
+                    const totalPrice = productFlow.count * product.price;
+                    const count = stringUtil.beautifyNominal(productFlow.count);
+                    const priceString = stringUtil.beautifyNominal(price) + ",00";
+                    const totalPriceString = stringUtil.beautifyNominal(totalPrice) + ",00";
+                    const values = [
                         i, productFlow.id, product.name, productFlow.expiryDate, count, priceString, totalPriceString, productFlow.flowReferenceId
                     ];
                     i++;
