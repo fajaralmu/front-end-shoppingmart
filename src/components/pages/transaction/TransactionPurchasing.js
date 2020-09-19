@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import * as actions from '../../../redux/actionCreators'
 
-import * as trxCss from './Transaction.css' 
+import * as trxCss from './Transaction.css'
 import Label from '../../container/Label';
 import InputField from '../../inputs/InputField';
 import DetailProductPanel from './DetailProductPanel';
@@ -10,16 +10,17 @@ import StockListTable from './StockListTable'
 import Message from '../../container/Message'
 import TransactionReceipt from './TransactionReceipt'
 import * as stringUtil from '../../../utils/StringUtil'
-import ActionButtons from '../../buttons/ActionButtons' 
+import ActionButtons from '../../buttons/ActionButtons'
 import * as componentUtil from '../../../utils/ComponentUtil'
 import { _byId } from '../../../utils/ComponentUtil'
-import InputDropdown from '../../inputs/InputDropdown' 
+import InputDropdown from '../../inputs/InputDropdown'
 import AddToCartButton from './AddToCartButton';
 import GridComponent from '../../container/GridComponent';
 import Card from '../../card/Card'
+import BaseTransactionPage from './BaseTransactionPage';
 
 class TransactionPurchasing
-    extends Component {
+    extends BaseTransactionPage {
 
     constructor(props) {
         super(props);
@@ -29,9 +30,7 @@ class TransactionPurchasing
             quantity: 0, price: 0, expiryDate: "2020-01-01",
             activeField: ""
         }
-
-
-
+ 
         this.isExistInTheChart = (productId) => {
             if (this.state.productFlows == null) return false;
             return this.getProductFlow(productId) != null;
@@ -49,7 +48,7 @@ class TransactionPurchasing
             if (this.isExistInTheChart(product.id))
                 if (!window.confirm("The product already exist in the chart, do you want to override it?"))
                     return;
-            alert("PRICE: "+price);
+            alert("PRICE: " + price);
             let ID = Math.floor(Math.random() * 1000);
             let newProductFlow = {
                 "id": ID,
@@ -162,9 +161,12 @@ class TransactionPurchasing
         }
 
         this.emptyForm = () => {
+            //emoty states
             this.setState({
                 productName: null, expiryDate: null, quantity: null, price: null
             });
+
+           this.emptyFormValues();
         }
 
         this.setActiveField = (id) => {
@@ -201,6 +203,7 @@ class TransactionPurchasing
 
         this.getProductList = (value, id) => {
             if (value == null || value.trim() == "") { return; }
+            this.addFormFieldId(id);
             this.setState({ showDetail: true, productName: value })
             this.props.getProductList(value, this.props.app);
             this.setActiveField(id);
@@ -221,7 +224,8 @@ class TransactionPurchasing
     componentDidMount() {
         if (this.props.resetPurchaseTransaction)
             this.props.resetPurchaseTransaction();
-        document.title = "Transaction::In";
+        document.title = "Purchasing";
+        this.formFieldIds = [];
 
     }
     componentDidUpdate() {
@@ -260,7 +264,7 @@ class TransactionPurchasing
         //     price: {this.state.price},
         //     exp: {this.state.expiryDate}
         // </div>
-
+         
         let formComponent = <table><tbody>
             <tr valign="top"><td>
                 <Card title="Transaction Detail" content={<>
@@ -276,15 +280,24 @@ class TransactionPurchasing
                                 onKeyUp={this.getProductList} placeholder="input product name" />,
                             <Label text="Price" />,
                             <InputField id="input-product-price"
-                                value={this.state.price} onKeyUp={(value, id) => this.setState({ activeField: id, price: value })}
+                                value={this.state.price} onKeyUp={(value, id) => {
+                                    this.setState({ activeField: id, price: value });
+                                    this.addFormFieldId(id);
+                                }}
                                 type="number" placeholder="input product price" />,
                             <Label text="Quantity" />,
                             <InputField id="input-quantity"
-                                value={this.state.quantity} onKeyUp={(value, id) => this.setState({ activeField: id, quantity: value })}
+                                value={this.state.quantity} onKeyUp={(value, id) => {
+                                    this.setState({ activeField: id, quantity: value });
+                                    this.addFormFieldId(id);
+                                }}
                                 type="number" placeholder="quantity" />,
                             <Label text="Expiry Date" />,
                             <InputField id="input-exp-date"
-                                value={this.state.expiryDate} onKeyUp={(value, id) => this.setState({ activeField: id, expiryDate: value })}
+                                value={this.state.expiryDate} onKeyUp={(value, id) => {
+                                    this.setState({ activeField: id, expiryDate: value });
+                                    this.addFormFieldId(id);
+                                }}
                                 type="date" placeholder="input product exp date" />
                         ]}
                     />

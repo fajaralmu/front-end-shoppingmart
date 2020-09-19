@@ -33,8 +33,11 @@ class StockListTable extends Component {
                     let product = productFlow.product ? productFlow.product : {};
                     let price = this.props.purchasing ?  productFlow.price : product.price;
                     let totalPrice = productFlow.count * product.price;
+                    let count = stringUtil.beautifyNominal(productFlow.count);
+                    let priceString = stringUtil.beautifyNominal(price) + ",00";
+                    let totalPriceString = stringUtil.beautifyNominal(totalPrice) + ",00";
                     let values = [
-                        i, productFlow.id, product.name, productFlow.expiryDate, stringUtil.beautifyNominal(productFlow.count), stringUtil.beautifyNominal(price) + ",00", stringUtil.beautifyNominal(totalPrice) + ",00", productFlow.flowReferenceId
+                        i, productFlow.id, product.name, productFlow.expiryDate, count, priceString, totalPriceString, productFlow.flowReferenceId
                     ];
                     i++;
                     return <CrudRow disabled={this.props.disabled}

@@ -26,8 +26,8 @@ class InputField extends Component {
 
     }
 
-    componentDidMount() {
-        if (this.props.value && this.props.id) {
+    componentDidMount() { 
+        if (this.props.value && this.props.id) { 
             _byId(this.props.id).value = this.props.value;
         }
     }
