@@ -31,9 +31,10 @@ class StockListTable extends Component {
             productFlows.map(
                 productFlow => {
                     let product = productFlow.product ? productFlow.product : {};
+                    let price = this.props.purchasing ?  productFlow.price : product.price;
                     let totalPrice = productFlow.count * product.price;
                     let values = [
-                        i, productFlow.id, product.name, productFlow.expiryDate, stringUtil.beautifyNominal(productFlow.count), stringUtil.beautifyNominal(product.price) + ",00", stringUtil.beautifyNominal(totalPrice) + ",00", productFlow.flowReferenceId
+                        i, productFlow.id, product.name, productFlow.expiryDate, stringUtil.beautifyNominal(productFlow.count), stringUtil.beautifyNominal(price) + ",00", stringUtil.beautifyNominal(totalPrice) + ",00", productFlow.flowReferenceId
                     ];
                     i++;
                     return <CrudRow disabled={this.props.disabled}
@@ -44,11 +45,11 @@ class StockListTable extends Component {
                 }
             );
 
-        let tableStyle = { fontFamily: 'consolas', fontSize: '0.8em' }
+        let tableStyle = {   };
 
         return (
-            <div className="entity-list-container">
-                <table className="entity-list-table" style={tableStyle}>
+            <div >
+                <table className="table" style={tableStyle}>
                     <thead>
                         <tr key={stringUtil.uniqueId() + "-stock"}>
                             {headers.map(headerValue => <th key={stringUtil.uniqueId() + "-th"}>{headerValue} </th>)}

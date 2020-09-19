@@ -19,7 +19,7 @@ class Tab extends React.Component {
             //     gridTemplateColumns: autoColumns
             // }} >
             //      <div style={{width:'100%', borderBottom:'solid 1px lightgray'}}></div>
-            <ul class="nav nav-tabs">
+            <ul className="nav nav-tabs">
   
                 {tabsData.map((tabData,i) => {
                     return (

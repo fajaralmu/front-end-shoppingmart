@@ -6,7 +6,7 @@ import DashboardMenu from './DashboardMenu';
 import TransactionOut from '../transaction/TransactionOut';
 import ErrorPage from '../../ErrorPage';
 import { withRouter } from 'react-router';
-import TransactionIn from '../transaction/TransactionIn';
+import TransactionPurchasing from '../transaction/TransactionPurchasing';
 import Cashflow from './Cashflow';
 import * as componentUtil from '../../../utils/ComponentUtil'
 import ActionButton from '../../buttons/ActionButton';
@@ -108,7 +108,7 @@ class Dashboard extends Component {
                     mainComponent = <TransactionOut app={this.props.app} setFeatureCode={this.setFeatureCode} />
                     break;
                 case 'trxIn':
-                    mainComponent = <TransactionIn app={this.props.app} setFeatureCode={this.setFeatureCode} />
+                    mainComponent = <TransactionPurchasing app={this.props.app} setFeatureCode={this.setFeatureCode} />
                     break;
                 case 'cashflow':
                     mainComponent = <Cashflow app={this.props.app} transactionYears={this.props.transactionYears} setFeatureCode={this.setFeatureCode} />

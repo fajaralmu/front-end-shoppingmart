@@ -47,14 +47,15 @@ class InputDropdown extends Component {
     render() {
         
         let placeholder = this.props.placeholder ? this.props.placeholder : "";
-        let inputClassName = "form-control";
+        let inputClassName = "form-control"; 
+        
         return (
             <div onMouseOver={() => this.setState({ focus: true })}  onMouseLeave={this.onBlur}  className="dropdown-wrapper input-field">
                 <input
                     className={inputClassName}
                     onFocus={() => this.setState({ focus: true })}
                     id={this.props.id}
-                    type="text"
+                    type="text" 
                     onKeyUp={this.handleKeyup}
                     placeholder={placeholder} />
                 

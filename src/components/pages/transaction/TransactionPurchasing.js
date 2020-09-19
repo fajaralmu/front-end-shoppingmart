@@ -15,10 +15,10 @@ import * as componentUtil from '../../../utils/ComponentUtil'
 import { _byId } from '../../../utils/ComponentUtil'
 import InputDropdown from '../../inputs/InputDropdown' 
 import AddToCartButton from './AddToCartButton';
-import GridComponent from './../../container/GridComponent';
+import GridComponent from '../../container/GridComponent';
 import Card from '../../card/Card'
 
-class TransactionIn
+class TransactionPurchasing
     extends Component {
 
     constructor(props) {
@@ -49,7 +49,7 @@ class TransactionIn
             if (this.isExistInTheChart(product.id))
                 if (!window.confirm("The product already exist in the chart, do you want to override it?"))
                     return;
-
+            alert("PRICE: "+price);
             let ID = Math.floor(Math.random() * 1000);
             let newProductFlow = {
                 "id": ID,
@@ -316,7 +316,7 @@ class TransactionIn
                 </div>
                 {/* ======= product list ======== */}
                 <h3>Product List</h3>
-                <StockListTable disabled={this.props.successTransaction} handleEdit={this.handleEdit} handleDelete={this.handleDelete} productFlows={this.state.productFlows} />
+                <StockListTable purchasing={true} disabled={this.props.successTransaction} handleEdit={this.handleEdit} handleDelete={this.handleDelete} productFlows={this.state.productFlows} />
                 <Label className="totalprice-info" text={"Total Price: IDR " + totalPrice} />
 
             </div >
@@ -344,4 +344,4 @@ const mapDispatchToProps = dispatch => ({
 export default (connect(
     mapStateToProps,
     mapDispatchToProps
-)(TransactionIn));
+)(TransactionPurchasing));
