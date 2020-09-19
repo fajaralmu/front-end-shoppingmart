@@ -2,16 +2,14 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import * as actions from '../../../redux/actionCreators'
 
-import * as trxCss from './Transaction.css'
-import ActionButton from '../../buttons/ActionButton'
+import * as trxCss from './Transaction.css' 
 import Label from '../../container/Label';
 import InputField from '../../inputs/InputField';
 import StockListTable from './StockListTable'
 import Message from '../../container/Message'
 import TransactionReceipt from './TransactionReceipt'
 import * as stringUtil from '../../../utils/StringUtil'
-import ActionButtons from '../../buttons/ActionButtons'
-import InstantTable from '../../container/InstantTable'
+import ActionButtons from '../../buttons/ActionButtons' 
 import InputDropdown from '../../inputs/InputDropdown'
 import { _byId } from '../../../utils/ComponentUtil'
 import * as componentUtil from '../../../utils/ComponentUtil'

@@ -223,7 +223,7 @@ class App extends Component {
 
     if (!this.state.requestId) {
       return (
-        <div>Please wait.. </div>
+        <Message realtime={false}  text="Please wait..." type="loading" />
       )
     } 
 
