@@ -6,7 +6,7 @@ import * as trxCss from './Transaction.css'
 import Label from '../../container/Label';
 import InputField from '../../inputs/InputField';
 import StockListTable from './StockListTable'
-import Message from '../../container/Message'
+import Loader from '../../container/Loader'
 import TransactionReceipt from './TransactionReceipt'
 import * as stringUtil from '../../../utils/StringUtil'
 import ActionButtons from '../../buttons/ActionButtons'
@@ -221,7 +221,7 @@ class TransactionOut extends Component {
 
         this.messageComponent = () => {
             if (this.state.messageShow == true) {
-                return <Message withTimer={true} text={this.state.messageText} endMessage={this.endMessage} type={this.state.messageType} />
+                return <Loader withTimer={true} text={this.state.messageText} endMessage={this.endMessage} type={this.state.messageType} />
             }
             return <></>
         }
@@ -235,7 +235,7 @@ class TransactionOut extends Component {
         }
     }
 
-    getProductListView() {
+    getProductDropdownData() {
         const productList = [];
 
         if (this.props.products != null)
@@ -246,7 +246,7 @@ class TransactionOut extends Component {
         return productList;
     }
 
-    getCustomerListView(){
+    getCustomerDropdownData(){
         const customerList = [];
 
         if (this.props.customersData != null)
@@ -261,8 +261,8 @@ class TransactionOut extends Component {
     render() {
         let totalPrice = this.calculateTotalPrice(); 
 
-        let customerList = this.getCustomerListView();
-        let productList = this.getProductListView();
+        let customerList = this.getCustomerDropdownData();
+        let productList = this.getProductDropdownData();
 
         let formComponent = <table><tbody>
             <tr valign="top"><td>

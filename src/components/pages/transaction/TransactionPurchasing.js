@@ -7,7 +7,7 @@ import Label from '../../container/Label';
 import InputField from '../../inputs/InputField';
 import DetailProductPanel from './DetailProductPanel';
 import StockListTable from './StockListTable'
-import Message from '../../container/Message'
+import Loader from '../../container/Loader'
 import TransactionReceipt from './TransactionReceipt'
 import * as stringUtil from '../../../utils/StringUtil'
 import ActionButtons from '../../buttons/ActionButtons'
@@ -223,7 +223,7 @@ class TransactionPurchasing
 
         this.messageComponent = () => {
             if (this.state.messageShow == true) {
-                return <Message withTimer={true} text={this.state.messageText} endMessage={this.endMessage} type={this.state.messageType} />
+                return <Loader withTimer={true} text={this.state.messageText} endMessage={this.endMessage} type={this.state.messageType} />
             }
             return <></>
         }
@@ -241,7 +241,7 @@ class TransactionPurchasing
         }
     }
 
-    getSupplierListView() {
+    getSupplierDropdownData() {
         const supplierList = []; 
         if (this.props.suppliers != null)
             for (let index = 0; index < this.props.suppliers.length; index++) {
@@ -251,7 +251,7 @@ class TransactionPurchasing
         return supplierList;
     }
 
-    getProductListView() {
+    getProductDropdownData() {
         const productList = [];
         if (this.props.products != null)
             for (let index = 0; index < this.props.products.length; index++) {
@@ -265,8 +265,8 @@ class TransactionPurchasing
         let totalPrice = this.calculateTotalPrice();
 
         const detailStock = this.state.product ? <DetailProductPanel product={this.state.product} /> : null;
-        const supplierList = this.getSupplierListView();
-        const productList = this.getProductListView(); 
+        const supplierList = this.getSupplierDropdownData();
+        const productList = this.getProductDropdownData(); 
 
         let formComponent = <table><tbody>
             <tr valign="top"><td>

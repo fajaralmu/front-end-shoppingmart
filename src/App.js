@@ -14,7 +14,7 @@ import Login from './components/pages/login/Login'
 import Dashboard from './components/pages/dashboard/Dashboard';
 import * as menus from './constant/Menus'
 import SupplierList from './components/pages/supplier_list/SupplierList';
-import Message from './components/container/Message';
+import Loader from './components/container/Loader';
 import Footer from './components/layout/footer/Footer';
 import SockJsClient from 'react-stomp';
 import ChatRoom from './components/pages/chat_room/ChatRoom';
@@ -161,7 +161,7 @@ class App extends Component {
 
     this.loadingComponent = () => {
       if (this.state.loading == true) {
-        return <Message realtime={this.state.realtime} progress={this.state.loadingPercentage} text="Please wait..." type="loading" />;
+        return <Loader realtime={this.state.realtime} progress={this.state.loadingPercentage} text="Please wait..." type="loading" />;
 
       }
       return null;
@@ -223,7 +223,7 @@ class App extends Component {
 
     if (!this.state.requestId) {
       return (
-        <Message realtime={false}  text="Please wait..." type="loading" />
+        <Loader realtime={false}  text="Please wait..." type="loading" />
       )
     } 
 

@@ -45,7 +45,7 @@ class Login extends Component {
 
         this.message = () => {
             let message = <p>
-                {this.props.loginFailed ? <Message endMessage={this.endMessage} type="failed" text="Login Failed" /> : ""}
+                {this.props.loginFailed ? <Message endMessage={this.endMessage} status="danger" text="Login Failed" /> : ""}
             </p>
             return message;
         }
