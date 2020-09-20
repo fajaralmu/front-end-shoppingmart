@@ -229,8 +229,9 @@ class TransactionPurchasing
         }
     }
     componentDidMount() {
-        if (this.props.resetPurchaseTransaction)
+        if (this.props.resetPurchaseTransaction) {
             this.props.resetPurchaseTransaction();
+        }
         document.title = "Purchasing";
         this.formFieldIds = [];
         this.props.resetSuppliers();
@@ -243,7 +244,7 @@ class TransactionPurchasing
     }
 
     getSupplierDropdownData() {
-        const supplierList = []; 
+        const supplierList = [];
         if (this.props.suppliers != null)
             for (let index = 0; index < this.props.suppliers.length; index++) {
                 const supplier = this.props.suppliers[index];
@@ -261,13 +262,13 @@ class TransactionPurchasing
             }
 
         return productList;
-    } 
+    }
     render() {
         let totalPrice = this.calculateTotalPrice();
 
         const detailStock = this.state.product ? <DetailProductPanel product={this.state.product} /> : null;
         const supplierList = this.getSupplierDropdownData();
-        const productList = this.getProductDropdownData(); 
+        const productList = this.getProductDropdownData();
 
         let formComponent = <table><tbody>
             <tr valign="top"><td>

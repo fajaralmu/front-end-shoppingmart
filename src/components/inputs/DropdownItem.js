@@ -21,7 +21,8 @@ class DropdownItem extends Component {
     render() {
           return (
             <div onMouseLeave={this.unHover} onMouseOver ={this.onHover}  >
-                {this.props.text}</div>
+                {this.props.text}
+            </div>
         )
     }
 }

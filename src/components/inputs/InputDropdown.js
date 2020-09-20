@@ -1,4 +1,4 @@
-import React, { Component } from 'react'   
+import React, { Component } from 'react'
 import DropdownItem from './DropdownItem';
 import * as stringUtil from '../../utils/StringUtil';
 import './Inputs.css'
@@ -31,9 +31,9 @@ class InputDropdown extends Component {
             }
         }
 
-        this.onHover = (i) => {
-            if (this.state.hoverIndex != i)
-                this.setState({ hoverIndex: i });
+        this.onHover = (index) => {
+            if (this.state.hoverIndex != index)
+                this.setState({ hoverIndex: index });
         }
 
     }
@@ -45,23 +45,26 @@ class InputDropdown extends Component {
     }
 
     render() {
-        
+
         let placeholder = this.props.placeholder ? this.props.placeholder : "";
-        let inputClassName = "form-control"; 
-        
+        let inputClassName = "form-control";
+
         return (
-            <div onMouseOver={() => this.setState({ focus: true })}  onMouseLeave={this.onBlur}  className="dropdown-wrapper input-field">
+            <div onMouseOver={() => this.setState({ focus: true })} onMouseLeave={this.onBlur} className="dropdown-wrapper input-field">
                 <input
                     className={inputClassName}
                     onFocus={() => this.setState({ focus: true })}
                     id={this.props.id}
-                    type="text" 
+                    type="text"
                     onKeyUp={this.handleKeyup}
                     placeholder={placeholder} />
-                
-                <DropDownComponent focus={this.state.focus} dropdownList={this.props.dropdownList}
-                 hoverIndex={this.state.hoverIndex} onSelect={this.onSelect} onHover={this.onHover}
-                 />
+
+                <DropDownComponent focus={this.state.focus}
+                    dropdownList={this.props.dropdownList}
+                    hoverIndex={this.state.hoverIndex}
+                    onSelect={this.onSelect}
+                    onHover={this.onHover}
+                />
             </div>
         )
     }
@@ -69,29 +72,29 @@ class InputDropdown extends Component {
 
 function DropDownComponent(props) {
     let dropdownComponent = "";
-        if (props.focus &&  props.dropdownList &&  props.dropdownList.length > 0) {
-            let dropdownList = props.dropdownList;
-            // console.log("RENDERD HOVER:", this.state.hoverIndex);
-            dropdownComponent = <div className="dropdown">
-                {dropdownList.map(
-                    (data, i) => {
-                        let className = "dropdown-item";
-                        if (props.hoverIndex == i) className = "dropdown-item-hovered";
-                        return (
-                            <div
-                                id={stringUtil.uniqueId()}
-                                key={"dropdown-xx-" + stringUtil.uniqueId()}
-                                onClick={() => props.onSelect(data.value, data.text)}
-                                style={{position:"relative", backgroundColor: '#cccccc'}}
-                                className={className}>
-                                <DropdownItem onHover={props.onHover} index={i} text={data.text} />
-                            </div>
-                        )
-                    })}
-            </div>
-        }
+    if (props.focus && props.dropdownList && props.dropdownList.length > 0) {
+        let dropdownList = props.dropdownList;
+        // console.log("RENDERD HOVER:", this.state.hoverIndex);
+        dropdownComponent = <div className="dropdown">
+            {dropdownList.map(
+                (data, i) => {
+                    let className = "dropdown-item";
+                    if (props.hoverIndex == i) className += " dropdown-item-hovered";
+                    return (
+                        <div
+                            id={stringUtil.uniqueId()}
+                            key={"dropdown-xx-" + stringUtil.uniqueId()}
+                            onClick={() => props.onSelect(data.value, data.text)}
+                            style={{ position: "relative" }}
+                            className={className}>
+                            <DropdownItem onHover={props.onHover} index={i} text={data.text} />
+                        </div>
+                    )
+                })}
+        </div>
+    }
 
-        return dropdownComponent;
+    return dropdownComponent;
 }
 
 

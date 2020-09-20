@@ -1,7 +1,10 @@
 .dropdown-item-hovered{
     cursor: pointer;
+    border: solid 1px grey;
 }
 .dropdown{
     z-index: 3;
     position: absolute;
+    width: max-content;
+    background-color: #cccccc
 }
