@@ -91,7 +91,7 @@ function DropDownComponent(props) {
                         </div>
                     )
                 })}
-        </div>
+        </div> 
     }
 
     return dropdownComponent;
