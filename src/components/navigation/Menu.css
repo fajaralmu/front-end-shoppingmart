@@ -3,7 +3,7 @@
     list-style: none;
     padding: 0;
     width: 150px;
-    background-color: darkcyan;
+    /* background-color: darkcyan; OK */
  
 } 
  
@@ -13,7 +13,7 @@
 
 .fill{
     width: 100%; 
-    color:lightblue;  
+    /* color:lightblue; ok  */
     transition-duration: 100ms;
 }
 .fill:hover{ 
@@ -25,11 +25,11 @@
 }
 
 .menu-active { 
-    background-color: lightblue;  
+    /* background-color: lightblue;  ok */
 }
 
 .menu-active .fill{
-    color:darkcyan
+    /* color:darkcyan ok */
 }
 
 .side-menu {
@@ -50,11 +50,11 @@
     vertical-align: middle;
     height:200px;
     width:150px;
-    background-color:#fff;
+    /* background-color:#fff; */
     padding-top:20px;
     padding-bottom: 20px ;
-    color:darkcyan;
-    border-top:solid 2px #fff;
+    /* color:darkcyan;
+    border-top:solid 2px #fff; */
 }
 
 

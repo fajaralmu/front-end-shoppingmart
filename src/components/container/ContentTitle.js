@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import './Content.css'
+import { connect } from 'react-redux'
 
 class ContentTitle extends Component {
     constructor(props) {
@@ -14,7 +15,7 @@ class ContentTitle extends Component {
         let iconClass = this.props.iconClass ? this.props.iconClass : "fas fa-home";
 
         return (
-            <div className="content-title">
+            <div style={{color: this.props.applicationProfile.color}}>
                 <h2><i className={iconClass}></i>&nbsp;{title}</h2>
                 <p>{description}</p>
                 {this.props.children}
@@ -23,4 +24,13 @@ class ContentTitle extends Component {
     }
 }
 
-export default ContentTitle;
+const mapStateToProps = state => {
+    //console.log(state);
+    return {
+        applicationProfile: state.userState.applicationProfile,
+    }
+}
+
+export default (connect(
+    mapStateToProps
+)(ContentTitle));

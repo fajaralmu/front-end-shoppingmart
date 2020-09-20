@@ -1,5 +1,5 @@
 .App-footer {
-    background-color: darkcyan;
+    
     min-height: 5vh; 
     padding-top: 30px;
     padding-bottom: 30px;
@@ -11,6 +11,6 @@
     align-items: center;
     justify-content: center;
     font-size: calc(7px + 1vmin);
-    color: white; 
+    
     
   }

@@ -74,16 +74,18 @@ class Dashboard extends Component {
             <div className="cashflow-info">
                 <h3>Cashflow Info</h3>
                 <GridComponent style={{ backgroundColor: '#cccccc', padding: '5px', borderRadius: '3px', width: 'max-content', gridColumnGap: '10px' }} items={[
-                    <h3 style={{ marginRight: '4px', color: '#555' }}><i className="fas fa-calendar-alt"></i></h3>,
+                    
                     <ComboBoxes key="cb" values={[
                         {
                             id: "select-month",
+                            label: "Month",
                             defaultValue: this.state.cashflowMonth ? this.state.cashflowMonth : componentUtil.getCurrentMMYY()[0],
                             options: componentUtil.getDropdownOptionsMonth(),
                             handleOnChange: (value) => this.setState({ cashflowMonth: value })
                         },
                         {
                             id: "select-year",
+                            label: "Year",
                             defaultValue: this.state.cashflowYear ? this.state.cashflowYear : componentUtil.getCurrentMMYY()[1],
                             options: componentUtil.getDropdownOptionsYear(minYear, maxYear),
                             handleOnChange: (value) => this.setState({ cashflowYear: value })

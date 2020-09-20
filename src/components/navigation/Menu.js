@@ -1,29 +1,26 @@
 import React, { Component } from 'react'
 import './Menu.css'
 import * as url from '../../constant/Url'
-import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom' 
+import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'
+import { connect } from 'react-redux'
 
 class Menu extends Component {
     constructor(props) {
         super(props);
+        this.fontColor = this.props.applicationProfile.fontColor;
+        this.backgroundColor = this.props.applicationProfile.color;
 
     }
 
-    componentDidUpdate() {
-    }
+    componentDidUpdate() { }
 
     render() {
-        let userLink = "";
+        let userLink = <></>;
         if (this.props.loggedUser != null) {
-            userLink = <li id="user-link">
-                <div style={{
-                    margin: 'auto',
-                    textAlign: 'center',
-                    backgroundImage: 'url('+url.baseImageUrl + "/" + this.props.loggedUser.profileImage +')',
-                    backgroundSize: '50px 50px',
-                    width: '50px', height: '50px', borderRadius: '25px'
-                }}> </div>
-                <div className="fill" >Welcome, {this.props.loggedUser.displayName} </div>
+            userLink = 
+            <li id="user-link">
+                <Avatar user={this.props.loggedUser} /> 
+                <div style={{ color: this.fontColor }} className="fill" >Welcome, {this.props.loggedUser.displayName} </div>
             </li>
         }
 
@@ -35,12 +32,18 @@ class Menu extends Component {
         return (
 
             <div className="side-menu" >
-                < ul className="menu-ul " >
+                <ul className="menu-ul " style={{ backgroundColor: this.backgroundColor }}>
                     {userLink}
                     {
                         renderedMenus.map(
                             e => {
-                               return <MenuItem key={e.code} menu={e} activeCode={this.props.activeCode} handleMenuCLick={this.props.handleMenuCLick} />
+                                return <MenuItem
+                                    fontColor={this.fontColor}
+                                    backgroundColor={this.backgroundColor}
+                                    key={e.code}
+                                    menu={e}
+                                    activeCode={this.props.activeCode}
+                                    handleMenuCLick={this.props.handleMenuCLick} />
                             }
                         )
                     } </ul>
@@ -51,21 +54,49 @@ class Menu extends Component {
     }
 }
 
-function MenuItem(props){
+function Avatar(props) {
+    const style = {
+        margin: 'auto',
+        textAlign: 'center',
+        backgroundImage: 'url(' + url.baseImageUrl + "/" + props.user.profileImage + ')',
+        backgroundSize: '50px 50px',
+        width: '50px', height: '50px', borderRadius: '25px'
+    };
+    return <div style={style}></div>
+}
+
+function MenuItem(props) {
     let menuClass = "fa fa-store-alt";
     const menu = props.menu;
+    const fillStyle = {
+        color: props.fontColor
+    }
+    const isActive = props.activeCode == menu.code;
+    const liStyle = isActive ? { backgroundColor: props.fontColor } : {};
+    if (isActive) {
+        fillStyle.color = props.backgroundColor;
+    }
     if (menu.menuClass) {
         menuClass = menu.menuClass;
     }
     if (menu.url == "#") {
-        return (<li onClick={() => props.handleMenuCLick(menu)} className={props.activeCode == menu.code ? "active" : ""} key={menu.name}
+        return (<li style={liStyle} onClick={() => props.handleMenuCLick(menu)} className={isActive ? "active" : ""} key={menu.name}
             id={menu.name}> <Link key={menu.name} className="App-link"
-                to="#" ><div className="fill" ><i className={menuClass}></i>&nbsp;{menu.name} </div></Link></li >)
+                to="#" ><div style={fillStyle} className="fill" ><i className={menuClass}></i>&nbsp;{menu.name} </div></Link></li >)
     }
-    return (<li className={ props.activeCode == menu.code ? "menu-active" : ""} key={menu.name}
+
+    return (<li style={liStyle} className={isActive ? "menu-active" : ""} key={menu.name}
         id={menu.name}> <Link key={menu.name} className="App-link"
-            to={menu.url} ><div className="fill" ><i className={menuClass}></i>&nbsp;{menu.name} </div></Link></li >
+            to={menu.url} ><div style={fillStyle} className="fill" ><i className={menuClass}></i>&nbsp;{menu.name} </div></Link></li >
     )
 }
 
-export default Menu;
+const mapStateToProps = state => { 
+    return {
+        applicationProfile: state.userState.applicationProfile,
+    }
+}
+
+export default (connect(
+    mapStateToProps
+)(Menu));

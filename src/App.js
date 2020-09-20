@@ -283,22 +283,25 @@ class App extends Component {
       return (<Loader realtime={false} text="Please wait..." type="loading" />)
     }
 
-    let menus = this.setMenus();
+    const menus = this.setMenus();
 
-    let cloudHost = "https://nuswantoroshop.herokuapp.com/";
-    let localHost = "http://localhost:8080/universal-good-shop/";
+    const cloudHost = "https://nuswantoroshop.herokuapp.com/";
+    const localHost = "http://localhost:8080/universal-good-shop/";
     const usedHost = localHost;
+    const user = this.props.loggedUser;
+    const applicationProfile = this.props.applicationProfile;
+    const cart = this.props.cart;
 
     return (
       <div className="App">
         <this.loadingComponent />
         <this.alertComponent />
-        <Header applicationProfile={this.props.applicationProfile} enableShopping={this.state.enableShopping} cart={this.props.cart} />
+        <Header applicationProfile={applicationProfile} enableShopping={this.state.enableShopping} cart={cart} />
 
         <div id="main-layout">
-          <div id="main-menu">
+          <div id="main-menu" style={{backgroundColor: applicationProfile.color}}>
             <Menu alertDialog={this.alertDialog}
-              loggedUser={this.props.loggedUser}
+              loggedUser={user}
               handleMenuCLick={this.handleMenuCLick}
               activeCode={this.state.menuCode}
               menus={menus} />
@@ -330,8 +333,7 @@ const mapStateToProps = state => {
     loginAttempt: state.userState.loginAttempt,
     requestId: state.userState.requestId,
     applicationProfile: state.userState.applicationProfile,
-
-
+ 
     cart: state.shopState.cart
   }
 }
