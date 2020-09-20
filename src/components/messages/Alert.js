@@ -35,7 +35,7 @@ class Alert extends Component {
                         <div className="modal-content">
                             <Header title={title} onClose={this.onClose} />
                             <Body content={this.props.message} />
-                            <Footer onOnly={yesOnly} onOk={this.onOk} onNo={this.onNo} />
+                            <Footer yesOnly={yesOnly} onOk={this.onOk} onNo={this.onNo} />
                         </div>
                     </div>
                 </div>
@@ -46,7 +46,7 @@ class Alert extends Component {
 
 function Backdrop(props) {
     return (
-        <div className="modal-backdrop" ></div>
+        <div className="modal-backdrop" style={{backgroundColor: 'rgba(100,100,100,0.7)'}} ></div>
     );
 }
 

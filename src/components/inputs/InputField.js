@@ -1,5 +1,5 @@
 import React, { Component } from 'react' 
-import { _byId } from '../../utils/ComponentUtil'
+import { byId } from '../../utils/ComponentUtil'
 
 /**
  * JUST FOR INPUT !!!
@@ -9,7 +9,7 @@ class InputField extends Component {
         super(props);
         this.handleKeyup = () => {
             if (this.props.onKeyUp && this.props.id)
-                this.props.onKeyUp(_byId(this.props.id).value, this.props.id);
+                this.props.onKeyUp(byId(this.props.id).value, this.props.id);
         }
 
         this.onChange = () => {
@@ -28,7 +28,7 @@ class InputField extends Component {
 
     componentDidMount() { 
         if (this.props.value && this.props.id) { 
-            _byId(this.props.id).value = this.props.value;
+            byId(this.props.id).value = this.props.value;
         }
     }
 

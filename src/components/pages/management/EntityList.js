@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import InstantTable from '../../container/InstantTable'
-import { _byId } from '../../../utils/ComponentUtil'
+import { byId } from '../../../utils/ComponentUtil'
 import * as stringUtil from '../../../utils/StringUtil'
 import './Management.css'
 import './Entity.css'
@@ -168,8 +168,8 @@ class EntityList extends Component {
         }
 
         this.focusActiveId = () => {
-            if (_byId(this.state.activeId)) {
-                _byId(this.state.activeId).focus();
+            if (byId(this.state.activeId)) {
+                byId(this.state.activeId).focus();
             }
         }
 

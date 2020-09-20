@@ -41,8 +41,8 @@ class Catalog extends Component {
         };
 
         this.focusToActiveField = () => {
-            if (componentUtil._byId(this.state.activeId)) {
-                componentUtil._byId(this.state.activeId).focus();
+            if (componentUtil.byId(this.state.activeId)) {
+                componentUtil.byId(this.state.activeId).focus();
             }
         }
 
@@ -123,7 +123,7 @@ class Catalog extends Component {
             this.setState({ requestOrderBy: null, requestOrderType: null });
             this.setState({ requestCategoryId: null });
 
-            alert("filter has been cleared, please push the search button to take effect")
+            this.props.app.infoDialog("filter has been cleared, please push the search button to take effect")
         }
 
         this.getProductDetail = (code) => {
@@ -169,16 +169,16 @@ class Catalog extends Component {
         }
 
         this.handleChangeWithStockOption = (id) => {
-            if (!componentUtil._byId(id))
+            if (!componentUtil.byId(id))
                 return;
-            this.setState({ requestWithStock: componentUtil._byId(id).checked });
+            this.setState({ requestWithStock: componentUtil.byId(id).checked });
         }
 
         this.handleChangeEnableShoppingOption = (id) => {
             console.log("ID: ", id)
-            if (!componentUtil._byId(id))
+            if (!componentUtil.byId(id))
                 return;
-            this.props.app.setEnableShopping(componentUtil._byId(id).checked)
+            this.props.app.setEnableShopping(componentUtil.byId(id).checked)
         }
 
         this.generateNavButtonsData = () => {

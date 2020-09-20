@@ -1,4 +1,4 @@
-export const _byId = (id) => { return document.getElementById(id) }
+export const byId = (id) => { return document.getElementById(id) }
 
 export const clearFields = (...ignore) => {
     let inputs = document.getElementsByTagName("input");
@@ -24,7 +24,7 @@ export function toBase64(file, referer, callback){
 
 export const checkExistance = function (...ids) {
     for (let i = 0; i < ids.length; i++) {
-        if (_byId(ids[i]) == null) {
+        if (byId(ids[i]) == null) {
             console.log("component with id:", ids[i], "does not exist");
             return false;
         }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { _byId } from '../../utils/ComponentUtil'
+import { byId } from '../../utils/ComponentUtil'
 import * as stringUtil from '../../utils/StringUtil'
 
 class ComboBox extends Component {
@@ -7,8 +7,8 @@ class ComboBox extends Component {
         super(props);
         this.handleOnChange = () => {
             if (this.props.onChange) {
-                this.props.onChange(_byId(this.props.id).value);
-                console.log("x x x CHANGED VALUE: ", _byId(this.props.id).value);
+                this.props.onChange(byId(this.props.id).value);
+                console.log("x x x CHANGED VALUE: ", byId(this.props.id).value);
             }
             else {
                 console.log("Not supported");
@@ -19,7 +19,7 @@ class ComboBox extends Component {
 
     componentDidMount() {
         if (this.props.value) {
-            _byId(this.props.id).value = this.props.value;
+            byId(this.props.id).value = this.props.value;
         }
     }
 

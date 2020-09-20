@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import * as actions from '../../../redux/actionCreators'
-import { _byId } from '../../../utils/ComponentUtil'
+import { byId } from '../../../utils/ComponentUtil'
 import InputField from '../../inputs/InputField';
 import ActionButton from '../../buttons/ActionButton';
 import SockJsClient from 'react-stomp'; 
@@ -14,12 +14,12 @@ class ChatRoom extends Component {
         super(props);
         this.state = { messages: null, username: null, activeId: null }
         this.sendChatMessage = () => {
-            if (!_byId("input-msg").value) {
+            if (!byId("input-msg").value) {
                 alert("Message must not be null");
                 return;
             }
-            this.props.sendChatMessage(_byId("input-msg").value, this.state.username, this.props.app);
-            _byId("input-msg").value = "";
+            this.props.sendChatMessage(byId("input-msg").value, this.state.username, this.props.app);
+            byId("input-msg").value = "";
         }
 
         this.handleMessage = (response) => {
@@ -48,8 +48,8 @@ class ChatRoom extends Component {
     }
 
     componentDidUpdate() {
-        if (this.state.activeId && _byId(this.state.activeId)) {
-            _byId(this.state.activeId).focus();
+        if (this.state.activeId && byId(this.state.activeId)) {
+            byId(this.state.activeId).focus();
         }
     }
 

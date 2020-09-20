@@ -7,7 +7,7 @@ import * as stringUtil from '../../../utils/StringUtil'
 import ActionButtons from '../../buttons/ActionButtons'
 import InstantTable from '../../container/InstantTable'
 import * as componentUtil from '../../../utils/ComponentUtil'
-import { _byId } from '../../../utils/ComponentUtil'
+import { byId } from '../../../utils/ComponentUtil'
 import Chart from '../../Chart'
 import * as creator from '../../../utils/ComponentCreator'
 import InputField from '../../inputs/InputField'
@@ -35,10 +35,10 @@ class ProductSales
             }
             let request = {
                 page: _page,
-                fromMonth: this.state.fromMonth,//_byId("select-month-from").value,
-                fromYear: this.state.fromYear,// _byId("select-year-from").value,
-                toMonth: this.state.toMonth,//_byId("select-month-to").value,
-                toYear: this.state.toYear,// _byId("select-year-to").value,
+                fromMonth: this.state.fromMonth,//byId("select-month-from").value,
+                fromYear: this.state.fromYear,// byId("select-year-from").value,
+                toMonth: this.state.toMonth,//byId("select-month-to").value,
+                toYear: this.state.toYear,// byId("select-year-to").value,
                 productName: this.state.productName,
                 //special fro laod more case
                 loadMore: loadMore,
@@ -53,10 +53,10 @@ class ProductSales
 
                 let request = {
                     page: 0,
-                    fromMonth: this.state.fromMonth,//_byId("select-month-from").value,
-                    fromYear: this.state.fromYear,// _byId("select-year-from").value,
-                    toMonth: this.state.toMonth,//_byId("select-month-to").value,
-                    toYear: this.state.toYear,// _byId("select-year-to").value, 
+                    fromMonth: this.state.fromMonth,//byId("select-month-from").value,
+                    fromYear: this.state.fromYear,// byId("select-year-from").value,
+                    toMonth: this.state.toMonth,//byId("select-month-to").value,
+                    toYear: this.state.toYear,// byId("select-year-to").value, 
                     productId: productId
                 }
 
@@ -139,8 +139,8 @@ class ProductSales
     }
     componentDidUpdate() {
         console.log("updated", this.state.fromMonth, this.state.fromYear, " to ", this.state.toMonth, this.state.toYear);
-        if (_byId(this.state.activeField)) {
-            _byId(this.state.activeField).focus();
+        if (byId(this.state.activeField)) {
+            byId(this.state.activeField).focus();
         }
     }
 

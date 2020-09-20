@@ -60,7 +60,7 @@ class SupplierList extends Component {
             document.getElementById("select-order").value = "00";
             this.setState({ requestOrderBy: null, requestOrderType: null });
 
-            alert("filter has been cleared, please push the search button to take effect")
+            this.props.app.infoDialog("filter has been cleared, please push the search button to take effect")
         }
 
         this.next = () => {

@@ -12,7 +12,7 @@ import TransactionReceipt from './TransactionReceipt'
 import * as stringUtil from '../../../utils/StringUtil'
 import ActionButtons from '../../buttons/ActionButtons'
 import * as componentUtil from '../../../utils/ComponentUtil'
-import { _byId } from '../../../utils/ComponentUtil'
+import { byId } from '../../../utils/ComponentUtil'
 import InputDropdown from '../../inputs/InputDropdown'
 import AddToCartButton from './AddToCartButton';
 import GridComponent from '../../container/GridComponent';
@@ -38,7 +38,7 @@ class TransactionPurchasing
 
         this.addToCart = () => {
             if (this.state.quantity <= 0) {
-                alert("Please provide valid quantity!"); return;
+                this.props.app.infoDialog("Please provide valid quantity!"); return;
             }
             let quantity = this.state.quantity;
             let price = this.state.price;
@@ -236,8 +236,8 @@ class TransactionPurchasing
 
     }
     componentDidUpdate() {
-        if (_byId(this.state.activeField) != null) {
-            _byId(this.state.activeField).focus();
+        if (byId(this.state.activeField) != null) {
+            byId(this.state.activeField).focus();
         }
     }
 

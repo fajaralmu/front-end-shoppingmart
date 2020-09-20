@@ -11,7 +11,7 @@ import TransactionReceipt from './TransactionReceipt'
 import * as stringUtil from '../../../utils/StringUtil'
 import ActionButtons from '../../buttons/ActionButtons'
 import InputDropdown from '../../inputs/InputDropdown'
-import { _byId } from '../../../utils/ComponentUtil'
+import { byId } from '../../../utils/ComponentUtil'
 import * as componentUtil from '../../../utils/ComponentUtil'
 import AddToCartButton from './AddToCartButton';
 import DetailProductPanel from './DetailProductPanel';
@@ -48,12 +48,12 @@ class TransactionSelling extends Component {
 
         this.addToCart = () => {
             if (this.state.quantity <= 0) {
-                alert("Please provide valid quantity!"); return;
+                this.props.app.infoDialog("Please provide valid quantity!"); return;
             }
             let quantity = this.state.quantity;
             let productFlowStock = this.props.productFlowStock;
             if (quantity > productFlowStock.count) {
-                alert("Stock unavailable!"); return;
+                this.props.app.infoDialog("Stock unavailable!"); return;
             }
 
             // let productFlow = productFlowStock.id;
@@ -230,8 +230,8 @@ class TransactionSelling extends Component {
         document.title = "Selling";
     }
     componentDidUpdate() {
-        if (_byId(this.state.activeField) != null) {
-            _byId(this.state.activeField).focus();
+        if (byId(this.state.activeField) != null) {
+            byId(this.state.activeField).focus();
         }
     }
 

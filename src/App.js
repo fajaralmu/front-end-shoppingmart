@@ -104,7 +104,7 @@ class App extends Component {
 
     this.loginComponent = () => {
       return <Login main={this} setMenuCode={this.setMenuCode}
-        alertDialog={this.alertDialog}
+        app={this}
         setDetailMode={this.setDetailMode}
         detailMode={this.state.detailMode}
         doLogin={this.props.performLogin}
@@ -118,34 +118,35 @@ class App extends Component {
         <Switch>
           <Route exact path="/" render={
             (renderProps) =>
-              <Home alertDialog={this.alertDialog} applicationProfile={this.props.applicationProfile} setMenuCode={this.setMenuCode} />
+              <Home app={this} applicationProfile={this.props.applicationProfile} setMenuCode={this.setMenuCode} />
           } />
           <Route exact path="/home" render={
             (renderProps) =>
-              <Home alertDialog={this.alertDialog} applicationProfile={this.props.applicationProfile} setMenuCode={this.setMenuCode} />
+              <Home app={this} applicationProfile={this.props.applicationProfile} setMenuCode={this.setMenuCode} />
           } />
           <Route exact path="/suppliers" render={
             (renderProps) =>
-              <SupplierList alertDialog={this.alertDialog} app={this} setMenuCode={this.setMenuCode} />
+              <SupplierList  app={this} setMenuCode={this.setMenuCode} />
           } />
           <Route exact path="/chatroom" render={
             (renderProps) =>
-              <ChatRoom alertDialog={this.alertDialog} app={this} setMenuCode={this.setMenuCode} />
+              <ChatRoom app={this} setMenuCode={this.setMenuCode} />
           } />
           <Route exact path="/about" render={
             (renderProps) =>
-              <About alertDialog={this.alertDialog} applicationProfile={this.props.applicationProfile} setMenuCode={this.setMenuCode} />
+              <About app={this} applicationProfile={this.props.applicationProfile} setMenuCode={this.setMenuCode} />
           }></Route>
           <Route exact path="/catalog" render={
             (renderProps) =>
-              <Catalog alertDialog={this.alertDialog} app={this}
+              <Catalog
+                app={this}
                 enableShopping={this.state.enableShopping}
                 setMenuCode={this.setMenuCode}
                 setDetailMode={this.setDetailMode} detailMode={this.state.detailMode} />
 
           }></Route>
           <Route exact path="/cart" render={
-            (renderProps) => <CartDetail alertDialog={this.alertDialog} enableShopping={this.state.enableShopping} cart={this.props.cart} app={this} setMenuCode={this.setMenuCode} />
+            (renderProps) => <CartDetail enableShopping={this.state.enableShopping} cart={this.props.cart} app={this} setMenuCode={this.setMenuCode} />
 
           }></Route>
           <Route exact path="/login" render={
@@ -192,6 +193,10 @@ class App extends Component {
 
     }
 
+    this.infoDialog = (message) => {
+      this.alertDialog(message, "Info", true, blankFunc, blankFunc);
+    }
+
     this.confirmDialog = (message, onOk, onNo) => {
       this.alertDialog(message, "Confirmation", false, onOk, onNo);
     }
@@ -203,14 +208,12 @@ class App extends Component {
           title={alertData.title}
           message={alertData.message}
           onOk={(e) => {
-            if (alertData.onOk)
-              alertData.onOk(e);
+            if (alertData.onOk) { alertData.onOk(e); }
             this.setState({ showInfo: false });
           }}
           yesOnly={alertData.yesOnly}
           onNo={(e) => {
-            if (alertData.onNo)
-              alertData.onNo(e);
+            if (alertData.onNo) { alertData.onNo(e); }
             this.setState({ showInfo: false });
           }}
           onClose={(e) => {
@@ -277,9 +280,7 @@ class App extends Component {
   render() {
 
     if (!this.state.requestId) {
-      return (
-        <Loader realtime={false} text="Please wait..." type="loading" />
-      )
+      return (<Loader realtime={false} text="Please wait..." type="loading" />)
     }
 
     let menus = this.setMenus();
