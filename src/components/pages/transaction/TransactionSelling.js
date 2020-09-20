@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import * as actions from '../../../redux/actionCreators'
-
 import * as trxCss from './Transaction.css'
 import Label from '../../container/Label';
 import InputField from '../../inputs/InputField';
@@ -119,9 +118,11 @@ class TransactionSelling extends Component {
                 return;
             }
             let currentFlows = this.state.productFlows;
-            for (let index = 0; index < this.state.productFlows.length; index++)
-                if (this.state.productFlows[index].flowReferenceId == stockId)
+            for (let index = 0; index < this.state.productFlows.length; index++) {
+                if (this.state.productFlows[index].flowReferenceId == stockId) {
                     currentFlows.splice(index, 1);
+                }
+            }
 
             this.setState({ productFlows: currentFlows });
         }
@@ -131,14 +132,16 @@ class TransactionSelling extends Component {
              * check mandatory fields
              */
             if (this.state.customer.id == null || this.state.productFlows == null || this.state.productFlows.length == 0) {
-                alert("Mandatory fields must not be empty!")
+                this.props.app.infoDialog("Mandatory fields must not be empty!");
                 return;
             }
 
-            if (!window.confirm("Are you sure want to proceed?"))
-                return;
-            let request = { productFlows: this.state.productFlows, customer: this.state.customer };
-            this.props.submitPurchaseTransaction(request, this.props.app);
+            const app = this;
+
+            this.props.app.confirmDialog("Are you sure want to proceed?", function (e) {
+                let request = { productFlows: app.state.productFlows, customer: app.state.customer };
+                app.props.submitPurchaseTransaction(request, app.props.app);
+            }, function (e) { });
         }
 
         this.endMessage = () => { this.setState({ messageShow: false }) }
@@ -156,11 +159,11 @@ class TransactionSelling extends Component {
 
         this.calculateTotalPrice = () => {
             let totalPrice = 0;
-            if (this.state.productFlows)
+            if (this.state.productFlows) {
                 this.state.productFlows.forEach(productFlow => {
                     totalPrice = totalPrice + productFlow.count * productFlow.product.price;
                 });
-
+            }
             return stringUtil.beautifyNominal(totalPrice) + (",00");
         }
 
@@ -186,7 +189,6 @@ class TransactionSelling extends Component {
             this.setState({ productName: value });
             this.setActiveField(id);
             this.props.getProductStockList(value, this.props.app);
-
         }
 
         this.selectproduct = (productCode) => {
@@ -194,10 +196,11 @@ class TransactionSelling extends Component {
                 alert("Data not found!");
                 return;
             }
-            for (let i = 0; i < this.props.products.length; i++)
+            for (let i = 0; i < this.props.products.length; i++) {
                 if (this.props.products[i].code == productCode) {
                     this.setState({ productName: this.props.products[i].name });
                 }
+            }
 
             this.setState({ stockId: productCode });
             this.getStockInfo(productCode);
@@ -209,7 +212,6 @@ class TransactionSelling extends Component {
                 return (<DetailProductPanel stockView={true} product={this.props.productFlowStock} />);
             }
             return <></>
-
         }
 
         this.buttonAddToCart = () => {
@@ -226,9 +228,11 @@ class TransactionSelling extends Component {
             return <></>
         }
     }
+
     componentDidMount() {
         document.title = "Selling";
     }
+
     componentDidUpdate() {
         if (byId(this.state.activeField) != null) {
             byId(this.state.activeField).focus();
@@ -237,29 +241,30 @@ class TransactionSelling extends Component {
 
     getProductDropdownData() {
         const productList = [];
-
-        if (this.props.products != null)
+        if (this.props.products != null) {
             for (let i = 0; i < this.props.products.length; i++) {
                 const product = this.props.products[i];
                 productList.push({ value: product.code, text: product.name });
             }
+        }
         return productList;
     }
 
-    getCustomerDropdownData(){
+    getCustomerDropdownData() {
         const customerList = [];
 
-        if (this.props.customersData != null)
+        if (this.props.customersData != null){
             for (let i = 0; i < this.props.customersData.length; i++) {
                 const customer = this.props.customersData[i];
                 customerList.push({ value: customer.id, text: customer.name });
             }
+        }
         return customerList;
     }
- 
+
 
     render() {
-        let totalPrice = this.calculateTotalPrice(); 
+        let totalPrice = this.calculateTotalPrice();
 
         let customerList = this.getCustomerDropdownData();
         let productList = this.getProductDropdownData();
@@ -281,7 +286,6 @@ class TransactionSelling extends Component {
                     ]}
                     />
                     <this.buttonAddToCart />
-
                 </>}
                 />
 
@@ -302,8 +306,8 @@ class TransactionSelling extends Component {
         return (
             <div className="transaction-container">
                 <this.messageComponent />
-                 
-                <h2>Selling {this.state.customer && this.state.customer.name ? "[" + this.state.customer.name + "]" : ""}</h2>
+
+                <h2>Selling {this.state.customer && this.state.customer.name ? <small>{this.state.customer.name}</small> : ""}</h2>
                 {formComponent}
                 <div>
                     <ActionButtons buttonsData={buttonsData} />

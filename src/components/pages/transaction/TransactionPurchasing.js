@@ -69,10 +69,11 @@ class TransactionPurchasing
             let currentFlows = this.state.productFlows;
             //update
             if (this.getProductFlow(productFlow.product.id) != null) {
-                for (let index = 0; index < this.state.productFlows.length; index++)
-                    if (this.state.productFlows[index].product.id == productFlow.product.id)
+                for (let index = 0; index < this.state.productFlows.length; index++) {
+                    if (this.state.productFlows[index].product.id == productFlow.product.id) {
                         currentFlows[index] = productFlow;
-
+                    }
+                }
             } else
                 currentFlows.push(productFlow); //add new
 
@@ -92,12 +93,10 @@ class TransactionPurchasing
         this.getProduct = (id) => {
             if (this.state.products == null) return null;
             for (let index = 0; index < this.state.products.length; index++) {
-                if (this.state.products[index].id == id) return this.state.products[id];
+                if (this.state.products[index].id == id) { return this.state.products[id]; }
             }
             return null;
         }
-
-
 
         this.handleEdit = (productId) => {
             alert("will Edit: " + productId);
@@ -121,10 +120,11 @@ class TransactionPurchasing
                 return;
             }
             let currentFlows = this.state.productFlows;
-            for (let index = 0; index < this.state.productFlows.length; index++)
-                if (this.state.productFlows[index].product.id == id)
-                    currentFlows.splice(index, 1);
-
+            for (let index = 0; index < this.state.productFlows.length; index++) {
+                if (this.state.productFlows[index].product.id == id) { 
+                    currentFlows.splice(index, 1); 
+                }
+            }
             this.setState({ productFlows: currentFlows });
         }
 
@@ -133,14 +133,15 @@ class TransactionPurchasing
              * check mandatory fields
              */
             if (this.state.supplier.id == null || this.state.productFlows == null || this.state.productFlows.length == 0) {
-                alert("Mandatory fields must not be empty!")
+                this.props.app.infoDialog("Mandatory fields must not be empty!")
                 return;
             }
 
-            if (!window.confirm("Are you sure want to proceed?"))
-                return;
-            let request = { productFlows: this.state.productFlows, supplier: this.state.supplier };
-            this.props.submitSupplyTransaction(request, this.props.app);
+            const app = this;
+            this.props.app.confirmDialog("Are you sure want to proceed?", function (e) {
+                let request = { productFlows: app.state.productFlows, supplier: app.state.supplier };
+                app.props.submitSupplyTransaction(request, app.props.app);
+            }, function (e) { });
         }
 
         this.endMessage = () => { this.setState({ messageShow: false }) }
@@ -326,7 +327,7 @@ class TransactionPurchasing
         return (
             <div className="transaction-container">
                 <this.messageComponent />
-                <h2>Purchasing {this.state.supplier && this.state.supplier.name ? "[" + this.state.supplier.name + "]" : null}</h2>
+                <h2>Purchasing {this.state.supplier && this.state.supplier.name ? <small>{this.state.supplier.name}</small> : null}</h2>
 
                 {formComponent}
                 <div>
