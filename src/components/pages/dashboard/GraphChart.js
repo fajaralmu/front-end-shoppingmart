@@ -41,7 +41,7 @@ class GraphChart extends Component {
                 groupedComponent = <div>
                     <div style={{ display: 'grid', width: 'min-content', gridTemplateColumns: 'auto auto' }}>{groupedComponents.map(g => g)}</div>
                     
-                    <div><Label style={{ fontSize: '0.9em', fontFamily: 'TNR' }} text={group.label} /></div>
+                    <div style={{textAlign:'center'}}><Label style={{ fontSize: '0.9em', fontFamily: 'TNR' }} text={group.label} /></div>
                 </div>
             }
             components.push(groupedComponent);
@@ -65,11 +65,12 @@ function ChartItem(props) {
     const value = element.value ? element.value : 0;
     let percentage = (value / props.maxValue) * 100;
     const orientation = props.orientation;
+    const isHorizonal = orientation == 'horizontal';
 
     let style;
     let bgStyle = { margin: '3px', fontSize: '0.6em' };
     let className;
-    if (orientation == 'horizontal') {
+    if (isHorizonal) {
         style = {
             backgroundColor: element.color ? element.color : '#cccccc',
             width: percentage + '%',
@@ -79,7 +80,7 @@ function ChartItem(props) {
         bgStyle.width = '100%';
         bgStyle.height = '20px';
 
-    } else if (orientation == 'vertical') {
+    } else {
         style = {
             backgroundColor: '#ffffff',
             height: (100 - percentage) + '%',
@@ -93,8 +94,9 @@ function ChartItem(props) {
     return (
         <div className={className} >
             <div style={bgStyle}>
-                <div style={style} >{element.label}</div>
+                <div style={style} >{isHorizonal?element.label:null}</div>
             </div>
+            {!isHorizonal?<div style={{fontSize:'0.6em'}} >{element.label}</div>:null}
         </div>
     );
 }
