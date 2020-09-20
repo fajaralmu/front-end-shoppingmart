@@ -74,9 +74,10 @@ class TransactionPurchasing
                         currentFlows[index] = productFlow;
                     }
                 }
-            } else
+            } else{
                 currentFlows.push(productFlow); //add new
-
+            }
+            
             this.setState({ productFlows: currentFlows });
             this.showMessage("Success saving to chart", "success");
 

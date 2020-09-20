@@ -95,10 +95,7 @@ class ProductSales
         }
 
         this.constructFilterBox = () => {
-            let filterButtons = <ActionButtons buttonsData={[
-                { text: "Back", onClick: () => this.props.setFeatureCode(null), id: "btn-back" },
-                { text: <i className="fas fa-search"></i>, onClick: () => this.getProductSales(null, 0), id: "btn-get-product-sales", status: "success" }]}
-            />;
+             
             return (<creator.FilterBox rows={[{
                 values: [
                     <creator.DateSelectionFrom years={this.props.transactionYears}
@@ -111,13 +108,14 @@ class ProductSales
                         handleOnChangeMto={(value) => this.setState({ toMonth: value })}
                         handleOnChangeYto={(value) => this.setState({ toYear: value })} />,
                     <InputField value={this.state.productName} onKeyUp={this.setRequestProductName} id="input-product-name" placeholder="Product Name" />,
-                    filterButtons
+                    <ActionButtons buttonsData={[
+                        { text: "Back", onClick: () => this.props.setFeatureCode(null), id: "btn-back" },
+                        { text: <i className="fas fa-search"></i>, onClick: () => this.getProductSales(null, 0), id: "btn-get-product-sales", status: "success" }]}
+                    />
                 ]
             }]} />);
         }
-
-
-
+ 
         this.constructFilterInfo = (productSalesData) => {
             let periodInfo = <div>
                 {"From: "}

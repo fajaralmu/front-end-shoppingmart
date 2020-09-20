@@ -1,15 +1,17 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import * as actions from '../../../redux/actionCreators'
- 
+
 import * as stringUtil from '../../../utils/StringUtil'
 import ActionButtons from '../../buttons/ActionButtons'
-import InstantTable from '../../container/InstantTable' 
+import InstantTable from '../../container/InstantTable'
 import * as componentUtil from '../../../utils/ComponentUtil'
 import { byId } from '../../../utils/ComponentUtil' 
 import Chart from '../../Chart'
 import * as creator from '../../../utils/ComponentCreator'
 import InputField from '../../inputs/InputField'
+import GraphChart from './GraphChart';
+import { MONTHS } from './../../../utils/DateUtil';
 
 class Cashflow
     extends Component {
@@ -98,62 +100,62 @@ class Cashflow
 
         let filterInfo = this.constructFilterInfo();
 
-        let cashflowDetail = this.props.cashflowDetail != null ? this.props.cashflowDetail : { supplies: [], purchases: [] };
-        let maxValue = this.props.cashflowDetail != null ? this.props.cashflowDetail.maxValue : 0; 
-
-        let chartOrientation = this.state.chartOrientation;
+        const cashflowDetail = this.props.cashflowDetail != null ? this.props.cashflowDetail : { supplies: [], purchases: [] };
+        const maxValue = this.props.cashflowDetail != null ? this.props.cashflowDetail.maxValue : 0;
 
         const filterBox = this.constructFilterBox();
 
-        let cashflowDataRows = new Array();
-
-        for (let i = 0; i < cashflowDetail.supplies.length; i++) {
+        const cashflowDataRows = new Array();
+        console.log("cashflowDetail: ", cashflowDetail);
+        let chartIndex = 0;
+        const chartGroups = new Array();
+        for (let i = 0; i < cashflowDetail.supplies.length; i++, chartIndex += 2) {
             const spending = cashflowDetail.supplies[i];
             const earning = cashflowDetail.purchases[i];
-            const yymm = earning.month + "/" + earning.year;
+            const period = MONTHS[earning.month-1] +" " + earning.year;
             const earningAmount = stringUtil.beautifyNominal(earning.amount);
             const spendingAmount = stringUtil.beautifyNominal(spending.amount);
             const earningCount = stringUtil.beautifyNominal(earning.count);
             const spendingCount = stringUtil.beautifyNominal(spending.count);
 
+            //earning
             cashflowDataRows.push({
-                id: 'chart-e-' + yymm,
-                item: earning.count, value: earning.amount, label: yymm,
-                values: [yymm, <Chart orientation={chartOrientation} text={earningAmount + "(" + earningCount + "items)"} type="success" width={450} value={earning.amount} maxValue={maxValue} />],
-                CS: [1, 3], RS: [2, 1]
+                group: i,
+                index: chartIndex,
+                series: "earn_amt",
+                value: earning.amount,
+                label: earningAmount,
+                color: 'rgb(10,200,10)'
             });
-            cashflowDataRows.push({
-                id: 'chart-s-' + yymm,
-                item: spending.count, value: spending.amount, label: yymm,
-                values: [<Chart orientation={chartOrientation} text={spendingAmount + "(" + spendingCount + "items)"} type="warning" width={450} value={spending.amount} maxValue={maxValue} />],
-                CS: [3]
-            });
+            // cashflowDataRows.push({
+            //     index: chartIndex, 
+            //     series: "earn_qty",
+            //     value: earning.count,  
+            //     label: earningCount,
+            // });
 
+
+            //spending
+            cashflowDataRows.push({
+                group: i,
+                index: chartIndex + 1,
+                series: "spend_amt",
+                value: spending.amount,
+                label: spendingAmount,
+                color: 'rgb(200,10,10)'
+            });
+            // cashflowDataRows.push({
+            //     index: chartIndex+1, 
+            //     series: "spend_qty",
+            //     value: spending.count,  
+            //     label: spendingCount,
+            // }); 
+            chartGroups.push({ value: i, label: period });
         }
 
-        if (chartOrientation == "vertical") {
-            let cashflowsDataRowsVert = new Array();
-            //initial
-            cashflowsDataRowsVert.push({ id: 'label-vertical', values: [], CS: [] });
-            cashflowsDataRowsVert.push({ id: 'chart-vertical', values: [] });
-            cashflowDataRows.forEach(row => {
-                if (row.id.includes('chart-e')) {
-                    cashflowsDataRowsVert[1].values.push(row.values[1]);
-                    //the label has 2 colspan
-                    cashflowsDataRowsVert[0].values.push(row.label);
-                    cashflowsDataRowsVert[0].CS.push(2);
-                } else if (row.id.includes('chart-s')) {
-                    cashflowsDataRowsVert[1].values.push(row.values[0]);
-                }
+        let cashflowListComponent = <div className="cashflow-list" style={{ width: '70vw', overflow: 'scroll'}}>
+            <GraphChart chartGroups={chartGroups} maxValue={maxValue} chartData={cashflowDataRows} orientation={this.state.chartOrientation} />
 
-            });
-
-            cashflowDataRows = cashflowsDataRowsVert;
-        }
-
-        let tableStyle = { fontFamily: 'consolas', fontSize: '0.8em'}
-        let cashflowListComponent = <div className="cashflow-list" style={{ width:'60vw', overflow: 'scroll' }}>
-            <InstantTable valign={chartOrientation == "horizontal" ? "middle" : null} style={tableStyle} rows={cashflowDataRows} />
         </div>
         return (
             <div className="cashflow-container">
@@ -161,6 +163,7 @@ class Cashflow
                 {filterBox}
                 {filterInfo}
                 <div><p></p></div>
+
                 {cashflowListComponent}
             </div>
         )
