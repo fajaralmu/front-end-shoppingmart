@@ -2,12 +2,12 @@ import React, { Component } from 'react'
 import * as menus from '../../../constant/Menus'
 import { withRouter } from 'react-router';
 import ContentTitle from '../../container/ContentTitle';
-import Label from '../../container/Label'; 
+import Label from '../../container/Label';
 import ActionButton from '../../buttons/ActionButton';
 import Message from '../../messages/Message';
 import '../login/Login.css'
 import InputField from '../../inputs/InputField';
-
+import { byId } from '../../../utils/ComponentUtil'
 class Login extends Component {
 
     constructor(props) {
@@ -19,8 +19,6 @@ class Login extends Component {
             showMessageLoginFailed: false
         }
 
-
-
         this.handleUsername = (value) => {
             this.setState({ username: value });
         }
@@ -31,8 +29,10 @@ class Login extends Component {
         this.doLogin = () => {
 
             console.log("u:", this.state.username, ",p:", this.state.password);
-            this.props.doLogin(document.getElementById("username-field").value,
-                document.getElementById("password-field").value, this.props.main);
+            this.props.doLogin(
+                byId("username-field").value,
+                byId("password-field").value,
+                this.props.main);
         }
 
         this.endMessage = () => {
@@ -66,14 +66,14 @@ class Login extends Component {
         // }
     }
 
-  
 
-    render() { 
+
+    render() {
 
         return (
             <div className="section-container">
-                < ContentTitle title="Login Page" iconClass="fas fa-sign-in-alt"/>
-                <this.message/>
+                < ContentTitle title="Login Page" iconClass="fas fa-sign-in-alt" />
+                <this.message />
                 <div className="login-container card">
                     <div className="card-header">Login</div>
                     <div className="card-body">

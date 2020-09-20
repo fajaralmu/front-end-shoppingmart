@@ -15,7 +15,7 @@ class ChatRoom extends Component {
         this.state = { messages: null, username: null, activeId: null }
         this.sendChatMessage = () => {
             if (!byId("input-msg").value) {
-                alert("Message must not be null");
+                this.props.app.infoDialog("Message must not be null");
                 return;
             }
             this.props.sendChatMessage(byId("input-msg").value, this.state.username, this.props.app);

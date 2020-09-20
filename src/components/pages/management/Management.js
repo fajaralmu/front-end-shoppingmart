@@ -1,4 +1,4 @@
-import React, { Component } from 'react' 
+import React, { Component } from 'react'
 import './Management.css'
 import { withRouter } from 'react-router';
 import * as actions from '../../../redux/actionCreators'
@@ -83,15 +83,17 @@ class Management extends Component {
         }
 
         this.updateEntity = (name, entity, flag) => {
-            if (!window.confirm("Are you sure will update " + name + "?")) {
-                return;
-            }
+            const app = this;
+            this.props.app.confirmDialog("Are you sure will update " + name + "?",
+                function (e) {
+                    let newRecord = flag == "addNew"; 
+                    app.props.updateEntity({ entityName: name, entity: entity, isNewRecord: newRecord }, app, function (ref) {
+                        ref.callbackHandleUpdate();
+                    });
+                }, function (e) { });
 
-            let newRecord = flag == "addNew";
 
-            this.props.updateEntity({ entityName: name, entity: entity, isNewRecord: newRecord }, this, function (ref) {
-                ref.callbackHandleUpdate();
-            });
+
         }
 
         this.getEntityById = (name, id) => {
@@ -104,11 +106,11 @@ class Management extends Component {
         this.callbackHandleUpdate = () => {
             this.refresh();
             this.removeManagedEntity();
-           
+
         }
     }
 
-    componentDidUpdate(){
+    componentDidUpdate() {
         this.validateLoginStatus();
     }
 
@@ -132,8 +134,8 @@ class Management extends Component {
                     this.state.entityConfig.title :
                     this.props.entitiesData && this.props.entitiesData.entityConfig ?
                         this.props.entitiesData.entityConfig.title : "")}
-                        
-                        description="manage master data"/>
+
+                    description="manage master data" />
                 <div className="management-container">
                     <Tab tabsData={buttonsData} />
                     <EntityList currentPage={this.state.currentPage}
