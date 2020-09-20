@@ -13,3 +13,12 @@
     border: solid 1px #cccccc;
     border-radius: 10px;
 }
+
+.input-field{
+    display: grid;
+    grid-template-columns: auto auto;
+}
+
+.select-label{
+    margin: 5px;
+}

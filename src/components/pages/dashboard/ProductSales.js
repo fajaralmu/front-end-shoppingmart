@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import * as actions from '../../../redux/actionCreators'
-  
+
 import ActionButton from '../../buttons/ActionButton'
 import * as stringUtil from '../../../utils/StringUtil'
 import ActionButtons from '../../buttons/ActionButtons'
@@ -97,22 +97,20 @@ class ProductSales
         this.constructFilterBox = () => {
             let filterButtons = <ActionButtons buttonsData={[
                 { text: "Back", onClick: () => this.props.setFeatureCode(null), id: "btn-back" },
-                { text: "Search", onClick: () => this.getProductSales(null, 0), id: "btn-get-product-sales", status: "success" }]}
+                { text: <i className="fas fa-search"></i>, onClick: () => this.getProductSales(null, 0), id: "btn-get-product-sales", status: "success" }]}
             />;
             return (<creator.FilterBox rows={[{
-                values: [<creator.DateSelectionFrom years={this.props.transactionYears}
-                    monthVal={this.state.fromMonth} yearVal={this.state.fromYear}
-                    handleOnChangeMfrom={(value) => this.setState({ fromMonth: value })}
-                    handleOnChangeYfrom={(value) => this.setState({ fromYear: value })}
-                />
-                    ,
-                <creator.DateSelectionTo years={this.props.transactionYears}
-                    monthVal={this.state.toMonth} yearVal={this.state.toYear}
-                    handleOnChangeMto={(value) => this.setState({ toMonth: value })}
-                    handleOnChangeYto={(value) => this.setState({ toYear: value })} />
-                    ,
-                <InputField value={this.state.productName} onKeyUp={this.setRequestProductName} id="input-product-name" placeholder="Product Name" />
-                    ,
+                values: [
+                    <creator.DateSelectionFrom years={this.props.transactionYears}
+                        monthVal={this.state.fromMonth} yearVal={this.state.fromYear}
+                        handleOnChangeMfrom={(value) => this.setState({ fromMonth: value })}
+                        handleOnChangeYfrom={(value) => this.setState({ fromYear: value })}
+                    />,
+                    <creator.DateSelectionTo years={this.props.transactionYears}
+                        monthVal={this.state.toMonth} yearVal={this.state.toYear}
+                        handleOnChangeMto={(value) => this.setState({ toMonth: value })}
+                        handleOnChangeYto={(value) => this.setState({ toYear: value })} />,
+                    <InputField value={this.state.productName} onKeyUp={this.setRequestProductName} id="input-product-name" placeholder="Product Name" />,
                     filterButtons
                 ]
             }]} />);

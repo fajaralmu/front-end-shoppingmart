@@ -2,29 +2,30 @@ import React, { Component } from 'react'
 import * as stringUtil from '../../../utils/StringUtil'
 import InstantTable from '../../container/InstantTable';
 import Chart from '../../Chart';
-import ActionButton from '../../buttons/ActionButton'; 
+import ActionButton from '../../buttons/ActionButton';
 
 class ProductSalesDetail extends Component {
     constructor(props) {
         super(props);
 
         this.goBack = () => {
-            if(this.props.goBack)
+            if (this.props.goBack)
                 this.props.goBack();
         }
     }
- 
+
     render() {
         let chartRows = new Array();
         let maxValue = 0;
-        console.log("this.props.productSalesDetails : ",this.props.productSalesDetails );
-        let productName = this.props.productSalesDetails && this.props.productSalesDetails.entity? this.props.productSalesDetails.entity.name : "....";
-       
+
+        console.log("this.props.productSalesDetails : ", this.props.productSalesDetails);
+
+        let productName = this.props.productSalesDetails && this.props.productSalesDetails.entity ? this.props.productSalesDetails.entity.name : "....";
+
         let entities = new Array();
-        if ( this.props.productSalesDetails && this.props.productSalesDetails.entities != null) {
+        if (this.props.productSalesDetails && this.props.productSalesDetails.entities != null) {
             entities = this.props.productSalesDetails.entities;
             maxValue = this.props.productSalesDetails.maxValue;
-           
         }
 
         for (let i = 0; i < entities.length; i++) {
@@ -33,8 +34,12 @@ class ProductSalesDetail extends Component {
                 id: "row-detail-product-" + i,
                 values: [
                     stringUtil.monthYearString(salesData.month, salesData.year),
-                    <Chart text={salesData.sales}
-                        type="success" width={450} value={salesData.sales} maxValue={maxValue} />
+                    <Chart 
+                        text={salesData.sales}
+                        type={"success"}
+                        width={450}
+                        value={salesData.sales}
+                        maxValue={maxValue} />
                 ]
             });
         }
@@ -45,8 +50,6 @@ class ProductSalesDetail extends Component {
             <InstantTable rows={chartRows} />
         </div>)
     }
-
-
 }
 
 export default ProductSalesDetail;

@@ -30,7 +30,9 @@ class ComboBoxes extends Component {
                 let options = [];
                 if (comboBox.options) { options = comboBox.options; }
                 return (
-                    <ComboBox defaultValue={comboBox.defaultValue ? comboBox.defaultValue : ""}
+                    <ComboBox
+                        label={comboBox.label}
+                        defaultValue={comboBox.defaultValue ? comboBox.defaultValue : ""}
                         key={"key_" + comboBox.id} id={comboBox.id}
                         onChange={comboBox.handleOnChange}
                         options={options} />

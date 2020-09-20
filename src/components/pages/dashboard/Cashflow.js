@@ -61,7 +61,7 @@ class Cashflow
 
             let filterButtons = <ActionButtons buttonsData={[
                 { text: "Back", onClick: () => this.props.setFeatureCode(null), id: "btn-back" },
-                { text: "Search", onClick: this.getCashflowDetail, status: "success", id: "btn-get-cashflow-detail" }]}
+                { text: <i className="fas fa-search"></i>, onClick: this.getCashflowDetail, status: "success", id: "btn-get-cashflow-detail" }]}
             />;
 
             return (
