@@ -7,7 +7,7 @@ import Label from '../../container/Label';
 import InputField from '../../inputs/InputField';
 import DetailProductPanel from './DetailProductPanel';
 import StockListTable from './StockListTable'
-import Loader from '../../container/Loader'
+import Loader from '../../messages/Loader'
 import TransactionReceipt from './TransactionReceipt'
 import * as stringUtil from '../../../utils/StringUtil'
 import ActionButtons from '../../buttons/ActionButtons'

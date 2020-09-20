@@ -4,7 +4,7 @@ import { withRouter } from 'react-router';
 import ContentTitle from '../../container/ContentTitle';
 import Label from '../../container/Label'; 
 import ActionButton from '../../buttons/ActionButton';
-import Message from '../../container/Message';
+import Message from '../../messages/Message';
 import '../login/Login.css'
 import InputField from '../../inputs/InputField';
 

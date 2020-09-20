@@ -131,7 +131,6 @@ class Dashboard extends Component {
         else
             return <ErrorPage message="OOPS! Page not found" />
     }
-
 }
 
 

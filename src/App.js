@@ -14,7 +14,7 @@ import Login from './components/pages/login/Login'
 import Dashboard from './components/pages/dashboard/Dashboard';
 import * as menus from './constant/Menus'
 import SupplierList from './components/pages/supplier_list/SupplierList';
-import Loader from './components/container/Loader';
+import Loader from './components/messages/Loader';
 import Footer from './components/layout/footer/Footer';
 import SockJsClient from 'react-stomp';
 import ChatRoom from './components/pages/chat_room/ChatRoom';
@@ -22,6 +22,9 @@ import CartDetail from './components/cart/CartDetail';
 import Management from './components/pages/management/Management';
 import Header from './components/layout/header/Header';
 import * as url from './constant/Url';
+import Alert from './components/messages/Alert';
+
+const blankFunc = function (e) { };
 
 class App extends Component {
 
@@ -37,6 +40,14 @@ class App extends Component {
       enableShopping: false,
       mainAppUpdated: new Date()
     };
+
+    this.alertCallback = {
+      title: "Info",
+      message: "Info",
+      yesOnly: false,
+      onOk: () => { },
+      onNo: () => { }
+    }
 
     this.setDetailMode = (detailMode) => {
       this.setState({ detailMode: detailMode });
@@ -55,13 +66,15 @@ class App extends Component {
     }
 
     this.handleMenuCLick = (menu) => {
+      const app = this;
       switch (menu.code) {
 
         case menus.LOGOUT:
-          if (!window.confirm("Are you sure want to logout?")) {
-            return;
-          }
-          this.props.performLogout(this);
+          this.confirmDialog("Are you sure to logout?",
+            function (e) {
+              app.props.performLogout(app);
+            }, blankFunc);
+
           break;
 
         default:
@@ -91,6 +104,7 @@ class App extends Component {
 
     this.loginComponent = () => {
       return <Login main={this} setMenuCode={this.setMenuCode}
+        alertDialog={this.alertDialog}
         setDetailMode={this.setDetailMode}
         detailMode={this.state.detailMode}
         doLogin={this.props.performLogin}
@@ -104,34 +118,34 @@ class App extends Component {
         <Switch>
           <Route exact path="/" render={
             (renderProps) =>
-              <Home applicationProfile={this.props.applicationProfile} setMenuCode={this.setMenuCode} />
+              <Home alertDialog={this.alertDialog} applicationProfile={this.props.applicationProfile} setMenuCode={this.setMenuCode} />
           } />
           <Route exact path="/home" render={
             (renderProps) =>
-              <Home applicationProfile={this.props.applicationProfile} setMenuCode={this.setMenuCode} />
+              <Home alertDialog={this.alertDialog} applicationProfile={this.props.applicationProfile} setMenuCode={this.setMenuCode} />
           } />
           <Route exact path="/suppliers" render={
             (renderProps) =>
-              <SupplierList app={this} setMenuCode={this.setMenuCode} />
+              <SupplierList alertDialog={this.alertDialog} app={this} setMenuCode={this.setMenuCode} />
           } />
           <Route exact path="/chatroom" render={
             (renderProps) =>
-              <ChatRoom app={this} setMenuCode={this.setMenuCode} />
+              <ChatRoom alertDialog={this.alertDialog} app={this} setMenuCode={this.setMenuCode} />
           } />
           <Route exact path="/about" render={
             (renderProps) =>
-              <About applicationProfile={this.props.applicationProfile} setMenuCode={this.setMenuCode} />
+              <About alertDialog={this.alertDialog} applicationProfile={this.props.applicationProfile} setMenuCode={this.setMenuCode} />
           }></Route>
           <Route exact path="/catalog" render={
             (renderProps) =>
-              <Catalog app={this}
+              <Catalog alertDialog={this.alertDialog} app={this}
                 enableShopping={this.state.enableShopping}
                 setMenuCode={this.setMenuCode}
                 setDetailMode={this.setDetailMode} detailMode={this.state.detailMode} />
 
           }></Route>
           <Route exact path="/cart" render={
-            (renderProps) => <CartDetail enableShopping={this.state.enableShopping} cart={this.props.cart} app={this} setMenuCode={this.setMenuCode} />
+            (renderProps) => <CartDetail alertDialog={this.alertDialog} enableShopping={this.state.enableShopping} cart={this.props.cart} app={this} setMenuCode={this.setMenuCode} />
 
           }></Route>
           <Route exact path="/login" render={
@@ -166,6 +180,46 @@ class App extends Component {
       }
       return null;
     }
+
+    this.alertDialog = (message, title, yesOnly, onOk, onNo) => {
+
+      this.alertCallback.yesOnly = yesOnly;
+      this.alertCallback.onOk = onOk;
+      this.alertCallback.onNo = onNo;
+      this.alertCallback.message = message;
+      this.alertCallback.title = title;
+      this.setState({ showInfo: true })
+
+    }
+
+    this.confirmDialog = (message, onOk, onNo) => {
+      this.alertDialog(message, "Confirmation", false, onOk, onNo);
+    }
+
+    this.alertComponent = () => {
+      if (this.state.showInfo) {
+        const alertData = this.alertCallback;
+        return <Alert
+          title={alertData.title}
+          message={alertData.message}
+          onOk={(e) => {
+            if (alertData.onOk)
+              alertData.onOk(e);
+            this.setState({ showInfo: false });
+          }}
+          yesOnly={alertData.yesOnly}
+          onNo={(e) => {
+            if (alertData.onNo)
+              alertData.onNo(e);
+            this.setState({ showInfo: false });
+          }}
+          onClose={(e) => {
+            this.setState({ showInfo: false });
+          }}
+        />
+      }
+      return <></>
+    }
   }
 
   componentDidUpdate() {
@@ -173,6 +227,7 @@ class App extends Component {
       this.setState({ requestId: this.props.requestId });
       localStorage.setItem("requestId", this.props.requestId);
       this.props.refreshLogin();
+
     }
 
     if (this.props.applicationProfile) {
@@ -223,9 +278,9 @@ class App extends Component {
 
     if (!this.state.requestId) {
       return (
-        <Loader realtime={false}  text="Please wait..." type="loading" />
+        <Loader realtime={false} text="Please wait..." type="loading" />
       )
-    } 
+    }
 
     let menus = this.setMenus();
 
@@ -236,18 +291,20 @@ class App extends Component {
     return (
       <div className="App">
         <this.loadingComponent />
+        <this.alertComponent />
         <Header applicationProfile={this.props.applicationProfile} enableShopping={this.state.enableShopping} cart={this.props.cart} />
-       
+
         <div id="main-layout">
           <div id="main-menu">
-            <Menu loggedUser={this.props.loggedUser}
+            <Menu alertDialog={this.alertDialog}
+              loggedUser={this.props.loggedUser}
               handleMenuCLick={this.handleMenuCLick}
               activeCode={this.state.menuCode}
               menus={menus} />
           </div>
           <this.mainContent />
         </div>
-        
+
         <SockJsClient url={usedHost + 'realtime-app'} topics={['/wsResp/progress/' + localStorage.getItem("requestId")]}
           onMessage={(msg) => { this.handleMessage(msg) }}
           ref={(client) => { this.clientRef = client }} />

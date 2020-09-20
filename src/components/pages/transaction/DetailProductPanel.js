@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import * as url from '../../../constant/Url'
 import * as stringUtil from '../../../utils/StringUtil'
 import InstantTable from '../../container/InstantTable';
-import Card from '../../card/Card';
+import Card from '../../card/Card'; 
 
 class DetailProductPanel extends Component {
     constructor(props) {
@@ -37,14 +37,15 @@ class DetailProductPanel extends Component {
 
     render() {
         let product = this.props.product;
+        const defaultVal = spinner();
         if (this.props.product == null || this.props.product.unit == null || this.props.product.category == null) {
             product = {
-                name: spinner(),
+                name: defaultVal,
                 unit: {
-                    name: spinner()
+                    name: defaultVal
                 },
                 category: {
-                    name: spinner()
+                    name: defaultVal
                 },
                 price: 0
             }
