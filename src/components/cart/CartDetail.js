@@ -3,6 +3,7 @@ import * as cartCss from './Cart.css'
 import ContentTitle from '../container/ContentTitle';
 import * as stringUtil from '../../utils/StringUtil'
 import InstantTable from '../container/InstantTable';
+import { connect } from 'react-redux'
 
 class CartDetail extends Component {
     constructor(props) {
@@ -77,4 +78,11 @@ function CartItemList (props ) {
     return cartItemList;
 }
 
-export default CartDetail;
+const mapStateToProps = state => {
+    return { 
+        cart: state.shopState.cart
+    }
+}
+export default connect(
+    mapStateToProps, 
+)(CartDetail);

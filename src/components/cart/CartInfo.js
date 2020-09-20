@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import * as cartCss from './Cart.css'
 import Label from '../container/Label';
 import * as stringUtil from '../../utils/StringUtil'
+import { connect } from 'react-redux'
 
 class CartInfo extends Component {
     constructor(props) {
@@ -36,9 +37,14 @@ class CartInfo extends Component {
         }
     }
 
-    render() {
+    componentDidUpdate(){
+        console.debug("Cart Info updated");
+    }
 
+    render() {
+        console.debug("appCart", this.props.appCart);
         let cart = this.props.cart;
+        // let cart = this.props.appCart;
 
         let count = 0;
         for (let i = 0; i < cart.length; i++) {
@@ -49,6 +55,7 @@ class CartInfo extends Component {
 
         return (
             <div onClick={this.handleClick} onMouseOver={this.showCartList} onMouseLeave={this.hideCartList} className="cart-info" >
+              
                <CartInfoContent detail={this.state.detail} count={count} totalPrice={totalPrice} />
             </div>
         )
@@ -70,5 +77,14 @@ function CartInfoContent(props) {
 
     return content;
 }
-
-export default CartInfo;
+const mapDispatchToProps = dispatch => ({ 
+})
+const mapStateToProps = state => {
+    return { 
+        cart: state.shopState.cart
+    }
+}
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(CartInfo);

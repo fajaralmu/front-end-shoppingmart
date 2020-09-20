@@ -58,7 +58,7 @@ class Catalog extends Component {
         }
 
         this.clearCart = () => {
-            this.props.updateCart([], this.props.app);
+            this.props.updateCart([], this.props.app); 
         }
 
         this.addToCart = (product, count) => {
@@ -81,7 +81,7 @@ class Catalog extends Component {
                     count: count
                 })
             }
-            this.props.updateCart(currentCart, this.props.app);
+            this.props.updateCart(currentCart, this.props.app); 
         }
 
         this.getProductCatalog = (_page) => {
@@ -245,7 +245,7 @@ class Catalog extends Component {
        
         if (this.props.enableShopping) {
             actionButtons.push({
-                text: <span><i claclassNamess="fa fa-cart-arrow-down" ></i>&nbsp;Clear Shopping List</span>, onClick: () => { this.clearCart() }, status: 'danger', id: "clear-list"
+                text: <span><i className="fa fa-cart-arrow-down" ></i>&nbsp;Clear Shopping List</span>, onClick: () => { this.clearCart() }, status: 'danger', id: "clear-list"
             });
         }
 

@@ -126,7 +126,7 @@ class App extends Component {
           } />
           <Route exact path="/suppliers" render={
             (renderProps) =>
-              <SupplierList  app={this} setMenuCode={this.setMenuCode} />
+              <SupplierList app={this} setMenuCode={this.setMenuCode} />
           } />
           <Route exact path="/chatroom" render={
             (renderProps) =>
@@ -146,7 +146,7 @@ class App extends Component {
 
           }></Route>
           <Route exact path="/cart" render={
-            (renderProps) => <CartDetail enableShopping={this.state.enableShopping} cart={this.props.cart} app={this} setMenuCode={this.setMenuCode} />
+            (renderProps) => <CartDetail enableShopping={this.state.enableShopping} app={this} setMenuCode={this.setMenuCode} />
 
           }></Route>
           <Route exact path="/login" render={
@@ -289,17 +289,20 @@ class App extends Component {
     const localHost = "http://localhost:8080/universal-good-shop/";
     const usedHost = localHost;
     const user = this.props.loggedUser;
-    const applicationProfile = this.props.applicationProfile;
-    const cart = this.props.cart;
-
+    const applicationProfile = this.props.applicationProfile; 
+ 
     return (
       <div className="App">
         <this.loadingComponent />
         <this.alertComponent />
-        <Header applicationProfile={applicationProfile} enableShopping={this.state.enableShopping} cart={cart} />
+        <Header
+          applicationProfile={applicationProfile}
+          enableShopping={this.state.enableShopping} 
+          mainAppUpdated = {this.state.mainAppUpdated}
+        />
 
         <div id="main-layout">
-          <div id="main-menu" style={{backgroundColor: applicationProfile.color}}>
+          <div id="main-menu" style={{ backgroundColor: applicationProfile.color }}>
             <Menu alertDialog={this.alertDialog}
               loggedUser={user}
               handleMenuCLick={this.handleMenuCLick}
@@ -333,7 +336,7 @@ const mapStateToProps = state => {
     loginAttempt: state.userState.loginAttempt,
     requestId: state.userState.requestId,
     applicationProfile: state.userState.applicationProfile,
- 
+
     cart: state.shopState.cart
   }
 }
