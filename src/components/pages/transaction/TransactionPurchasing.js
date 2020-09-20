@@ -233,6 +233,7 @@ class TransactionPurchasing
             this.props.resetPurchaseTransaction();
         document.title = "Purchasing";
         this.formFieldIds = [];
+        this.props.resetSuppliers();
 
     }
     componentDidUpdate() {
