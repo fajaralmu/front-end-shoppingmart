@@ -16,9 +16,9 @@ import * as componentUtil from '../../../utils/ComponentUtil'
 import AddToCartButton from './AddToCartButton';
 import DetailProductPanel from './DetailProductPanel';
 import GridComponent from '../../container/GridComponent'
-import Card from './../../card/Card';
+import Card from '../../card/Card';
 
-class TransactionOut extends Component {
+class TransactionSelling extends Component {
 
     constructor(props) {
         super(props);
@@ -339,4 +339,4 @@ const mapDispatchToProps = dispatch => ({
 export default (connect(
     mapStateToProps,
     mapDispatchToProps
-)(TransactionOut));
+)(TransactionSelling));

@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import '../dashboard/Dashboard.css'
 import * as menus from '../../../constant/Menus'
 import DashboardMenu from './DashboardMenu';
-import TransactionOut from '../transaction/TransactionOut';
+import TransactionSelling from '../transaction/TransactionSelling';
 import ErrorPage from '../../ErrorPage';
 import { withRouter } from 'react-router';
 import TransactionPurchasing from '../transaction/TransactionPurchasing';
@@ -73,8 +73,8 @@ class Dashboard extends Component {
         let mainComponent = <div>
             <div className="cashflow-info">
                 <h3>Cashflow Info</h3>
-                <GridComponent style={{ backgroundColor:'#cccccc', padding:'5px', borderRadius:'3px', width: 'max-content', gridColumnGap: '10px' }} items={[
-                    <h3 style={{marginRight:'4px', color:'#555' }}><i  className="fas fa-calendar-alt"></i></h3>,
+                <GridComponent style={{ backgroundColor: '#cccccc', padding: '5px', borderRadius: '3px', width: 'max-content', gridColumnGap: '10px' }} items={[
+                    <h3 style={{ marginRight: '4px', color: '#555' }}><i className="fas fa-calendar-alt"></i></h3>,
                     <ComboBoxes key="cb" values={[
                         {
                             id: "select-month",
@@ -93,10 +93,10 @@ class Dashboard extends Component {
 
                 ]} />
                 <div className="cashflow-info-wrapper">
-                    <GridComponent style={{width:'50%'}}
+                    <GridComponent style={{ width: '50%' }}
                         items={[
-                            <EarningContent cashflowInfoOut={cashflowInfoOut} />,
-                            <SpendingContent cashflowInfoIn={cashflowInfoIn} />
+                            <CashflowInfoContent type="earn" cashflowInfo={cashflowInfoOut} />,
+                            <CashflowInfoContent type="spend" cashflowInfo={cashflowInfoIn} />
                         ]} />
                 </div>
             </div>
@@ -105,7 +105,7 @@ class Dashboard extends Component {
         if (this.state.featureCode != null) {
             switch (this.state.featureCode) {
                 case 'trxOut':
-                    mainComponent = <TransactionOut app={this.props.app} setFeatureCode={this.setFeatureCode} />
+                    mainComponent = <TransactionSelling app={this.props.app} setFeatureCode={this.setFeatureCode} />
                     break;
                 case 'trxIn':
                     mainComponent = <TransactionPurchasing app={this.props.app} setFeatureCode={this.setFeatureCode} />
@@ -134,27 +134,17 @@ class Dashboard extends Component {
 
 }
 
-function EarningContent(props) {
-    const cashflowInfoOut = props.cashflowInfoOut;
-    const value = <><i className="fas fa-money-bill-wave"></i>&nbsp;{stringUtil.beautifyNominal(cashflowInfoOut.amount) + ",00"}</>;
-    const content = <div> 
+
+function CashflowInfoContent(props) {
+    const cashflowInfo = props.cashflowInfo;
+    const title = props.type == "earn" ? "Total Earning" : "Total Spending";
+    const value = <><i className="fas fa-comments-dollar"></i>&nbsp;{stringUtil.beautifyNominal(cashflowInfo.amount) + ",00"}</>;
+    const content = <div>
         <Label style={{ fontFamily: "TNR" }} text={value} />
         <Label text="Item" />
-        <Label text={stringUtil.beautifyNominal(cashflowInfoOut.count)} />
-    </div>;
-
-    return (<Card style={{marginTop:'3px'}} title={"Total Earning " + stringUtil.monthYearString(cashflowInfoOut.month, cashflowInfoOut.year)} content={content} />);
-}
-
-function SpendingContent(props) {
-    const cashflowInfoIn = props.cashflowInfoIn;
-    const value = <><i className="fas fa-comments-dollar"></i>&nbsp;{stringUtil.beautifyNominal(cashflowInfoIn.amount) + ",00"}</>;
-    const content = <div> 
-        <Label style={{ fontFamily: "TNR" }} text={value} />
-        <Label text="Item" />
-        <Label text={<>{stringUtil.beautifyNominal(cashflowInfoIn.count)}</>} />
+        <Label text={<>{stringUtil.beautifyNominal(cashflowInfo.count)}</>} />
     </div>
-    return (<Card style={{marginTop:'3px'}} title={"Total Spending " + stringUtil.monthYearString(cashflowInfoIn.month, cashflowInfoIn.year)} content={content} />);
+    return (<Card style={{ marginTop: '3px' }} title={title + " " + stringUtil.monthYearString(cashflowInfo.month, cashflowInfo.year)} content={content} />);
 }
 
 const mapStateToProps = state => {
