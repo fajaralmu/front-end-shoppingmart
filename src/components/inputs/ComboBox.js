@@ -33,7 +33,7 @@ class ComboBox extends Component {
             <div className="input-field ">
                 <label className="select-label">{this.props.label}</label>
                 <select value={this.props.defaultValue ? this.props.defaultValue : ""} 
-                    className="form-control" id={this.props.id}
+                    className={"form-control"} id={this.props.id}
                     onChange={this.handleOnChange} >
                     {options.map(
                         option => {

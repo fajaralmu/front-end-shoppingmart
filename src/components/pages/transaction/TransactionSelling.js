@@ -253,7 +253,7 @@ class TransactionSelling extends Component {
     getCustomerDropdownData() {
         const customerList = [];
 
-        if (this.props.customersData != null){
+        if (this.props.customersData != null) {
             for (let i = 0; i < this.props.customersData.length; i++) {
                 const customer = this.props.customersData[i];
                 customerList.push({ value: customer.id, text: customer.name });
@@ -269,28 +269,26 @@ class TransactionSelling extends Component {
         let customerList = this.getCustomerDropdownData();
         let productList = this.getProductDropdownData();
 
-        let formComponent = <table><tbody>
-            <tr valign="top"><td>
-                <Card title="Transaction Detail" content={<>
-                    <GridComponent cols={1} items={[
-                        <Label text="Customer" />,
-                        <InputDropdown value={this.state.customerName} onSelect={this.selectCustomer} dropdownList={customerList}
-                            onKeyUp={this.getCustomerList} id="input-customer-name-sell" placeholder="customer name" />,
-                        <Label text="Product" />,
-                        <InputDropdown value={this.state.productName} onSelect={this.selectproduct} dropdownList={productList}
-                            onKeyUp={this.getProductStockList} id="input-product-name-sell" placeholder="product name" />,
-                        <Label text="Quantity" />,
-                        <InputField id="input-quantity-sell"
-                            value={this.state.quantity} onKeyUp={(value, id) => this.setState({ activeField: id, quantity: value })}
-                            type="number" placeholder="quantity" />
-                    ]}
-                    />
-                    <this.buttonAddToCart />
-                </>}
+        let formComponent = <div className="row"><div className="col-5">
+            <Card title="Transaction Detail" content={<>
+                <GridComponent style={{gridRowGap:'5px'}} cols={2} items={[
+                    <Label text="Customer" />,
+                    <InputDropdown value={this.state.customerName} onSelect={this.selectCustomer} dropdownList={customerList}
+                        onKeyUp={this.getCustomerList} id="input-customer-name-sell" placeholder="customer name" />,
+                    <Label text="Product" />,
+                    <InputDropdown value={this.state.productName} onSelect={this.selectproduct} dropdownList={productList}
+                        onKeyUp={this.getProductStockList} id="input-product-name-sell" placeholder="product name" />,
+                    <Label text="Quantity" />,
+                    <InputField id="input-quantity-sell"
+                        value={this.state.quantity} onKeyUp={(value, id) => this.setState({ activeField: id, quantity: value })}
+                        type="number" placeholder="quantity" />
+                ]}
                 />
-
-            </td><td><this.detailStockComponent /></td></tr>
-        </tbody></table>;
+                <this.buttonAddToCart />
+            </>}
+            /></div> <div className="col-7">
+                <this.detailStockComponent /></div>
+        </div>
 
         let buttonsData = [
             { text: "Back", status: "secondary", onClick: () => this.props.setFeatureCode(null), id: "btn-back" },

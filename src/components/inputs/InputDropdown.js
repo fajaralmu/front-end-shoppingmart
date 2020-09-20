@@ -51,6 +51,7 @@ class InputDropdown extends Component {
 
         return (
             <div onMouseOver={() => this.setState({ focus: true })} onMouseLeave={this.onBlur} className="dropdown-wrapper input-field">
+                
                 <input
                     className={inputClassName}
                     onFocus={() => this.setState({ focus: true })}

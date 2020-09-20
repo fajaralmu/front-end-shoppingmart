@@ -121,8 +121,8 @@ class TransactionPurchasing
             }
             let currentFlows = this.state.productFlows;
             for (let index = 0; index < this.state.productFlows.length; index++) {
-                if (this.state.productFlows[index].product.id == id) { 
-                    currentFlows.splice(index, 1); 
+                if (this.state.productFlows[index].product.id == id) {
+                    currentFlows.splice(index, 1);
                 }
             }
             this.setState({ productFlows: currentFlows });
@@ -271,10 +271,10 @@ class TransactionPurchasing
         const supplierList = this.getSupplierDropdownData();
         const productList = this.getProductDropdownData();
 
-        let formComponent = <table><tbody>
-            <tr valign="top"><td>
+        let formComponent = <div className="row">
+            <div className="col-5">
                 <Card title="Transaction Detail" content={<>
-                    <GridComponent cols={1}
+                    <GridComponent style={{gridRowGap:'5px'}} cols={2}
                         items={[
                             <Label text="Supplier" />,
                             <InputDropdown onSelect={this.selectSupplier} dropdownList={supplierList}
@@ -287,30 +287,28 @@ class TransactionPurchasing
                             <Label text="Price" />,
                             <InputField id="input-product-price-purc"
                                 value={this.state.price} onKeyUp={(value, id) => {
-                                    this.setState({ activeField: id, price: value });
-                                    this.addFormFieldId(id);
+                                    this.setState({ activeField: id, price: value }); this.addFormFieldId(id);
                                 }}
                                 type="number" placeholder="input product price" />,
                             <Label text="Quantity" />,
                             <InputField id="input-quantity-purc"
                                 value={this.state.quantity} onKeyUp={(value, id) => {
-                                    this.setState({ activeField: id, quantity: value });
-                                    this.addFormFieldId(id);
+                                    this.setState({ activeField: id, quantity: value });  this.addFormFieldId(id);
                                 }}
                                 type="number" placeholder="quantity" />,
                             <Label text="Expiry Date" />,
                             <InputField id="input-exp-date-purc"
                                 value={this.state.expiryDate} onKeyUp={(value, id) => {
-                                    this.setState({ activeField: id, expiryDate: value });
-                                    this.addFormFieldId(id);
+                                    this.setState({ activeField: id, expiryDate: value });   this.addFormFieldId(id);
                                 }}
                                 type="date" placeholder="input product exp date" />
                         ]}
                     />
                     {this.state.product != null ? <AddToCartButton onClick={this.addToCart} /> : ""}
                 </>} />
-            </td><td>{detailStock}</td></tr>
-        </tbody></table>;
+            </div>
+            <div className="col-7">{detailStock}</div>
+        </div>;
 
         let buttonsData = [
             { text: "Back", status: "secondary", onClick: () => this.props.setFeatureCode(null), id: "btn-back" },
