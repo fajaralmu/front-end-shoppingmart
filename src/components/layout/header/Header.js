@@ -1,23 +1,25 @@
 import React, { Component } from 'react';
-import './Header.css' 
+import './Header.css'
 import CartInfo from '../../cart/CartInfo';
+import { connect } from 'react-redux'
 
-class Header extends Component{
+class Header extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.handleClick = ()=> {
-            
+        
+        this.handleClick = () => {
+
         }
     }
 
-    render(){
-        let cartInfo = this.props.enableShopping ? 
-        <CartInfo onClick={this.handleClick} cart={this.props.cart} />:
-        null;
+    render() {
+        let cartInfo = this.props.enableShopping ?
+            <CartInfo onClick={this.handleClick} cart={this.props.cart} /> :
+            null;
 
         return (
-            <div className="App-header">
+            <div className="App-header" style={{color:this.props.applicationProfile.color}}>
                 <h2>{this.props.applicationProfile.name}</h2>
                 {cartInfo}
             </div>
@@ -26,4 +28,12 @@ class Header extends Component{
 
 }
 
-export default Header;
+const mapStateToProps = state => {
+    return {
+        applicationProfile: state.userState.applicationProfile,
+    }
+}
+
+export default (connect(
+    mapStateToProps
+)(Header));

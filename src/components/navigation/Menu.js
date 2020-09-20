@@ -36,12 +36,13 @@ class Menu extends Component {
                     {userLink}
                     {
                         renderedMenus.map(
-                            e => {
+                           ( menu, i) => {
                                 return <MenuItem
+                                    key={"menu_"+i}
+                                    
                                     fontColor={this.fontColor}
-                                    backgroundColor={this.backgroundColor}
-                                    key={e.code}
-                                    menu={e}
+                                    backgroundColor={this.backgroundColor} 
+                                    menu={menu}
                                     activeCode={this.props.activeCode}
                                     handleMenuCLick={this.props.handleMenuCLick} />
                             }
@@ -62,7 +63,7 @@ function Avatar(props) {
         backgroundSize: '50px 50px',
         width: '50px', height: '50px', borderRadius: '25px'
     };
-    return <div style={style}></div>
+    return <div style={{padding: '5px'}}><div style={style}></div></div>
 }
 
 function MenuItem(props) {
