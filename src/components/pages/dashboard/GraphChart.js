@@ -17,6 +17,7 @@ class GraphChart extends Component {
         const components = [];
         const chartData = this.props.chartData;
         const chartGroups = this.props.chartGroups;
+        
 
         for (let g = 0; g < chartGroups.length; g++) {
             const group = chartGroups[g];
@@ -55,7 +56,8 @@ class GraphChart extends Component {
 
         return (
             <div className="graph-chart" style={{ width: '80%' }}>
-                <GridComponent cols={this.props.orientation == "horizontal" ? 1 : this.props.chartGroups.length} style={{ width: '100%' }} items={this.getChartComponents()} />
+                <GridComponent cols={this.isHorizontal() ? 1 : this.props.chartGroups.length} 
+                style={{ width: this.isHorizontal()?'100%':'max-content' }} items={this.getChartComponents()} />
             </div>
         )
     }
@@ -91,6 +93,7 @@ function ChartItem(props) {
         bgStyle.backgroundColor = element.color ? element.color : '#cccccc';
         bgStyle.height = '200px';
         bgStyle.width = '20px'; 
+        bgStyle.margin = 'auto';
        
     }
     return (
