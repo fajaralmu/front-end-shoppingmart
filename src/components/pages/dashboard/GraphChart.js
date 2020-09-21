@@ -34,7 +34,7 @@ class GraphChart extends Component {
             let groupedComponent;
             if (this.isHorizontal()) {
                 groupedComponent = 
-                (<div className="row">
+                (<div style={{borderBottom: 'solid 1px #cccccc'}} className="row">
                     <div className="col-2"><Label style={{ fontSize: '0.9em', fontFamily: 'TNR' }} text={group.label} /></div>
                     <div className="col-10">{groupedComponents.map(g => g)}</div>
                 </div>)
@@ -44,7 +44,7 @@ class GraphChart extends Component {
                 groupedComponent = 
                 (<div style={{borderRight: 'solid 1px #cccccc'}}>
                     <div style={{ display: 'grid', width: width+'px', gridTemplateColumns:  gridTemplateColumns}}>{groupedComponents.map(g => g)}</div>
-                    <div style={{ textAlign:'center' }}><Label style={{ fontSize: '0.9em', fontFamily: 'TNR' }} text={group.label} /></div>
+                    <div style={{ padding:'3px', textAlign:'center' }}><Label style={{ fontSize: '0.9em', fontFamily: 'TNR' }} text={group.label} /></div>
                 </div>)
             }
             components.push(groupedComponent);
