@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import GridComponent from './../../container/GridComponent';
 import Label from './../../container/Label';
 
-
 class GraphChart extends Component {
 
     constructor(props) {
@@ -33,16 +32,17 @@ class GraphChart extends Component {
 
             let groupedComponent;
             if (this.isHorizontal()) {
-                groupedComponent = <div className="row">
+                groupedComponent = 
+                (<div className="row">
                     <div className="col-2"><Label style={{ fontSize: '0.9em', fontFamily: 'TNR' }} text={group.label} /></div>
                     <div className="col-10">{groupedComponents.map(g => g)}</div>
-                </div>
+                </div>)
             } else {
-                groupedComponent = <div>
+                groupedComponent = 
+                (<div style={{borderRight: 'solid 1px #cccccc'}}>
                     <div style={{ display: 'grid', width: 'min-content', gridTemplateColumns: 'auto auto' }}>{groupedComponents.map(g => g)}</div>
-                    
-                    <div style={{textAlign:'center'}}><Label style={{ fontSize: '0.9em', fontFamily: 'TNR' }} text={group.label} /></div>
-                </div>
+                    <div style={{ textAlign:'center' }}><Label style={{ fontSize: '0.9em', fontFamily: 'TNR' }} text={group.label} /></div>
+                </div>)
             }
             components.push(groupedComponent);
         }
@@ -89,14 +89,14 @@ function ChartItem(props) {
         bgStyle.backgroundColor = element.color ? element.color : '#cccccc';
         bgStyle.height = '200px';
         bgStyle.width = '20px';
-        className = "col";
+       
     }
     return (
         <div className={className} >
             <div style={bgStyle}>
                 <div style={style} >{isHorizonal?element.label:null}</div>
             </div>
-            {!isHorizonal?<div style={{fontSize:'0.6em'}} >{element.label}</div>:null}
+            {!isHorizonal?<div style={{fontSize:'0.6em',  transform: 'rotate(20deg)'}} >{element.label}</div>:null}
         </div>
     );
 }

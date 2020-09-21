@@ -163,7 +163,6 @@ class Cashflow
                 {filterBox}
                 {filterInfo}
                 <div><p></p></div>
-
                 {cashflowListComponent}
             </div>
         )
