@@ -38,9 +38,11 @@ class GraphChart extends Component {
                     <div className="col-10">{groupedComponents.map(g => g)}</div>
                 </div>)
             } else {
+                const width = (20 + 30)*groupedComponents.length;
+                const gridTemplateColumns = ((20 + 30)+'px ').repeat(groupedComponents.length);
                 groupedComponent = 
                 (<div style={{borderRight: 'solid 1px #cccccc'}}>
-                    <div style={{ display: 'grid', width: 'min-content', gridTemplateColumns: 'auto auto' }}>{groupedComponents.map(g => g)}</div>
+                    <div style={{ display: 'grid', width: width+'px', gridTemplateColumns:  gridTemplateColumns}}>{groupedComponents.map(g => g)}</div>
                     <div style={{ textAlign:'center' }}><Label style={{ fontSize: '0.9em', fontFamily: 'TNR' }} text={group.label} /></div>
                 </div>)
             }
@@ -88,11 +90,11 @@ function ChartItem(props) {
         }
         bgStyle.backgroundColor = element.color ? element.color : '#cccccc';
         bgStyle.height = '200px';
-        bgStyle.width = '20px';
+        bgStyle.width = '20px'; 
        
     }
     return (
-        <div className={className} >
+        <div className={className}>
             <div style={bgStyle}>
                 <div style={style} >{isHorizonal?element.label:null}</div>
             </div>
