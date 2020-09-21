@@ -54,7 +54,7 @@ class Cashflow
             let isChartHorizontal = this.state.chartOrientation == "horizontal";
             let isChartVertical = this.state.chartOrientation == "vertical";
 
-            let inputRadio = <div>
+            let inputRadio = <div className="row">
                 <InputField key="radio-o-h" checked={isChartHorizontal} name="orientation" onChange={() => this.onChangeChartOrientation('h')} type="radio"
                     id="radio-orientation-h" text="Horizontal orientation" />
                 <InputField key="radio-o-v" checked={isChartVertical} name="orientation" onChange={() => this.onChangeChartOrientation('v')} type="radio"
