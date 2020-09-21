@@ -6,13 +6,10 @@ import * as userMiddleware from '../middlewares/UserMiddleware'
 import * as managementMiddleware from '../middlewares/ManagementMiddleware'
 import * as realtimeChatMiddleware from '../middlewares/RealtimeChatMiddleware'
 import * as catalogMiddleware from '../middlewares/CatalogMiddleware'
+import * as common from '../middlewares/Common';
 
 const commonAuthorizedHeader = () => {
-    return {
-        'Content-Type': 'application/json', 
-        'requestId':  '1234',//'localStorage.getItem("requestId")',
-        'loginKey': localStorage.getItem('loginKey')
-    }
+   return common.commonAuthorizedHeader(); 
 };
 const POST_METHOD = "POST";
 

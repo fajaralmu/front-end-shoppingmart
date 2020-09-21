@@ -46,11 +46,7 @@ export const performLoginMiddleware = store => next => action => {
 export const requestAppIdMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.REQUEST_ID) { return next(action); }
 
-    let headers = common.commonAuthorizedHeader();
-    const loginKey = localStorage.getItem("loginKey");
-    if (loginKey) {
-        headers['loginKey'] = loginKey;
-    }
+    let headers = common.commonAuthorizedHeader(); 
 
     fetch(action.meta.url, {
         method: POST_METHOD, body: JSON.stringify(action.payload),
@@ -58,6 +54,7 @@ export const requestAppIdMiddleware = store => next => action => {
     }).then(response => response.json())
         .then(data => {
             console.debug("requestAppIdMiddleware Response:", data);
+            
             if (data.code != "00") {
                 alert("Error requesting app ID");
                 return;
@@ -85,7 +82,7 @@ export const refreshLoginStatusMiddleware = store => next => action => {
             loginStatus: loggedUser ? true : false,
             loginKey: localStorage.getItem("loginKey"),
             loggedUser: loggedUser,
-            requestId: '1234', //TODO: no hard code
+            requestId: common.getRequestId(), //TODO: no hard code
         }
     });
     delete newAction.meta;

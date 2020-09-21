@@ -37,6 +37,7 @@ export const reducer = (state = initState, action) => {
         case types.REQUEST_ID:
             result = { ...state, requestId: action.payload.message, applicationProfile: action.payload.applicationProfile };
             console.log("APP PROFILE: ",result.applicationProfile);
+            localStorage.setItem('requestId', result.requestId);
             if (action.payload.loggedIn != true) {
 
                 result.loginStatus = false;
