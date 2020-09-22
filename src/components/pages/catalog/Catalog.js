@@ -97,7 +97,7 @@ class Catalog extends Component {
                     orderby: this.state.requestOrderBy,
                     ordertype: this.state.requestOrderType,
                     categoryId: this.state.requestCategoryId,
-                    withStock: this.state.requestWithStock
+                    withStock: true,//this.state.requestWithStock
                 }, this.props.app
             );
             this.setState({ catalogPage: _page, totalData: this.props.catalogData.totalData });
@@ -297,31 +297,14 @@ class Catalog extends Component {
                 <div className="row catalog-container" >
                     {products.map(
                         product => {
-
-                            let shoppingInfo = null;
-                            if (this.props.enableShopping) {
-
-                                const cartItem = this.getProductInCart(product.id);
-                                const qty = cartItem.count;
-
-                                const cartButtonsData = [
-                                    { text: <i className="fas fa-sync"></i>, status: "danger btn-sm", onClick: () => this.addToCart(product, (qty * (-1))), id: "btn-add-cart-" + product.id },
-                                    { text: <i className="fa fa-minus-circle"></i>, status: "warning btn-sm", onClick: () => this.addToCart(product, -1), id: "btn-add-cart-" + product.id },
-                                    { text: qty, id: "info-cart-" + product.id, status: 'light btn-sm' },
-                                    { text: <i className="fa fa-plus-circle"></i>, status: 'success btn-sm', onClick: () => this.addToCart(product, 1), id: "btn-reduce-cart-" + product.id }
-                                ];
-
-                                shoppingInfo = <div>
-                                    <ActionButtons buttonsData={cartButtonsData} />
-                                </div>
-                            }
-
                             return (
-                                <div className="col-md-3" key={stringUtil.uniqueId()}>
-                                    {shoppingInfo}
-                                    <CatalogItem getProductDetail={this.getProductDetail} key={product.id} product={product} />
-                                </div>
-                            )
+                                <ProductCard
+                                    getProductDetail={this.getProductDetail}
+                                    getProductInCart={this.getProductInCart}
+                                    enableShopping={this.props.enableShopping}
+                                    product={product}
+                                    addToCart={this.addToCart} />
+                            );
                         }
                     )}
                 </div>
@@ -337,6 +320,34 @@ class Catalog extends Component {
 
         return (rendered)
     }
+}
+
+function ProductCard(props) {
+    let shoppingInfo = <></>;
+    const product = props.product;
+    if (props.enableShopping) {
+
+        const cartItem = props.getProductInCart(product.id);
+        const qty = cartItem.count;
+
+        const cartButtonsData = [
+            { text: <i className="fas fa-sync"></i>, status: "danger btn-sm", onClick: () => props.addToCart(product, (qty * (-1))), id: "btn-add-cart-" + product.id },
+            { text: <i className="fa fa-minus-circle"></i>, status: "warning btn-sm", onClick: () => props.addToCart(product, -1), id: "btn-add-cart-" + product.id },
+            { text: qty, id: "info-cart-" + product.id, status: 'light btn-sm' },
+            { text: <i className="fa fa-plus-circle"></i>, status: 'success btn-sm', onClick: () => props.addToCart(product, 1), id: "btn-reduce-cart-" + product.id }
+        ];
+
+        shoppingInfo = <div>
+            <ActionButtons buttonsData={cartButtonsData} />
+        </div>
+    }
+
+    return (
+        <div className="col-md-3" key={stringUtil.uniqueId()}>
+            {shoppingInfo}
+            <CatalogItem getProductDetail={props.getProductDetail} key={product.id} product={product} />
+        </div>
+    )
 }
 
 const filterProductOption = [
