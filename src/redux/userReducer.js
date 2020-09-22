@@ -88,7 +88,6 @@ export const reducer = (state = initState, action) => {
             localStorage.removeItem("loggedUser");
             return result;
         case types.REFRESH_LOGIN:
-
             result = {
                 ...state,
                 loginStatus: action.payload.loginStatus,
@@ -97,11 +96,10 @@ export const reducer = (state = initState, action) => {
                 requestId: action.payload.requestId,
             };
             return result;
-        case types.GET_LOGGED_USER: 
-            console.info("GET_LOGGED_USER");
+        case types.GET_LOGGED_USER:
             result = {
                 ...state,
-                loggedUser: action.payload
+                loggedUser: action.payload.data
             };
             localStorage.setItem("loggedUser", JSON.stringify(action.payload))
             return result;

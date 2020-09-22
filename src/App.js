@@ -59,7 +59,8 @@ class App extends Component {
     }
 
     this.refresh = () => {
-      this.setState({ mainAppUpdated: new Date() });
+      this.setState({ mainAppUpdated: new Date() }); 
+      console.info("App refresh, logged user=>", this.props.loggedUser);
     }
 
     this.setEnableShopping = (val) => {
@@ -320,8 +321,7 @@ const mapStateToProps = state => {
 
     //user
     loginStatus: state.userState.loginStatus,
-    loginKey: state.userState.loginKey,
-    loginFailed: state.userState.loginFailed,
+    loginKey: state.userState.loginKey, 
     menus: state.userState.menus,
     loggedUser: state.userState.loggedUser,
     loginAttempt: state.userState.loginAttempt,

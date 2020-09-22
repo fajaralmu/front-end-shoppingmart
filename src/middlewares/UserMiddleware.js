@@ -55,7 +55,7 @@ export const requestAppIdMiddleware = store => next => action => {
         headers: headers
     }).then(response => response.json())
         .then(data => {
-            console.debug("requestAppIdMiddleware Response:", data);
+            console.debug("Request App Id Middleware Response:", data);
             
             if (data.code != "00") {
                 alert("Error requesting app ID");
@@ -81,7 +81,7 @@ export const getLoggedUserMiddleware = store => next => action => {
         .then(data => {
             console.debug("getLoggedUserMiddleware Response:", data);
             
-            if (data.code != "00") {
+            if (!data) {
                 alert("Error performing request");
                 return;
             }
@@ -90,7 +90,10 @@ export const getLoggedUserMiddleware = store => next => action => {
             delete newAction.meta;
             store.dispatch(newAction);
         })
-        .catch(err => console.log(err)).finally(param => action.meta.app.endLoading());
+        .catch(err => console.log(err)).finally(param =>{ 
+            action.meta.app.endLoading();
+            action.meta.app.refresh();
+        });
 }
 
 export const refreshLoginStatusMiddleware = store => next => action => {

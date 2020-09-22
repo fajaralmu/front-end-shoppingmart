@@ -12,9 +12,7 @@ class Menu extends Component {
 
     }
 
-    componentDidUpdate() { 
-        console.debug("Menu updated ", this.props.loggedUser);
-    }
+    componentDidUpdate() {   }
 
     render() { 
         let renderedMenus = [];
