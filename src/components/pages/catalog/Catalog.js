@@ -272,12 +272,12 @@ class Catalog extends Component {
                 />,
                 <ActionButtons style={{ margin: '5px' }} buttonsData={actionButtons} />,
                 <div>
-                    <InputField checked={this.state.requestWithStock} onChange={this.handleChangeWithStockOption}
+                    {/* <InputField checked={this.state.requestWithStock} onChange={this.handleChangeWithStockOption}
                         type="checkbox" id="checkbox-with-stock"
-                        text="Inculde Remaining Stock" />
+                        text="Inculde Remaining Stock" /> */}
                     <InputField checked={this.props.enableShopping} onChange={this.handleChangeEnableShoppingOption}
                         type="checkbox" id="checkbox-enable-cart"
-                        text="I Want to List My Needs" />
+                        text="Show Shopping List" />
                 </div>,
             ]} />
             <p></p>

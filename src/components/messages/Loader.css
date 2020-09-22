@@ -1,6 +1,7 @@
 .message{
     text-align: center;
-    font-family: 'Segoe UI'
+    font-family: 'Segoe UI';
+    z-index: 5;
 }
 .message-failed{
      color: white;
