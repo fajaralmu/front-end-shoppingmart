@@ -417,7 +417,8 @@ export const getSupplierList = (request, app) => {
 }
 
 export const getProductList = (request, app) => {
-    app.startLoading(request.withStock == true);
+    // app.startLoading(request.withStock == true);
+    app.startLoading(true);
     let requested = {
         type: types.FETCH_PRODUCT_LIST,
         payload: {
