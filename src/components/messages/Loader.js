@@ -39,18 +39,31 @@ class Loader extends Component {
                 textAlign: 'left'
             };
             className += " rounded";
-            messageText = <span className="loader">{this.props.progress + "%"}</span>
+            messageText = <span className="loader">{this.props.progress + "%"}</span>  
+            msgStyle.backgroundColor= 'rgba(106, 154, 243 ,0.7)';
         }
+
         return (
             <div style={msgStyle} className={className} >
-                <button className="btn btn-primary" type="button" disabled>
-                    <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                    <span className=" ">Loading...</span>
-                </button>
+                <LoaderContent realtime={this.props.realtime} />
             </div>
         )
     }
 
+}
+
+function LoaderContent(props){
+    if(props.realtime){
+        return (
+            <></>
+        );
+    }
+    return (
+        <button className="btn btn-primary" type="button" disabled>
+        <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        <span className=" ">Loading...</span>
+    </button>
+    );
 }
 
 export default Loader;

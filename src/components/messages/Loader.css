@@ -23,7 +23,6 @@
     color: white;
     
     z-index: 1;
-    background-color: rgba(106, 154, 243 ,0.7);
     transition-duration: 700ms; 
 }
  .loader{
