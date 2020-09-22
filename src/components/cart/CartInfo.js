@@ -47,15 +47,14 @@ class CartInfo extends Component {
             return <></>
         }
 
-        let cart = this.props.cart;
-        // let cart = this.props.appCart;
-
+        const cart = this.props.cart;   
+        const totalPrice = this.caculateTotalPrice(); 
+        
         let count = 0;
         for (let i = 0; i < cart.length; i++) {
             const cartItem = cart[i];
             count += cartItem.count
         }
-        let totalPrice = this.caculateTotalPrice(); 
 
         return (
             <div onClick={this.handleClick} onMouseOver={this.showCartList} onMouseLeave={this.hideCartList} className="cart-info" >

@@ -32,13 +32,8 @@ class Loader extends Component {
         let messageText = this.props.text;
 
         let msgStyle = {};
-        if (this.props.realtime == true) { 
-            msgStyle = { 
-                textAlign: 'left',
-                position: 'fixed',
-                width: '100%'
-            };
-            className = "progress";
+        if (this.props.realtime == true) {  
+            className = "message-loading progress";
             messageText = <span className="loader">{this.props.progress + "%"}</span>   
         }
 
@@ -54,7 +49,10 @@ class Loader extends Component {
 function LoaderContent(props){
     if(props.realtime){
         return (
-            <div className="progress-bar progress-bar-striped" role="progressbar" style={{ width: props.progress + "%"}}>
+            <div className="progress-bar progress-bar-striped" role="progressbar" style={{ 
+                width: props.progress + "%",
+                transitionDuration: '300ms'
+                }}>
             </div>
         );
     }

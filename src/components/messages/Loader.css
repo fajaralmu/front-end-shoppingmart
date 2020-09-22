@@ -16,14 +16,10 @@
 }
 
 .message-loading{
-    padding: 5px;
+    padding: 3px;
     width:100%;
     font-family: 'Lucida Sans';
-    position: fixed;
-    color: white;
-    
-    z-index: 1;
-    transition-duration: 700ms; 
+    position: fixed;  
 }
  .loader{
     font-size: '60';

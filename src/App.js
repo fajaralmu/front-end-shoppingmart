@@ -290,8 +290,7 @@ class App extends Component {
     const localHost = "http://localhost:8080/universal-good-shop/";
     const usedHost = localHost;
     const user = this.props.loggedUser;
-    const applicationProfile = this.props.applicationProfile;
-
+    const applicationProfile = this.props.applicationProfile; 
 
     return (
       <div className="App">
