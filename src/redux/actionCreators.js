@@ -348,6 +348,16 @@ export const performLogin = (username, password, app) => {
     return loginRequest;
 }
 
+export const getLoggedUser = (app) => {
+    app.startLoading();
+    let request = {
+        type: types.GET_LOGGED_USER,
+        payload: { },
+        meta: { type: types.GET_LOGGED_USER, url: apiAccount.concat("user"), app: app }
+    };
+    return request;
+}
+
 export const refreshLoginStatus = () => {
 
     let loginRequest = {

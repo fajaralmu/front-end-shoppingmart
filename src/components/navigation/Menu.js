@@ -12,18 +12,11 @@ class Menu extends Component {
 
     }
 
-    componentDidUpdate() { }
+    componentDidUpdate() { 
+        console.debug("Menu updated ", this.props.loggedUser);
+    }
 
-    render() {
-        let userLink = <></>;
-        if (this.props.loggedUser != null) {
-            userLink = 
-            <li id="user-link">
-                <Avatar user={this.props.loggedUser} /> 
-                <div style={{ color: this.fontColor }} className="fill" >Welcome, {this.props.loggedUser.displayName} </div>
-            </li>
-        }
-
+    render() { 
         let renderedMenus = [];
         if (this.props.menus != null) {
             renderedMenus = this.props.menus;
@@ -33,26 +26,35 @@ class Menu extends Component {
 
             <div className="side-menu" >
                 <ul className="menu-ul " style={{ backgroundColor: this.backgroundColor }}>
-                    {userLink}
+                    <UserLink loggedUser={this.props.loggedUser} fontColor={this.fontColor} /> 
                     {
                         renderedMenus.map(
-                           ( menu, i) => {
+                            (menu, i) => {
                                 return <MenuItem
-                                    key={"menu_"+i}
-                                    
+                                    key={"menu_" + i}
+
                                     fontColor={this.fontColor}
-                                    backgroundColor={this.backgroundColor} 
+                                    backgroundColor={this.backgroundColor}
                                     menu={menu}
                                     activeCode={this.props.activeCode}
                                     handleMenuCLick={this.props.handleMenuCLick} />
                             }
                         )
                     } </ul>
-
             </div>
 
         )
     }
+}
+
+function UserLink(props) {
+    if (props.loggedUser == null) {
+        return <></>
+    }
+    return (<li id="user-link">
+        <Avatar user={props.loggedUser} />
+        <div style={{ color: props.fontColor }} className="fill" >Welcome, {props.loggedUser.displayName} </div>
+    </li>);
 }
 
 function Avatar(props) {
@@ -63,7 +65,7 @@ function Avatar(props) {
         backgroundSize: '50px 50px',
         width: '50px', height: '50px', borderRadius: '25px'
     };
-    return <div style={{padding: '5px'}}><div style={style}></div></div>
+    return <div style={{ padding: '5px' }}><div style={style}></div></div>
 }
 
 function MenuItem(props) {
@@ -92,12 +94,13 @@ function MenuItem(props) {
     )
 }
 
-const mapStateToProps = state => { 
+const mapStateToProps = state => {
     return {
-        applicationProfile: state.userState.applicationProfile,
+        applicationProfile: state.userState.applicationProfile, 
+        cart: state.shopState.cart,
+        loggedUser: state.userState.loggedUser,
     }
 }
-
 export default (connect(
     mapStateToProps
 )(Menu));

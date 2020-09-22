@@ -31,6 +31,7 @@ export const configureStore = () => {
             userMiddleware.performLogoutMiddleware,
             userMiddleware.refreshLoginStatusMiddleware,
             userMiddleware.requestAppIdMiddleware, 
+            userMiddleware.getLoggedUserMiddleware, 
 
             //transaction
             getStockInfoMiddleware,

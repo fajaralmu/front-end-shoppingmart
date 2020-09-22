@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import * as actions from '../../../redux/actionCreators'
+import { connect } from 'react-redux'
 import * as menus from '../../../constant/Menus'
 import { withRouter } from 'react-router';
 import ContentTitle from '../../container/ContentTitle';
@@ -29,18 +31,26 @@ class Login extends Component {
         this.doLogin = () => {
 
             console.log("u:", this.state.username, ",p:", this.state.password);
-            this.props.doLogin(
+            this.props.performLogin(
                 byId("username-field").value,
                 byId("password-field").value,
-                this.props.main);
+                this.props.app);
         }
 
         this.endMessage = () => {
             this.setState({ showMessageLoginFailed: false })
         }
 
+        this.getLoggedUser = () => {
+            this.props.getLoggedUser(this.props.app);
+        }
+
         this.validateLoginStatus = () => {
-            if (this.props.loginStatus == true) this.props.history.push("/dashboard");
+            if (this.props.loginStatus == true) {
+                console.info("Login success! Redirect to dashboard");
+                this.getLoggedUser();
+                this.props.history.push("/dashboard");
+            }
         }
 
         this.message = () => {
@@ -87,6 +97,22 @@ class Login extends Component {
         )
     }
 }
-
-
-export default withRouter(Login);
+const mapStateToProps = state => {
+    //console.log(state);
+    return { 
+  
+      //user
+      loginStatus: state.userState.loginStatus, 
+      loginFailed: state.userState.loginFailed, 
+      loggedUser: state.userState.loggedUser,
+      loginAttempt: state.userState.loginAttempt,   
+    }
+  }
+const mapDispatchToProps = dispatch => ({
+    performLogin: (username, password, app) => dispatch(actions.performLogin(username, password, app)),  
+    getLoggedUser: (app) => dispatch(actions.getLoggedUser(app))
+  })
+export default withRouter(connect( 
+    mapStateToProps,
+    mapDispatchToProps
+  )(Login))

@@ -104,14 +104,9 @@ class App extends Component {
     }
 
     this.loginComponent = () => {
-      return <Login main={this} setMenuCode={this.setMenuCode}
+      return <Login   setMenuCode={this.setMenuCode}
         app={this}
-        setDetailMode={this.setDetailMode}
-        detailMode={this.state.detailMode}
-        doLogin={this.props.performLogin}
-        loginFailed={this.props.loginFailed}
-        loginAttempt={this.props.loginAttempt}
-        loginStatus={this.props.loginStatus} />;
+      />;
     }
 
     this.mainContent = () => {
@@ -258,7 +253,7 @@ class App extends Component {
   }
 
   setMenus() {
-    let additionalMenus = this.props.menus
+    let additionalMenus = this.props.menus ? this.props.menus : [];
     let menus = new Array();
     for (let i = 0; i < additionalMenus.length; i++) {
 
@@ -289,20 +284,18 @@ class App extends Component {
     const cloudHost = "https://nuswantoroshop.herokuapp.com/";
     const localHost = "http://localhost:8080/universal-good-shop/";
     const usedHost = localHost;
-    const user = this.props.loggedUser;
-    const applicationProfile = this.props.applicationProfile; 
+    const applicationProfile = this.props.applicationProfile ;
 
     return (
       <div className="App">
         <this.loadingComponent />
         <this.alertComponent />
         <CartInfo mainAppUpdated={this.state.mainAppUpdated} enableShopping={this.state.enableShopping} />
-        <Header applicationProfile={applicationProfile}  />
+        <Header applicationProfile={applicationProfile} />
 
         <div id="main-layout">
           <div id="main-menu" style={{ backgroundColor: applicationProfile.color }}>
-            <Menu alertDialog={this.alertDialog}
-              loggedUser={user}
+            <Menu mainAppUpdated={this.state.mainAppUpdated} alertDialog={this.alertDialog}
               handleMenuCLick={this.handleMenuCLick}
               activeCode={this.state.menuCode}
               menus={menus} />
@@ -327,7 +320,7 @@ const mapStateToProps = state => {
 
     //user
     loginStatus: state.userState.loginStatus,
-    loginKey: state.userState.loginJey,
+    loginKey: state.userState.loginKey,
     loginFailed: state.userState.loginFailed,
     menus: state.userState.menus,
     loggedUser: state.userState.loggedUser,
@@ -339,11 +332,10 @@ const mapStateToProps = state => {
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  performLogin: (username, password, app) => dispatch(actions.performLogin(username, password, app)),
+const mapDispatchToProps = dispatch => ({ 
   performLogout: (app) => dispatch(actions.performLogout(app)),
   requestAppId: (app) => dispatch(actions.requestAppId(app)),
-  refreshLogin: () => dispatch(actions.refreshLoginStatus())
+  refreshLogin: () => dispatch(actions.refreshLoginStatus()), 
   // getProductCatalog: (page) => dispatch(actions.getProductList(page))
 
 })

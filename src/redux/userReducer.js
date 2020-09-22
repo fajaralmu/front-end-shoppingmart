@@ -9,7 +9,7 @@ export const initState = {
     menus: menus.menus,
     loggedUser: null,
     loginAttempt: false,
-    requestId: null, 
+    requestId: null,
     applicationProfile: {},
 };
 
@@ -36,7 +36,7 @@ export const reducer = (state = initState, action) => {
     switch (action.type) {
         case types.REQUEST_ID:
             result = { ...state, requestId: action.payload.message, applicationProfile: action.payload.applicationProfile };
-            console.log("APP PROFILE: ",result.applicationProfile);
+            console.log("APP PROFILE: ", result.applicationProfile);
             localStorage.setItem('requestId', result.requestId);
             if (action.payload.loggedIn != true) {
 
@@ -49,11 +49,11 @@ export const reducer = (state = initState, action) => {
 
                     result.loggedUser = action.payload.sessionData.user;
                     result.loginStatus = action.payload.loggedIn;
-                    result.loginKey= localStorage.getItem('loginKey');
+                    result.loginKey = localStorage.getItem('loginKey');
                     localStorage.setItem("loggedUser", JSON.stringify(result.loggedUser));
                 }
             }
-            
+
 
             console.log("o o o result.loginStatus:", result.loginStatus)
             //  action.payload.referer.refresh();
@@ -72,7 +72,7 @@ export const reducer = (state = initState, action) => {
 
             if (result.loginStatus == true) {
                 localStorage.setItem("loginKey", result.loginKey);
-                localStorage.setItem("loggedUser", JSON.stringify(result.loggedUser));
+                // localStorage.setItem("loggedUser", JSON.stringify(result.loggedUser));
             }
 
             console.log("logged user: ", result.loggedUser);
@@ -96,6 +96,14 @@ export const reducer = (state = initState, action) => {
                 loggedUser: action.payload.loggedUser,
                 requestId: action.payload.requestId,
             };
+            return result;
+        case types.GET_LOGGED_USER: 
+            console.info("GET_LOGGED_USER");
+            result = {
+                ...state,
+                loggedUser: action.payload
+            };
+            localStorage.setItem("loggedUser", JSON.stringify(action.payload))
             return result;
         default:
             if (action.payload && action.payload.loginStatus != null)

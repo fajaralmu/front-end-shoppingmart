@@ -39,7 +39,9 @@ export const performLoginMiddleware = store => next => action => {
             store.dispatch(newAction);
         })
         .catch(err => { console.log(err) })
-        .finally(param => app.endLoading());
+        .finally(param => {
+            app.endLoading();  
+        });
 
 }
 
@@ -61,6 +63,30 @@ export const requestAppIdMiddleware = store => next => action => {
             }
 
             let newAction = Object.assign({}, action, { payload: {loginStatus: data.loggedIn, ...data }});
+            delete newAction.meta;
+            store.dispatch(newAction);
+        })
+        .catch(err => console.log(err)).finally(param => action.meta.app.endLoading());
+}
+
+export const getLoggedUserMiddleware = store => next => action => {
+    if (!action.meta || action.meta.type !== types.GET_LOGGED_USER) { return next(action); }
+
+    let headers = common.commonAuthorizedHeader(); 
+
+    fetch(action.meta.url, {
+        method: POST_METHOD, body: JSON.stringify(action.payload),
+        headers: headers
+    }).then(response => response.json())
+        .then(data => {
+            console.debug("getLoggedUserMiddleware Response:", data);
+            
+            if (data.code != "00") {
+                alert("Error performing request");
+                return;
+            }
+
+            let newAction = Object.assign({}, action, { payload: { data }});
             delete newAction.meta;
             store.dispatch(newAction);
         })
