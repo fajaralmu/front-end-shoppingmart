@@ -265,9 +265,8 @@ class App extends Component {
     const usedHost = localHost;
     const applicationProfile = this.props.applicationProfile;
     const isHideSidebar = this.state.hideSidebar == true;
-    const sideBarClass = isHideSidebar ? 'col-1' : 'col-2';
-    const contentClass = isHideSidebar ? 'col-11' : 'col-10';
-    const toggleButtonIconClass  = isHideSidebar ? 'fa fa-align-justify' : 'fa fa-angle-double-left';
+    const contentClass = isHideSidebar ? 'col-12' : 'col-10';
+    const toggleButtonIconClass = isHideSidebar ? 'fa fa-align-justify' : 'fa fa-angle-double-left';
 
     return (
       <div className="App">
@@ -275,19 +274,18 @@ class App extends Component {
         <AlertComponent showInfo={this.state.showInfo} alertData={this.alertCallback} hideInfo={() => this.setState({ showInfo: false })} />
         <CartInfo mainAppUpdated={this.state.mainAppUpdated} enableShopping={this.state.enableShopping} />
 
-
-        <Header applicationProfile={applicationProfile} />
-        <div className="row" id="main-layout"  >
-          <div id="main-menu" className={sideBarClass} style={{ backgroundColor: applicationProfile.color }}>
-            <button style={{margin:'5px'}} className="btn btn-secondary" onClick={() => {
-              this.setState({ hideSidebar: !isHideSidebar })
-            }} ><i className={toggleButtonIconClass}></i></button>
-            {isHideSidebar ? null :
+        <Header showOptionButton={isHideSidebar} hideMenu={() => { this.setState({ hideSidebar: true }) }} showMenu={() => { this.setState({ hideSidebar: false }) }} applicationProfile={applicationProfile} />
+        <div className="row" id="main-layout">
+          {isHideSidebar ? null :
+            <div id="main-menu" className={'col-2'} style={{ backgroundColor: applicationProfile.color }}>
+              <button style={{ float: "right", margin: '5px', color: applicationProfile.fontColor }} className="btn" onClick={() => {
+                this.setState({ hideSidebar: true })
+              }} ><i className='fa fa-angle-double-left'></i></button>
               <Menu alertDialog={this.alertDialog}
                 handleMenuCLick={this.handleMenuCLick}
                 activeCode={this.state.menuCode}
-                menus={menus} />}
-          </div>
+                menus={menus} />
+            </div>}
 
           <div id="main-content" className={contentClass}><this.mainContent /></div>
         </div>

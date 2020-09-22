@@ -23,12 +23,14 @@
     background-color: #cccccc;
     margin:5px;
     padding-bottom: 20px;
+    overflow: auto;
+    border: solid 1px #cccccc;
 }
 
 .cart-container{
     background-color: white; 
     margin: auto;
-    width: 50%; 
+    width: 600px; 
     padding: 10px;
     border-radius: 10px;
 }
