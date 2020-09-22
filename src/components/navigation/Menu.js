@@ -12,9 +12,9 @@ class Menu extends Component {
 
     }
 
-    componentDidUpdate() {   }
+    componentDidUpdate() { }
 
-    render() { 
+    render() {
         let renderedMenus = [];
         if (this.props.menus != null) {
             renderedMenus = this.props.menus;
@@ -24,19 +24,20 @@ class Menu extends Component {
 
             <div className="side-menu" >
                 <ul className="menu-ul " style={{ backgroundColor: this.backgroundColor }}>
-                    <UserLink loggedUser={this.props.loggedUser} fontColor={this.fontColor} /> 
+                    <UserLink loggedUser={this.props.loggedUser} fontColor={this.fontColor} />
                     {renderedMenus.map(
-                            (menu, i) => {
-                                return <MenuItem
-                                    key={"menu_" + i}
+                        (menu, i) => {
+                            return <MenuItem
+                                key={"menu_" + i}
 
-                                    fontColor={this.fontColor}
-                                    backgroundColor={this.backgroundColor}
-                                    menu={menu}
-                                    activeCode={this.props.activeCode}
-                                    handleMenuCLick={this.props.handleMenuCLick} />
-                            }
-                        )
+                                fontColor={this.fontColor}
+                                backgroundColor={this.backgroundColor}
+                                menu={menu}
+                                cart={this.props.cart}
+                                activeCode={this.props.activeCode}
+                                handleMenuCLick={this.props.handleMenuCLick} />
+                        }
+                    )
                     } </ul>
             </div>
         )
@@ -71,6 +72,7 @@ function MenuItem(props) {
         color: props.fontColor
     }
     const isActive = props.activeCode == menu.code;
+    const isCart = menu.code == 'cart';
     const liStyle = isActive ? { backgroundColor: props.fontColor } : {};
     if (isActive) {
         fillStyle.color = props.backgroundColor;
@@ -78,21 +80,32 @@ function MenuItem(props) {
     if (menu.menuClass) {
         menuClass = menu.menuClass;
     }
+
+    const menuName = isCart ? <span>{menu.name}&nbsp;<span class="badge badge-warning">{cartCount(props.cart)} </span></span> : <span>{menu.name}</span>;
+
     if (menu.url == "#") {
         return (<li style={liStyle} onClick={() => props.handleMenuCLick(menu)} className={isActive ? "active" : ""} key={menu.name}
-            id={menu.name}> <Link key={menu.name} className="App-link"
-                to="#" ><div style={fillStyle} className="fill" ><i className={menuClass}></i>&nbsp;{menu.name} </div></Link></li >)
+            id={menu.name}> <Link key={menu.name + "LINK"} className="App-link"
+                to="#" ><div style={fillStyle} className="fill" ><i className={menuClass}></i>&nbsp;{menuName} </div></Link></li >)
     }
 
     return (<li style={liStyle} className={isActive ? "menu-active" : ""} key={menu.name}
-        id={menu.name}> <Link key={menu.name} className="App-link"
-            to={menu.url} ><div style={fillStyle} className="fill" ><i className={menuClass}></i>&nbsp;{menu.name} </div></Link></li >
+        id={menu.name}> <Link key={menu.name + "LINK"} className="App-link"
+            to={menu.url} ><div style={fillStyle} className="fill" ><i className={menuClass}></i>&nbsp;{menuName} </div></Link></li >
     )
+}
+
+function cartCount(cart) {
+    let count = 0;
+    for (let i = 0; i < cart.length; i++) {
+        count += cart[i].count
+    }
+    return count;
 }
 
 const mapStateToProps = state => {
     return {
-        applicationProfile: state.userState.applicationProfile, 
+        applicationProfile: state.userState.applicationProfile,
         cart: state.shopState.cart,
         loggedUser: state.userState.loggedUser,
     }

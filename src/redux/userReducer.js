@@ -74,7 +74,6 @@ export const reducer = (state = initState, action) => {
                 // localStorage.setItem("loggedUser", JSON.stringify(result.loggedUser));
             }
 
-            console.log("logged user: ", result.loggedUser);
             return result;
         case types.DO_LOGOUT:
             result = {
