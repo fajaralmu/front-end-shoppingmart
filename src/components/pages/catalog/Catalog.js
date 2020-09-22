@@ -97,7 +97,7 @@ class Catalog extends Component {
                     orderby: this.state.requestOrderBy,
                     ordertype: this.state.requestOrderType,
                     categoryId: this.state.requestCategoryId,
-                    withStock: true,//this.state.requestWithStock
+                    withStock: this.state.requestWithStock
                 }, this.props.app
             );
             this.setState({ catalogPage: _page, totalData: this.props.catalogData.totalData });
@@ -271,10 +271,10 @@ class Catalog extends Component {
                     options={categories} id="select-category"
                 />,
                 <ActionButtons style={{ margin: '5px' }} buttonsData={actionButtons} />,
-                <div>
-                    {/* <InputField checked={this.state.requestWithStock} onChange={this.handleChangeWithStockOption}
+                <div className="row">
+                    <InputField checked={this.state.requestWithStock} onChange={this.handleChangeWithStockOption}
                         type="checkbox" id="checkbox-with-stock"
-                        text="Inculde Remaining Stock" /> */}
+                        text="Inculde Remaining Stock" /> 
                     <InputField checked={this.props.enableShopping} onChange={this.handleChangeEnableShoppingOption}
                         type="checkbox" id="checkbox-enable-cart"
                         text="Show Shopping List" />
@@ -296,16 +296,13 @@ class Catalog extends Component {
                 {this.filterBox()}
                 <div className="row catalog-container" >
                     {products.map(
-                        product => {
-                            return (
+                        product =>  
                                 <ProductCard
                                     getProductDetail={this.getProductDetail}
                                     getProductInCart={this.getProductInCart}
                                     enableShopping={this.props.enableShopping}
                                     product={product}
-                                    addToCart={this.addToCart} />
-                            );
-                        }
+                                    addToCart={this.addToCart} /> 
                     )}
                 </div>
             </div>);
@@ -343,7 +340,7 @@ function ProductCard(props) {
     }
 
     return (
-        <div className="col-md-3" key={stringUtil.uniqueId()}>
+        <div className="col-md-3" style={{width:'min-content'}} key={stringUtil.uniqueId()}>
             {shoppingInfo}
             <CatalogItem getProductDetail={props.getProductDetail} key={product.id} product={product} />
         </div>
