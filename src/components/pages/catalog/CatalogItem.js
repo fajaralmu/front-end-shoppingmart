@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 
-import * as url from '../../constant/Url'
-import * as stringUtil from '../../utils/StringUtil'
-import Label from './Label'
-import Card from '../card/Card'
+import * as url from '../../../constant/Url'
+import * as stringUtil from '../../../utils/StringUtil'
+import Label from '../../container/Label'
+import Card from '../../card/Card'
 
 class CatalogItem extends Component {
 

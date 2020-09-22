@@ -4,6 +4,8 @@ import ContentTitle from '../container/ContentTitle';
 import * as stringUtil from '../../utils/StringUtil'
 import InstantTable from '../container/InstantTable';
 import { connect } from 'react-redux'
+import * as url from '../../constant/Url'
+import Label from '../container/Label';
 
 class CartDetail extends Component {
     constructor(props) {
@@ -48,6 +50,8 @@ function CartItemList (props ) {
         const name = cartItem.product.name;
         const count = (cartItem.count);
         const price = (cartItem.product.price);
+        const productImageUrl = cartItem.product.imageUrl;
+        const imageUrl = url.baseImageUrl + productImageUrl.split("~")[0];
         let totalPrice = price * count;
 
         totalPrice = (totalPrice);
@@ -57,7 +61,7 @@ function CartItemList (props ) {
         cartRows.push({
             values: [
                 number, 
-                name, 
+               <div style={{textAlign:'center'}}><img src={imageUrl} width="50" height="50"/><Label text={name} /></div> , 
                 stringUtil.beautifyNominal(count),
                 cartItem.product.unit.name,
                 stringUtil.beautifyNominal(price),

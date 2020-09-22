@@ -19,14 +19,16 @@
 
 .cart-bg{
     padding-top:20px;
-    background-color: rgb(216, 213, 213);
+    /* background-color: rgb(216, 213, 213); */
+    background-color: #cccccc;
     margin:5px;
     padding-bottom: 20px;
 }
 
 .cart-container{
-    background-color: antiquewhite; 
-    margin:auto;
-    width:50%; 
-    padding:10px;
+    background-color: white; 
+    margin: auto;
+    width: 50%; 
+    padding: 10px;
+    border-radius: 10px;
 }
