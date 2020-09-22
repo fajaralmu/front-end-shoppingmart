@@ -61,24 +61,28 @@ class App extends Component {
     }
 
     this.refresh = () => {
-      this.setState({ mainAppUpdated: new Date() }); 
+      this.setState({ mainAppUpdated: new Date() });
     }
 
     this.setEnableShopping = (val) => {
       this.setState({ enableShopping: val })
     }
 
-    this.handleMenuCLick = (menu) => {
+    this.logout = () => {
       const app = this;
+      this.confirmDialog("Are you sure to logout?",
+        function (e) {
+          app.props.performLogout(app);
+        }, blankFunc);
+    }
+
+    this.handleMenuCLick = (menu) => {
+
       switch (menu.code) {
 
         case menus.LOGOUT:
-          this.confirmDialog("Are you sure to logout?",
-            function (e) {
-              app.props.performLogout(app);
-            }, blankFunc);
+          this.logout();
           break;
-
         default:
           break;
       }
@@ -89,28 +93,28 @@ class App extends Component {
       this.props.requestAppId(this);
     }
 
-    this.incrementLoadings = function(){
-      this.loadings++; 
+    this.incrementLoadings = function () {
+      this.loadings++;
     }
 
-    this.decrementLoadings = function(){
+    this.decrementLoadings = function () {
       this.loadings--;
-      if(this.loadings < 0){
+      if (this.loadings < 0) {
         this.loadings = 0;
       }
     }
 
     this.startLoading = (realtime) => {
-      this.incrementLoadings(); 
+      this.incrementLoadings();
       this.setState({ loading: true, realtime: realtime });
     }
 
     this.endLoading = () => {
       this.decrementLoadings();
-      if(this.loadings == 0){ 
+      if (this.loadings == 0) {
         this.setState({ loading: false, loadingPercentage: 0 });
       }
-      
+
     }
 
     this.handleMessage = (msg) => {
@@ -119,12 +123,6 @@ class App extends Component {
         this.endLoading();
       }
       this.setState({ loadingPercentage: percentage });
-    }
-
-    this.loginComponent = () => {
-      return <Login   setMenuCode={this.setMenuCode}
-        app={this}
-      />;
     }
 
     this.mainContent = () => {
@@ -164,15 +162,10 @@ class App extends Component {
 
           }></Route>
           <Route exact path="/login" render={
-            (renderProps) => <this.loginComponent />
+            (renderProps) => <Login setMenuCode={this.setMenuCode} app={this} />
 
           }></Route>
-
-          {/*
-               =============================
-               ======== need login =========
-               =============================
-               */}
+          {/* ///////////authenticated//////////// */}
           <Route exact path="/dashboard" render={
             (renderProps) =>
               <Dashboard app={this} loginStatus={this.props.loginStatus} setMenuCode={this.setMenuCode} />
@@ -186,14 +179,6 @@ class App extends Component {
         </Switch>
 
       </div>);
-    }
-
-    this.loadingComponent = () => {
-      if (this.state.loading == true) {
-        return <Loader realtime={this.state.realtime} progress={this.state.loadingPercentage} text="Please wait..." type="loading" />;
-
-      }
-      return null;
     }
 
     this.alertDialog = (message, title, yesOnly, onOk, onNo) => {
@@ -215,33 +200,11 @@ class App extends Component {
       this.alertDialog(message, "Confirmation", false, onOk, onNo);
     }
 
-    this.alertComponent = () => {
-      if (this.state.showInfo) {
-        const alertData = this.alertCallback;
-        return <Alert
-          title={alertData.title}
-          message={alertData.message}
-          onOk={(e) => {
-            if (alertData.onOk) { alertData.onOk(e); }
-            this.setState({ showInfo: false });
-          }}
-          yesOnly={alertData.yesOnly}
-          onNo={(e) => {
-            if (alertData.onNo) { alertData.onNo(e); }
-            this.setState({ showInfo: false });
-          }}
-          onClose={(e) => {
-            this.setState({ showInfo: false });
-          }}
-        />
-      }
-      return <></>
-    }
   }
 
   componentDidUpdate() {
     if (this.props.requestId != this.state.requestId) {
-      this.setState({ requestId: this.props.requestId }); 
+      this.setState({ requestId: this.props.requestId });
       this.props.refreshLogin();
 
     }
@@ -282,7 +245,7 @@ class App extends Component {
       if (this.props.loginStatus != true && menu.authenticated == true)
         continue;
 
-      menus.push(menu); 
+      menus.push(menu);
     }
 
     return menus;
@@ -299,18 +262,18 @@ class App extends Component {
     const cloudHost = "https://nuswantoroshop.herokuapp.com/";
     const localHost = "http://localhost:8080/universal-good-shop/";
     const usedHost = localHost;
-    const applicationProfile = this.props.applicationProfile ;
+    const applicationProfile = this.props.applicationProfile;
 
     return (
       <div className="App">
-        <this.loadingComponent />
-        <this.alertComponent />
+        <Loading realtime={this.state.realtime} loading={this.state.loading} loadingPercentage={this.state.loadingPercentage} />
+        <AlertComponent showInfo={this.state.showInfo} alertData={this.alertCallback} hideInfo={()=>this.setState({ showInfo: false })} />
         <CartInfo mainAppUpdated={this.state.mainAppUpdated} enableShopping={this.state.enableShopping} />
         <Header applicationProfile={applicationProfile} />
 
         <div id="main-layout">
           <div id="main-menu" style={{ backgroundColor: applicationProfile.color }}>
-            <Menu mainAppUpdated={this.state.mainAppUpdated} alertDialog={this.alertDialog}
+            <Menu alertDialog={this.alertDialog}
               handleMenuCLick={this.handleMenuCLick}
               activeCode={this.state.menuCode}
               menus={menus} />
@@ -327,6 +290,38 @@ class App extends Component {
     )
   }
 
+}
+
+function AlertComponent(props) {
+  if (props.showInfo) {
+    const alertData = props.alertData;
+    return <Alert
+      title={alertData.title}
+      message={alertData.message}
+      onOk={(e) => {
+        if (alertData.onOk) { alertData.onOk(e); }
+        props.hideInfo();
+      }}
+      yesOnly={alertData.yesOnly}
+      onNo={(e) => {
+        if (alertData.onNo) { alertData.onNo(e); }
+        props.hideInfo();
+      }}
+      onClose={(e) => {
+        props.hideInfo();
+      }}
+    />
+  }
+  return null;
+}
+
+function Loading(props) {
+  if (props.loading == true) {
+    return (
+      <Loader realtime={props.realtime} progress={props.loadingPercentage} text="Please wait..." type="loading" />
+    );
+  }
+  return null;
 }
 
 const mapStateToProps = state => {
@@ -346,10 +341,10 @@ const mapStateToProps = state => {
   }
 }
 
-const mapDispatchToProps = dispatch => ({ 
+const mapDispatchToProps = dispatch => ({
   performLogout: (app) => dispatch(actions.performLogout(app)),
   requestAppId: (app) => dispatch(actions.requestAppId(app)),
-  refreshLogin: () => dispatch(actions.refreshLoginStatus()), 
+  refreshLogin: () => dispatch(actions.refreshLoginStatus()),
   // getProductCatalog: (page) => dispatch(actions.getProductList(page))
 })
 
