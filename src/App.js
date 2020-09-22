@@ -60,7 +60,6 @@ class App extends Component {
 
     this.refresh = () => {
       this.setState({ mainAppUpdated: new Date() }); 
-      console.info("App refresh, logged user=>", this.props.loggedUser);
     }
 
     this.setEnableShopping = (val) => {
@@ -76,7 +75,6 @@ class App extends Component {
             function (e) {
               app.props.performLogout(app);
             }, blankFunc);
-
           break;
 
         default:
@@ -224,8 +222,7 @@ class App extends Component {
 
   componentDidUpdate() {
     if (this.props.requestId != this.state.requestId) {
-      this.setState({ requestId: this.props.requestId });
-      localStorage.setItem("requestId", this.props.requestId);
+      this.setState({ requestId: this.props.requestId }); 
       this.props.refreshLogin();
 
     }
@@ -254,11 +251,11 @@ class App extends Component {
   }
 
   setMenus() {
-    let additionalMenus = this.props.menus ? this.props.menus : [];
-    let menus = new Array();
+    const additionalMenus = this.props.menus ? this.props.menus : [];
+    const menus = new Array();
     for (let i = 0; i < additionalMenus.length; i++) {
 
-      let menu = additionalMenus[i];
+      const menu = additionalMenus[i];
 
       if (!this.state.enableShopping && menu.code == 'cart')
         continue;
@@ -266,8 +263,7 @@ class App extends Component {
       if (this.props.loginStatus != true && menu.authenticated == true)
         continue;
 
-      menus.push(menu);
-
+      menus.push(menu); 
     }
 
     return menus;
@@ -281,7 +277,6 @@ class App extends Component {
     }
 
     const menus = this.setMenus();
-
     const cloudHost = "https://nuswantoroshop.herokuapp.com/";
     const localHost = "http://localhost:8080/universal-good-shop/";
     const usedHost = localHost;
@@ -314,20 +309,20 @@ class App extends Component {
   }
 
 }
+
 const mapStateToProps = state => {
   //console.log(state);
   return {
+    //
     entities: state.shopState.entities,
 
     //user
     loginStatus: state.userState.loginStatus,
-    loginKey: state.userState.loginKey, 
     menus: state.userState.menus,
-    loggedUser: state.userState.loggedUser,
-    loginAttempt: state.userState.loginAttempt,
     requestId: state.userState.requestId,
     applicationProfile: state.userState.applicationProfile,
 
+    //
     cart: state.shopState.cart
   }
 }
@@ -337,8 +332,8 @@ const mapDispatchToProps = dispatch => ({
   requestAppId: (app) => dispatch(actions.requestAppId(app)),
   refreshLogin: () => dispatch(actions.refreshLoginStatus()), 
   // getProductCatalog: (page) => dispatch(actions.getProductList(page))
-
 })
+
 export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps

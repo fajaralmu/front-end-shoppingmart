@@ -36,7 +36,7 @@ export const reducer = (state = initState, action) => {
     switch (action.type) {
         case types.REQUEST_ID:
             result = { ...state, requestId: action.payload.message, applicationProfile: action.payload.applicationProfile };
-            console.log("APP PROFILE: ", result.applicationProfile);
+             
             localStorage.setItem('requestId', result.requestId);
             if (action.payload.loggedIn != true) {
 
@@ -52,10 +52,9 @@ export const reducer = (state = initState, action) => {
                     result.loginKey = localStorage.getItem('loginKey');
                     localStorage.setItem("loggedUser", JSON.stringify(result.loggedUser));
                 }
-            }
+            } 
 
-
-            console.log("o o o result.loginStatus:", result.loginStatus)
+            console.debug("o o o result.loginStatus:", result.loginStatus)
             //  action.payload.referer.refresh();
 
             return result;

@@ -25,8 +25,7 @@ class Menu extends Component {
             <div className="side-menu" >
                 <ul className="menu-ul " style={{ backgroundColor: this.backgroundColor }}>
                     <UserLink loggedUser={this.props.loggedUser} fontColor={this.fontColor} /> 
-                    {
-                        renderedMenus.map(
+                    {renderedMenus.map(
                             (menu, i) => {
                                 return <MenuItem
                                     key={"menu_" + i}
@@ -40,7 +39,6 @@ class Menu extends Component {
                         )
                     } </ul>
             </div>
-
         )
     }
 }
