@@ -28,7 +28,7 @@ class ComboBox extends Component {
         if (this.props.options) {
             options = this.props.options;
         }
-        console.log("this.props.defaultValue: ", this.props.defaultValue)
+        // console.log("this.props.defaultValue: ", this.props.defaultValue)
         return (
             <div className="input-field ">
                 <label className="select-label">{this.props.label}</label>
