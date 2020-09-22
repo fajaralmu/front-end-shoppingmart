@@ -39,7 +39,8 @@ class App extends Component {
       loadingPercentage: 0,
       requestId: null,
       enableShopping: false,
-      mainAppUpdated: new Date()
+      mainAppUpdated: new Date(),
+      hideSidebar: true
     };
 
     this.loadings = 0;
@@ -126,7 +127,7 @@ class App extends Component {
     }
 
     this.mainContent = () => {
-      return (<div id="main-content" >
+      return (<>
         <Switch>
           <Route exact path="/" render={
             (renderProps) =>
@@ -178,7 +179,7 @@ class App extends Component {
           }></Route>
         </Switch>
 
-      </div>);
+      </>);
     }
 
     this.alertDialog = (message, title, yesOnly, onOk, onNo) => {
@@ -263,22 +264,32 @@ class App extends Component {
     const localHost = "http://localhost:8080/universal-good-shop/";
     const usedHost = localHost;
     const applicationProfile = this.props.applicationProfile;
+    const isHideSidebar = this.state.hideSidebar == true;
+    const sideBarClass = isHideSidebar ? 'col-1' : 'col-2';
+    const contentClass = isHideSidebar ? 'col-11' : 'col-10';
+    const toggleButtonIconClass  = isHideSidebar ? 'fa fa-align-justify' : 'fa fa-angle-double-left';
 
     return (
       <div className="App">
         <Loading realtime={this.state.realtime} loading={this.state.loading} loadingPercentage={this.state.loadingPercentage} />
-        <AlertComponent showInfo={this.state.showInfo} alertData={this.alertCallback} hideInfo={()=>this.setState({ showInfo: false })} />
+        <AlertComponent showInfo={this.state.showInfo} alertData={this.alertCallback} hideInfo={() => this.setState({ showInfo: false })} />
         <CartInfo mainAppUpdated={this.state.mainAppUpdated} enableShopping={this.state.enableShopping} />
-        <Header applicationProfile={applicationProfile} />
 
-        <div id="main-layout">
-          <div id="main-menu" style={{ backgroundColor: applicationProfile.color }}>
-            <Menu alertDialog={this.alertDialog}
-              handleMenuCLick={this.handleMenuCLick}
-              activeCode={this.state.menuCode}
-              menus={menus} />
+
+        <Header applicationProfile={applicationProfile} />
+        <div className="row" id="main-layout"  >
+          <div id="main-menu" className={sideBarClass} style={{ backgroundColor: applicationProfile.color }}>
+            <button style={{margin:'5px'}} className="btn btn-secondary" onClick={() => {
+              this.setState({ hideSidebar: !isHideSidebar })
+            }} ><i className={toggleButtonIconClass}></i></button>
+            {isHideSidebar ? null :
+              <Menu alertDialog={this.alertDialog}
+                handleMenuCLick={this.handleMenuCLick}
+                activeCode={this.state.menuCode}
+                menus={menus} />}
           </div>
-          <this.mainContent />
+
+          <div id="main-content" className={contentClass}><this.mainContent /></div>
         </div>
 
         <SockJsClient url={usedHost + 'realtime-app'} topics={['/wsResp/progress/' + localStorage.getItem("requestId")]}

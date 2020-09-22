@@ -15,23 +15,18 @@
   }
 }
 
-#main-layout{
-  table-layout: fixed;
-  width: 100%;
-  min-height: 85vh;
-  display: grid; 
-  grid-template-columns: 160px auto;
+#main-layout{ 
+  margin:0; 
 }
 
-#main-menu{ 
-  /* background-color: darkcyan; */
+#main-menu{  
+  margin: 0px;
 }
 
-#main-content{
-  margin-left:10px;
-  margin-right:10px;
-  margin-bottom:10px;
-  background-color: white
+#main-content{ 
+  min-height: 80vh;
+  background-color: white;
+  margin: 0px;
 }
 
 /* .App-header {
@@ -48,8 +43,6 @@
 a {
   color: black;
 }
-
-
 
 @keyframes App-logo-spin {
   from {
