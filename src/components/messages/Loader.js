@@ -32,20 +32,19 @@ class Loader extends Component {
         let messageText = this.props.text;
 
         let msgStyle = {};
-        if (this.props.realtime == true) {
-            let progress = Math.floor(this.props.progress);
-            msgStyle = {
-                width: progress + "%",
-                textAlign: 'left'
+        if (this.props.realtime == true) { 
+            msgStyle = { 
+                textAlign: 'left',
+                position: 'fixed',
+                width: '100%'
             };
-            className += " rounded";
-            messageText = <span className="loader">{this.props.progress + "%"}</span>  
-            msgStyle.backgroundColor= 'rgba(106, 154, 243 ,0.7)';
+            className = "progress";
+            messageText = <span className="loader">{this.props.progress + "%"}</span>   
         }
 
         return (
             <div style={msgStyle} className={className} >
-                <LoaderContent realtime={this.props.realtime} />
+                <LoaderContent progress={this.props.progress} realtime={this.props.realtime} />
             </div>
         )
     }
@@ -55,14 +54,15 @@ class Loader extends Component {
 function LoaderContent(props){
     if(props.realtime){
         return (
-            <></>
+            <div className="progress-bar progress-bar-striped" role="progressbar" style={{ width: props.progress + "%"}}>
+            </div>
         );
     }
     return (
         <button className="btn btn-primary" type="button" disabled>
-        <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-        <span className=" ">Loading...</span>
-    </button>
+            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            <span className=" ">Loading...</span>
+        </button>
     );
 }
 
