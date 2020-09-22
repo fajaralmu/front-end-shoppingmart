@@ -58,7 +58,11 @@ class Catalog extends Component {
         }
 
         this.clearCart = () => {
-            this.props.updateCart([], this.props.app); 
+            const props = this.props;
+            this.props.app.confirmDialog("Are you sure clear shopping list?", function (e) {
+                props.updateCart([], props.app);
+            }, null);
+
         }
 
         this.addToCart = (product, count) => {
@@ -81,7 +85,7 @@ class Catalog extends Component {
                     count: count
                 })
             }
-            this.props.updateCart(currentCart, this.props.app); 
+            this.props.updateCart(currentCart, this.props.app);
         }
 
         this.getProductCatalog = (_page) => {
@@ -233,7 +237,7 @@ class Catalog extends Component {
         this.focusToActiveField();
     }
 
-    filterBox(){
+    filterBox() {
         let categories = [{ value: "00", text: "-all category-" }];
         let actionButtons = [
             { text: <i className="fa fa-search" ></i>, status: "success", onClick: () => this.getProductCatalog(0), id: "btn-search" },
@@ -241,11 +245,11 @@ class Catalog extends Component {
         ];
         this.props.productCategories.map(category => {
             categories.push({ value: category.id, text: category.name });
-        }) 
-       
+        })
+
         if (this.props.enableShopping) {
             actionButtons.push({
-                text: <span><i className="fa fa-cart-arrow-down" ></i>&nbsp;Clear Shopping List</span>, onClick: () => { this.clearCart() }, status: 'danger', id: "clear-list"
+                text: <span><i className="fa fa-cart-arrow-down" ></i></span>, onClick: () => { this.clearCart() }, status: 'danger', id: "clear-list"
             });
         }
 
@@ -268,13 +272,13 @@ class Catalog extends Component {
                 />,
                 <ActionButtons style={{ margin: '5px' }} buttonsData={actionButtons} />,
                 <div>
-                <InputField checked={this.state.requestWithStock} onChange={this.handleChangeWithStockOption}
-                    type="checkbox" id="checkbox-with-stock"
-                    text="Inculde Remaining Stock" />
-                <InputField checked={this.props.enableShopping} onChange={this.handleChangeEnableShoppingOption}
-                    type="checkbox" id="checkbox-enable-cart"
-                    text="I Want to List My Needs" />
-            </div>,
+                    <InputField checked={this.state.requestWithStock} onChange={this.handleChangeWithStockOption}
+                        type="checkbox" id="checkbox-with-stock"
+                        text="Inculde Remaining Stock" />
+                    <InputField checked={this.props.enableShopping} onChange={this.handleChangeEnableShoppingOption}
+                        type="checkbox" id="checkbox-enable-cart"
+                        text="I Want to List My Needs" />
+                </div>,
             ]} />
             <p></p>
         </div>;
@@ -282,45 +286,46 @@ class Catalog extends Component {
 
     render() {
 
-        let products = this.props.catalogData.entities == null ? [] : this.props.catalogData.entities;    
+        let products = this.props.catalogData.entities == null ? [] : this.props.catalogData.entities;
 
-        let productCatalog = (<div className="section-container" id="catalog-main" key="catalog-main">
-            <ContentTitle title="Catalog Page" iconClass="fas fa-store-alt" description="Choose your favourite products" />
-            <NavButtons buttonsData={this.generateNavButtonsData()} />
+        let productCatalog = (
+            <div className="section-container" id="catalog-main" key="catalog-main">
+                <ContentTitle title="Catalog Page" iconClass="fas fa-store-alt" description="Choose your favourite products" />
+                <NavButtons buttonsData={this.generateNavButtonsData()} />
 
-            {this.filterBox()}
-            <div className="grid-container" >
-                {products.map(
-                    product => {
+                {this.filterBox()}
+                <div className="row catalog-container" >
+                    {products.map(
+                        product => {
 
-                        let shoppingInfo = null;
-                        if (this.props.enableShopping) {
+                            let shoppingInfo = null;
+                            if (this.props.enableShopping) {
 
-                            const cartItem = this.getProductInCart(product.id);
-                            const qty = cartItem.count; 
+                                const cartItem = this.getProductInCart(product.id);
+                                const qty = cartItem.count;
 
-                            const cartButtonsData = [
-                                { text: <i className="fas fa-sync"></i>, status: "danger btn-sm", onClick: () => this.addToCart(product, (qty * (-1))), id: "btn-add-cart-" + product.id },
-                                { text: <i className="fa fa-minus-circle"></i>, status: "warning btn-sm", onClick: () => this.addToCart(product, -1), id: "btn-add-cart-" + product.id },
-                                { text: qty, id: "info-cart-" + product.id, status: 'light btn-sm' },
-                                { text: <i className="fa fa-plus-circle"></i>, status: 'success btn-sm', onClick: () => this.addToCart(product, 1), id: "btn-reduce-cart-" + product.id }
-                            ];
+                                const cartButtonsData = [
+                                    { text: <i className="fas fa-sync"></i>, status: "danger btn-sm", onClick: () => this.addToCart(product, (qty * (-1))), id: "btn-add-cart-" + product.id },
+                                    { text: <i className="fa fa-minus-circle"></i>, status: "warning btn-sm", onClick: () => this.addToCart(product, -1), id: "btn-add-cart-" + product.id },
+                                    { text: qty, id: "info-cart-" + product.id, status: 'light btn-sm' },
+                                    { text: <i className="fa fa-plus-circle"></i>, status: 'success btn-sm', onClick: () => this.addToCart(product, 1), id: "btn-reduce-cart-" + product.id }
+                                ];
 
-                            shoppingInfo = <div>
-                                <ActionButtons buttonsData={cartButtonsData} />
-                            </div>
+                                shoppingInfo = <div>
+                                    <ActionButtons buttonsData={cartButtonsData} />
+                                </div>
+                            }
+
+                            return (
+                                <div className="col-md-3" key={stringUtil.uniqueId()}>
+                                    {shoppingInfo}
+                                    <CatalogItem getProductDetail={this.getProductDetail} key={product.id} product={product} />
+                                </div>
+                            )
                         }
-
-                        return (
-                            <div key={stringUtil.uniqueId()} className="catalog-item-container">
-                                {shoppingInfo}
-                                <CatalogItem getProductDetail={this.getProductDetail} key={product.id} product={product} />
-                            </div>
-                        )
-                    }
-                )}
-            </div>
-        </div>);
+                    )}
+                </div>
+            </div>);
 
         let rendered = productCatalog;
 
