@@ -42,7 +42,11 @@ class CartInfo extends Component {
     }
 
     render() {
-        console.debug("appCart", this.props.appCart);
+         
+        if(!this.props.enableShopping){
+            return <></>
+        }
+
         let cart = this.props.cart;
         // let cart = this.props.appCart;
 

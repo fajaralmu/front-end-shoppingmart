@@ -23,6 +23,7 @@ import Management from './components/pages/management/Management';
 import Header from './components/layout/header/Header';
 import * as url from './constant/Url';
 import Alert from './components/messages/Alert';
+import CartInfo from './components/cart/CartInfo';
 
 const blankFunc = function (e) { };
 
@@ -289,17 +290,15 @@ class App extends Component {
     const localHost = "http://localhost:8080/universal-good-shop/";
     const usedHost = localHost;
     const user = this.props.loggedUser;
-    const applicationProfile = this.props.applicationProfile; 
- 
+    const applicationProfile = this.props.applicationProfile;
+
+
     return (
       <div className="App">
         <this.loadingComponent />
         <this.alertComponent />
-        <Header
-          applicationProfile={applicationProfile}
-          enableShopping={this.state.enableShopping} 
-          mainAppUpdated = {this.state.mainAppUpdated}
-        />
+        <CartInfo mainAppUpdated={this.state.mainAppUpdated} enableShopping={this.state.enableShopping} />
+        <Header applicationProfile={applicationProfile}  />
 
         <div id="main-layout">
           <div id="main-menu" style={{ backgroundColor: applicationProfile.color }}>

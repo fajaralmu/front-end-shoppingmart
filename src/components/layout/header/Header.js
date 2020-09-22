@@ -14,13 +14,11 @@ class Header extends Component {
     }
 
     render() {
-        let cartInfo = this.props.enableShopping ?
-            <CartInfo mainAppUpdated={this.props.mainAppUpdated} onClick={this.handleClick} /> :
-            null;  
+         
         return (
             <div className="App-header" style={{color:this.props.applicationProfile.color}}>
                 <h2>{this.props.applicationProfile.name}</h2>
-                {cartInfo}
+               
             </div>
         )
     }
