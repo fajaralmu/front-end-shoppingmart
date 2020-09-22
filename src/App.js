@@ -42,6 +42,8 @@ class App extends Component {
       mainAppUpdated: new Date()
     };
 
+    this.loadings = 0;
+
     this.alertCallback = {
       title: "Info",
       message: "Info",
@@ -87,11 +89,28 @@ class App extends Component {
       this.props.requestAppId(this);
     }
 
+    this.incrementLoadings = function(){
+      this.loadings++; 
+    }
+
+    this.decrementLoadings = function(){
+      this.loadings--;
+      if(this.loadings < 0){
+        this.loadings = 0;
+      }
+    }
+
     this.startLoading = (realtime) => {
+      this.incrementLoadings(); 
       this.setState({ loading: true, realtime: realtime });
     }
+
     this.endLoading = () => {
-      this.setState({ loading: false, loadingPercentage: 0 });
+      this.decrementLoadings();
+      if(this.loadings == 0){ 
+        this.setState({ loading: false, loadingPercentage: 0 });
+      }
+      
     }
 
     this.handleMessage = (msg) => {
