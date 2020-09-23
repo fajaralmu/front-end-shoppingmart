@@ -7,7 +7,7 @@ class ComboBox extends Component {
         super(props);
         this.handleOnChange = (e) => {
             if (this.props.onChange) {
-                this.props.onChange(byId(this.props.id).value, this.props.id );
+                this.props.onChange(byId(this.props.id).value );
                 console.log("Select box ",this.props.id, " CHANGED VALUE: ", byId(this.props.id).value);
             }
             else {

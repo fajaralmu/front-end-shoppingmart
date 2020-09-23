@@ -81,6 +81,11 @@ class Management extends Component {
                     onClick: () => { this.loadEntityManagement(entityConfig.menuConfig) }
                 },
                 {
+                    active: this.checkIfCurrentMenuName("page"),
+                    text: "Page",
+                    onClick: () => { this.loadEntityManagement(entityConfig.pageConfig) }
+                },
+                {
                     active: this.checkIfCurrentMenuName("transaction"),
                     text: "Transaction",
                     onClick: () => { this.loadEntityManagement(entityConfig.transactionConfig) }

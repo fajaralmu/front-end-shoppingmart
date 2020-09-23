@@ -366,6 +366,7 @@ class EntityForm extends Component {
                     console.info("update fieldId: ", entity);
                     this.updateSelectedEntity(fieldId, entity);
                     this.setState({ activeId: null, dropdownValues: dropdownValues });
+                    this.refresh();
                     break;
                 }
             }
@@ -453,9 +454,9 @@ function FormElement(_props) {
                     const entity = props.managedEntity ? props.managedEntity : props.stateManagedEntity;
 
                     if (element.entityReferenceClass != null && props.activeId != "input-for-" + element.name) {
-                        const valueAsObject = entity[elementId] != null; 
+                        const valueAsObject = entity[elementId]  ; 
                          
-                        if(valueAsObject){
+                        if(valueAsObject!=null){
                             if (element.type == "dynamiclist") {
                                 const objectPropName = element.optionItemName;
                                 value =  valueAsObject[objectPropName];
@@ -502,11 +503,8 @@ function FormElement(_props) {
                     console.info("def value ", elementId, " : ", value)
                     const comboBoxOptions = getElementOptions(element);
                     inputComponent = <ComboBox
-                        onChange={(value, id) => {
-                            app.selectFromFixedDropdown(value, elementId);
-                            app.refresh();
-                            // byId(id).value = value;
-                            // console.log("byId(id).value", byId(id).value);
+                        onChange={(value) => {
+                            app.selectFromFixedDropdown(value, elementId); 
                         }}
                         defaultValue={value}
                         id={inputId}

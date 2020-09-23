@@ -19,3 +19,7 @@ export const transactionConfig = {
 export const menuConfig = { 
     entityName: "menu",
 }
+
+export const pageConfig = { 
+    entityName: "page",
+}
