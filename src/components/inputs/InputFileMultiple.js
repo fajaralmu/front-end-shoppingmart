@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import * as url from '../../constant/Url'
 import * as stringUtil from '../../utils/StringUtil'
-import InputFile from './InputFile'; 
+import InputFile from './InputFile';
 import ActionButton from '../buttons/ActionButton';
 
 class InputFileMultiple extends Component {
@@ -9,7 +9,7 @@ class InputFileMultiple extends Component {
         super(props);
 
         this.handleAddMoreFile = () => {
-            if(this.props.addMoreImage){
+            if (this.props.addMoreImage) {
                 this.props.addMoreImage();
             }
         }
@@ -25,7 +25,8 @@ class InputFileMultiple extends Component {
 
 
         return (
-            <div>
+            <div >
+
                 {inputFields.map(
                     inputFileData => {
                         let value = inputFileData.value;
@@ -44,12 +45,11 @@ class InputFileMultiple extends Component {
                                         inputFileData.removeImage()
                                 }
                                 }
-
                             />
                         )
                     }
                 )}
-                <ActionButton text="add more" onClick={this.handleAddMoreFile} />
+                <ActionButton status="info bn-sm" text={<i className="fas fa-plus-circle" ></i>} onClick={this.handleAddMoreFile} />
             </div>
         )
     }

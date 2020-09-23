@@ -32,23 +32,25 @@ class EntityForm extends Component {
          * valudate before submit
          */
         this.validateEntity = (entity) => {
+            console.info("validateEntity");
             const result = entity;
             for (let key in entity) {
-                console.log(key);
-                const formDataItem = this.getFormDataItemStartWith(key);
-                if (formDataItem) {
-                    if (formDataItem.inputType == "singleImage") {
+               
+                const element = this.getFormDataItem(key);
+                if (element) {
+                    if (element.type == "img" && element.multiple == false) {
                         /**
                          * handle single Image
                          */
                         if (entity[key] && !entity[key].includes("base64")) {
                             result[key] = null;
                         }
-                    } else if (formDataItem.inputType == "multipleImage") {
+                    } else if (element.type == "img" && element.multiple == true) {
                         /**
                          * handle MULTIPLE Image
                          */
-
+                        console.info("this.state.base64DataMultiple[key] ", this.state.base64DataMultiple[key] );
+                            
                         if (entity[key]) {
                             let arrayOfValues = entity[key].split("~");
                             let resultValue = new Array();
@@ -86,6 +88,7 @@ class EntityForm extends Component {
                         }
                     }
                 }
+                console.log(key, "=>", result[key]);
             }
 
             return result;
@@ -100,7 +103,7 @@ class EntityForm extends Component {
             if (updateMode) {
                 console.log("WILL UPDATE(props):", this.props.managedEntity);
                 if (this.props.updateEntity) {
-                    this.props.updateEntity(this.props.entityConfig.entityName,
+                    this.props.updateEntity(this.props.entityProperty.entityName,
                         this.validateEntity(this.props.managedEntity), "update");
                 }
             }
@@ -109,7 +112,7 @@ class EntityForm extends Component {
             if (addNewMod) {
                 console.log("WILL SUBMIT NEW(state):", this.state.managedEntity);
                 if (this.props.updateEntity) {
-                    this.props.updateEntity(this.props.entityConfig.entityName,
+                    this.props.updateEntity(this.props.entityProperty.entityName,
                         this.validateEntity(this.state.managedEntity), "addNew");
                 }
             }
@@ -154,27 +157,27 @@ class EntityForm extends Component {
 
         }
 
-        this.onKeyUpDynamicDropdown = (value, id, propName, reffEntity) => {
+        this.onKeyUpDynamicDropdown = (value, inputPhysicalId, fieldId, reffEntity, optionItemName) => {
             if (value == null || value.trim() == "") { return; }
             const request = {
-                entityName: reffEntity,
-                fieldName: 'name',
+                entityName: reffEntity.toLowerCase(),
+                fieldName:  optionItemName,
                 fieldValue: value
             }
             this.props.getEntitiesWithCallback(request, this, function (data, referer) {
                 console.log("LIST FOR DROPDOWN: ", data.entities)
-                referer.populateDropdownValues(data.entities, propName);
+                referer.populateDropdownValues(data.entities, fieldId);
             });
             let currentDropdownValue = this.state.dropdownValues;
-            currentDropdownValue[propName] = value;
-            this.setState({ activeId: id, dropdownValues: currentDropdownValue });
+            currentDropdownValue[fieldId] = value;
+            this.setState({ activeId: inputPhysicalId, dropdownValues: currentDropdownValue });
         }
 
-        this.populateDropdownValues = (entities, propName) => {
-            console.log("ENTITIES:", entities)
+        this.populateDropdownValues = (entities, fieldId) => {
+            console.log("ENTITIES (",fieldId,"):", entities)
             let options = new Array();
-            const formDataItem = this.getFormDataItem(propName);
-            if (null == formDataItem) {
+            const element = this.getFormDataItem(fieldId);
+            if (null == element) {
                 console.log("FORM DATA NOT FOUND");
                 return;
             }
@@ -182,22 +185,22 @@ class EntityForm extends Component {
             for (let i = 0; i < entities.length; i++) {
                 const entity = entities[i];
                 options.push({
-                    value: entity[formDataItem.idField],
-                    text: entity[formDataItem.displayField],
+                    value: entity[element.optionValueName],
+                    text: entity[element.optionItemName],
                     entity: entity
                 })
             }
             let currentDropdownList = this.state.dropdownList;
-            currentDropdownList[propName] = options;
+            currentDropdownList[fieldId] = options;
             //  this.setState({ dropdownList: currentDropdownList })
             return options;
         }
 
-        this.getSelectedDropdownItem = (value, propName) => {
-            if (this.state.dropdownList[propName] == null) {
+        this.getSelectedDropdownItem = (value, fieldId) => {
+            if (this.state.dropdownList[fieldId] == null) {
                 return null;
             }
-            const dropdownList = this.state.dropdownList[propName];
+            const dropdownList = this.state.dropdownList[fieldId];
             for (let i = 0; i < dropdownList.length; i++) {
                 const option = dropdownList[i];
                 if (option.value == value) {
@@ -208,13 +211,13 @@ class EntityForm extends Component {
             return null;
         }
 
-        this.getFormDataItem = (propName) => {
-            if (this.props.entityConfig && this.props.entityConfig.formData) {
-                const formDataList = this.props.entityConfig.formData;
-                for (let i = 0; i < formDataList.length; i++) {
-                    const formDataItem = formDataList[i];
-                    if (formDataItem.name == propName) {
-                        return formDataItem;
+        this.getFormDataItem = (fieldId) => {
+            if (this.props.entityProperty ) {
+                const entityProperty = this.props.entityProperty;
+                for (let i = 0; i < entityProperty.elements.length; i++) {
+                    const element = entityProperty.elements[i];
+                    if (element.id == fieldId) {
+                        return element;
                     }
                 }
             }
@@ -252,47 +255,28 @@ class EntityForm extends Component {
                 this.setState({ managedEntity: managedEntity });
             }
 
-        }
-
-        this.getFormDataItemStartWith = (propName) => {
-            if (this.props.entityConfig && this.props.entityConfig.formData) {
-                const formDataList = this.props.entityConfig.formData;
-                for (let i = 0; i < formDataList.length; i++) {
-                    const formDataItem = formDataList[i];
-                    if (formDataItem.name == propName) {
-                        return formDataItem;
-                    }
-                    if (formDataItem.name.split(".").length > 1) {
-                        if (formDataItem.name.split(".")[0] == propName) {
-                            return formDataItem;
-                        }
-                    }
-                }
-            }
-            return null;
-        }
-
-        this.handleRemoveImage = (propName) => {
+        } 
+        this.handleRemoveImage = (fieldId) => {
 
             let base64Data = this.state.base64Data;
-            base64Data[propName] = null;
+            base64Data[fieldId] = null;
 
-            this.updateSelectedEntity(propName, null);
+            this.updateSelectedEntity(fieldId, null);
             this.setState({ base64Data: base64Data });
         }
 
-        this.handleChangeBase64Image = (base64, propName) => {
+        this.handleChangeBase64Image = (base64, fieldId) => {
 
             let base64Data = this.state.base64Data;
-            base64Data[propName] = base64;
+            base64Data[fieldId] = base64;
 
-            this.updateSelectedEntity(propName, base64);
+            this.updateSelectedEntity(fieldId, base64);
             this.setState({ base64Data: base64Data });
         }
 
-        this.handleChangeBase64MultipleImage = function (base64, propNameRaw, i) {
+        this.handleChangeBase64MultipleImage = function (base64, fieldId, i) {
             let base64DataMultiple = this.state.base64DataMultiple;
-            const propName = propNameRaw.split(".")[0];
+            const propName = fieldId;
             if (!base64DataMultiple[propName]) {
                 base64DataMultiple[propName] = new Array();
             }
@@ -313,37 +297,38 @@ class EntityForm extends Component {
             return result;
         }
 
-        this.handleRemoveMultipleImage = (propNameRaw, i) => {
+        this.handleRemoveMultipleImage = (_fieldId, i) => {
             let base64DataMultiple = this.state.base64DataMultiple;
-            const propName = propNameRaw.split(".")[0];
-            if (!base64DataMultiple[propName]) {
-                base64DataMultiple[propName] = new Array();
+            const fieldId = _fieldId;
+            if (!base64DataMultiple[fieldId]) {
+                base64DataMultiple[fieldId] = new Array();
             }
-            base64DataMultiple[propName][i] = null;
+            base64DataMultiple[fieldId][i] = null; //set to NULL
 
             this.setState({ base64DataMultiple: base64DataMultiple });
+
             if (this.props.managedEntity) {
-                let currentValue = this.props.managedEntity[propName];
+                let currentValue = this.props.managedEntity[fieldId];
                 if (currentValue) {
                     let newArrayValue = this.removeElementAtPosition(currentValue.split("~"), i);
-                    this.updateSelectedEntity(propName, newArrayValue.join("~"));
+                    this.updateSelectedEntity(fieldId, newArrayValue.join("~"));
                 }
             } else {
                 let managedEntity = this.state.managedEntity;
                 if (!managedEntity) {
                     return;
                 }
-                let currentValue = managedEntity[propName];
+                let currentValue = managedEntity[fieldId];
                 if (currentValue) {
                     let newArrayValue = this.removeElementAtPosition(currentValue.split("~"), i);
-                    this.updateSelectedEntity(propName, newArrayValue.join("~"));
+                    this.updateSelectedEntity(fieldId, newArrayValue.join("~"));
 
                 }
             }
         }
 
         this.selectFromDynamicDropdown = (value, propName) => {
-            console.log(propName, ":", value);
+            console.log("Dynamic Dropdown ",propName, ":", value);
             const currentDropdownList = this.state.dropdownList;
             const dropdownValues = this.state.dropdownValues;
             const selectedEntities = this.state.selectedEntities;
@@ -360,7 +345,7 @@ class EntityForm extends Component {
             /**
              * time to modify entity
              */
-            const displayPropName = propName.split(".")[0];
+            const displayPropName = propName;
 
             this.updateSelectedEntity(displayPropName, selectedOption.entity);
             this.setState({ activeId: null, dropdownList: currentDropdownList, dropdownValues: dropdownValues, selectedEntities: selectedEntities });
@@ -369,6 +354,9 @@ class EntityForm extends Component {
 
     componentDidUpdate() {
         this.focusActiveId();
+
+       console.debug("props managedEntity: ", this.props.managedEntity);
+       console.debug("state managedEntity: ", this.state.managedEntity);
     }
 
     render() {
@@ -378,6 +366,7 @@ class EntityForm extends Component {
                     <FormElement
                         entityConfig={this.props.entityConfig}
                         managedEntity={this.props.managedEntity}
+                        entityProperty={this.props.entityProperty}
 
                         app={this}
 
@@ -417,87 +406,90 @@ function FormActionButtons(props) {
     return <></>;
 }
 
-function FormElement(props) {
+function FormElement(_props) {
+    const props = _props;
     const formData = props.entityConfig && props.entityConfig.formData ? props.entityConfig.formData : [];
     const app = props.app;
     const entityExist = props.managedEntity != null || props.stateManagedEntity;
+    const enityProperty = props.entityProperty;
+    const elements = enityProperty.elements;
 
     return (<>
-        {formData.map(
-            data => {
-                const parentPropName = data.name.split(".")[0];
+        {elements.map(
+            element => {
+                const elementId = element.id;
                 let value = null;
                 if (entityExist) {
                     const entity = props.managedEntity ? props.managedEntity : props.stateManagedEntity;
-                    const propName = data.name;
+                    const propName = element.lableName;
 
-                    if (propName.split(".").length > 1 && props.activeId != "input-for-" + data.name) {
-                        const valueAsObject = entity[propName.split(".")[0]];
-                        const objectPropName = propName.split(".")[1];
+                    if (element.entityReferenceClass != null && props.activeId != "input-for-" + element.name) {
+                        const valueAsObject = entity[elementId];
+                        const objectPropName = element.optionItemName;
 
                         value = valueAsObject ? valueAsObject[objectPropName] : null;
                     } else {
-                        value = entity[propName];
+                        value = entity[elementId];
                     }
                 }
 
                 let inputComponent = null;
-                const inputId = "input-for-" + data.name;
+                const inputId = "input-for-" + elementId;
 
-                if (data.inputType == "dynamicDropdown") {
+                if (element.type == "dynamiclist") {
                     /**
                      * if dynamic dropDown
                      */
 
                     if (null == value) {
-                        value = props.dropdownValues[data.name]
+                        value = props.dropdownValues [elementId]
                     }
 
                     inputComponent = <InputDropdown
-                        onSelect={(value) => app.selectFromDynamicDropdown(value, data.name)}
+                        onSelect={(value) => app.selectFromDynamicDropdown(value, elementId)}
                         id={inputId}
-                        placeholder={data.lableName}
+                        placeholder={element.lableName}
                         value={value}
-                        dropdownList={props.dropdownList[data.name]}
-                        onKeyUp={(value, id) => { app.onKeyUpDynamicDropdown(value, id, data.name, data.reffEntity) }} />
+                        dropdownList={props.dropdownList[elementId]}
+                        onKeyUp={(value, id) => { app.onKeyUpDynamicDropdown(value, id, elementId, element.entityReferenceClass, element.optionItemName) }} />
 
-                } else if (data.inputType == "singleImage") {
+                } else if (element.type == "img" && element.multiple == false) {
                     /**
                      * handle image single
                      */
                     inputComponent = <InputFile
-                        onChange={(base64) => app.handleChangeBase64Image(base64, data.name)}
+                        onChange={(base64) => app.handleChangeBase64Image(base64, elementId)}
                         value={value && value.includes("base64") ? value : value ? url.baseImageUrl + value : null}
                         id={inputId}
-                        removeImage={() => app.handleRemoveImage(data.name)}
+                        removeImage={() => app.handleRemoveImage(elementId)}
 
                     />
 
-                } else if (data.inputType == "multipleImage") {
+                } else if (element.type == "img" && element.multiple == true) {
                     /**
                      * handle multiple single
                      */
-                    let valueSplit = value ? value.split("~") : [];
+                    const valueSplit = value ? value.split("~") : [];
 
-                    let imagesData = new Array();
+                    const imagesData = new Array();
                     for (let i = 0; i < valueSplit.length; i++) {
                         let valueSplitItem = valueSplit[i];
-                        if (props.base64DataMultiple[parentPropName] &&
-                            props.base64DataMultiple[parentPropName][i]
-                            && props.base64DataMultiple[parentPropName][i].includes("base64")) {
-                            valueSplitItem = props.base64DataMultiple[parentPropName][i];
+                        if (props.base64DataMultiple[elementId] &&
+                            props.base64DataMultiple[elementId][i]
+                            && props.base64DataMultiple[elementId][i].includes("base64")) {
+                            valueSplitItem = props.base64DataMultiple[elementId][i];
                         }
                         imagesData.push({
                             value: valueSplitItem,
                             onChange: (base64) => {
-                                app.handleChangeBase64MultipleImage(base64, data.name, i);
+                                app.handleChangeBase64MultipleImage(base64, elementId, i);
                             },
-                            removeImage: () => app.handleRemoveMultipleImage(data.name, i)
+                            removeImage: () => app.handleRemoveMultipleImage(elementId, i)
 
                         })
                     }
                     inputComponent = <InputFileMultiple
-                        addMoreImage={() => app.addMoreImage(data.name)}
+                        addMoreImage={() => app.addMoreImage(elementId)}
                         inputFilesData={imagesData}
                     />
                 }
@@ -507,14 +499,15 @@ function FormElement(props) {
                      * regular
                      */
                     inputComponent = <InputField
-                        onKeyUp={(value, id) => { app.onKeyUp(value, id, data.name) }}
+                        disabled={element.idField}
+                        onKeyUp={(value, id) => { app.onKeyUp(value, id, elementId) }}
                         id={inputId} value={value}
-                        type={data.inputType} placeholder={data.lableName} />;
+                        type={element.type} placeholder={element.lableName} />;
                 }
 
                 return (
                     <div key={"FORM-FIELD-" + stringUtil.uniqueId()}>
-                        <Label text={data.lableName} />
+                        <Label text={element.lableName} />
                         {inputComponent}
                     </div>
                 )

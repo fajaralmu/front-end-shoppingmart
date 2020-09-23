@@ -219,8 +219,8 @@ class EntityList extends Component {
             for (let i = 0; i < entities.length; i++) {
                 const entity = entities[i];
                 let rowValues = [];
-                for (let j = 0; j < entityConfig.elements.length; j++) {
-                    const element = entityConfig.elements[j];
+                for (let j = 0; j < entityProperty.elements.length; j++) {
+                    const element = entityProperty.elements[j];
                     const id = element.id;
                     let isObject = false;
 
@@ -286,7 +286,10 @@ class EntityList extends Component {
                             updateEntity={this.props.updateEntity}
                             removeManagedEntity={this.props.removeManagedEntity}
                             managedEntity={this.props.managedEntity}
-                            entityConfig={entityConfig} />
+                            entityProperty={this.props.entityProperty}
+                            
+                            entityConfig={entityConfig}
+                            />
                     </div>
                     <EntityTable rows={this.getEntityRows()} />
                 </div>

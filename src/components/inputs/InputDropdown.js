@@ -24,7 +24,7 @@ class InputDropdown extends Component {
         }
 
         this.onSelect = (dataValue, text) => {
-            console.log("select value:", dataValue);
+            console.log("select value:", dataValue, " text: ", text);
             if (this.props.onSelect) { this.props.onSelect(dataValue); }
             if (this.props.id) {
                 document.getElementById(this.props.id).value = text;
