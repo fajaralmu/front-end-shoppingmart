@@ -139,6 +139,7 @@ class Management extends Component {
                     description="manage master data" />
                 <div className="management-container">
                     <Tab tabsData={buttonsData} />
+                    {this.props.entityProperty? 
                     <EntityList currentPage={this.state.currentPage}
                         app={this.props.app}
                         getEntityInPage={this.getEntityInPage}
@@ -148,7 +149,8 @@ class Management extends Component {
                         getEntityById={this.getEntityById}
                         removeManagedEntity={this.removeManagedEntity}
                         updateEntity={this.updateEntity}
-                    />
+                        entityProperty={this.props.entityProperty}
+                    /> : <h3>Please wait..</h3>}
                 </div>
             </div>
         )
