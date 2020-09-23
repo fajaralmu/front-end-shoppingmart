@@ -70,7 +70,7 @@ class Chart extends Component {
              * horizontal====
              */ 
             if (this.props.type == "success") {
-                mainStyle.borderTop = 'solid 1px gray';
+               
                 chartStyle.marginTop = "5px";
             } else if (this.props.type == "warning") {
                 chartStyle.marginBottom = "5px";

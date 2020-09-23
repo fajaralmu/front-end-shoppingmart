@@ -1,7 +1,18 @@
 import React, { Component } from 'react'
 import GridComponent from './../../container/GridComponent';
 import Label from './../../container/Label';
-
+const baseRowData = {
+    group: 1,
+    index: 1,
+    series: "earn_amt",
+    value: 1,
+    label: 1,
+    color: 'rgb(10,200,10)'
+}
+const baseGroup = {
+    value: 1,
+    label: 'August 2020'
+}
 class GraphChart extends Component {
 
     constructor(props) {

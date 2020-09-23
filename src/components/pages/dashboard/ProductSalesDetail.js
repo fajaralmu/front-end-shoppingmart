@@ -20,7 +20,7 @@ class ProductSalesDetail extends Component {
 
         console.log("this.props.productSalesDetails : ", this.props.productSalesDetails);
 
-        let productName = this.props.productSalesDetails && this.props.productSalesDetails.entity ? this.props.productSalesDetails.entity.name : "....";
+        const productName = this.props.productSalesDetails && this.props.productSalesDetails.entity ? this.props.productSalesDetails.entity.name : "";
 
         let entities = new Array();
         if (this.props.productSalesDetails && this.props.productSalesDetails.entities != null) {
@@ -45,7 +45,7 @@ class ProductSalesDetail extends Component {
         }
 
         return (<div>
-            <h2>{productName} Sales Detail</h2>
+            <h2>Sales Detail: {productName} </h2>
             <ActionButton onClick={this.goBack} text="Back" />
             <InstantTable rows={chartRows} />
         </div>)

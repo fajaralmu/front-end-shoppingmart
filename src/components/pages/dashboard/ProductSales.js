@@ -13,6 +13,7 @@ import * as creator from '../../../utils/ComponentCreator'
 import InputField from '../../inputs/InputField'
 import Label from '../../container/Label'
 import ProductSalesDetail from './ProductSalesDetail'
+import GraphChart from './GraphChart'
 
 class ProductSales
     extends Component {
@@ -95,7 +96,7 @@ class ProductSales
         }
 
         this.constructFilterBox = () => {
-             
+
             return (<creator.FilterBox rows={[{
                 values: [
                     <creator.DateSelectionFrom years={this.props.transactionYears}
@@ -115,7 +116,7 @@ class ProductSales
                 ]
             }]} />);
         }
- 
+
         this.constructFilterInfo = (productSalesData) => {
             let periodInfo = <div>
                 {"From: "}
@@ -142,35 +143,36 @@ class ProductSales
 
     render() {
 
-        let productSalesData = this.props.productSalesData != null ? this.props.productSalesData : { entities: [], filter: {} };
-        let maxValue = stringUtil.getMaxSales(productSalesData.entities);
-        console.log("============(product sales data)====", productSalesData.entities.length, "IN", new Date());
-        let filterInfo = this.constructFilterInfo(productSalesData);
-        let filterBox = this.constructFilterBox();
-        let productDetailRows = new Array();
+        const productSalesData = this.props.productSalesData != null ? this.props.productSalesData : { entities: [], filter: {} };
+        const maxValue = stringUtil.getMaxSales(productSalesData.entities);
+        const filterInfo = this.constructFilterInfo(productSalesData);
+        const filterBox = this.constructFilterBox();
+        const productDetailRows = new Array();
+        const chartGroups = new Array();
         /**
          * construct chart
          */
         for (let i = 0; i < productSalesData.entities.length; i++) {
             const entity = productSalesData.entities[i];
             const sales = stringUtil.beautifyNominal(entity.sales);
-
-            productDetailRows.push({
-                id: 'chart-e-' + entity.product.id,
-                values: [
-                    <Label key={'lbl-e-' + entity.product.id} text={(i + 1), entity.product.name}
-                        onClick={() => this.getProductSalesDetail(entity.product.id)} />
-                    ,
-                    <Chart text={sales}
-                        type="success" width={450} value={entity.sales} maxValue={maxValue} />
-                ]
+            chartGroups.push({
+                value: i, label: <Label key={'lbl-e-' + entity.product.id} text={(i + 1), entity.product.name}
+                    onClick={() => this.getProductSalesDetail(entity.product.id)} />
             });
+            productDetailRows.push({
+                group: i,
+                index: i,
+                series: "product_sales",
+                value: entity.sales,
+                label: sales,
+                color: 'rgb(160,160,160)'
+            })
         }
 
-        let tableStyle = { fontFamily: 'consolas', fontSize: '0.8em' }
-        let productSalesListComponent = <div className="cashflow-list">
-            <InstantTable style={tableStyle} rows={productDetailRows} />
-        </div>
+        let productSalesListComponent =
+            <div className="cashflow-list">
+                <GraphChart chartGroups={chartGroups} maxValue={maxValue} chartData={productDetailRows} orientation={"horizontal"} />
+            </div>
 
         /**
          * if show detail
@@ -183,7 +185,7 @@ class ProductSales
 
         return (
             <div className="cashflow-container">
-                <h2>Product Sales {this.state.page}</h2>
+                <h2>Product Sales</h2>
                 {filterBox}
                 <div> {filterInfo} </div>
                 {productSalesListComponent}
