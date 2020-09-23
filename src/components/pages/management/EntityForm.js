@@ -6,12 +6,13 @@ import { withRouter } from 'react-router'
 import * as actions from '../../../redux/actionCreators'
 import { connect } from 'react-redux'
 import * as url from '../../../constant/Url'
-import InputDropdown from '../../inputs/InputDropdown'
+import DynamicDropdown from '../../inputs/DynamicDropdown'
 import InputField from '../../inputs/InputField'
 import InputFile from '../../inputs/InputFile'
 import InputFileMultiple from '../../inputs/InputFileMultiple'
 import Label from '../../container/Label'
 import ActionButtons from '../../buttons/ActionButtons'
+import ComboBox from './../../inputs/ComboBox';
 
 class EntityForm extends Component {
     constructor(props) {
@@ -35,8 +36,8 @@ class EntityForm extends Component {
             console.info("validateEntity");
             const result = entity;
             for (let key in entity) {
-               
-                const element = this.getFormDataItem(key);
+
+                const element = this.getElementProperty(key);
                 if (element) {
                     if (element.type == "img" && element.multiple == false) {
                         /**
@@ -49,8 +50,8 @@ class EntityForm extends Component {
                         /**
                          * handle MULTIPLE Image
                          */
-                        console.info("this.state.base64DataMultiple[key] ", this.state.base64DataMultiple[key] );
-                            
+                        console.info("this.state.base64DataMultiple[key] ", this.state.base64DataMultiple[key]);
+
                         if (entity[key]) {
                             let arrayOfValues = entity[key].split("~");
                             let resultValue = new Array();
@@ -161,11 +162,11 @@ class EntityForm extends Component {
             if (value == null || value.trim() == "") { return; }
             const request = {
                 entityName: reffEntity.toLowerCase(),
-                fieldName:  optionItemName,
+                fieldName: optionItemName,
                 fieldValue: value
             }
             this.props.getEntitiesWithCallback(request, this, function (data, referer) {
-                console.log("LIST FOR DROPDOWN: ", data.entities)
+                console.log("LIST FOR ", fieldId, " DROPDOWN: ", data.entities)
                 referer.populateDropdownValues(data.entities, fieldId);
             });
             let currentDropdownValue = this.state.dropdownValues;
@@ -174,9 +175,9 @@ class EntityForm extends Component {
         }
 
         this.populateDropdownValues = (entities, fieldId) => {
-            console.log("ENTITIES (",fieldId,"):", entities)
+            console.log("ENTITIES (", fieldId, "):", entities)
             let options = new Array();
-            const element = this.getFormDataItem(fieldId);
+            const element = this.getElementProperty(fieldId);
             if (null == element) {
                 console.log("FORM DATA NOT FOUND");
                 return;
@@ -211,8 +212,8 @@ class EntityForm extends Component {
             return null;
         }
 
-        this.getFormDataItem = (fieldId) => {
-            if (this.props.entityProperty ) {
+        this.getElementProperty = (fieldId) => {
+            if (this.props.entityProperty) {
                 const entityProperty = this.props.entityProperty;
                 for (let i = 0; i < entityProperty.elements.length; i++) {
                     const element = entityProperty.elements[i];
@@ -255,7 +256,7 @@ class EntityForm extends Component {
                 this.setState({ managedEntity: managedEntity });
             }
 
-        } 
+        }
         this.handleRemoveImage = (fieldId) => {
 
             let base64Data = this.state.base64Data;
@@ -328,7 +329,7 @@ class EntityForm extends Component {
         }
 
         this.selectFromDynamicDropdown = (value, propName) => {
-            console.log("Dynamic Dropdown ",propName, ":", value);
+            console.log("Dynamic Dropdown ", propName, ":", value);
             const currentDropdownList = this.state.dropdownList;
             const dropdownValues = this.state.dropdownValues;
             const selectedEntities = this.state.selectedEntities;
@@ -349,14 +350,43 @@ class EntityForm extends Component {
 
             this.updateSelectedEntity(displayPropName, selectedOption.entity);
             this.setState({ activeId: null, dropdownList: currentDropdownList, dropdownValues: dropdownValues, selectedEntities: selectedEntities });
-        } 
+        }
+
+        this.selectFromFixedDropdown = (value, fieldId) => {
+            console.log("FIXED Dropdown ", fieldId, ":", value);
+            const currentDropdownList = this.state.dropdownList[fieldId];
+            const dropdownValues = this.state.dropdownValues;
+            dropdownValues[fieldId] = value;
+            const element = this.getElementProperty(fieldId);
+            const optionValueName = element.optionValueName;
+           
+            for (let i = 0; i < currentDropdownList.length; i++) {
+                const entity = currentDropdownList[i];
+                if (entity[optionValueName] == value) { 
+                    console.info("update fieldId: ", entity);
+                    this.updateSelectedEntity(fieldId, entity);
+                    this.setState({ activeId: null, dropdownValues: dropdownValues });
+                    break;
+                }
+            }
+            console.info("dropdownValues: ", dropdownValues);
+            console.info("currentDropdownList: ", currentDropdownList);
+        }
+
+        this.updateFixedListValues = (options, fieldId) => {
+
+            const currentDropdownList = this.state.dropdownList;
+            if (currentDropdownList[fieldId] != null && currentDropdownList[fieldId].length == options.length) return;
+            currentDropdownList[fieldId] = options;
+            this.setState({ dropdownList: currentDropdownList });
+        }
     }
 
     componentDidUpdate() {
         this.focusActiveId();
 
-       console.debug("props managedEntity: ", this.props.managedEntity);
-       console.debug("state managedEntity: ", this.state.managedEntity);
+        console.debug("props managedEntity: ", this.props.managedEntity);
+        console.debug("state managedEntity: ", this.state.managedEntity);
     }
 
     render() {
@@ -370,6 +400,7 @@ class EntityForm extends Component {
 
                         app={this}
 
+                        updated={this.state.updated}
                         stateManagedEntity={this.state.managedEntity}
                         dropdownValues={this.state.dropdownValues}
                         dropdownList={this.state.dropdownList}
@@ -408,7 +439,6 @@ function FormActionButtons(props) {
 
 function FormElement(_props) {
     const props = _props;
-    const formData = props.entityConfig && props.entityConfig.formData ? props.entityConfig.formData : [];
     const app = props.app;
     const entityExist = props.managedEntity != null || props.stateManagedEntity;
     const enityProperty = props.entityProperty;
@@ -421,13 +451,19 @@ function FormElement(_props) {
                 let value = null;
                 if (entityExist) {
                     const entity = props.managedEntity ? props.managedEntity : props.stateManagedEntity;
-                    const propName = element.lableName;
 
                     if (element.entityReferenceClass != null && props.activeId != "input-for-" + element.name) {
-                        const valueAsObject = entity[elementId];
-                        const objectPropName = element.optionItemName;
-
-                        value = valueAsObject ? valueAsObject[objectPropName] : null;
+                        const valueAsObject = entity[elementId] != null; 
+                         
+                        if(valueAsObject){
+                            if (element.type == "dynamiclist") {
+                                const objectPropName = element.optionItemName;
+                                value =  valueAsObject[objectPropName];
+                            }else if (element.type == "fixedlist") {
+                                const objectPropName = element.optionValueName;
+                                value =  valueAsObject[objectPropName];
+                            }
+                        }
                     } else {
                         value = entity[elementId];
                     }
@@ -442,16 +478,41 @@ function FormElement(_props) {
                      */
 
                     if (null == value) {
-                        value = props.dropdownValues [elementId]
+                        value = props.dropdownValues[elementId]
                     }
 
-                    inputComponent = <InputDropdown
+                    inputComponent = <DynamicDropdown
                         onSelect={(value) => app.selectFromDynamicDropdown(value, elementId)}
                         id={inputId}
                         placeholder={element.lableName}
                         value={value}
                         dropdownList={props.dropdownList[elementId]}
                         onKeyUp={(value, id) => { app.onKeyUpDynamicDropdown(value, id, elementId, element.entityReferenceClass, element.optionItemName) }} />
+
+                } else if (element.type == "fixedlist") {
+                    /**
+                     * if fixed dropDown
+                     */
+                    
+                    if (null == value) {
+                        value = props.dropdownValues[elementId]; 
+                    }
+
+                    app.updateFixedListValues(element.options, elementId);
+                    console.info("def value ", elementId, " : ", value)
+                    const comboBoxOptions = getElementOptions(element);
+                    inputComponent = <ComboBox
+                        onChange={(value, id) => {
+                            app.selectFromFixedDropdown(value, elementId);
+                            app.refresh();
+                            // byId(id).value = value;
+                            // console.log("byId(id).value", byId(id).value);
+                        }}
+                        defaultValue={value}
+                        id={inputId}
+                        placeholder={element.lableName}
+                        options={comboBoxOptions}
+                    />
 
                 } else if (element.type == "img" && element.multiple == false) {
                     /**
@@ -499,14 +560,14 @@ function FormElement(_props) {
                      * regular
                      */
                     inputComponent = <InputField
-                        disabled={element.idField}
+                        disabled={element.idField == true}
                         onKeyUp={(value, id) => { app.onKeyUp(value, id, elementId) }}
                         id={inputId} value={value}
                         type={element.type} placeholder={element.lableName} />;
                 }
 
                 return (
-                    <div key={"FORM-FIELD-" + stringUtil.uniqueId()}>
+                    <div key={"FORM-FIELD-" + stringUtil.uniqueId()}  >
                         <Label text={element.lableName} />
                         {inputComponent}
                     </div>
@@ -515,6 +576,20 @@ function FormElement(_props) {
         )}
     </>);
 
+}
+
+const getElementOptions = (element) => {
+    const options = [];
+
+    for (let i = 0; i < element.options.length; i++) {
+        const el = element.options[i];
+        options.push({
+            value: el[element.optionValueName],
+            text: el[element.optionItemName]
+        })
+    }
+
+    return options;
 }
 
 const mapStateToProps = state => {

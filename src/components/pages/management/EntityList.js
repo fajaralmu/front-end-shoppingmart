@@ -68,78 +68,7 @@ class EntityList extends Component {
 
         this.setOrderBy = (fieldName, orderType) => {
             this.goToPage(this.props.currentPage, { orderBy: fieldName, orderType: orderType });
-        }
-
-        this.createFilterInputs = (fieldNames) => {
-            let inputs = new Array();
-
-            if (!fieldNames) {
-                return inputs;
-            }
-
-            for (let i = 0; i < fieldNames.length; i++) {
-                const fieldName = fieldNames[i];
-                let headerName = fieldName.name;
-                if (headerName.split(".").length > 1) {
-                    headerName = headerName.split(".")[0];
-                }
-
-                let value = "";
-
-                if (this.state.filter[headerName] != null) {
-                    value = this.state.filter[headerName];
-                }
-
-                let input = <InputField value={value} id={headerName + "_filter_id"}
-                    onKeyUp={this.handleFilterChange} key={"input_field_" + stringUtil.uniqueId()}
-                    placeholder={headerName} />
-
-                if (fieldName.type == "longDate") {
-                    const valueDay = this.state.filter[headerName + "-day"];
-                    const valueMonth = this.state.filter[headerName + "-month"];
-                    const valueYear = this.state.filter[headerName + "-year"];
-
-                    const style = { width: '60px', fontSize: '0.7em' };
-
-                    const inputDay = <InputField style={style} value={valueDay} id={headerName + "-day_filter_id"}
-                        onKeyUp={this.handleFilterChange} key={"input_field_d" + stringUtil.uniqueId()}
-                        placeholder={"day"} />;
-                    const inputMonth = <InputField style={style} value={valueMonth} id={headerName + "-month_filter_id"}
-                        onKeyUp={this.handleFilterChange} key={"input_field_m" + stringUtil.uniqueId()}
-                        placeholder={"month"} />;
-                    const inputYear = <InputField style={style} value={valueYear} id={headerName + "-year_filter_id"}
-                        onKeyUp={this.handleFilterChange} key={"input_field_y" + stringUtil.uniqueId()}
-                        placeholder={"year"} />;
-
-                    input = <GridComponent items={[inputDay, inputMonth, inputYear]} />
-                }
-
-                let orderType = "desc";
-                if (this.state.orderBy && this.state.orderBy == headerName) {
-                    if (this.state.orderType == "asc") {
-                        orderType = "asc";
-                    }
-                }
-
-                const sortingButtons = <ActionButtons buttonsData={[{
-                    status: 'outline-secondary btn-sm',
-                    onClick: () => { this.setOrderBy(headerName, 'asc') },
-                    text: <i className={"fa fa-angle-up"} aria-hidden="true"></i>
-                },
-                {
-                    status: 'outline-secondary btn-sm',
-                    onClick: () => { this.setOrderBy(headerName, 'desc') },
-                    text: <i className={"fa fa-angle-down"} aria-hidden="true"></i>
-                }
-                ]} />
-
-                inputs.push(<div className="filter-wrapper">
-                    {input}{sortingButtons}
-                </div>);
-            }
-            inputs.push("");
-            return inputs;
-        }
+        } 
 
         this.createFilterInputsv2 = (entityProperty) => {
             const inputs = new Array();
@@ -214,22 +143,18 @@ class EntityList extends Component {
             ];
 
             const entities = this.props.entitiesData.entities;
-            const idField = entityConfig.id;
+            const idField = entityProperty.idField;
 
             for (let i = 0; i < entities.length; i++) {
                 const entity = entities[i];
                 let rowValues = [];
                 for (let j = 0; j < entityProperty.elements.length; j++) {
                     const element = entityProperty.elements[j];
-                    const id = element.id;
-                    let isObject = false;
+                    const elementId = element.id;
+                    const isObject =  element.entityReferenceClass != null;
 
-                    if (element.entityReferenceClass != null) { 
-                        isObject = true;
-                    }
-
-                    let entityValue = entity[id];
-                    if (element.type) {
+                    let entityValue = entity[elementId];
+                    if (element.type && entityValue) {
                         if (element.type == "number") {
                             entityValue = stringUtil.beautifyNominal(entityValue);
                         // } else if (element.type == "link") {
@@ -242,10 +167,12 @@ class EntityList extends Component {
                         } else if (element.type == "date") {
                             const dateStr = new Date(entityValue).toDateString();
                             entityValue = <Label text={dateStr} />;
+                        } else if(isObject){
+                            entityValue = entityValue[element.optionItemName];
                         }
                     }
 
-                    rowValues.push(isObject && entityValue ? entityValue[element.optionItemName] : entityValue);
+                    rowValues.push(entityValue);
                 }
 
                 rows.push(
@@ -345,20 +272,7 @@ const getHeaderNamesv2 = function (entityProperty) {
     }
     headers.push("OPTION");
     return headers;
-}
-function getHeaderNames(fieldNames) {
-    const headers = [];
-    for (let i = 0; i < fieldNames.length; i++) {
-        const name = fieldNames[i];
-        let headerName = name.name;
-        if (headerName.split(".").length > 1) {
-            headerName = headerName.split(".")[0];
-        }
-        headers.push(headerName.toUpperCase());
-    }
-    headers.push("OPTION");
-    return headers;
-}
+} 
 
 function EntityTable(props) {
     return <div className="entity-list-container">

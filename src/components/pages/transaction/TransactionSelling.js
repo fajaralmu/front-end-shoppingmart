@@ -9,7 +9,7 @@ import Loader from '../../messages/Loader'
 import TransactionReceipt from './TransactionReceipt'
 import * as stringUtil from '../../../utils/StringUtil'
 import ActionButtons from '../../buttons/ActionButtons'
-import InputDropdown from '../../inputs/InputDropdown'
+import DynamicDropdown from '../../inputs/DynamicDropdown'
 import { byId } from '../../../utils/ComponentUtil'
 import * as componentUtil from '../../../utils/ComponentUtil'
 import AddToCartButton from './AddToCartButton';
@@ -273,10 +273,10 @@ class TransactionSelling extends Component {
             <Card title="Transaction Detail" content={<>
                 <GridComponent style={{gridRowGap:'5px'}} cols={2} items={[
                     <Label text="Customer" />,
-                    <InputDropdown value={this.state.customerName} onSelect={this.selectCustomer} dropdownList={customerList}
+                    <DynamicDropdown value={this.state.customerName} onSelect={this.selectCustomer} dropdownList={customerList}
                         onKeyUp={this.getCustomerList} id="input-customer-name-sell" placeholder="customer name" />,
                     <Label text="Product" />,
-                    <InputDropdown value={this.state.productName} onSelect={this.selectproduct} dropdownList={productList}
+                    <DynamicDropdown value={this.state.productName} onSelect={this.selectproduct} dropdownList={productList}
                         onKeyUp={this.getProductStockList} id="input-product-name-sell" placeholder="product name" />,
                     <Label text="Quantity" />,
                     <InputField id="input-quantity-sell"

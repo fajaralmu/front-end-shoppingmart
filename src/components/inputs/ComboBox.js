@@ -5,10 +5,10 @@ import * as stringUtil from '../../utils/StringUtil'
 class ComboBox extends Component {
     constructor(props) {
         super(props);
-        this.handleOnChange = () => {
+        this.handleOnChange = (e) => {
             if (this.props.onChange) {
-                this.props.onChange(byId(this.props.id).value);
-                console.log("x x x CHANGED VALUE: ", byId(this.props.id).value);
+                this.props.onChange(byId(this.props.id).value, this.props.id );
+                console.log("Select box ",this.props.id, " CHANGED VALUE: ", byId(this.props.id).value);
             }
             else {
                 console.log("Not supported");
@@ -24,6 +24,7 @@ class ComboBox extends Component {
     }
 
     render() {
+         
         let options = [];
         if (this.props.options) {
             options = this.props.options;

@@ -76,6 +76,11 @@ class Management extends Component {
                     onClick: () => { this.loadEntityManagement(entityConfig.customerList) }
                 },
                 {
+                    active: this.checkIfCurrentMenuName("menu"),
+                    text: "Menu",
+                    onClick: () => { this.loadEntityManagement(entityConfig.menuConfig) }
+                },
+                {
                     active: this.checkIfCurrentMenuName("transaction"),
                     text: "Transaction",
                     onClick: () => { this.loadEntityManagement(entityConfig.transactionConfig) }
@@ -131,10 +136,8 @@ class Management extends Component {
 
         return (
             <div className="section-container">
-                <ContentTitle iconClass="fas fa-database" title={"Management " + (this.state.entityConfig.title ?
-                    this.state.entityConfig.title :
-                    this.props.entitiesData && this.props.entitiesData.entityConfig ?
-                        this.props.entitiesData.entityConfig.title : "")}
+                <ContentTitle iconClass="fas fa-database" title={"Management " + (this.props.entityProperty ?
+                        this.props.entityProperty.alias : "")}
 
                     description="manage master data" />
                 <div className="management-container">

@@ -13,7 +13,7 @@ import * as stringUtil from '../../../utils/StringUtil'
 import ActionButtons from '../../buttons/ActionButtons'
 import * as componentUtil from '../../../utils/ComponentUtil'
 import { byId } from '../../../utils/ComponentUtil'
-import InputDropdown from '../../inputs/InputDropdown'
+import DynamicDropdown from '../../inputs/DynamicDropdown'
 import AddToCartButton from './AddToCartButton';
 import GridComponent from '../../container/GridComponent';
 import Card from '../../card/Card'
@@ -278,11 +278,11 @@ class TransactionPurchasing
                     <GridComponent style={{gridRowGap:'5px'}} cols={2}
                         items={[
                             <Label text="Supplier" />,
-                            <InputDropdown onSelect={this.selectSupplier} dropdownList={supplierList}
+                            <DynamicDropdown onSelect={this.selectSupplier} dropdownList={supplierList}
                                 value={this.state.supplierName}
                                 onKeyUp={this.getSupplierList} id="input-supplier-name-purc" placeholder="supplier name" />,
                             <Label text="Product" />,
-                            <InputDropdown onSelect={this.selectProduct} id="input-product-name-purc" dropdownList={productList}
+                            <DynamicDropdown onSelect={this.selectProduct} id="input-product-name-purc" dropdownList={productList}
                                 value={this.state.productName}
                                 onKeyUp={this.getProductList} placeholder="input product name" />,
                             <Label text="Price" />,

@@ -1,4 +1,4 @@
-import React, { Component } from 'react' 
+import React, { Component } from 'react'
 import * as stringUtil from '../../utils/StringUtil'
 import ActionButtons from '../buttons/ActionButtons';
 
@@ -63,7 +63,7 @@ class CrudRow extends Component {
             actionButton = null;
             trStyle = this.props.style ? this.props.style : {};
         }
-      
+
         return (
             <tr style={trStyle} key={stringUtil.uniqueId()}
                 valign={this.props.valign}>
@@ -75,13 +75,19 @@ class CrudRow extends Component {
 
 const Cells = (props) => {
 
-    return props.values.map(value => {
+    return <>{props.values.map(element => {
+
+        const isJSON = element.value != null && element.value.constructor == Object && !React.isValidElement(element.value);
+        const valueComponent = isJSON ? JSON.stringify(element.value) : element.value;
         return (
-            <td key={"td-key-" + stringUtil.uniqueId()} id={"td-" + stringUtil.uniqueId()} style={props.trStyle} rowSpan={value.rowspan} colSpan={value.colspan}>
-                {value.value}
+            <td key={"td-key-" + stringUtil.uniqueId()} id={"td-" + stringUtil.uniqueId()}
+                style={props.trStyle}
+                rowSpan={element.rowspan}
+                colSpan={element.colspan}>
+                {valueComponent}
             </td>
         )
-    });
+    })}</>
 }
 
 export default CrudRow;

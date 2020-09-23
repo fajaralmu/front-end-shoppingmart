@@ -5,7 +5,7 @@ import './Inputs.css'
 /**
  * JUST FOR INPUT !!!
  */
-class InputDropdown extends Component {
+class DynamicDropdown extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -99,4 +99,4 @@ function DropDownComponent(props) {
 }
 
 
-export default InputDropdown;
+export default DynamicDropdown;
