@@ -7,7 +7,6 @@ import './Entity.css'
 import * as componentUtil from '../../../utils/ComponentUtil'
 import ActionButtons from '../../buttons/ActionButtons';
 import InputField from '../../inputs/InputField'
-import ActionButton from '../../buttons/ActionButton'
 import EntityForm from './EntityForm';
 import * as url from '../../../constant/Url'
 import Label from '../../container/Label'
@@ -139,16 +138,19 @@ class EntityList extends Component {
                 },
                 //filter
                 {
-                    values: this.createFilterInputsv2(entityProperty), disabled: true
+                    values:[null ,... this.createFilterInputsv2(entityProperty)], disabled: true
                 }
             ];
 
             const entities = this.props.entitiesData.entities;
             const idField = entityProperty.idField;
+            const currentPage = this.props.currentPage;
 
             for (let i = 0; i < entities.length; i++) {
                 const entity = entities[i];
-                let rowValues = [];
+                const number = (currentPage * 10)+i+1;
+                const rowValues = [number];
+
                 for (let j = 0; j < entityProperty.elements.length; j++) {
                     const element = entityProperty.elements[j];
                     const elementId = element.id;
@@ -272,7 +274,7 @@ function DateFilter(props) {
 
 const getHeaderNamesv2 = function (entityProperty) {
     const elements = entityProperty.elements;
-    const headers = [];
+    const headers = ["No"];
     for (let i = 0; i < elements.length; i++) {
         const element = elements[i];
         let headerName = element.lableName;
