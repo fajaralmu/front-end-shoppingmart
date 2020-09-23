@@ -22,7 +22,7 @@ class Footer extends Component {
         const profile = this.props.applicationProfile ? this.props.applicationProfile : {};
         return (
             <div className="App-footer" style={this.footerStyle()}>
-                <span className="fas fa-coffee"></span>&nbsp;&nbsp;{profile.name} {year}
+                <span className={profile.footerIconClassValue}></span>&nbsp;&nbsp;{profile.name} {year}
             </div>
         )
     }
