@@ -183,12 +183,12 @@ class EntityList extends Component {
 
             const rows = [
                 //header
-                {  
-                    values: this.getHeaderNames(entityConfig.fieldNames),  disabled: true, style: { textAlign: 'center', fontWeight: 'bold' }
+                {
+                    values: this.getHeaderNames(entityConfig.fieldNames), disabled: true, style: { textAlign: 'center', fontWeight: 'bold' }
                 },
                 //filter
                 {
-                    values: this.createFilterInputs(entityConfig.fieldNames),  disabled: true
+                    values: this.createFilterInputs(entityConfig.fieldNames), disabled: true
                 }
             ];
 
@@ -240,46 +240,6 @@ class EntityList extends Component {
             }
             return rows;
         }
-
-        this.entityTable = () => {
-            return <div className="entity-list-container">
-                <InstantTable
-                    style={{
-                        width: "100%",
-                        margin: "5px",
-                    }}
-                    rows={this.getEntityRows()} />
-            </div>
-        }
-
-        this.navButtons = () => {
-            const buttonsData = this.createNavButtons();
-            const fixButtonData = new Array();
-
-            fixButtonData.push({
-                onClick: () => { this.goToPage(this.props.currentPage + -1) },
-                text: 'previous'
-            })
-
-            for (let i = 0; i < buttonsData.length; i++) {
-                buttonsData[i].onClick = () => { this.goToPage(buttonsData[i].value) }
-                if (buttonsData[i].value == this.props.currentPage) {
-                    buttonsData[i].status = "info btn-sm";
-                } else {
-                    buttonsData[i].status = "outline-info btn-sm";
-                }
-                buttonsData[i].text = buttonsData[i].text;
-                fixButtonData.push(buttonsData[i]);
-            }
-
-            fixButtonData.push({
-                onClick: () => { this.goToPage(this.props.currentPage + 1) },
-                text: 'next'
-            });
-
-            const style = {  width: 'min-content', paddingTop: '15px',  margin: '10px'  };
-            return (<ActionButtons style={style} buttonsData={fixButtonData} />);
-        }
     }
 
     componentDidUpdate() {
@@ -297,11 +257,9 @@ class EntityList extends Component {
         return (
             <div style={{ textAlign: 'center' }}>
                 <div className="entity-container">
-                    <div style={{
-                        backgroundColor: 'white',
-                        margin: '10px'
-                    }} > </div>
-                    <this.navButtons />
+                    <div style={{ backgroundColor: 'white', margin: '10px' }} > </div>
+                    <NavigationButton buttonsData={this.createNavButtons()}
+                        goToPage={this.goToPage}  currentPage={this.props.currentPage} />
                     <div className="entityForm">
                         <EntityForm
                             app={this.props.app}
@@ -310,12 +268,49 @@ class EntityList extends Component {
                             managedEntity={this.props.managedEntity}
                             entityConfig={entityConfig} />
                     </div>
-                    <this.entityTable />
+                    <EntityTable rows={this.getEntityRows()} />
                 </div>
             </div>
 
         )
     }
+}
+
+function EntityTable(props) {
+    return <div className="entity-list-container">
+        <InstantTable style={{ width: "100%", margin: "5px", }} rows={props.rows} />
+    </div>
+}
+
+function NavigationButton(props) {
+
+    const buttonsData = props.buttonsData;
+    const fixButtonData = new Array();
+
+    fixButtonData.push({
+        onClick: () => { props.goToPage(props.currentPage + -1) },
+        text: 'previous'
+    })
+
+    for (let i = 0; i < buttonsData.length; i++) {
+        buttonsData[i].onClick = () => { props.goToPage(buttonsData[i].value) }
+        if (buttonsData[i].value == props.currentPage) {
+            buttonsData[i].status = "info btn-sm";
+        } else {
+            buttonsData[i].status = "outline-info btn-sm";
+        }
+        buttonsData[i].text = buttonsData[i].text;
+        fixButtonData.push(buttonsData[i]);
+    }
+
+    fixButtonData.push({
+        onClick: () => { props.goToPage(props.currentPage + 1) },
+        text: 'next'
+    });
+
+    const style = { width: 'min-content', paddingTop: '15px', margin: '10px' };
+    return (<ActionButtons style={style} buttonsData={fixButtonData} />);
+
 }
 
 export default EntityList;
