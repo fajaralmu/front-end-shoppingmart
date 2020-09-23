@@ -18,8 +18,7 @@ class InstantTable extends Component {
         return (
             <table style={tableStyle} className={className}><tbody>
                 {rows.map(row => {
-                    let disabled = row.disabled == false? false:true;
-                  
+                    let disabled = row.disabled == false? false:true; 
                     
                     return (
                         <CrudRow

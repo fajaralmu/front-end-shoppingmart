@@ -362,10 +362,10 @@ class EntityForm extends Component {
             const element = this.getElementProperty(fieldId);
             const optionValueName = element.optionValueName;
             const currentDropdownList = stateDropdownList[fieldId];
-           
+
             for (let i = 0; i < currentDropdownList.length; i++) {
                 const entity = currentDropdownList[i];
-                if (entity[optionValueName] == value) { 
+                if (entity[optionValueName] == value) {
                     console.info("update fieldId: ", entity);
                     this.updateSelectedEntity(fieldId, entity);
                     this.setState({ activeId: null, dropdownValues: stateDropdownValues });
@@ -373,7 +373,7 @@ class EntityForm extends Component {
                     break;
                 }
             }
-        
+
         }
         this.selectFromPlainListDropdown = (value, fieldId) => {
             console.log("Plain Dropdown ", fieldId, ":", value);
@@ -381,10 +381,10 @@ class EntityForm extends Component {
             const dropdownValues = this.state.dropdownValues;
             dropdownValues[fieldId] = value;
             const currentDropdownList = stateDropdownList[fieldId];
-           
+
             for (let i = 0; i < currentDropdownList.length; i++) {
                 const item = currentDropdownList[i];
-                if ( item == value) { 
+                if (item.toString() == value.toString()) {
                     console.info("update fieldId: ", item);
                     this.updateSelectedEntity(fieldId, item);
                     this.setState({ activeId: null, dropdownValues: dropdownValues });
@@ -392,7 +392,7 @@ class EntityForm extends Component {
                     break;
                 }
             }
-           
+
         }
 
         this.updateFixedListValues = (options, fieldId) => {
@@ -482,15 +482,15 @@ function FormElement(_props) {
                     const entity = props.managedEntity ? props.managedEntity : props.stateManagedEntity;
 
                     if (element.entityReferenceClass != null && props.activeId != "input-for-" + element.name) {
-                        const valueAsObject = entity[elementId]  ; 
-                         
-                        if(valueAsObject!=null){
+                        const valueAsObject = entity[elementId];
+
+                        if (valueAsObject != null) {
                             if (element.type == "dynamiclist") {
                                 const objectPropName = element.optionItemName;
-                                value =  valueAsObject[objectPropName];
-                            }else if (element.type == "fixedlist") {
+                                value = valueAsObject[objectPropName];
+                            } else if (element.type == "fixedlist") {
                                 const objectPropName = element.optionValueName;
-                                value =  valueAsObject[objectPropName];
+                                value = valueAsObject[objectPropName];
                             }
                         }
                     } else {
@@ -522,9 +522,9 @@ function FormElement(_props) {
                     /**
                      * if fixed dropDown
                      */
-                    
+
                     if (null == value) {
-                        value = props.dropdownValues[elementId]; 
+                        value = props.dropdownValues[elementId];
                     }
 
                     app.updateFixedListValues(element.options, elementId);
@@ -532,7 +532,7 @@ function FormElement(_props) {
                     const comboBoxOptions = getFixedListElementOptions(element);
                     inputComponent = <ComboBox
                         onChange={(value) => {
-                            app.selectFromFixedDropdown(value, elementId); 
+                            app.selectFromFixedDropdown(value, elementId);
                         }}
                         defaultValue={value}
                         id={inputId}
@@ -544,9 +544,9 @@ function FormElement(_props) {
                     /**
                      * if fixed dropDown
                      */
-                    
+
                     if (null == value) {
-                        value = props.dropdownValues[elementId]; 
+                        value = props.dropdownValues[elementId];
                     }
 
                     app.updatePlainListValues(element.plainListValues, elementId);
@@ -554,9 +554,9 @@ function FormElement(_props) {
                     const comboBoxOptions = getPlainListElementOptions(element);
                     inputComponent = <ComboBox
                         onChange={(value) => {
-                            app.selectFromPlainListDropdown(value, elementId); 
+                            app.selectFromPlainListDropdown(value, elementId);
                         }}
-                        defaultValue={value}
+                        defaultValue={value == null ? null : value.toString()}
                         id={inputId}
                         placeholder={element.lableName}
                         options={comboBoxOptions}

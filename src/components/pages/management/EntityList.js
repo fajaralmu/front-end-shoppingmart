@@ -67,7 +67,7 @@ class EntityList extends Component {
 
         this.setOrderBy = (fieldName, orderType) => {
             this.goToPage(this.props.currentPage, { orderBy: fieldName, orderType: orderType });
-        } 
+        }
 
         this.createFilterInputsv2 = (entityProperty) => {
             const inputs = new Array();
@@ -92,7 +92,7 @@ class EntityList extends Component {
                 if (element.type == "date") {
                     input = <DateFilter id={id} filter={this.state.filter} app={this} />
                 }
-  
+
                 inputs.push(<div className="filter-wrapper">
                     {input}<SortingButton app={this} id={id} />
                 </div>);
@@ -134,11 +134,11 @@ class EntityList extends Component {
             const rows = [
                 //header
                 {
-                    values: getHeaderNamesv2(entityProperty), disabled: true, style: { textAlign: 'center', fontWeight: 'bold' }
+                    values: ["No", ...getHeaderNamesv2(entityProperty)], disabled: true, style: { textAlign: 'center', fontWeight: 'bold' }
                 },
                 //filter
                 {
-                    values:[null ,... this.createFilterInputsv2(entityProperty)], disabled: true
+                    values: [null, ... this.createFilterInputsv2(entityProperty)], disabled: true
                 }
             ];
 
@@ -148,20 +148,20 @@ class EntityList extends Component {
 
             for (let i = 0; i < entities.length; i++) {
                 const entity = entities[i];
-                const number = (currentPage * 10)+i+1;
+                const number = (currentPage * 10) + i + 1;
                 const rowValues = [number];
 
                 for (let j = 0; j < entityProperty.elements.length; j++) {
                     const element = entityProperty.elements[j];
                     const elementId = element.id;
-                    const isObject =  element.entityReferenceClass != null;
+                    const isObject = element.entityReferenceClass != null;
 
                     let entityValue = entity[elementId];
                     if (element.type && entityValue) {
                         if (element.type == "number") {
                             entityValue = stringUtil.beautifyNominal(entityValue);
-                        // } else if (element.type == "link") {
-                        //     entityValue = <a href={entityValue}><u>{entityValue}</u></a>
+                            // } else if (element.type == "link") {
+                            //     entityValue = <a href={entityValue}><u>{entityValue}</u></a>
                         } else if (element.type == "img" && element.multiple == false) {
                             entityValue = <img width="60" height="60" alt={url.baseImageUrl + entityValue} src={url.baseImageUrl + entityValue} />
                         } else if (element.type == "img" && element.multiple == true) {
@@ -170,15 +170,15 @@ class EntityList extends Component {
                         } else if (element.type == "date") {
                             const dateStr = new Date(entityValue).toDateString();
                             entityValue = <Label text={dateStr} />;
-                        } else if(isObject){
+                        } else if (isObject) {
                             entityValue = entityValue[element.optionItemName];
                         }
 
                         //validate length..
-                        if(entityValue.constructor == String) {
+                        if (entityValue.constructor == String) {
                             const str = entityValue.toString();
-                            if(str.length > 50){
-                                entityValue = str.substr(0, 50)+"....";
+                            if (str.length > 50) {
+                                entityValue = str.substr(0, 50) + "....";
                             }
                         }
                     }
@@ -226,7 +226,7 @@ class EntityList extends Component {
                             managedEntity={this.props.managedEntity}
                             entityProperty={this.props.entityProperty}
                             entityConfig={entityConfig}
-                            />
+                        />
                     </div>
                     <EntityTable rows={this.getEntityDataTableRowData()} />
                 </div>
@@ -238,13 +238,13 @@ class EntityList extends Component {
 }
 
 function SortingButton(props) {
-    return (<ActionButtons buttonsData={[{
-        status: 'outline-secondary btn-sm',
+    return (<ActionButtons orientation="vertical" buttonsData={[{
+        status: 'outline-secondary btn-xs no-border',
         onClick: () => { props.app.setOrderBy(props.id, 'asc') },
         text: <i className={"fa fa-angle-up"} aria-hidden="true"></i>
     },
     {
-        status: 'outline-secondary btn-sm',
+        status: 'outline-secondary btn-xs no-border',
         onClick: () => { props.app.setOrderBy(props.id, 'desc') },
         text: <i className={"fa fa-angle-down"} aria-hidden="true"></i>
     }
@@ -274,7 +274,7 @@ function DateFilter(props) {
 
 const getHeaderNamesv2 = function (entityProperty) {
     const elements = entityProperty.elements;
-    const headers = ["No"];
+    const headers = [];
     for (let i = 0; i < elements.length; i++) {
         const element = elements[i];
         let headerName = element.lableName;
@@ -282,7 +282,7 @@ const getHeaderNamesv2 = function (entityProperty) {
     }
     headers.push("OPTION");
     return headers;
-} 
+}
 
 function EntityTable(props) {
     return <div className="entity-list-container">

@@ -30,11 +30,12 @@
  .filter-wrapper{
      display: grid;
      width: max-content;
-     grid-template-columns: auto auto auto;
+     grid-template-columns: 180px auto;
  }
  .filter-wrapper .input-field{
-    margin:0px;
+    margin-top:5px;
     padding:0px;
+
 }
 
 .entity-form{

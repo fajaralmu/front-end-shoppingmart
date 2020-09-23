@@ -1,18 +1,19 @@
 import React, { Component } from 'react'
 import * as stringUtil from '../../utils/StringUtil'
 import ActionButtons from '../buttons/ActionButtons';
+import './CrudRow.css'
 
 class CrudRow extends Component {
     constructor(props) {
         super(props);
 
         this.handleEdit = () => {
-            if (this.props.handleEdit) {
+            if (this.props.handleEdit && !this.props.disabled) {
                 this.props.handleEdit(this.props.identifier);
             }
         }
         this.handleDelete = () => {
-            if (this.props.handleEdit) {
+            if (this.props.handleDelete) {
                 this.props.handleDelete(this.props.identifier);
             }
         }
@@ -33,8 +34,9 @@ class CrudRow extends Component {
                     let rowspan = stringUtil.isNonNullArrayWithIndex(this.props.RS, i) ?
                         this.props.RS[i] : defaultRowColSpan;
                     newValues.push({ value: value, colspan: colspan, rowspan: rowspan });
-                } else
+                } else {
                     newValues.push({ value: value });
+                }
             }
             values = newValues;
         }
@@ -58,15 +60,15 @@ class CrudRow extends Component {
                 }
             ]} />
         </td>;
-
-        if (this.props.disabled == true) {
+        const disabled = this.props.disabled;
+        if (disabled == true) {
             actionButton = null;
             trStyle = this.props.style ? this.props.style : {};
         }
 
         return (
-            <tr style={trStyle} key={stringUtil.uniqueId()}
-                valign={this.props.valign}>
+            <tr className={disabled ? "" : "crud-row"} style={trStyle} key={stringUtil.uniqueId()}
+                valign={this.props.valign} onClick= {this.handleEdit}> 
                 <Cells values={values} trStyle={trStyle} />
                 {actionButton}</tr>
         )

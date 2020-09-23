@@ -1,0 +1,7 @@
+.crud-row{
+    transition-duration: 400ms;
+}
+.crud-row:hover{
+    background-color: #cccccc;
+    cursor: pointer;
+}
