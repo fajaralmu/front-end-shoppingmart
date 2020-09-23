@@ -124,6 +124,24 @@ export const getEntityList = (request, app) => {
     return requested;
 }
 
+
+export const getEntityProperty = (entityName, app) => {
+    app.startLoading();
+    let requested = {
+        type: types.GET_ENTITY_PROPERTY,
+        payload: {
+            entity: entityName
+        },
+        meta: {
+            type: types.GET_ENTITY_PROPERTY,
+            url: apiEntityBaseUrl.concat("config"),
+            app: app, 
+        }
+    };
+    return requested;
+}
+
+
 export const getProductStocks = (name, app) => {
     app.startLoading(true);
     return {

@@ -33,6 +33,7 @@ class Management extends Component {
                 limit: 10,
                 entityConfig: config
             }, this.props.app);
+            this.props.getEntityProperty(config.entityName, this.props.app);
         }
 
         this.getEntityInPage = (config, page) => {
@@ -126,7 +127,7 @@ class Management extends Component {
         let entityList = this.props.entitiesData ? this.props.entitiesData.entities : [];
         if (null == entityList) { entityList = []; }
 
-        let buttonsData = this.getButtonsData();
+        const buttonsData = this.getButtonsData();
 
         return (
             <div className="section-container">
@@ -159,12 +160,14 @@ const mapStateToProps = state => {
     //console.log(state);
     return {
         entitiesData: state.managementState.entitiesData,
-        managedEntity: state.managementState.managedEntity
+        managedEntity: state.managementState.managedEntity,
+        entityProperty: state.managementState.entityProperty
     }
 }
 
 const mapDispatchToProps = dispatch => ({
     getEntities: (request, app) => dispatch(actions.getEntityList(request, app)),
+    getEntityProperty: (entityName, app) => dispatch(actions.getEntityProperty(entityName, app)),
     getEntityById: (name, id, app) => {
         let action = actions.getEntityById(name, id, app);
         dispatch(action);

@@ -104,6 +104,30 @@ export const getEntityListMiddleware = store => next => action => {
         .finally(param => action.meta.app.endLoading());
 }
 
+export const getEntityPropertyMiddleware = store => next => action => {
+    if (!action.meta || action.meta.type !== types.GET_ENTITY_PROPERTY) { return next(action); }
+
+    fetch(action.meta.url, {
+        method: POST_METHOD, body: JSON.stringify(action.payload),
+        headers: common.commonAuthorizedHeader()
+    })
+        .then(response => response.json())
+        .then(data => {
+            if(data == null){
+                alert("Error requesting object property");
+                return;
+            }
+            console.debug("Response:", data);  
+            let newAction = Object.assign({}, action, {
+                payload: data
+            });
+            delete newAction.meta;
+            store.dispatch(newAction);
+        })
+        .catch(err => console.log(err))
+        .finally(param => action.meta.app.endLoading());
+}
+
 export const removeManagedEntityMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.REMOVE_MANAGED_ENTITY) { return next(action); }
     let newAction = Object.assign({}, action, { payload: action.payload });

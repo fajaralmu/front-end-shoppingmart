@@ -27,6 +27,7 @@ export const STORE_MESSAGE = "store_message";
 export const GET_MESSAGE = "GET_MESSAGE";
 export const UPDATE_CART = "update_cart";
 export const GET_ENTITY = "get_entity";
+export const GET_ENTITY_PROPERTY = "get_entity_config";
 export const GET_ENTITY_BY_ID = "get_entity_by_id";
 export const UPDATE_ENTITY = "update_entity";
 export const GET_ENTITY_WITH_CALLBACK = "GET_ENTITY_WITH_CALLBACK";

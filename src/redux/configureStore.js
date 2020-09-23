@@ -56,6 +56,7 @@ export const configureStore = () => {
             managementMiddleware.updateEntityMiddleware,
             managementMiddleware.removeManagedEntityMiddleware, 
             managementMiddleware.getEntitiesWithCallbackMiddleware,
+            managementMiddleware.getEntityPropertyMiddleware,
 
             /*realtime chat*/
             realtimeChatMiddleware.sendChatMessageMiddleware,
