@@ -141,7 +141,7 @@ class Management extends Component {
 
         return (
             <div className="section-container">
-                <ContentTitle iconClass="fas fa-database" title={"Management " + (this.props.entityProperty ?
+                <ContentTitle iconClass="fas fa-database" title={"Master Data " + (this.props.entityProperty ?
                         this.props.entityProperty.alias : "")}
 
                     description="manage master data" />

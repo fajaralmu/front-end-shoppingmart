@@ -330,8 +330,8 @@ class EntityForm extends Component {
 
         this.selectFromDynamicDropdown = (value, propName) => {
             console.log("Dynamic Dropdown ", propName, ":", value);
-            const currentDropdownList = this.state.dropdownList;
-            const dropdownValues = this.state.dropdownValues;
+            const stateDropdownList = this.state.dropdownList;
+            const stateDropdownValues = this.state.dropdownValues;
             const selectedEntities = this.state.selectedEntities;
 
             const selectedOption = this.getSelectedDropdownItem(value, propName);
@@ -339,8 +339,8 @@ class EntityForm extends Component {
                 return;
             }
 
-            dropdownValues[propName] = selectedOption.text;
-            currentDropdownList[propName] = [];
+            stateDropdownValues[propName] = selectedOption.text;
+            stateDropdownList[propName] = [];
             selectedEntities[propName] = selectedOption.entity;
 
             /**
@@ -349,32 +349,60 @@ class EntityForm extends Component {
             const displayPropName = propName;
 
             this.updateSelectedEntity(displayPropName, selectedOption.entity);
-            this.setState({ activeId: null, dropdownList: currentDropdownList, dropdownValues: dropdownValues, selectedEntities: selectedEntities });
+            this.setState({ activeId: null, dropdownList: stateDropdownList, dropdownValues: stateDropdownValues, selectedEntities: selectedEntities });
+            this.refresh();
         }
 
         this.selectFromFixedDropdown = (value, fieldId) => {
             console.log("FIXED Dropdown ", fieldId, ":", value);
-            const currentDropdownList = this.state.dropdownList[fieldId];
-            const dropdownValues = this.state.dropdownValues;
-            dropdownValues[fieldId] = value;
+            const stateDropdownList = this.state.dropdownList;
+            const stateDropdownValues = this.state.dropdownValues;
+
+            stateDropdownValues[fieldId] = value;
             const element = this.getElementProperty(fieldId);
             const optionValueName = element.optionValueName;
+            const currentDropdownList = stateDropdownList[fieldId];
            
             for (let i = 0; i < currentDropdownList.length; i++) {
                 const entity = currentDropdownList[i];
                 if (entity[optionValueName] == value) { 
                     console.info("update fieldId: ", entity);
                     this.updateSelectedEntity(fieldId, entity);
+                    this.setState({ activeId: null, dropdownValues: stateDropdownValues });
+                    this.refresh();
+                    break;
+                }
+            }
+        
+        }
+        this.selectFromPlainListDropdown = (value, fieldId) => {
+            console.log("Plain Dropdown ", fieldId, ":", value);
+            const stateDropdownList = this.state.dropdownList;
+            const dropdownValues = this.state.dropdownValues;
+            dropdownValues[fieldId] = value;
+            const currentDropdownList = stateDropdownList[fieldId];
+           
+            for (let i = 0; i < currentDropdownList.length; i++) {
+                const item = currentDropdownList[i];
+                if ( item == value) { 
+                    console.info("update fieldId: ", item);
+                    this.updateSelectedEntity(fieldId, item);
                     this.setState({ activeId: null, dropdownValues: dropdownValues });
                     this.refresh();
                     break;
                 }
             }
-            console.info("dropdownValues: ", dropdownValues);
-            console.info("currentDropdownList: ", currentDropdownList);
+           
         }
 
         this.updateFixedListValues = (options, fieldId) => {
+
+            const currentDropdownList = this.state.dropdownList;
+            if (currentDropdownList[fieldId] != null && currentDropdownList[fieldId].length == options.length) return;
+            currentDropdownList[fieldId] = options;
+            this.setState({ dropdownList: currentDropdownList });
+        }
+        this.updatePlainListValues = (options, fieldId) => {
 
             const currentDropdownList = this.state.dropdownList;
             if (currentDropdownList[fieldId] != null && currentDropdownList[fieldId].length == options.length) return;
@@ -501,10 +529,32 @@ function FormElement(_props) {
 
                     app.updateFixedListValues(element.options, elementId);
                     console.info("def value ", elementId, " : ", value)
-                    const comboBoxOptions = getElementOptions(element);
+                    const comboBoxOptions = getFixedListElementOptions(element);
                     inputComponent = <ComboBox
                         onChange={(value) => {
                             app.selectFromFixedDropdown(value, elementId); 
+                        }}
+                        defaultValue={value}
+                        id={inputId}
+                        placeholder={element.lableName}
+                        options={comboBoxOptions}
+                    />
+
+                } else if (element.type == "plainlist") {
+                    /**
+                     * if fixed dropDown
+                     */
+                    
+                    if (null == value) {
+                        value = props.dropdownValues[elementId]; 
+                    }
+
+                    app.updatePlainListValues(element.plainListValues, elementId);
+                    console.info("def value ", elementId, " : ", value)
+                    const comboBoxOptions = getPlainListElementOptions(element);
+                    inputComponent = <ComboBox
+                        onChange={(value) => {
+                            app.selectFromPlainListDropdown(value, elementId); 
                         }}
                         defaultValue={value}
                         id={inputId}
@@ -576,7 +626,21 @@ function FormElement(_props) {
 
 }
 
-const getElementOptions = (element) => {
+const getPlainListElementOptions = (element) => {
+    const options = [];
+
+    for (let i = 0; i < element.plainListValues.length; i++) {
+        const el = element.plainListValues[i];
+        options.push({
+            value: el,
+            text: el
+        })
+    }
+
+    return options;
+}
+
+const getFixedListElementOptions = (element) => {
     const options = [];
 
     for (let i = 0; i < element.options.length; i++) {

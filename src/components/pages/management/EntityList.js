@@ -122,7 +122,8 @@ class EntityList extends Component {
             }
         }
 
-        this.getEntityRows = () => {
+        //for data table
+        this.getEntityDataTableRowData = () => {
             const entitiesData = this.props.entitiesData;
             const entityConfig = this.props.entityConfig;
             const entityProperty = this.props.entityProperty;
@@ -170,6 +171,14 @@ class EntityList extends Component {
                         } else if(isObject){
                             entityValue = entityValue[element.optionItemName];
                         }
+
+                        //validate length..
+                        if(entityValue.constructor == String) {
+                            const str = entityValue.toString();
+                            if(str.length > 50){
+                                entityValue = str.substr(0, 50)+"....";
+                            }
+                        }
                     }
 
                     rowValues.push(entityValue);
@@ -214,11 +223,10 @@ class EntityList extends Component {
                             removeManagedEntity={this.props.removeManagedEntity}
                             managedEntity={this.props.managedEntity}
                             entityProperty={this.props.entityProperty}
-                            
                             entityConfig={entityConfig}
                             />
                     </div>
-                    <EntityTable rows={this.getEntityRows()} />
+                    <EntityTable rows={this.getEntityDataTableRowData()} />
                 </div>
             </div>
 
