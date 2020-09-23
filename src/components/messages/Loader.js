@@ -35,6 +35,7 @@ class Loader extends Component {
         if (this.props.realtime == true) {  
             className = "message-loading progress";
             messageText = <span className="loader">{this.props.progress + "%"}</span>   
+            msgStyle.zIndex = 100;
         }
 
         return (
