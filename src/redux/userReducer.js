@@ -42,7 +42,8 @@ export const reducer = (state = initState, action) => {
 
                 result.loginStatus = false;
                 result.loggedUser = null;
-
+                localStorage.removeItem("loginKey");
+                localStorage.removeItem("loggedUser");
             } else {
 
                 if (action.payload.sessionData) {
@@ -51,6 +52,11 @@ export const reducer = (state = initState, action) => {
                     result.loginStatus = action.payload.loggedIn;
                     result.loginKey = localStorage.getItem('loginKey');
                     localStorage.setItem("loggedUser", JSON.stringify(result.loggedUser));
+                }else {
+                    result.loginStatus = false;
+                    result.loggedUser = null;
+                    localStorage.removeItem("loginKey");
+                    localStorage.removeItem("loggedUser");
                 }
             } 
 
