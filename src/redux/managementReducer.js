@@ -7,6 +7,7 @@ export const initState = {
     },
     managedEntity: null,
     entityProperty: null,
+    managementMenus: [],
 
 };
 
@@ -26,7 +27,10 @@ export const reducer = (state = initState, action) => {
             return { ...state, managedEntity: null };
         case types.GET_ENTITY_PROPERTY:
 
-            return { ...state, entityProperty: action.payload  };
+            return { ...state, entityProperty: action.payload };
+        case types.GET_MANAGEMENT_MENUS:
+
+            return { ...state, managementMenus: action.payload.generalList };
         default:
             return state;
     }

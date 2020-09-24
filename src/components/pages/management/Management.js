@@ -3,8 +3,7 @@ import './Management.css'
 import { withRouter } from 'react-router';
 import * as actions from '../../../redux/actionCreators'
 import { connect } from 'react-redux'
-import ContentTitle from '../../container/ContentTitle'
-import * as entityConfig from '../../../utils/EntityConfigurations'
+import ContentTitle from '../../container/ContentTitle' 
 import EntityList from './EntityList';
 import Tab from '../../navigation/Tab';
 
@@ -14,7 +13,7 @@ class Management extends Component {
         this.state = {
             entityList: [],
             currentPage: 0,
-            entityConfig: { entityName: "product" }
+            entityConfig: null
         }
         this.validateLoginStatus = () => {
             if (this.props.loginStatus != true) this.props.history.push("/login");
@@ -55,42 +54,35 @@ class Management extends Component {
         }
 
         this.checkIfCurrentMenuName = (name) => {
+            if(!this.state.entityConfig){
+                return false;
+            }
             return this.state.entityConfig.entityName == name || (this.props.entitiesData.entityConfig && this.props.entitiesData.entityConfig.entityName == name);
         }
 
         this.getButtonsData = () => {
-            return [
-                {
-                    text: "Product",
-                    active: this.checkIfCurrentMenuName("product"),
-                    onClick: () => { this.loadEntityManagement(entityConfig.productConfig) }
-                },
-                {
-                    active: this.checkIfCurrentMenuName("supplier"),
-                    text: "Supplier",
-                    onClick: () => { this.loadEntityManagement(entityConfig.supplierList) }
-                },
-                {
-                    active: this.checkIfCurrentMenuName("customer"),
-                    text: "Customer",
-                    onClick: () => { this.loadEntityManagement(entityConfig.customerList) }
-                },
-                {
-                    active: this.checkIfCurrentMenuName("menu"),
-                    text: "Menu",
-                    onClick: () => { this.loadEntityManagement(entityConfig.menuConfig) }
-                },
-                {
-                    active: this.checkIfCurrentMenuName("page"),
-                    text: "Page",
-                    onClick: () => { this.loadEntityManagement(entityConfig.pageConfig) }
-                },
-                {
-                    active: this.checkIfCurrentMenuName("transaction"),
-                    text: "Transaction",
-                    onClick: () => { this.loadEntityManagement(entityConfig.transactionConfig) }
-                }
-            ];
+
+            if(this.props.entityConfigList == null) {
+                return [];
+            }
+
+            const configList = this.props.entityConfigList;
+            const buttonsData = [];
+            for (let i = 0; i < configList.length; i++) {
+                const config = configList[i];
+                buttonsData.push( {
+                    text: config.entityName.toUpperCase(),
+                    active: this.checkIfCurrentMenuName(config.entityName),
+                    onClick: () => { this.loadEntityManagement(config) }
+                });
+            }
+
+            if(!this.state.entityConfig &&  (configList).length > 0){
+                this.loadEntityManagement(configList[0]);
+            }
+
+            return buttonsData; 
+            
         }
 
         this.updateEntity = (name, entity, flag) => {
@@ -101,9 +93,7 @@ class Management extends Component {
                     app.props.updateEntity({ entityName: name, entity: entity, isNewRecord: newRecord }, app, function (ref) {
                         ref.callbackHandleUpdate();
                     });
-                }, function (e) { });
-
-
+                }, function (e) { }); 
 
         }
 
@@ -129,7 +119,8 @@ class Management extends Component {
         this.validateLoginStatus();
         document.title = "Management";
         this.props.setMenuCode("management");
-        this.loadEntityManagement(entityConfig.productConfig);
+        this.props.getManagementMenus(this.props.app);
+        
     }
 
     render() {
@@ -171,7 +162,8 @@ const mapStateToProps = state => {
     return {
         entitiesData: state.managementState.entitiesData,
         managedEntity: state.managementState.managedEntity,
-        entityProperty: state.managementState.entityProperty
+        entityProperty: state.managementState.entityProperty,
+        entityConfigList: state.managementState.managementMenus
     }
 }
 
@@ -183,7 +175,8 @@ const mapDispatchToProps = dispatch => ({
         dispatch(action);
     },
     removeManagedEntity: () => dispatch(actions.removeManagedEntity()),
-    updateEntity: (request, referer, callback) => dispatch(actions.updateEntity(request, referer, callback))
+    updateEntity: (request, referer, callback) => dispatch(actions.updateEntity(request, referer, callback)),
+    getManagementMenus: (app) => dispatch(actions.getManagementMenus(app))
 
 })
 export default withRouter(connect(

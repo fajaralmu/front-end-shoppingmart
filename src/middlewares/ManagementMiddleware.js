@@ -114,7 +114,31 @@ export const getEntityPropertyMiddleware = store => next => action => {
         .then(response => response.json())
         .then(data => {
             if(data == null){
-                alert("Error requesting object property");
+                alert("Error requesting EntityProperty");
+                return;
+            }
+            console.debug("Response:", data);  
+            let newAction = Object.assign({}, action, {
+                payload: data
+            });
+            delete newAction.meta;
+            store.dispatch(newAction);
+        })
+        .catch(err => console.log(err))
+        .finally(param => action.meta.app.endLoading());
+}
+
+export const getManagementMenusMiddleware = store => next => action => {
+    if (!action.meta || action.meta.type !== types.GET_MANAGEMENT_MENUS) { return next(action); }
+
+    fetch(action.meta.url, {
+        method: POST_METHOD, body: JSON.stringify(action.payload),
+        headers: common.commonAuthorizedHeader()
+    })
+        .then(response => response.json())
+        .then(data => {
+            if(data == null){
+                alert("Error requesting getManagementMenus");
                 return;
             }
             console.debug("Response:", data);  

@@ -142,6 +142,20 @@ export const getEntityProperty = (entityName, app) => {
 }
 
 
+export const getManagementMenus = ( app) => {
+    app.startLoading();
+    let requested = {
+        type: types.GET_MANAGEMENT_MENUS,
+        payload: {  },
+        meta: {
+            type: types.GET_MANAGEMENT_MENUS,
+            url: apiEntityBaseUrl.concat("managementpages"),
+            app: app, 
+        }
+    };
+    return requested;
+}
+
 export const getProductStocks = (name, app) => {
     app.startLoading(true);
     return {
