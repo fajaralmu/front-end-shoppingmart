@@ -120,7 +120,10 @@ class Management extends Component {
         this.validateLoginStatus();
         document.title = "Management";
         this.props.setMenuCode("management");
-        this.props.getManagementMenus(this.props.app);
+        if(!this.props.entityConfigList || this.props.entityConfigList.length == 0){
+            this.props.getManagementMenus(this.props.app);
+        }
+       
         
     }
 
@@ -171,10 +174,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
     getEntities: (request, app) => dispatch(actions.getEntityList(request, app)),
     getEntityProperty: (entityName, app) => dispatch(actions.getEntityProperty(entityName, app)),
-    getEntityById: (name, id, app) => {
-        let action = actions.getEntityById(name, id, app);
-        dispatch(action);
-    },
+    getEntityById: (name, id, app) => dispatch(actions.getEntityById(name, id, app)),
     removeManagedEntity: () => dispatch(actions.removeManagedEntity()),
     updateEntity: (request, referer, callback) => dispatch(actions.updateEntity(request, referer, callback)),
     getManagementMenus: (app) => dispatch(actions.getManagementMenus(app))

@@ -10,9 +10,9 @@ const Root = (props) => {
 
     return (
         <Provider store={store}>
-            <BrowserRouter>
+            <HashRouter>
                 <App />
-            </BrowserRouter>
+            </HashRouter>
         </Provider>
 
     );
