@@ -2,7 +2,7 @@ import React from 'react'
 import App from './App'
 import { Provider } from 'react-redux'
 import configureStore from './redux/configureStore'
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 
 const Root = (props) => {
 
@@ -10,9 +10,9 @@ const Root = (props) => {
 
     return (
         <Provider store={store}>
-            <BrowserRouter>
+            <HashRouter>
                 <App />
-            </BrowserRouter>
+            </HashRouter>
         </Provider>
 
     );

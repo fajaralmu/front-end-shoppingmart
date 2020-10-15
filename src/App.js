@@ -6,7 +6,8 @@ import './App.css';
 import Menu from './components/navigation/Menu'
 import Home from './components/pages/index/Home'
 import About from './components/pages/about/About'
-import { BrowserRouter as Router, Route, Link, Switch, withRouter } from 'react-router-dom'
+
+import { Route, Link, Switch, withRouter } from 'react-router-dom'
 import * as actions from './redux/actionCreators'
 import { connect } from 'react-redux'
 import Catalog from './components/pages/catalog/Catalog'
@@ -216,16 +217,18 @@ class App extends Component {
   }
 
   updateIcon(profile) {
-    let link = document.querySelector('link[rel="shortcut icon"]') ||
-      document.querySelector('link[rel="icon"]');
-    if (!link) {
-      link = document.createElement('link');
-      link.id = 'favicon';
-      link.rel = 'shortcut icon';
-      document.head.appendChild(link);
-    }
+    if(profile.iconUrl){
+      let link = document.querySelector('link[rel="shortcut icon"]') ||
+        document.querySelector('link[rel="icon"]');
+      if (!link) {
+        link = document.createElement('link');
+        link.id = 'favicon';
+        link.rel = 'shortcut icon';
+        document.head.appendChild(link);
+      }
 
-    link.href = url.baseImageUrl + '/' + profile.iconUrl;
+      link.href = url.baseImageUrl + '/' + profile.iconUrl;
+    }
   }
 
   componentDidMount() {
