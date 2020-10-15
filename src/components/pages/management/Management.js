@@ -25,8 +25,10 @@ class Management extends Component {
         }
 
         this.loadEntityManagement = (config) => {
+            
             this.props.removeManagedEntity();
             this.setState({ currentPage: 0, entityConfig: config });
+           
             this.props.getEntities({
                 entityName: config.entityName,
                 page: 0,
@@ -120,6 +122,7 @@ class Management extends Component {
         this.validateLoginStatus();
         document.title = "Management";
         this.props.setMenuCode("management");
+
         if(!this.props.entityConfigList || this.props.entityConfigList.length == 0){
             this.props.getManagementMenus(this.props.app);
         }
@@ -137,9 +140,7 @@ class Management extends Component {
         return (
             <div className="section-container">
                 <ContentTitle iconClass="fas fa-database" title={"Master Data " + (this.props.entityProperty ?
-                        this.props.entityProperty.alias : "")}
-
-                    description="manage master data" />
+                        this.props.entityProperty.alias : "")}  description="master data management" />
                 <div className="management-container">
                     <Tab tabsData={buttonsData} />
                     {this.props.entityProperty? 

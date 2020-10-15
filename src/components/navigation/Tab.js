@@ -22,9 +22,16 @@ class Tab extends React.Component {
             <ul className="nav nav-tabs">
   
                 {tabsData.map((tabData,i) => {
+                    const onClickHandler = function(e){
+                        e.preventDefault();
+                        if(tabData.onClick){
+                            tabData.onClick(e);
+                        }
+                    }
+
                     return (
                         <li key={"tab"+i} className="nav-item">
-                            <a href="#" className={tabData.active ? "nav-link active" : "nav-link"} onClick={tabData.onClick ? tabData.onClick : () => { }}>
+                            <a href="" className={tabData.active ? "nav-link active" : "nav-link"} onClick={onClickHandler}>
                                 {tabData.text}
                             </a>
                         </li>
