@@ -215,7 +215,7 @@ class App extends Component {
   }
 
   updateIcon(profile) {
-    if(profile.iconUrl){
+    if(profile.pageIcon){
       let link = document.querySelector('link[rel="shortcut icon"]') ||
         document.querySelector('link[rel="icon"]');
       if (!link) {
@@ -225,7 +225,7 @@ class App extends Component {
         document.head.appendChild(link);
       }
 
-      link.href = url.baseImageUrl + '/' + profile.iconUrl;
+      link.href = url.baseImageUrl + '/ICON/' + profile.pageIcon;
     }
   }
 
