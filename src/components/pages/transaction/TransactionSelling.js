@@ -16,6 +16,13 @@ import DetailProductPanel from './DetailProductPanel';
 import GridComponent from '../../container/GridComponent'
 import Card from '../../card/Card';
 
+const FIELD_IDS = {
+    customerName: "input-customer-name-sell",
+    productName: "input-product-name-sell",
+    productCode: "input-product-code-sell", 
+    productQuantity: "input-quantity-sell"
+}
+
 class TransactionSelling extends Component {
 
     constructor(props) {
@@ -32,10 +39,10 @@ class TransactionSelling extends Component {
             this.setState({ activeField: id });
         }
 
-        this.getStockInfo = (id) => {
-            let stockId = id ? id : this.state.stockId;
-            this.props.getStockInfo(stockId, this.props.app);
-            this.setState({ stockId: id, showDetail: true })
+        this.getStockInfo = (productCode) => {
+            if(!productCode){ productCode = this.state.productCode; }
+            this.props.getStockInfo(productCode, this.props.app);
+            this.setState({ productCode: productCode, showDetail: true });
         }
 
 
@@ -103,27 +110,39 @@ class TransactionSelling extends Component {
             this.setState({ productName: null, stockId: 0, quantity: 0 });
         }
 
-        this.handleEdit = (stockId) => {
-            alert("will Edit: " + stockId);
-            this.props.getStockInfo(stockId, this.props.app);
-            this.setState({ stockId: stockId, quantity: this.getProductFlow(stockId).count });
+        this.handleEdit = (productId) => {
+            alert("will Edit: " + productId);
+            const productFlow = this.getProductFlow(productId);
+            if(null == productFlow) {
+                alert("Will modify data that is not found");
+                return;
+            }
+            //validate latest stock
+            this.getStockInfo(productFlow.product.code);
+            const product = productFlow.product;
+            byId(FIELD_IDS.productCode).value = product.code;
+            byId(FIELD_IDS.productName).value = product.name;
+            byId(FIELD_IDS.productQuantity).value = productFlow.count; 
+
+           // this.setState({ stockId: productId, quantity: productFlow.count });
         }
 
-        this.handleDelete = (stockId) => {
+        this.handleDelete = (productId) => {
             if (!window.confirm("Are you sure want to delete this from chart?")) return;
 
-            if (!this.isExistInTheChart(stockId)) {
+            if (!this.isExistInTheChart(productId)) {
                 alert("Record does not exist in the chart!");
                 return;
             }
             let currentFlows = this.state.productFlows;
             for (let index = 0; index < this.state.productFlows.length; index++) {
-                if (this.state.productFlows[index].flowReferenceId == stockId) {
+                if (this.state.productFlows[index].product.id == productId) {
                     currentFlows.splice(index, 1);
                 }
             }
 
             this.setState({ productFlows: currentFlows });
+            componentUtil.clearFields(null);
         }
 
         this.submitTransaction = () => {
@@ -280,14 +299,14 @@ class TransactionSelling extends Component {
                 <GridComponent style={{gridRowGap:'5px'}} cols={2} items={[
                     <Label text="Customer" />,
                     <DynamicDropdown value={this.state.customerName} onSelect={this.selectCustomer} dropdownList={customerList}
-                        onKeyUp={this.getCustomerList} id="input-customer-name-sell" placeholder="customer name" />,
+                        onKeyUp={this.getCustomerList} id={FIELD_IDS.customerName} placeholder="customer name" />,
                     <Label text="Product Name" />,
                     <DynamicDropdown value={this.state.productName} onSelect={this.selectproduct} dropdownList={productList}
-                        onKeyUp={this.getProductStockList} id="input-product-name-sell" placeholder="product name" />,
+                        onKeyUp={this.getProductStockList} id={FIELD_IDS.productName} placeholder="product name" />,
                     <Label text="Or Product Code" />,
-                    <InputField onEnterPress={this.getProductStockListByCode} id="input-product-code-sell" placeholder="product code" />,
+                    <InputField onEnterPress={this.getProductStockListByCode} id={FIELD_IDS.productCode} placeholder="product code" />,
                     <Label text="Quantity" />,
-                    <InputField id="input-quantity-sell"
+                    <InputField id={FIELD_IDS.productQuantity}
                         value={this.state.quantity} onKeyUp={(value, id) => this.setState({ activeField: id, quantity: value })}
                         type="number" placeholder="quantity" />
                 ]}
@@ -338,7 +357,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
     resetCustomers: () => dispatch(actions.resetCustomers()),
-    getStockInfo: (stockId, app) => dispatch(actions.getStockInfo(stockId, app)),
+    getStockInfo: (productCode, app) => dispatch(actions.getStockInfo(productCode, app)),
     submitPurchaseTransaction: (request, app) => dispatch(actions.submitPurchaseTransaction(request, app)),
     resetPurchaseTransaction: () => dispatch(actions.resetPurchaseTransaction()),
     resetProductStocks: () => (dispatch(actions.resetProductStocks())),

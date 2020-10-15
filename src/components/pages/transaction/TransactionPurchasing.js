@@ -19,6 +19,15 @@ import GridComponent from '../../container/GridComponent';
 import Card from '../../card/Card'
 import BaseTransactionPage from './BaseTransactionPage';
 
+const FIELD_IDS = {
+    supplierName: "input-supplier-name-purc",
+    productName: "input-product-name-purc",
+    productCode: "input-product-code-purc",
+    productPrice: "input-product-price-purc",
+    productQuantity: "input-quantity-purc",
+    productExpiryDate: "input-exp-date-purc"
+}
+
 class TransactionPurchasing
     extends BaseTransactionPage {
 
@@ -99,16 +108,22 @@ class TransactionPurchasing
 
         this.handleEdit = (productId) => {
             alert("will Edit: " + productId);
-            let productFlow = this.getProductFlow(productId);
+            const productFlow = this.getProductFlow(productId);
             if (null == productFlow) {
                 alert("Data not found");
                 return;
             }
-            this.setState({ quantity: productFlow.count });
-            this.setState({ price: productFlow.price });
-            this.setState({ productName: productFlow.product.name });
-            this.setState({ expiryDate: productFlow.expiryDate });
-            this.setState({ product: productFlow.product })
+            const product = productFlow.product;
+            byId(FIELD_IDS.productCode).value = product.code;
+            byId(FIELD_IDS.productName).value = product.name;
+            byId(FIELD_IDS.productQuantity).value = productFlow.count ;
+            byId(FIELD_IDS.productExpiryDate).value = productFlow.expiryDate;
+            byId(FIELD_IDS.productPrice).value = productFlow.price ;
+            // this.setState({ quantity: productFlow.count });
+            // this.setState({ price: productFlow.price });
+            // this.setState({ productName: productFlow.product.name });
+            // this.setState({ expiryDate: productFlow.expiryDate });
+            this.setState({ product: product })
         }
 
         this.handleDelete = (id) => {
@@ -118,13 +133,15 @@ class TransactionPurchasing
                 alert("Record does not exist in the chart!");
                 return;
             }
-            let currentFlows = this.state.productFlows;
+            const currentFlows = this.state.productFlows;
             for (let index = 0; index < this.state.productFlows.length; index++) {
                 if (this.state.productFlows[index].product.id == id) {
                     currentFlows.splice(index, 1);
+                    break;
                 }
             }
             this.setState({ productFlows: currentFlows });
+            componentUtil.clearFields(null);
         }
 
         this.submitTransaction = () => {
@@ -277,7 +294,7 @@ class TransactionPurchasing
 
         const detailStock = this.state.product ? <DetailProductPanel product={this.state.product} /> : null;
         const supplierList = this.getSupplierDropdownData();
-        const productList = this.getProductDropdownData();
+        const productList = this.getProductDropdownData(); 
 
         let formComponent = <div className="row">
             <div className="col-5">
@@ -287,27 +304,27 @@ class TransactionPurchasing
                             <Label text="Supplier" />,
                             <DynamicDropdown onSelect={this.selectSupplier} dropdownList={supplierList}
                                 value={this.state.supplierName}
-                                onKeyUp={this.getSupplierList} id="input-supplier-name-purc" placeholder="supplier name" />,
+                                onKeyUp={this.getSupplierList} id={FIELD_IDS.supplierName} placeholder="supplier name" />,
                             <Label text="Product Name" />,
-                            <DynamicDropdown onSelect={this.selectProduct} id="input-product-name-purc" dropdownList={productList}
+                            <DynamicDropdown onSelect={this.selectProduct} id={FIELD_IDS.productName} dropdownList={productList}
                                 value={this.state.productName}
                                 onKeyUp={this.getProductList} placeholder="input product name" />,
                             <Label text="Or Product Code" />,
-                            <InputField onEnterPress={this.getProductByCode} id="input-product-code-purc" placeholder="product code" />,
+                            <InputField onEnterPress={this.getProductByCode} id={FIELD_IDS.productCode} placeholder="product code" />,
                             <Label text="Price" />,
-                            <InputField id="input-product-price-purc"
+                            <InputField id={FIELD_IDS.productPrice}
                                 value={this.state.price} onKeyUp={(value, id) => {
                                     this.setState({ activeField: id, price: value }); this.addFormFieldId(id);
                                 }}
                                 type="number" placeholder="input product price" />,
                             <Label text="Quantity" />,
-                            <InputField id="input-quantity-purc"
+                            <InputField id={FIELD_IDS.productQuantity}
                                 value={this.state.quantity} onKeyUp={(value, id) => {
                                     this.setState({ activeField: id, quantity: value });  this.addFormFieldId(id);
                                 }}
                                 type="number" placeholder="quantity" />,
                             <Label text="Expiry Date" />,
-                            <InputField id="input-exp-date-purc"
+                            <InputField id={FIELD_IDS.productExpiryDate}
                                 value={this.state.expiryDate} onKeyUp={(value, id) => {
                                     this.setState({ activeField: id, expiryDate: value });   this.addFormFieldId(id);
                                 }}
