@@ -7,7 +7,7 @@ import Menu from './components/navigation/Menu'
 import Home from './components/pages/index/Home'
 import About from './components/pages/about/About'
 
-import { Route, Link, Switch, withRouter } from 'react-router-dom'
+import { Route, Switch, withRouter } from 'react-router-dom'
 import * as actions from './redux/actionCreators'
 import { connect } from 'react-redux'
 import Catalog from './components/pages/catalog/Catalog'
@@ -130,27 +130,25 @@ class App extends Component {
     this.mainContent = () => {
       return (<>
         <Switch>
-          <Route exact path="/" render={
-            (renderProps) =>
-              <Home app={this} applicationProfile={this.props.applicationProfile} setMenuCode={this.setMenuCode} />
-          } />
-          <Route exact path="/home" render={
-            (renderProps) =>
-              <Home app={this} applicationProfile={this.props.applicationProfile} setMenuCode={this.setMenuCode} />
-          } />
-          <Route exact path="/suppliers" render={
+          
+           
+          <Route  path="/suppliers" render={
             (renderProps) =>
               <SupplierList app={this} setMenuCode={this.setMenuCode} />
           } />
-          <Route exact path="/chatroom" render={
+          <Route exact path={["/", "/home"]} render={
+            (renderProps) =>
+              <Home app={this} applicationProfile={this.props.applicationProfile} setMenuCode={this.setMenuCode} />
+          }  />
+          <Route  path="/chatroom" render={
             (renderProps) =>
               <ChatRoom app={this} setMenuCode={this.setMenuCode} />
           } />
-          <Route exact path="/about" render={
+          <Route  path="/about" render={
             (renderProps) =>
               <About app={this} applicationProfile={this.props.applicationProfile} setMenuCode={this.setMenuCode} />
           }></Route>
-          <Route exact path="/catalog" render={
+          <Route  path="/catalog" render={
             (renderProps) =>
               <Catalog
                 app={this}
@@ -159,23 +157,23 @@ class App extends Component {
                 setDetailMode={this.setDetailMode} detailMode={this.state.detailMode} />
 
           }></Route>
-          <Route exact path="/cart" render={
+          <Route  path="/cart" render={
             (renderProps) => <CartDetail enableShopping={this.state.enableShopping} app={this} setMenuCode={this.setMenuCode} />
 
           }></Route>
-          <Route exact path="/login" render={
+          <Route  path="/login" render={
             (renderProps) => <Login setMenuCode={this.setMenuCode} app={this} />
 
           }></Route>
           {/* ///////////authenticated//////////// */}
-          <Route exact path="/dashboard" render={
+          <Route  path="/dashboard" render={
             (renderProps) =>
               <Dashboard app={this} loginStatus={this.props.loginStatus} setMenuCode={this.setMenuCode} />
 
           }></Route>
-          <Route exact path="/management" render={
+          <Route  path="/management" render={
             (renderProps) =>
-              <Management app={this} loginStatus={this.props.loginStatus} setMenuCode={this.setMenuCode} />
+              <Management app={this} loginStatus={this.props.loginStatus} setMenuCode={(this.setMenuCode)} />
 
           }></Route>
         </Switch>

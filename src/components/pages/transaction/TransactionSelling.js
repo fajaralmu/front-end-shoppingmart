@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import * as actions from '../../../redux/actionCreators'
-import * as trxCss from './Transaction.css'
 import Label from '../../container/Label';
 import InputField from '../../inputs/InputField';
 import StockListTable from './StockListTable'
@@ -228,6 +227,7 @@ class TransactionSelling extends Component {
             return <></>
         }
     }
+
 
     componentDidMount() {
         document.title = "Selling";

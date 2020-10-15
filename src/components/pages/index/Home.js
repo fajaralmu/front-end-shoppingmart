@@ -11,6 +11,7 @@ class Home extends Component {
     }
 
     componentDidMount() {
+        console.debug("HOME DID MOUNT");
         const profile = this.props.applicationProfile ? this.props.applicationProfile : {};
         document.title = profile.name;
         this.props.setMenuCode(menus.HOME);

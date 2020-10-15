@@ -105,6 +105,7 @@ class Dashboard extends Component {
         </div>;
 
         if (this.state.featureCode != null) {
+           
             switch (this.state.featureCode) {
                 case 'trxOut':
                     mainComponent = <TransactionSelling app={this.props.app} setFeatureCode={this.setFeatureCode} />
