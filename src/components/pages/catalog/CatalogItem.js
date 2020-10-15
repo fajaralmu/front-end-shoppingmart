@@ -38,7 +38,7 @@ function CardContent(props) {
         <div>
             <i className="fas fa-cubes"></i>&nbsp;{stringUtil.beautifyNominal(product.count)}&nbsp;{product.unit.name}
         </div>
-        <Label text={product.category.name} />
+        {/* <Label text={product.category.name} /> */}
     </div>);
 }
 

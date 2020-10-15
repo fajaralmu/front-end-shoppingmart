@@ -190,6 +190,13 @@ class TransactionSelling extends Component {
             this.props.getProductStockList(value, this.props.app);
         }
 
+        this.getProductStockListByCode = (value, id) => {
+            const productCode = value;
+            this.setActiveField(id);
+            this.setState({ stockId: productCode });
+            this.getStockInfo(productCode);
+        }
+
         this.selectproduct = (productCode) => {
             if (this.props.products == null) {
                 alert("Data not found!");
@@ -227,7 +234,6 @@ class TransactionSelling extends Component {
             return <></>
         }
     }
-
 
     componentDidMount() {
         document.title = "Selling";
@@ -278,6 +284,8 @@ class TransactionSelling extends Component {
                     <Label text="Product" />,
                     <DynamicDropdown value={this.state.productName} onSelect={this.selectproduct} dropdownList={productList}
                         onKeyUp={this.getProductStockList} id="input-product-name-sell" placeholder="product name" />,
+                    <Label text="Or Product Code" />,
+                    <InputField  onEnterPress={this.getProductStockListByCode} id="input-product-code-sell" placeholder="product code" />,
                     <Label text="Quantity" />,
                     <InputField id="input-quantity-sell"
                         value={this.state.quantity} onKeyUp={(value, id) => this.setState({ activeField: id, quantity: value })}
@@ -286,8 +294,7 @@ class TransactionSelling extends Component {
                 />
                 <this.buttonAddToCart />
             </>}
-            /></div> <div className="col-7">
-                <this.detailStockComponent /></div>
+            /></div><div className="col-7"><this.detailStockComponent /></div>
         </div>
 
         let buttonsData = [

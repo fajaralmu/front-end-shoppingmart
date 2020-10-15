@@ -31,18 +31,13 @@ class Tab extends React.Component {
 
                     return (
                         <li key={"tab"+i} className="nav-item">
-                            <a href="" className={tabData.active ? "nav-link active" : "nav-link"} onClick={onClickHandler}>
+                            <a className={tabData.active ? "nav-link active" : "nav-link"} onClick={onClickHandler}>
                                 {tabData.text}
                             </a>
                         </li>
-                    // <div key={"tab"+i} className={tabData.active ? "tab-element tab-item-active rounded-top" : "tab-element tab-item"} onClick={tabData.onClick ? tabData.onClick : () => { }}>
-                    //     {tabData.text}
-                    // </div>
                     )
                 })}
             </ul>
-            //     <div style={{width:'100%', borderBottom:'solid 1px lightgray'}}></div>
-            // </div>
         )
     }
 }

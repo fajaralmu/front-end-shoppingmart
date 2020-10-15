@@ -7,9 +7,14 @@ import { byId } from '../../utils/ComponentUtil'
 class InputField extends Component {
     constructor(props) {
         super(props);
-        this.handleKeyup = () => {
-            if (this.props.onKeyUp && this.props.id)
-                this.props.onKeyUp(byId(this.props.id).value, this.props.id);
+        this.handleKeyup = (e) => {
+            if( this.props.id){
+                if(this.props.onEnterPress && e.keyCode == 13) {
+                    this.props.onEnterPress(byId(this.props.id).value, this.props.id);
+                }else if (this.props.onKeyUp) {
+                    this.props.onKeyUp(byId(this.props.id).value, this.props.id);
+                }
+            }
         }
 
         this.onChange = () => {

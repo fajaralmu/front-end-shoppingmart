@@ -13,6 +13,7 @@ class DetailProductPanel extends Component {
             let row = [];
             if (this.props.stockView) {
                 row = [
+                    { values: ["Code", product.code] },
                     { values: ["Name", product.name] },
                     { values: ["Remaining", product.count + " " + product.unit.name] },
                     { values: ["Price", stringUtil.beautifyNominal(product.price) + ",00"] },
@@ -20,6 +21,7 @@ class DetailProductPanel extends Component {
                 ]
             } else {
                 row = [
+                    { values: ["Code", product.code] },
                     { values: ["Name", product.name + "-" + product.id] },
                     { values: ["Unit", product.unit.name] },
                     { values: ["Category", product.category.name] },
