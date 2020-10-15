@@ -278,15 +278,19 @@ export const getCashflowInfo = (month, year, type, app) => {
     };
 }
 
-export const getProductListTrx = (name, app) => {
+export const getProductListTrx = (request, app) => {
     app.startLoading();
+    const callback = request.callback;
+    const fieldsFilter = {};
+    fieldsFilter[request.filterName] = request.filterValue; 
+    
     return {
         type: types.FETCH_PRODUCT_LIST_TRX,
         payload: {
-            entity: "product", filter: { page: 0, limit: 10, fieldsFilter: { name: name } }
+            entity: "product", filter: { page: 0, exacts: (request.exacts==true), limit: 10, fieldsFilter: fieldsFilter }
         },
         meta: {
-            type: types.FETCH_PRODUCT_LIST, url: apiEntityBaseUrl.concat("get"), app: app
+            type: types.FETCH_PRODUCT_LIST_TRX, url: apiEntityBaseUrl.concat("get"), app: app, callback: callback
         }
     }
 }
@@ -451,11 +455,13 @@ export const getSupplierList = (request, app) => {
 export const getProductList = (request, app) => {
     // app.startLoading(request.withStock == true);
     app.startLoading(true);
+
     let requested = {
         type: types.FETCH_PRODUCT_LIST,
         payload: {
             entity: "product",
             filter: {
+                exacts: request.exacts == true,
                 limit: 10,
                 page: request.page,
                 fieldsFilter: {

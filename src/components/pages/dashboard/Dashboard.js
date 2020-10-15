@@ -68,8 +68,6 @@ class Dashboard extends Component {
         let cashflowInfoIn = this.props.cashflowInfoIn ? this.props.cashflowInfoIn : { amount: "loading...", count: "loading..." };
         let cashflowInfoOut = this.props.cashflowInfoOut ? this.props.cashflowInfoOut : { amount: "loading...", count: "loading..." };
 
-        console.log("this.props.cashflowInfoIn ", this.props.cashflowInfoIn);
-
         let mainComponent = <div>
             <div className="cashflow-info">
                 <h3>Cashflow Info</h3>

@@ -207,7 +207,18 @@ class TransactionPurchasing
             if (value == null || value.trim() == "") { return; }
             this.addFormFieldId(id);
             this.setState({ showDetail: true, productName: value })
-            this.props.getProductList(value, this.props.app);
+            this.props.getProductList({ filterName:'name', filterValue: value }, this.props.app);
+            this.setActiveField(id);
+        }
+
+        this.getProductByCode = (value, id) => {
+            const app = this;
+            this.addFormFieldId(id);
+            this.setState({ showDetail: true });
+            this.props.getProductList({ exacts: true, filterName:'code', filterValue: value, callback: function(response){
+                const product = response.entities[0];
+                app.setState({ productName: product.name, product: product });
+            }}, this.props.app);
             this.setActiveField(id);
         }
 
@@ -216,11 +227,13 @@ class TransactionPurchasing
                 alert("Data not found!");
                 return;
             }
-            for (let i = 0; i < this.props.products.length; i++)
-                if (this.props.products[i].id == id)
-                    this.setState({ productName: this.props.products[i].name, product: this.props.products[i] });
+            for (let i = 0; i < this.props.products.length; i++) {
+                const product = this.props.products[i];
+                if (product.id == id) {
+                    this.setState({ productName: product.name, product: product });
+                }
+            }
             this.props.resetProducts();
-
         }
 
         this.messageComponent = () => {
@@ -281,10 +294,12 @@ class TransactionPurchasing
                             <DynamicDropdown onSelect={this.selectSupplier} dropdownList={supplierList}
                                 value={this.state.supplierName}
                                 onKeyUp={this.getSupplierList} id="input-supplier-name-purc" placeholder="supplier name" />,
-                            <Label text="Product" />,
+                            <Label text="Product Name" />,
                             <DynamicDropdown onSelect={this.selectProduct} id="input-product-name-purc" dropdownList={productList}
                                 value={this.state.productName}
                                 onKeyUp={this.getProductList} placeholder="input product name" />,
+                            <Label text="Or Product Code" />,
+                            <InputField onEnterPress={this.getProductByCode} id="input-product-code-purc" placeholder="product code" />,
                             <Label text="Price" />,
                             <InputField id="input-product-price-purc"
                                 value={this.state.price} onKeyUp={(value, id) => {
@@ -352,7 +367,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
-    getProductList: (productName, app) => dispatch(actions.getProductListTrx(productName, app)),
+    getProductList: (request, app) => dispatch(actions.getProductListTrx(request, app)),
     submitSupplyTransaction: (request, app) => dispatch(actions.submitSupplyTrx(request, app)),
     resetPurchaseTransaction: () => dispatch(actions.resetPurchaseTransaction()),
     resetSuppliers: () => dispatch(actions.resetSuppliers()),

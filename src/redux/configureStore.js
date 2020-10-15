@@ -183,8 +183,11 @@ const getCashflowInfoMiddleware = store => next => action => {
 
 const getProductListTrxMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.FETCH_PRODUCT_LIST_TRX) { return next(action); }
-
-    if (action.payload.filter.fieldsFilter.name == null || action.payload.filter.fieldsFilter.name.trim() == "") {
+   
+    const productAndNameIsNull = action.payload.filter.fieldsFilter.code == null && action.payload.filter.fieldsFilter.name == null;
+    const productAndNameIsEmpty= action.payload.filter.fieldsFilter.code == "" && action.payload.filter.fieldsFilter.name == "";
+    
+    if (productAndNameIsNull || productAndNameIsEmpty) {
         let newAction = Object.assign({}, action, {
             payload: { entities: [] }
         });
@@ -201,6 +204,11 @@ const getProductListTrxMiddleware = store => next => action => {
                     alert("Data not found!");
                     return;
                 }
+                 
+                if(action.meta.callback) {
+                    action.meta.callback(data);
+                }
+
                 let newAction = Object.assign({}, action, { payload: data });
                 delete newAction.meta;
                 store.dispatch(newAction);

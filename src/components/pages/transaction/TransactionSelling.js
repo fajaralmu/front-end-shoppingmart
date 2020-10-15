@@ -281,11 +281,11 @@ class TransactionSelling extends Component {
                     <Label text="Customer" />,
                     <DynamicDropdown value={this.state.customerName} onSelect={this.selectCustomer} dropdownList={customerList}
                         onKeyUp={this.getCustomerList} id="input-customer-name-sell" placeholder="customer name" />,
-                    <Label text="Product" />,
+                    <Label text="Product Name" />,
                     <DynamicDropdown value={this.state.productName} onSelect={this.selectproduct} dropdownList={productList}
                         onKeyUp={this.getProductStockList} id="input-product-name-sell" placeholder="product name" />,
                     <Label text="Or Product Code" />,
-                    <InputField  onEnterPress={this.getProductStockListByCode} id="input-product-code-sell" placeholder="product code" />,
+                    <InputField onEnterPress={this.getProductStockListByCode} id="input-product-code-sell" placeholder="product code" />,
                     <Label text="Quantity" />,
                     <InputField id="input-quantity-sell"
                         value={this.state.quantity} onKeyUp={(value, id) => this.setState({ activeField: id, quantity: value })}
