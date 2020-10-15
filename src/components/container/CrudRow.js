@@ -8,6 +8,7 @@ class CrudRow extends Component {
         super(props);
 
         this.handleEdit = () => {
+            console.debug("handleEdit");
             if (this.props.handleEdit && !this.props.disabled) {
                 this.props.handleEdit(this.props.identifier);
             }
@@ -16,6 +17,15 @@ class CrudRow extends Component {
             if (this.props.handleDelete) {
                 this.props.handleDelete(this.props.identifier);
             }
+        }
+
+        this.rowOnClick = (e) => {
+            if( !this.props.disabled){
+                e.preventDefault();
+                this.handleEdit();
+                 
+            } 
+            return false;
         }
     }
 
@@ -67,10 +77,11 @@ class CrudRow extends Component {
         }
 
         return (
-            <tr className={disabled ? "" : "crud-row"} style={trStyle} key={stringUtil.uniqueId()}
-                valign={this.props.valign} onClick= {this.handleEdit}> 
+            <tr className={disabled ? "crud-disabled" : "crud-row"} style={trStyle} key={stringUtil.uniqueId()}
+                valign={this.props.valign} onContextMenu= {this.rowOnClick}> 
                 <Cells values={values} trStyle={trStyle} />
-                {actionButton}</tr>
+                {actionButton}
+            </tr>
         )
     }
 }

@@ -79,8 +79,6 @@ class TransactionPurchasing
             }
             
             this.setState({ productFlows: currentFlows });
-            this.showMessage("Success saving to chart", "success");
-
         }
 
         this.getProductFlow = (productId) => {
@@ -145,11 +143,7 @@ class TransactionPurchasing
             }, function (e) { });
         }
 
-        this.endMessage = () => { this.setState({ messageShow: false }) }
-
-        this.showMessage = (text, type) => {
-            this.setState({ messageShow: true, messageText: text, messageType: type });
-        }
+        this.endMessage = () => { this.setState({ messageShow: false }) } 
 
         this.reset = () => {
             componentUtil.clearFields(null);
