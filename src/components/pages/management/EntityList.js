@@ -11,6 +11,7 @@ import EntityForm from './EntityForm';
 import * as url from '../../../constant/Url'
 import Label from '../../container/Label'
 import GridComponent from './../../container/GridComponent';
+import { CenterLoading } from '../../messages/SimpleLoader'
 
 class EntityList extends Component {
     constructor(props) {
@@ -128,7 +129,7 @@ class EntityList extends Component {
             const entityProperty = this.props.entityProperty;
 
             if (null == entitiesData || null == entityConfig || null == entitiesData.entities) {
-                return (<h2>Entity Not Found</h2>)
+                return (<CenterLoading />)
             }
 
             const rows = [
@@ -210,7 +211,7 @@ class EntityList extends Component {
         const entityConfig = this.props.entityConfig;
 
         if (null == entitiesData || null == entityConfig || null == entitiesData.entities) {
-            return (<h2>Entity Not Found</h2>)
+            return (<CenterLoading />)
         }
         return (
             <div style={{ textAlign: 'center' }}>
@@ -236,6 +237,8 @@ class EntityList extends Component {
     }
 
 }
+
+ 
 
 function SortingButton(props) {
     return (<ActionButtons orientation="vertical" buttonsData={[{

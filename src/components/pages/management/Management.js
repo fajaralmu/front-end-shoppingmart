@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import ContentTitle from '../../container/ContentTitle' 
 import EntityList from './EntityList';
 import Tab from '../../navigation/Tab';
+import { CenterLoading } from '../../messages/SimpleLoader';
 
 class Management extends Component {
     constructor(props) {
@@ -54,13 +55,13 @@ class Management extends Component {
         }
 
         this.checkIfCurrentMenuName = (name) => {
-            if(!this.state.entityConfig){
+            if(!this.state.entityConfig || !this.props.entitiesData.entityConfig){
                 return false;
             }
-            return this.state.entityConfig.entityName == name || (this.props.entitiesData.entityConfig && this.props.entitiesData.entityConfig.entityName == name);
+            return (this.state.entityConfig.entityName == name) || (this.props.entitiesData.entityConfig.entityName == name);
         }
 
-        this.getButtonsData = () => {
+        this.getTabMenusData = () => {
 
             if(this.props.entityConfigList == null) {
                 return [];
@@ -71,7 +72,7 @@ class Management extends Component {
             for (let i = 0; i < configList.length; i++) {
                 const config = configList[i];
                 buttonsData.push( {
-                    text: config.entityName.toUpperCase(),
+                    text: config.label,
                     active: this.checkIfCurrentMenuName(config.entityName),
                     onClick: () => { this.loadEntityManagement(config) }
                 });
@@ -128,7 +129,7 @@ class Management extends Component {
         let entityList = this.props.entitiesData ? this.props.entitiesData.entities : [];
         if (null == entityList) { entityList = []; }
 
-        const buttonsData = this.getButtonsData();
+        const buttonsData = this.getTabMenusData();
 
         return (
             <div className="section-container">
@@ -149,7 +150,7 @@ class Management extends Component {
                         removeManagedEntity={this.removeManagedEntity}
                         updateEntity={this.updateEntity}
                         entityProperty={this.props.entityProperty}
-                    /> : <h3>Please wait..</h3>}
+                    /> :<CenterLoading />}
                 </div>
             </div>
         )

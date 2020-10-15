@@ -239,12 +239,11 @@ class App extends Component {
     for (let i = 0; i < additionalMenus.length; i++) {
 
       const menu = additionalMenus[i];
+      const isNotAuthenticated = this.props.loginStatus != true && menu.authenticated == true;
+      const isShoppingDisabled = !this.state.enableShopping && menu.code == 'cart';
 
-      if (!this.state.enableShopping && menu.code == 'cart')
-        continue;
-
-      if (this.props.loginStatus != true && menu.authenticated == true)
-        continue;
+      if (isNotAuthenticated) { continue; } 
+      if (isShoppingDisabled) { continue; }
 
       menus.push(menu);
     }
@@ -259,10 +258,8 @@ class App extends Component {
       return (<Loader realtime={false} text="Please wait..." type="loading" />)
     }
 
-    const menus = this.setMenus();
-    const cloudHost = "https://nuswantoroshop.herokuapp.com/";
-    const localHost = "http://localhost:8080/universal-good-shop/";
-    const usedHost = localHost;
+    const menus = this.setMenus(); 
+    const usedHost = url.contextPath();
     const applicationProfile = this.props.applicationProfile;
     const isHideSidebar = this.state.hideSidebar == true;
     const contentClass = isHideSidebar ? 'col-12' : 'col-10';

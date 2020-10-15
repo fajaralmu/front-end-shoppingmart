@@ -1,7 +1,7 @@
 import * as types from './types'
-const hostCloud = "https://nuswantoroshop.herokuapp.com/";
-const hostLocal = "http://localhost:8080/universal-good-shop/";
-const usedHost = hostLocal;
+import * as url from '../constant/Url'
+
+const usedHost = url.contextPath();
 const apiBaseUrl = usedHost + "api/public/"
 const apiEntityBaseUrl = usedHost + "api/entity/"
 const apiAccount = usedHost + "api/account/"
