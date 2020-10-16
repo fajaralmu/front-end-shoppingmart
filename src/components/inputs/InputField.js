@@ -9,10 +9,16 @@ class InputField extends Component {
         super(props);
         this.handleKeyup = (e) => {
             if( this.props.id){
+                var value = byId(this.props.id).value;
+
+                if(this.props.type == "number"){
+                    value = parseInt(value);
+                }
+
                 if(this.props.onEnterPress && e.keyCode == 13) {
-                    this.props.onEnterPress(byId(this.props.id).value, this.props.id);
+                    this.props.onEnterPress(value, this.props.id);
                 }else if (this.props.onKeyUp) {
-                    this.props.onKeyUp(byId(this.props.id).value, this.props.id);
+                    this.props.onKeyUp(value, this.props.id);
                 }
             }
         }
@@ -83,7 +89,7 @@ class InputField extends Component {
         }
 
         return (
-            <div className="input-field">
+            <div className={"input-field "+this.props.className}>
                 {inputField}
                 {this.props.type == "radio" || this.props.type == "checkbox" ?
                  <span style={{ fontSize: '0.9em', margin:'4px' }}>{this.props.text} </span> : ""}

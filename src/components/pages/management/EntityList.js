@@ -362,11 +362,14 @@ function NavigationButton(props) {
     });
 
     const style = { width: 'min-content', paddingTop: '15px', margin: '10px' };
-    return (<div>
-        
-        <InputField placeholder="Page" style={{width:'min-content'}} id="input-page" type="number" 
-            onEnterPress={(val, id)=>props.goToPage(parseInt(val)-1) } />
-        <ActionButtons style={style} buttonsData={fixButtonData} />
+    return (<div class="row">
+            <div className="col-2 " style={{textAlign:'center'}}>
+                <InputField placeholder="Page" className="input-page"  id="input-page" type="number" 
+                onEnterPress={(val, id)=>props.goToPage((val)-1) } />
+            </div>
+            <div className="col-10">
+                <ActionButtons style={style} buttonsData={fixButtonData} />
+            </div>
         </div>);
 
 }
