@@ -115,7 +115,7 @@ class ProductSales
             }]} />);
         }
 
-        this.constructFilterInfo = (productSalesData) => {
+        this.constructFilterInfo = () => {
             return (<div>
                 {"From "}
                 {stringUtil.monthYearString(this.state.fromMonth, this.state.fromYear)}
@@ -140,10 +140,11 @@ class ProductSales
 
         const productSalesData = this.props.productSalesData != null ? this.props.productSalesData : { entities: [], filter: {} };
         const maxValue = stringUtil.getMaxSales(productSalesData.entities);
-        const filterInfo = this.constructFilterInfo(productSalesData);
+        const filterInfo = this.constructFilterInfo();
         const filterBox = this.constructFilterBox();
         const productDetailRows = new Array();
         const chartGroups = new Array();
+
         /**
          * construct chart
          */
@@ -164,18 +165,23 @@ class ProductSales
             })
         }
 
-        let productSalesListComponent =
-            <div className="cashflow-list">
-                <GraphChart chartGroups={chartGroups} maxValue={maxValue} chartData={productDetailRows} orientation={"horizontal"} />
-            </div>
+        let productSalesListComponent;
 
         /**
          * if show detail
          */
         let productSalesDetailsXX = this.props.productSalesDetails;
         if (this.state.showDetail) {
-            productSalesListComponent = <ProductSalesDetail productSalesDetails={productSalesDetailsXX}
+            productSalesListComponent = <ProductSalesDetail 
+                productSalesDetails={productSalesDetailsXX}
                 goBack={() => { this.setState({ showDetail: false }) }} />
+        } else if(productSalesData.entities.length > 0){
+            productSalesListComponent = (
+                <div className="cashflow-list">
+                    <GraphChart chartGroups={chartGroups} maxValue={maxValue} chartData={productDetailRows} orientation={"horizontal"} />
+                </div>)
+        } else {
+            productSalesListComponent = <h2>No Data</h2>
         }
 
         return (
