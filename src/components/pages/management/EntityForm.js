@@ -440,7 +440,8 @@ class EntityForm extends Component {
                         entityConfig={this.props.entityConfig}
                         managedEntity={this.props.managedEntity}
                         handleSubmit={this.handleSubmit}
-                        clear={this.clear} />
+                        clear={this.clear}
+                        hideForm={this.props.hideForm} />
                 </div>
             </div>
         )
@@ -459,6 +460,11 @@ function FormActionButtons(props) {
                 text: "Clear",
                 status: "warning",
                 onClick: props.clear
+            },
+            {
+                text: "Hide Form",
+                status: "secondary",
+                onClick: props.hideForm
             }
         ]} />)
     }

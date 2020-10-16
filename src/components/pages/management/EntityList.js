@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import InstantTable from '../../container/InstantTable'
 import { byId } from '../../../utils/ComponentUtil'
 import * as stringUtil from '../../../utils/StringUtil'
-import './Management.css'
 import './Entity.css'
 import * as componentUtil from '../../../utils/ComponentUtil'
 import ActionButtons from '../../buttons/ActionButtons';
@@ -12,6 +11,7 @@ import * as url from '../../../constant/Url'
 import Label from '../../container/Label'
 import GridComponent from './../../container/GridComponent';
 import { CenterLoading } from '../../messages/SimpleLoader'
+import ActionButton from '../../buttons/ActionButton'
 
 class EntityList extends Component {
     constructor(props) {
@@ -20,7 +20,8 @@ class EntityList extends Component {
             filter: {},
             activeId: null,
             orderBy: null,
-            orderType: null
+            orderType: null,
+            formDisplayed: true,
         }
 
         this.handleDelete = (id) => {
@@ -29,6 +30,12 @@ class EntityList extends Component {
         }
         this.handleEdit = (id) => {
             this.getEntityById(id);
+        }
+        this.hideForm = () => {
+            this.setState({formDisplayed: false});
+        }
+        this.showForm = () => {
+            this.setState({formDisplayed: true});
         }
 
         this.goToPage = (page, orderObject) => {
@@ -135,7 +142,7 @@ class EntityList extends Component {
             const rows = [
                 //header
                 {
-                    values: ["No", ...getHeaderNamesv2(entityProperty)], disabled: true, style: { textAlign: 'center', fontWeight: 'bold' }
+                    values: ["No", ... getHeaderNamesv2(entityProperty)], disabled: true, style: { textAlign: 'center', fontWeight: 'bold' }
                 },
                 //filter
                 {
@@ -213,13 +220,19 @@ class EntityList extends Component {
         if (null == entitiesData || null == entityConfig || null == entitiesData.entities) {
             return (<CenterLoading />)
         }
+
+        const isEditable = this.props.entityProperty.editable == true ;
+
         return (
             <div style={{ textAlign: 'center' }}>
-                <div className="entity-container">
-                    <div style={{ backgroundColor: 'white', margin: '10px' }} > </div>
-                    <NavigationButton buttonsData={this.createNavButtons()}
-                        goToPage={this.goToPage} currentPage={this.props.currentPage} />
-                    <div className="entityForm">
+                <div className="row">
+                    <div className="col-12"> 
+                        <ToggleForm showForm={this.showForm} displayed={this.state.formDisplayed==false} />
+                        <NavigationButton buttonsData={this.createNavButtons()}
+                            goToPage={this.goToPage} currentPage={this.props.currentPage} />
+                    </div>
+                   {isEditable && this.state.formDisplayed? 
+                   <div className="col-4 entityForm">
                         <EntityForm
                             app={this.props.app}
                             updateEntity={this.props.updateEntity}
@@ -227,9 +240,13 @@ class EntityList extends Component {
                             managedEntity={this.props.managedEntity}
                             entityProperty={this.props.entityProperty}
                             entityConfig={entityConfig}
+                            hideForm={this.hideForm}
                         />
+                    </div> 
+                    : null}
+                    <div className={isEditable && this.state.formDisplayed?"col-8":"col-12"}> 
+                        <EntityTable rows={this.getEntityDataTableRowData()} />
                     </div>
-                    <EntityTable rows={this.getEntityDataTableRowData()} />
                 </div>
             </div>
 
@@ -238,7 +255,12 @@ class EntityList extends Component {
 
 }
 
- 
+function ToggleForm(props){
+    if(props.displayed == false){
+        return null;
+    }
+    return <ActionButton text="Show Form" onClick={props.showForm} status="outline-secondary btn-sm"/>
+}
 
 function SortingButton(props) {
     return (<ActionButtons orientation="vertical" buttonsData={[{
