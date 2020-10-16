@@ -1,7 +1,7 @@
 .detail-supplier-container{
     max-height: 500px;
     overflow: scroll;
-    width: 400px;
+    width: 100%;
     background-color: white;
     padding:5px;
     margin:5px;

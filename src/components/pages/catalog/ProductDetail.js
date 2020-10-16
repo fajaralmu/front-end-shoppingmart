@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import './ProductDetail.css'
-import DetailRow from '../../DetailRow'
 import * as url from '../../../constant/Url'
 import * as actions from '../../../redux/actionCreators'
 import { connect } from 'react-redux'
@@ -68,23 +67,22 @@ class ProductDetail extends Component {
 
         /////////////////////////
 
-        let supplierListPanel = <p></p>
+        let supplierListPanel = <p>No Supplier</p>
         let supplierShown = this.state.supplierShown ? true : false;
-        if (supplierShown && product.suppliers) {
+        if (supplierShown && product.suppliers && product.suppliers.length > 0) {
             supplierListPanel = <div className="detail-supplier-container">
                 <h3>Supplier List</h3>
-                <table className="supplier-container">
-                    <tbody>
-                        {product.suppliers.map(
-                            supplier => {
-                                return (
-                                    <DetailRow desc={supplier.website} id={"supp-" + supplier.id} key={"supp-" + supplier.id} icon={supplier.iconUrl} name={supplier.name} />
-                                )
-                            }
-                        )}
-                    </tbody>
-                </table>
-                {this.state.supplierPage}
+                <ol>
+                    {product.suppliers.map(
+                        supplier => {
+                            return (
+                                <li><SupplierItem  key={"supp-" + supplier.id} icon={supplier.iconUrl} content={supplier.name} /></li>
+                            )
+                        }
+                    )}
+                    
+                    </ol>
+                {/* {this.state.supplierPage} */}
                 <ActionButton
                     id="btn-show-more"
                     onClick={() => this.loadMoreSupplier(this.state.supplierPage, product.id)}
@@ -117,6 +115,17 @@ class ProductDetail extends Component {
             </div>
         )
     }
+}
+
+function SupplierItem(props){
+    
+    return (
+        <div className="row" style={{padding: '5px'}} >
+            <div className="col-2"> <img src={url.baseImageUrl+props.icon} width="50" height="50"/> </div>
+            <div className="col-10">{props.content}</div>
+        </div>
+    )
+    
 }
 
 function ProductImage(props) {
