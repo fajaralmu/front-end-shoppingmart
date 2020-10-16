@@ -5,10 +5,8 @@ import * as actions from '../../../redux/actionCreators'
 import ActionButton from '../../buttons/ActionButton'
 import * as stringUtil from '../../../utils/StringUtil'
 import ActionButtons from '../../buttons/ActionButtons'
-import InstantTable from '../../container/InstantTable'
 import * as componentUtil from '../../../utils/ComponentUtil'
 import { byId } from '../../../utils/ComponentUtil'
-import Chart from '../../Chart'
 import * as creator from '../../../utils/ComponentCreator'
 import InputField from '../../inputs/InputField'
 import Label from '../../container/Label'
@@ -118,15 +116,12 @@ class ProductSales
         }
 
         this.constructFilterInfo = (productSalesData) => {
-            let periodInfo = <div>
-                {"From: "}
-                <span>{stringUtil.monthYearString(productSalesData.filter.month, productSalesData.filter.year)}</span>
-                {" To: "}
-                <span>{stringUtil.monthYearString(productSalesData.filter.monthTo, productSalesData.filter.yearTo)}</span>
-            </div>
             return (<div>
-                {periodInfo}
-            </div>)
+                {"From "}
+                {stringUtil.monthYearString(this.state.fromMonth, this.state.fromYear)}
+                {" to "}
+                {stringUtil.monthYearString(this.state.toMonth, this.state.toYear)}
+             </div>)
         }
 
     }
