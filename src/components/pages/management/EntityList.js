@@ -12,7 +12,7 @@ import Label from '../../container/Label'
 import GridComponent from './../../container/GridComponent';
 import { CenterLoading } from '../../messages/SimpleLoader'
 import ActionButton from '../../buttons/ActionButton'
-import {FIELD_TYPE_DYNAMIC_LIST, FIELD_TYPE_NUMBER, FIELD_TYPE_DATE, FIELD_TYPE_FIXED_LIST, FIELD_TYPE_PLAIN_LIST, FIELD_TYPE_IMAGE} from '../../../constant/FieldTypes'
+import { FIELD_TYPE_DYNAMIC_LIST, FIELD_TYPE_NUMBER, FIELD_TYPE_DATE, FIELD_TYPE_FIXED_LIST, FIELD_TYPE_PLAIN_LIST, FIELD_TYPE_IMAGE } from '../../../constant/FieldTypes'
 
 class EntityList extends Component {
     constructor(props) {
@@ -34,10 +34,10 @@ class EntityList extends Component {
             this.getEntityById(id);
         }
         this.hideForm = () => {
-            this.setState({formDisplayed: false});
+            this.setState({ formDisplayed: false });
         }
         this.showForm = () => {
-            this.setState({formDisplayed: true});
+            this.setState({ formDisplayed: true });
         }
 
         this.goToPage = (page, orderObject) => {
@@ -56,7 +56,7 @@ class EntityList extends Component {
                 this.setState({ orderBy: orderObject.orderBy, orderType: orderObject.orderType });
             }
 
-            this.props.getEntityInPage(config, page);
+            this.props.fetchEntities(config, page);
 
         }
 
@@ -95,14 +95,14 @@ class EntityList extends Component {
                     value = this.state.filter[id];
                 }
 
-                let input; 
+                let input;
 
                 if (element.type == FIELD_TYPE_DATE) {
                     input = <DateFilter id={id} filter={this.state.filter} app={this} />
                 } else {
                     input = <InputField value={value} id={id + "_filter_id"}
-                    onKeyUp={this.handleFilterChange} key={"input_field_" + stringUtil.uniqueId()}
-                    placeholder={id} />
+                        onKeyUp={this.handleFilterChange} key={"input_field_" + stringUtil.uniqueId()}
+                        placeholder={id} />
                 }
 
                 inputs.push(<div className="filter-wrapper">
@@ -113,6 +113,14 @@ class EntityList extends Component {
             return inputs;
         }
 
+        this.clearFilter = () => {
+            if (this.props.entityConfig.filter == null  ) {
+                return;
+            }
+            this.setState({ filter: {}, activeId: null });
+            this.props.entityConfig.filter = null;
+            this.props.fetchEntities(this.props.entityConfig, 0);
+        }
 
         this.handleFilterChange = (value, id) => {
 
@@ -128,7 +136,7 @@ class EntityList extends Component {
         }
 
         this.focusActiveId = () => {
-            if (byId(this.state.activeId)) {
+            if (this.state.activeId && byId(this.state.activeId)) {
                 byId(this.state.activeId).focus();
             }
         }
@@ -142,17 +150,14 @@ class EntityList extends Component {
             if (null == entitiesData || null == entityConfig || null == entitiesData.entities) {
                 return (<CenterLoading />)
             }
-
-            const rows = [
-                //header
-                {
-                    values: ["No", ... getHeaderNamesv2(entityProperty)], disabled: true, style: { textAlign: 'center', fontWeight: 'bold' }
-                },
-                //filter
-                {
-                    values: [null, ... this.createFilterInputsv2(entityProperty)], disabled: true
-                }
-            ];
+            const buttonClearFilter = <ActionButton text="clear" status="outline-secondary" onClick={this.clearFilter} />;
+            const headerColumn = {
+                values: ["No", ...getHeaderNamesv2(entityProperty)], disabled: true, style: { textAlign: 'center', fontWeight: 'bold' }
+            };
+            const filterColumn = {
+                values: [buttonClearFilter, ... this.createFilterInputsv2(entityProperty)], disabled: true
+            };
+            const TABLE_ROWS = [headerColumn, filterColumn];
 
             const entities = this.props.entitiesData.entities;
             const idField = entityProperty.idField;
@@ -176,16 +181,16 @@ class EntityList extends Component {
                             // } else if (element.type == "link") {
                             //     entityValue = <a href={entityValue}><u>{entityValue}</u></a>
                         } else if (element.type == FIELD_TYPE_IMAGE && element.multiple == false) {
-                            entityValue =  <SquareImage size={imageSize} src={url.baseImageUrl + entityValue} />
-                            
+                            entityValue = <SquareImage size={imageSize} src={url.baseImageUrl + entityValue} />
+
                         } else if (element.type == FIELD_TYPE_IMAGE && element.multiple == true) {
                             let imgName = entityValue.split("~")[0];
-                            entityValue =  <SquareImage size={imageSize} src={url.baseImageUrl + imgName} />
+                            entityValue = <SquareImage size={imageSize} src={url.baseImageUrl + imgName} />
 
                         } else if (element.type == FIELD_TYPE_DATE) {
                             const dateStr = new Date(entityValue).toDateString();
                             entityValue = <Label text={dateStr} />;
-                        
+
                         } else if (isObject) {
                             entityValue = entityValue[element.optionItemName];
                         }
@@ -202,7 +207,7 @@ class EntityList extends Component {
                     rowValues.push(entityValue);
                 }
 
-                rows.push(
+                TABLE_ROWS.push(
                     {
                         identifier: entity[idField],
                         values: rowValues,
@@ -212,7 +217,7 @@ class EntityList extends Component {
                     }
                 )
             }
-            return rows;
+            return TABLE_ROWS;
         }
     }
 
@@ -229,30 +234,30 @@ class EntityList extends Component {
             return (<CenterLoading />)
         }
 
-        const isEditable = this.props.entityProperty.editable == true ;
+        const isEditable = this.props.entityProperty.editable == true;
 
         return (
             <div style={{ textAlign: 'center' }}>
                 <div className="row">
-                    <div className="col-12"> 
-                        <ToggleForm showForm={this.showForm} displayed={this.state.formDisplayed==false} />
+                    <div className="col-12">
+                        <ToggleForm showForm={this.showForm} displayed={this.state.formDisplayed == false} />
                         <NavigationButton buttonsData={this.createNavButtons()}
                             goToPage={this.goToPage} currentPage={this.props.currentPage} />
                     </div>
-                   {isEditable && this.state.formDisplayed? 
-                   <div className="col-4 entityForm">
-                        <EntityForm
-                            app={this.props.app}
-                            updateEntity={this.props.updateEntity}
-                            removeManagedEntity={this.props.removeManagedEntity}
-                            managedEntity={this.props.managedEntity}
-                            entityProperty={this.props.entityProperty}
-                            entityConfig={entityConfig}
-                            hideForm={this.hideForm}
-                        />
-                    </div> 
-                    : null}
-                    <div className={isEditable && this.state.formDisplayed?"col-8":"col-12"}> 
+                    {isEditable && this.state.formDisplayed ?
+                        <div className="col-4 entityForm">
+                            <EntityForm
+                                app={this.props.app}
+                                updateEntity={this.props.updateEntity}
+                                removeManagedEntity={this.props.removeManagedEntity}
+                                managedEntity={this.props.managedEntity}
+                                entityProperty={this.props.entityProperty}
+                                entityConfig={entityConfig}
+                                hideForm={this.hideForm}
+                            />
+                        </div>
+                        : null}
+                    <div className={isEditable && this.state.formDisplayed ? "col-8" : "col-12"}>
                         <EntityTable rows={this.getEntityDataTableRowData()} />
                     </div>
                 </div>
@@ -263,29 +268,29 @@ class EntityList extends Component {
 
 }
 
-function ToggleForm(props){
-    if(props.displayed == false){
+function ToggleForm(props) {
+    if (props.displayed == false) {
         return null;
     }
-    return <ActionButton text="Show Form" onClick={props.showForm} status="outline-secondary btn-sm"/>
+    return <ActionButton text="Show Form" onClick={props.showForm} status="outline-secondary btn-sm" />
 }
 
 function SortingButton(props) {
-    return (<ActionButtons orientation="vertical" buttonsData={[{
+    const ascending = {
         status: 'outline-secondary btn-xs no-border',
         onClick: () => { props.app.setOrderBy(props.id, 'asc') },
         text: <i className={"fa fa-angle-up"} aria-hidden="true"></i>
-    },
-    {
+    };
+    const descending = {
         status: 'outline-secondary btn-xs no-border',
         onClick: () => { props.app.setOrderBy(props.id, 'desc') },
         text: <i className={"fa fa-angle-down"} aria-hidden="true"></i>
-    }
-    ]} />);
+    };
+    return (<ActionButtons orientation="vertical" buttonsData={[ascending, descending]} />);
 }
 
 function DateFilter(props) {
-    
+
     const app = props.app;
     const id = props.id;
     const valueDay = props.filter[id + "-day"];
@@ -321,7 +326,7 @@ const getHeaderNamesv2 = function (entityProperty) {
     return headers;
 }
 
-function SquareImage(props){
+function SquareImage(props) {
     return <img width={props.size} height={props.size} alt={props.src} src={props.src} />;
 }
 

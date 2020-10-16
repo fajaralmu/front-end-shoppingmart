@@ -20,7 +20,7 @@ class Management extends Component {
         }
 
         this.refresh = () => {
-            this.getEntityInPage(this.state.entityConfig, this.state.currentPage);
+            this.fetchEntities(this.state.entityConfig, this.state.currentPage);
         }
 
         this.loadEntityManagement = (config) => {
@@ -37,7 +37,7 @@ class Management extends Component {
             this.props.getEntityProperty(config.entityName, this.props.app);
         }
 
-        this.getEntityInPage = (config, page) => {
+        this.fetchEntities = (config, page) => {
             this.setState({ currentPage: page });
 
             const request = {
@@ -45,7 +45,7 @@ class Management extends Component {
                 page: page,
                 limit: 10,
                 entityConfig: config,
-                fieldsFilter: config.filter,
+                fieldsFilter: config.filter?config.filter: {},
                 orderBy: config.orderBy,
                 orderType: config.orderType,
             };
@@ -145,7 +145,7 @@ class Management extends Component {
                     {this.props.entityProperty? 
                     <EntityList currentPage={this.state.currentPage}
                         app={this.props.app}
-                        getEntityInPage={this.getEntityInPage}
+                        fetchEntities={this.fetchEntities}
                         entityConfig={this.props.entitiesData.entityConfig}
                         entitiesData={this.props.entitiesData}
                         managedEntity={this.props.managedEntity}
