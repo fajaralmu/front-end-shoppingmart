@@ -289,7 +289,7 @@ class Catalog extends Component {
         let products = this.props.catalogData.entities == null ? [] : this.props.catalogData.entities;
 
         let productCatalog = (
-            <div className="section-container" id="catalog-main" key="catalog-main">
+            <div className="section-container">
                 <ContentTitle title="Catalog Page" iconClass="fas fa-store-alt" description="Choose your favourite products" />
                 <NavButtons buttonsData={this.generateNavButtonsData()} />
 

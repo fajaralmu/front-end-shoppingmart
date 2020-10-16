@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import * as x from '../catalog/Catalog.css'
 import { BrowserRouter as Router, Route, Link, Switch, withRouter } from 'react-router-dom'
 import * as actions from '../../../redux/actionCreators'
 import * as menus from '../../../constant/Menus'
@@ -13,6 +12,9 @@ import ContentTitle from '../../container/ContentTitle'
 import NavButtons from '../../navigation/NavButtons'
 import GridComponent from '../../container/GridComponent'
 import InputField from '../../inputs/InputField'
+import SupplierDetail from './SupplierDetail'
+
+const DEFAULT_TITLE =  "Our Suppliers";
 
 class SupplierList extends Component {
 
@@ -24,6 +26,7 @@ class SupplierList extends Component {
             supplierPage: 0, firstLoad: true,
             requestOrderBy: null, requestOrderType: null,
             requestSupplierName: "",
+            supplierDetail : null
         };
 
         this.getSupplierList = (_page) => {
@@ -33,8 +36,19 @@ class SupplierList extends Component {
                 orderby: this.state.requestOrderBy,
                 ordertype: this.state.requestOrderType
             }, this.props.app);
+            
             this.setState({ supplierPage: _page });
             this.setState({ totalData: this.props.suppliersData.totalData });
+        }
+
+        this.showSupplierDetail = (supplier) => {
+            document.title = supplier.name;
+            this.setState({supplierDetail: supplier});
+        }
+
+        this.hideSupplierDetail = () => {
+            document.title = DEFAULT_TITLE;
+            this.setState({supplierDetail: null});
         }
 
         this.handleOrderChange = (value) => {
@@ -132,12 +146,11 @@ class SupplierList extends Component {
                 <p></p>
             </div>);
         }
-
     }
 
     componentWillMount() {
 
-        document.title = "Our Suppliers";
+        document.title = DEFAULT_TITLE;
         this.getSupplierList(this.state.supplierPage);
         this.props.setMenuCode(menus.SUPPLIERLIST);
 
@@ -157,35 +170,39 @@ class SupplierList extends Component {
 
         let suppliers = this.props.suppliersData.entities == null ? [] : this.props.suppliersData.entities;
 
-        let supplierCatalog = (<div className="section-container" id="catalog-main" key="catalog-main">
-            <ContentTitle title="Supplier List Page" iconClass="fas fa-warehouse" description="List of our partners" />
-            <NavButtons buttonsData={this.generateNavButtonsData()} />
-            <this.filterBox />
-            <div className="row catalog-container">
-                {suppliers.map(
-                    supplier => {
-                       return <SupplierCard supplier={supplier} />
-                    }
-                )}
-            </div>
-        </div>);
+        let content;
+        if(this.state.supplierDetail){
+            content = <SupplierDetail app={this.props.app} hideDetail={this.hideSupplierDetail} supplier={this.state.supplierDetail} />
+        } else {
+            content = (<div className="section-container">
+                <ContentTitle title="Supplier List Page" iconClass="fas fa-warehouse" description="List of our partners" />
+                <NavButtons buttonsData={this.generateNavButtonsData()} />
+                <this.filterBox />
+                <div className="row catalog-container">
+                    {suppliers.map(
+                        supplier => {
+                        return <SupplierCard onClick={this.showSupplierDetail} supplier={supplier} />
+                        }
+                    )}
+                </div>
+            </div>);
+        }
 
-        return (supplierCatalog)
+        return (content)
     }
 }
 
 function SupplierCard(props) {
     const supplier = props.supplier;
     const imageUrl = url.baseImageUrl + supplier.iconUrl;
-    const content = <div  >
-        <a href={supplier.website}>{supplier.name}</a>
-        <br />
+    const content = 
+    <div>
+        <p><a className="clickable" onClick={()=>props.onClick(supplier)}>{supplier.name}</a></p>
         <span style={{ fontSize: '0.7em' }}>{supplier.address}</span>
     </div>
 
-    return <div className="col-md-3"><Card
+    return <div className="col-md-3" style={{width:'min-content'}}><Card
         icon={imageUrl}
-        style={{ float: 'left', color: 'dimgrey' }}
         key={supplier.id}
         content={content}
     /></div>
