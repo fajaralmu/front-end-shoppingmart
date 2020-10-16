@@ -13,6 +13,8 @@ import InputFileMultiple from '../../inputs/InputFileMultiple'
 import Label from '../../container/Label'
 import ActionButtons from '../../buttons/ActionButtons'
 import ComboBox from './../../inputs/ComboBox';
+import {FIELD_TYPE_DYNAMIC_LIST, FIELD_TYPE_FIXED_LIST, FIELD_TYPE_PLAIN_LIST, FIELD_TYPE_IMAGE} from '../../../constant/FieldTypes'
+ 
 
 class EntityForm extends Component {
     constructor(props) {
@@ -39,18 +41,18 @@ class EntityForm extends Component {
 
                 const element = this.getElementProperty(key);
                 if (element) {
-                    if (element.type == "img" && element.multiple == false) {
+                    if (element.type == FIELD_TYPE_IMAGE && element.multiple == false) {
                         /**
                          * handle single Image
                          */
                         if (entity[key] && !entity[key].includes("base64")) {
                             result[key] = null;
                         }
-                    } else if (element.type == "img" && element.multiple == true) {
+                    } else if (element.type ==  FIELD_TYPE_IMAGE && element.multiple == true) {
                         /**
                          * handle MULTIPLE Image
                          */
-                        console.info("this.state.base64DataMultiple[key] ", this.state.base64DataMultiple[key]);
+                       // console.info("this.state.base64DataMultiple[key] ", this.state.base64DataMultiple[key]);
 
                         if (entity[key]) {
                             let arrayOfValues = entity[key].split("~");
@@ -436,6 +438,7 @@ class EntityForm extends Component {
                         base64DataMultiple={this.state.base64DataMultiple}
 
                     />
+                    <p>Actions</p>
                     <FormActionButtons
                         entityConfig={this.props.entityConfig}
                         managedEntity={this.props.managedEntity}
@@ -472,8 +475,9 @@ function FormActionButtons(props) {
     return <></>;
 }
 
-function FormElement(_props) {
-    const props = _props;
+
+function FormElement(p) {
+    const props = p;
     const app = props.app;
     const entityExist = props.managedEntity != null || props.stateManagedEntity;
     const enityProperty = props.entityProperty;
@@ -507,7 +511,7 @@ function FormElement(_props) {
                 let inputComponent = null;
                 const inputId = "input-for-" + elementId;
 
-                if (element.type == "dynamiclist") {
+                if (element.type == FIELD_TYPE_DYNAMIC_LIST) {
                     /**
                      * if dynamic dropDown
                      */
@@ -524,7 +528,7 @@ function FormElement(_props) {
                         dropdownList={props.dropdownList[elementId]}
                         onKeyUp={(value, id) => { app.onKeyUpDynamicDropdown(value, id, elementId, element.entityReferenceClass, element.optionItemName) }} />
 
-                } else if (element.type == "fixedlist") {
+                } else if (element.type == FIELD_TYPE_FIXED_LIST) {
                     /**
                      * if fixed dropDown
                      */
@@ -546,7 +550,7 @@ function FormElement(_props) {
                         options={comboBoxOptions}
                     />
 
-                } else if (element.type == "plainlist") {
+                } else if (element.type == FIELD_TYPE_PLAIN_LIST) {
                     /**
                      * if fixed dropDown
                      */
@@ -568,7 +572,7 @@ function FormElement(_props) {
                         options={comboBoxOptions}
                     />
 
-                } else if (element.type == "img" && element.multiple == false) {
+                } else if (element.type == FIELD_TYPE_IMAGE && element.multiple == false) {
                     /**
                      * handle image single
                      */
@@ -580,7 +584,7 @@ function FormElement(_props) {
 
                     />
 
-                } else if (element.type == "img" && element.multiple == true) {
+                } else if (element.type == FIELD_TYPE_IMAGE && element.multiple == true) {
                     /**
                      * handle multiple single
                      */

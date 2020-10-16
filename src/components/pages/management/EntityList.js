@@ -12,6 +12,7 @@ import Label from '../../container/Label'
 import GridComponent from './../../container/GridComponent';
 import { CenterLoading } from '../../messages/SimpleLoader'
 import ActionButton from '../../buttons/ActionButton'
+import {FIELD_TYPE_DYNAMIC_LIST, FIELD_TYPE_NUMBER, FIELD_TYPE_DATE, FIELD_TYPE_FIXED_LIST, FIELD_TYPE_PLAIN_LIST, FIELD_TYPE_IMAGE} from '../../../constant/FieldTypes'
 
 class EntityList extends Component {
     constructor(props) {
@@ -29,6 +30,7 @@ class EntityList extends Component {
             console.log("Will DELETE: ", id)
         }
         this.handleEdit = (id) => {
+            this.showForm();
             this.getEntityById(id);
         }
         this.hideForm = () => {
@@ -93,12 +95,14 @@ class EntityList extends Component {
                     value = this.state.filter[id];
                 }
 
-                let input = <InputField value={value} id={id + "_filter_id"}
+                let input; 
+
+                if (element.type == FIELD_TYPE_DATE) {
+                    input = <DateFilter id={id} filter={this.state.filter} app={this} />
+                } else {
+                    input = <InputField value={value} id={id + "_filter_id"}
                     onKeyUp={this.handleFilterChange} key={"input_field_" + stringUtil.uniqueId()}
                     placeholder={id} />
-
-                if (element.type == "date") {
-                    input = <DateFilter id={id} filter={this.state.filter} app={this} />
                 }
 
                 inputs.push(<div className="filter-wrapper">
@@ -163,21 +167,25 @@ class EntityList extends Component {
                     const element = entityProperty.elements[j];
                     const elementId = element.id;
                     const isObject = element.entityReferenceClass != null;
+                    const imageSize = 60;
 
                     let entityValue = entity[elementId];
                     if (element.type && entityValue) {
-                        if (element.type == "number") {
+                        if (element.type == FIELD_TYPE_NUMBER) {
                             entityValue = stringUtil.beautifyNominal(entityValue);
                             // } else if (element.type == "link") {
                             //     entityValue = <a href={entityValue}><u>{entityValue}</u></a>
-                        } else if (element.type == "img" && element.multiple == false) {
-                            entityValue = <img width="60" height="60" alt={url.baseImageUrl + entityValue} src={url.baseImageUrl + entityValue} />
-                        } else if (element.type == "img" && element.multiple == true) {
+                        } else if (element.type == FIELD_TYPE_IMAGE && element.multiple == false) {
+                            entityValue =  <SquareImage size={imageSize} src={url.baseImageUrl + entityValue} />
+                            
+                        } else if (element.type == FIELD_TYPE_IMAGE && element.multiple == true) {
                             let imgName = entityValue.split("~")[0];
-                            entityValue = <img width="60" height="60" src={url.baseImageUrl + imgName} />
-                        } else if (element.type == "date") {
+                            entityValue =  <SquareImage size={imageSize} src={url.baseImageUrl + imgName} />
+
+                        } else if (element.type == FIELD_TYPE_DATE) {
                             const dateStr = new Date(entityValue).toDateString();
                             entityValue = <Label text={dateStr} />;
+                        
                         } else if (isObject) {
                             entityValue = entityValue[element.optionItemName];
                         }
@@ -277,23 +285,27 @@ function SortingButton(props) {
 }
 
 function DateFilter(props) {
+    
+    const app = props.app;
+    const id = props.id;
     const valueDay = props.filter[id + "-day"];
     const valueMonth = props.filter[id + "-month"];
     const valueYear = props.filter[id + "-year"];
-    const app = props.app;
-    const id = props.id;
 
     const style = { width: '60px', fontSize: '0.7em' };
 
     const inputDay = <InputField style={style} value={valueDay} id={id + "-day_filter_id"}
         onKeyUp={app.handleFilterChange} key={"input_field_d" + stringUtil.uniqueId()}
         placeholder={"day"} />;
+
     const inputMonth = <InputField style={style} value={valueMonth} id={id + "-month_filter_id"}
         onKeyUp={app.handleFilterChange} key={"input_field_m" + stringUtil.uniqueId()}
         placeholder={"month"} />;
+
     const inputYear = <InputField style={style} value={valueYear} id={id + "-year_filter_id"}
         onKeyUp={app.handleFilterChange} key={"input_field_y" + stringUtil.uniqueId()}
         placeholder={"year"} />;
+
     return <GridComponent items={[inputDay, inputMonth, inputYear]} />
 }
 
@@ -307,6 +319,10 @@ const getHeaderNamesv2 = function (entityProperty) {
     }
     headers.push("OPTION");
     return headers;
+}
+
+function SquareImage(props){
+    return <img width={props.size} height={props.size} alt={props.src} src={props.src} />;
 }
 
 function EntityTable(props) {
