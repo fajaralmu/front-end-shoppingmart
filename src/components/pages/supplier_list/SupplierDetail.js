@@ -40,7 +40,7 @@ class SupplierDetail extends Component {
             return <h2>No Data</h2>
         }
 
-        const groupedProducts = groupArray(this.props.productsSupplied, 3);
+        const groupedProducts = groupArray(this.props.productsSupplied, 4);
 
         return (
             <div className="section-container">
@@ -50,22 +50,13 @@ class SupplierDetail extends Component {
             <ActionButton text={"Back"} status="outline-secondary" onClick={this.close} />
                 <div className="product list">
                     <p>Supplied Products</p>
-                    {/* <ol>
-                        {this.props.productsSupplied.map(function(product, i){
-                            return <li>
-                                <p>{product.name} {i}</p>
-                            </li>
-                        })}
-                    </ol> */}
                     <div className="row">
-                        {groupedProducts.map(function(products, i){
+                        {
+                        groupedProducts.length == 0 ? <h3>No Supplied Product Yet</h3> :
+                        groupedProducts.map(function(products, i){
+                            const starts = (i*groupedProducts[0].length+1);
                             return(
-                                <div className="col-4">
-                                    {products.map(function(product, j){
-                                        const number = (i*groupedProducts[0].length + j + 1);
-                                        return <p>{number} {product.name}</p>
-                                    })}
-                                </div>
+                                <OrderedListOfProduct wrapperClassName={"col-3"} starts={starts} products={products} />
                             )
                         })}
                     </div>
@@ -73,6 +64,15 @@ class SupplierDetail extends Component {
             </div>
         )
     }
+}
+
+const OrderedListOfProduct = function (props){
+    const products = props.products;
+    return  <div className={props.wrapperClassName}><ol start={props.starts}>
+        {products.map(function(product){
+            return <li>{product.name} ({product.unit.name})</li>
+        })}
+    </ol> </div>
 }
 
 const groupArray = function(array, division){
@@ -88,7 +88,7 @@ const groupArray = function(array, division){
     for (let i = 0; i < division; i++) {
         groupedArray.push(new Array());    
     }
-    console.debug("result ", groupedArray);
+    
     let index = 1;
     let divisionIndex = 0;
     for (let i = 0; i < array.length; i++) {
