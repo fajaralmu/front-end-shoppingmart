@@ -40,6 +40,8 @@ class SupplierDetail extends Component {
             return <h2>No Data</h2>
         }
 
+        const groupedProducts = groupArray(this.props.productsSupplied, 3);
+
         return (
             <div className="section-container">
             <ContentTitle title={supplier.name} iconClass="fas fa-warehouse" description={<SupplierLink supplier={supplier} />} />
@@ -48,17 +50,60 @@ class SupplierDetail extends Component {
             <ActionButton text={"Back"} status="outline-secondary" onClick={this.close} />
                 <div className="product list">
                     <p>Supplied Products</p>
-                    <ol>
-                        {this.props.productsSupplied.map(function(product){
+                    {/* <ol>
+                        {this.props.productsSupplied.map(function(product, i){
                             return <li>
-                                <p>{product.name}</p>
+                                <p>{product.name} {i}</p>
                             </li>
                         })}
-                    </ol>
+                    </ol> */}
+                    <div className="row">
+                        {groupedProducts.map(function(products, i){
+                            return(
+                                <div className="col-4">
+                                    {products.map(function(product, j){
+                                        const number = (i*groupedProducts[0].length + j + 1);
+                                        return <p>{number} {product.name}</p>
+                                    })}
+                                </div>
+                            )
+                        })}
+                    </div>
                 </div>
             </div>
         )
     }
+}
+
+const groupArray = function(array, division){
+    if(null == array || array.length == 0){ return [] }
+    const groupedArray = new Array();
+    const itemPerDivision = Math.ceil(array.length / division)
+
+    if(itemPerDivision == 1){
+        groupedArray.push(array);
+        return groupedArray;
+    }
+
+    for (let i = 0; i < division; i++) {
+        groupedArray.push(new Array());    
+    }
+    console.debug("result ", groupedArray);
+    let index = 1;
+    let divisionIndex = 0;
+    for (let i = 0; i < array.length; i++) {
+        const element = array[i];
+        groupedArray[divisionIndex].push(element);
+
+        index++;
+        if(index > itemPerDivision){
+            divisionIndex++;
+            index = 1;
+        }
+        
+    }
+
+    return groupedArray;
 }
 
 function SupplierLink(prop){
