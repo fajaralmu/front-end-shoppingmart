@@ -25,18 +25,17 @@ class About extends Component {
                 <div className=" abount-content" style={{
                     padding: '5px',
                     width: '90%',
-                    fontFamily: 'Consolas', margin: '5px'
+                    margin: '5px'
                 }}>
-                    <InstantTable
-                        rows={[
-                            { values: ["Name", profile.name] },
-                            { values: ["Version", "1.0.0"] },
-                            { values: ["Description", profile.shortDescription] },
-
-
-                        ]} />
-                    <h2>Powered By</h2>
-                    <img style={{ width: '80%' }} src={url.baseResUrl + "POWERED_BY.png"} />
+                <InstantTable
+                    rows={[
+                        { values: ["Name", profile.name] },
+                        { values: ["Version", "1.0.0"] },
+                        { values: ["Description", profile.shortDescription] },
+                        { values: ["Contact", "somabangsa@gmail.com"]}
+                    ]} />
+                    {/* <h2>Powered By</h2>
+                    <img style={{ width: '80%' }} src={url.baseResUrl + "POWERED_BY.png"} /> */}
                 </div></div>
  
         )

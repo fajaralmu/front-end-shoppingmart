@@ -57,7 +57,6 @@ class EntityList extends Component {
             }
 
             this.props.fetchEntities(config, page);
-
         }
 
         this.getEntityById = (id) => {
@@ -363,7 +362,12 @@ function NavigationButton(props) {
     });
 
     const style = { width: 'min-content', paddingTop: '15px', margin: '10px' };
-    return (<ActionButtons style={style} buttonsData={fixButtonData} />);
+    return (<div>
+        
+        <InputField placeholder="Page" style={{width:'min-content'}} id="input-page" type="number" 
+            onEnterPress={(val, id)=>props.goToPage(parseInt(val)-1) } />
+        <ActionButtons style={style} buttonsData={fixButtonData} />
+        </div>);
 
 }
 
