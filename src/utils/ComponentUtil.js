@@ -1,24 +1,32 @@
 export const byId = (id) => { return document.getElementById(id) }
 
-export const clearFields = (...ignore) => {
+/**
+ * 
+ * @param  {...string} ignoredIds 
+ */
+export const clearFields = (...ignoredIds) => {
     let inputs = document.getElementsByTagName("input");
-    let withIgnore = ignore != null;
-    loop: for (let i = 0; i < inputs.length; i++) {
-        if (withIgnore)
-            for (let y = 0; y < ignore.length; y++)
-                if (inputs[i].id == ignore[y]) continue loop;
 
-        if (inputs[i].type == "text") inputs[i].value = "";
-        if (inputs[i].type == "number") inputs[i].value = 0;
+    let withIgnore = ignoredIds != null;
+    loop: for (let i = 0; i < inputs.length; i++) {
+        if (withIgnore){
+            for (let y = 0; y < ignoredIds.length; y++) {
+                if (inputs[i].id == ignoredIds[y]) continue loop;
+            }
+        }
+        
+        if (inputs[i].type == "text") { inputs[i].value = ""; }
+        else if (inputs[i].type == "number") { inputs[i].value = 0; }
+        else { inputs[i].value = null; }
     }
 }
 
-export function toBase64(file, referer, callback){
-	const reader = new FileReader();
+export function toBase64(file, referer, callback) {
+    const reader = new FileReader();
     reader.readAsDataURL(file.files[0]);
     reader.onload = () => callback(reader.result, referer);
     reader.onerror = error => {
-    	alert("Error Loading File");
+        alert("Error Loading File");
     }
 }
 
@@ -35,9 +43,9 @@ export const checkExistance = function (...ids) {
 export const createNavButtons = (totalButton, currentPage) => {
     totalButton = Math.ceil(totalButton);
     if (!currentPage) { currentPage = 0 }
-    let buttonData = new Array(); 
+    let buttonData = new Array();
     let min = currentPage - 3 < 0 ? 0 : currentPage - 3;
-    let max = currentPage + 3 > totalButton  ? totalButton  : currentPage + 3;
+    let max = currentPage + 3 > totalButton ? totalButton : currentPage + 3;
 
     if (min != 0) {
         buttonData.push({
@@ -53,10 +61,10 @@ export const createNavButtons = (totalButton, currentPage) => {
         });
     }
 
-    if (max != totalButton  ) {
+    if (max != totalButton) {
         buttonData.push({
             text: totalButton,
-            value: totalButton -1 
+            value: totalButton - 1
         });
     }
 

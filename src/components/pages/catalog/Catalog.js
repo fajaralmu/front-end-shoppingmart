@@ -14,6 +14,15 @@ import * as stringUtil from '../../../utils/StringUtil'
 import NavButtons from '../../navigation/NavButtons'
 import ComboBox from '../../inputs/ComboBox'
 import GridComponent from '../../container/GridComponent'
+import { byId } from './../../../utils/ComponentUtil';
+
+const FILTER_IDS = {
+    productName: "input-product-name",
+    selectOrder: "select-order",
+    selectCategory: "select-category",
+    checkBoxWithStock: "checkbox-with-stock",
+    checkBoxEnableCart: "checkbox-enable-cart"
+}
 
 class Catalog extends Component {
 
@@ -114,7 +123,6 @@ class Catalog extends Component {
                 this.setState({ requestOrderBy: rawOrderRequest[0] });
                 this.setState({ requestOrderType: rawOrderRequest[1] });
             }
-
         }
 
         this.handleInputNameChange = (value, id) => {
@@ -123,10 +131,8 @@ class Catalog extends Component {
         }
 
         this.clearField = () => {
-            this.setState({ requestProductName: "" });
-            this.setState({ requestOrderBy: null, requestOrderType: null });
-            this.setState({ requestCategoryId: null });
-
+            this.setState({ requestProductName: null ,requestOrderBy: null, requestOrderType: null , requestCategoryId: null }); 
+            componentUtil.clearFields(null);
             this.props.app.infoDialog("filter has been cleared, please push the search button to take effect")
         }
 
@@ -147,10 +153,11 @@ class Catalog extends Component {
 
         this.handleCategoryChange = (value) => {
             this.setState({ catalogPage: 0 })
-            if (value != null && value != "00")
+            if (value != null && value != "00"){
                 this.setState({ requestCategoryId: value });
-            else
+            } else {
                 this.setState({ requestCategoryId: null });
+            }
 
         }
 
@@ -253,30 +260,33 @@ class Catalog extends Component {
             });
         }
 
+      
+
         return <div className="filter-box">
             <GridComponent cols={3} style={{ width: 'max-content' }} items={[
                 <InputField placeholder="search by product name"
                     value={this.state.requestProductName}
+                    onEnterPress={()=>{this.getProductCatalog(0)}}
                     onKeyUp={this.handleInputNameChange}
-                    type="search" id="input-product-name" />
+                    type="search" id={FILTER_IDS.productName} />
                 ,
                 <ComboBox
                     defaultValue={this.state.requestOrderBy + "-" + this.state.requestOrderType}
                     onChange={this.handleOrderChange}
-                    options={filterProductOption} id={"select-order"}
+                    options={filterProductOption} id={FILTER_IDS.selectOrder}
                 />,
                 <ComboBox
                     defaultValue={this.state.requestCategoryId}
                     onChange={this.handleCategoryChange}
-                    options={categories} id="select-category"
+                    options={categories} id={FILTER_IDS.selectCategory}
                 />,
                 <ActionButtons style={{ margin: '5px' }} buttonsData={actionButtons} />,
                 <div className="row">
                     <InputField checked={this.state.requestWithStock} onChange={this.handleChangeWithStockOption}
-                        type="checkbox" id="checkbox-with-stock"
+                        type="checkbox" id={FILTER_IDS.checkBoxWithStock}
                         text="Inculde Remaining Stock" /> 
                     <InputField checked={this.props.enableShopping} onChange={this.handleChangeEnableShoppingOption}
-                        type="checkbox" id="checkbox-enable-cart"
+                        type="checkbox" id={FILTER_IDS.checkBoxEnableCart}
                         text="Show Shopping List" />
                 </div>,
             ]} />
@@ -296,8 +306,8 @@ class Catalog extends Component {
                 {this.filterBox()}
                 <div className="row catalog-container" >
                     {products.map(
-                        product =>  
-                                <ProductCard
+                        (product) =>  
+                                <ProductCard key={product.id}
                                     getProductDetail={this.getProductDetail}
                                     getProductInCart={this.getProductInCart}
                                     enableShopping={this.props.enableShopping}

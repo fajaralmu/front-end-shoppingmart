@@ -136,7 +136,11 @@ class App extends Component {
             (renderProps) =>
               <SupplierList app={this} setMenuCode={this.setMenuCode} />
           } />
-          <Route exact path={["/", "/home"]} render={
+          <Route exact path={ "/" } render={
+            (renderProps) =>
+              <Home app={this} applicationProfile={this.props.applicationProfile} setMenuCode={this.setMenuCode} />
+          }  />
+           <Route exact path={ "/home" } render={
             (renderProps) =>
               <Home app={this} applicationProfile={this.props.applicationProfile} setMenuCode={this.setMenuCode} />
           }  />
