@@ -3,7 +3,11 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import ContentTitle from '../../container/ContentTitle';
 import { resetPurchasingAndSelling } from '../../../redux/actionCreators';
-
+const EMPTY = {
+    customer:{},
+    supplier:{},
+    user:{}
+}
 class TransactionReceiptv2 extends Component {
 
     constructor(props) {
@@ -21,14 +25,12 @@ class TransactionReceiptv2 extends Component {
     }
 
     render() {
-        const transaction = this.props.transactionData ? this.props.transactionData : {
-            customer:{},
-            supplier:{}
-        };
+        const transaction = this.props.transactionData ? this.props.transactionData : EMPTY;
+        const date = transaction.transactionDate ? new Date(transaction.transactionDate).toLocaleString() : null;
         return (
             <div className="section-container">
                 <ContentTitle iconClass="fas fa-file-alt" title={transaction.type + " Transaction Success (" + transaction.mode + ")"}
-                    description={new Date(transaction.transactionDate)} />
+                    description={<>{date}</>} />
                 <div className="row">
                     {this.isSelling() ? 
                     <><div className="col-3">Customer</div><div className="col-9">{transaction.customer.name}</div></>
