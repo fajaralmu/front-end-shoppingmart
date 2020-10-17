@@ -164,6 +164,7 @@ class Management extends Component {
 const mapStateToProps = state => {
     //console.log(state);
     return {
+        loginStatus: state.userState.loginStatus,
         entitiesData: state.managementState.entitiesData,
         managedEntity: state.managementState.managedEntity,
         entityProperty: state.managementState.entityProperty,

@@ -1,30 +1,75 @@
 import React, { Component } from 'react'
-
+import { connect } from 'react-redux'
+import { Route, Switch, withRouter } from 'react-router-dom'
+import ContentTitle from '../../container/ContentTitle';
+import TransactionSelling from './TransactionSelling';
+import TransactionPurchasing from './TransactionPurchasing';
 class BaseTransactionPage extends Component {
 
-
     constructor(props) {
-        super(props);
-        this.formFieldIds = [];
+        super(props); 
+        this.type = "";
+
+        this.validateLoginStatus = () => {
+            if (this.props.loginStatus != true) {
+                this.gotoLogin();
+            }
+        }
+        this.gotoLogin = () => {
+            this.props.history.push("/login");
+        }
+    }
+
+    componentWillMount() {
+        const paramType = this.props.match.params.type;
+        if (!paramType) {
+            this.gotoLogin();
+        }
+        if (paramType != "selling" && paramType != "purchasing") {
+            this.gotoLogin();
+        }
+    }
+
+
+    componentDidUpdate() {
+        this.validateLoginStatus();
+        const paramType = this.props.match.params.type;
+        if (paramType == "selling" && this.props.app.state.menuCode != "selling") {
+            this.props.setMenuCode("selling");
+        }else  if (paramType == "purchasing" && this.props.app.state.menuCode != "purchasing") {
+            this.props.setMenuCode("purchasing");
+        }
     } 
-
-    addFormFieldId(id) {
-        if (this.formFieldIds.indexOf(id) >= 0) {
-
-        } else {
-            this.formFieldIds.push(id);
-        }
+    render() {
+        const paramType = this.props.match.params.type;
+        return (
+            <section className="section-container">
+                <ContentTitle title={"Transaction " + paramType} />
+                {paramType == "selling" ?
+                    <TransactionSelling app={this.props.app} setFeatureCode={this.setFeatureCode} />
+                    :
+                    <TransactionPurchasing app={this.props.app} setFeatureCode={this.setFeatureCode} />
+                }
+            </section>
+        )
     }
+}
+const mapStateToProps = state => {
+    //console.log(state);
+    return {
 
-    emptyFormValues(){
-        for (let i = 0; i < this.formFieldIds.length; i++) {
-            const id = this.formFieldIds[i];
-            try {
-                document.getElementById(id).value = null;
-            } catch (e) { }
-        }
+        loginStatus: state.userState.loginStatus,
     }
-
 }
 
-export default BaseTransactionPage;
+//   const mapDispatchToProps = dispatch => ({
+//     performLogout: (app) => dispatch(actions.performLogout(app)),
+//     requestAppId: (app) => dispatch(actions.requestAppId(app)),
+//     refreshLogin: () => dispatch(actions.refreshLoginStatus()),
+//     // getProductCatalog: (page) => dispatch(actions.getProductList(page))
+//   })
+
+export default withRouter(connect(
+    mapStateToProps
+    // mapDispatchToProps
+)(BaseTransactionPage)) 

@@ -25,6 +25,7 @@ import Header from './components/layout/header/Header';
 import * as url from './constant/Url';
 import Alert from './components/messages/Alert';
 import CartInfo from './components/cart/CartInfo';
+import BaseTransactionPage from './components/pages/transaction/BaseTransactionPage';
 
 const blankFunc = function (e) { };
 
@@ -130,8 +131,6 @@ class App extends Component {
     this.mainContent = () => {
       return (<>
         <Switch>
-          
-           
           <Route  path="/suppliers" render={
             (renderProps) =>
               <SupplierList app={this} setMenuCode={this.setMenuCode} />
@@ -151,7 +150,7 @@ class App extends Component {
           <Route  path="/about" render={
             (renderProps) =>
               <About app={this} applicationProfile={this.props.applicationProfile} setMenuCode={this.setMenuCode} />
-          }></Route>
+          }/>
           <Route  path="/catalog" render={
             (renderProps) =>
               <Catalog
@@ -160,26 +159,26 @@ class App extends Component {
                 setMenuCode={this.setMenuCode}
                 setDetailMode={this.setDetailMode} detailMode={this.state.detailMode} />
 
-          }></Route>
+          }/>
           <Route  path="/cart" render={
             (renderProps) => <CartDetail enableShopping={this.state.enableShopping} app={this} setMenuCode={this.setMenuCode} />
 
-          }></Route>
+          }/>
           <Route  path="/login" render={
             (renderProps) => <Login setMenuCode={this.setMenuCode} app={this} />
-
-          }></Route>
+          }/>
           {/* ///////////authenticated//////////// */}
           <Route  path="/dashboard" render={
             (renderProps) =>
-              <Dashboard app={this} loginStatus={this.props.loginStatus} setMenuCode={this.setMenuCode} />
-
-          }></Route>
+              <Dashboard app={this}  setMenuCode={this.setMenuCode} />
+            }/>
           <Route  path="/management" render={
             (renderProps) =>
-              <Management app={this} loginStatus={this.props.loginStatus} setMenuCode={(this.setMenuCode)} />
-
-          }></Route>
+              <Management app={this} setMenuCode={(this.setMenuCode)} />
+            }/>
+          <Route  path="/transaction/:type" render={(renderProps)=>{
+             return <BaseTransactionPage app={this} setMenuCode={(this.setMenuCode)} />
+          }}  />
         </Switch>
 
       </>);
@@ -267,8 +266,7 @@ class App extends Component {
     const usedHost = url.contextPath();
     const applicationProfile = this.props.applicationProfile;
     const isHideSidebar = this.state.hideSidebar == true;
-    const contentClass = isHideSidebar ? 'col-12' : 'col-10';
-    const toggleButtonIconClass = isHideSidebar ? 'fa fa-align-justify' : 'fa fa-angle-double-left';
+    const contentClass = isHideSidebar ? 'col-12' : 'col-10'; 
 
     return (
       <div className="App">
@@ -283,6 +281,7 @@ class App extends Component {
               <button style={{ float: "right", margin: '5px', color: applicationProfile.fontColor }} className="btn" onClick={() => {
                 this.setState({ hideSidebar: true })
               }} ><i className='fa fa-angle-double-left'></i></button>
+              
               <Menu alertDialog={this.alertDialog}
                 handleMenuCLick={this.handleMenuCLick}
                 activeCode={this.state.menuCode}

@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
 import './Transaction.css'
 import InstantTable from '../../container/InstantTable';
+
 function Spinner(props) {
-    return <div className="spinner-border text-primary" role="status">
-        <span className="sr-only">Loading...</span>
-    </div>
+    return (<div className="spinner-border text-primary" role="status">
+                <span className="sr-only">Loading...</span>
+            </div>);
 }
+
 class TransactionReceipt extends Component {
     constructor(props) {
         super(props);

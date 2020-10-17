@@ -16,8 +16,7 @@ import Card from '../../card/Card'
 import * as stringUtil from '../../../utils/StringUtil'
 import Label from '../../container/Label';
 import ProductSales from './ProductSales';
-import ContentTitle from '../../container/ContentTitle';
-import InstantTable from '../../container/InstantTable';
+import ContentTitle from '../../container/ContentTitle'; 
 import ComboBoxes from './../../inputs/ComboBoxes';
 import GridComponent from './../../container/GridComponent';
 
@@ -105,12 +104,12 @@ class Dashboard extends Component {
         if (this.state.featureCode != null) {
            
             switch (this.state.featureCode) {
-                case 'trxOut':
-                    mainComponent = <TransactionSelling app={this.props.app} setFeatureCode={this.setFeatureCode} />
-                    break;
-                case 'trxIn':
-                    mainComponent = <TransactionPurchasing app={this.props.app} setFeatureCode={this.setFeatureCode} />
-                    break;
+                // case 'trxOut':
+                //     mainComponent = <TransactionSelling app={this.props.app} setFeatureCode={this.setFeatureCode} />
+                //     break;
+                // case 'trxIn':
+                //     mainComponent = <TransactionPurchasing app={this.props.app} setFeatureCode={this.setFeatureCode} />
+                //     break;
                 case 'cashflow':
                     mainComponent = <Cashflow app={this.props.app} transactionYears={this.props.transactionYears} setFeatureCode={this.setFeatureCode} />
                     break;
@@ -149,6 +148,8 @@ function CashflowInfoContent(props) {
 
 const mapStateToProps = state => {
     return {
+        loginStatus: state.userState.loginStatus,
+
         cashflowInfoIn: state.transactionState.cashflowInfoIn,
         cashflowInfoOut: state.transactionState.cashflowInfoOut,
         transactionYears: state.transactionState.transactionYears

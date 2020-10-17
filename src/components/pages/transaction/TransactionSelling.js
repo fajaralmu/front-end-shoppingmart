@@ -4,7 +4,6 @@ import * as actions from '../../../redux/actionCreators'
 import Label from '../../container/Label';
 import InputField from '../../inputs/InputField';
 import StockListTable from './StockListTable'
-import Loader from '../../messages/Loader'
 import TransactionReceipt from './TransactionReceipt'
 import * as stringUtil from '../../../utils/StringUtil'
 import ActionButtons from '../../buttons/ActionButtons'
@@ -295,10 +294,9 @@ class TransactionSelling extends Component {
 
 
     render() {
-        let totalPrice = this.calculateTotalPrice();
-
-        let customerList = this.getCustomerDropdownData();
-        let productList = this.getProductDropdownData();
+        const totalPrice = this.calculateTotalPrice();
+        const customerList = this.getCustomerDropdownData();
+        const productList = this.getProductDropdownData();
 
         let formComponent = <div className="row"><div className="col-5">
             <Card title="Transaction Detail" content={<>
@@ -338,7 +336,7 @@ class TransactionSelling extends Component {
         return (
             <div className="transaction-container"> 
 
-                <h2>Selling {this.state.customer && this.state.customer.name ? <small>{this.state.customer.name}</small> : ""}</h2>
+                <h3>Customer {this.state.customer && this.state.customer.name ? <small>{this.state.customer.name}</small> : ""}</h3>
                 {formComponent}
                 <div>
                     <ActionButtons buttonsData={buttonsData} />

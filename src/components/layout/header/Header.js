@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import './Header.css'
-import CartInfo from '../../cart/CartInfo';
 import { connect } from 'react-redux'
 
 class Header extends Component {

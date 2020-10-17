@@ -5,4 +5,6 @@ export const ACCOUNT = "account";
 export const LOGIN = "login";
 export const LOGOUT = "logout";
 export const DASHBOARD = "dashboard";
+export const TRANSACTION_SELLING = "transaction/selling";
+export const TRANSACTION_PURCHASING = "transaction/purchasing";
 export const SUPPLIERLIST = "supplierlist";

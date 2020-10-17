@@ -15,8 +15,7 @@ import { byId } from '../../../utils/ComponentUtil'
 import DynamicDropdown from '../../inputs/DynamicDropdown'
 import AddToCartButton from './AddToCartButton';
 import GridComponent from '../../container/GridComponent';
-import Card from '../../card/Card'
-import BaseTransactionPage from './BaseTransactionPage';
+import Card from '../../card/Card' 
 
 const FIELD_IDS = {
     supplierName: "input-supplier-name-purc",
@@ -28,8 +27,7 @@ const FIELD_IDS = {
     productExpiryDate: "input-exp-date-purc"
 }
 
-class TransactionPurchasing
-    extends BaseTransactionPage {
+class TransactionPurchasing extends Component {
 
     constructor(props) {
         super(props);
@@ -56,7 +54,7 @@ class TransactionPurchasing
 
             if (this.isExistInTheChart(product.id))
                 if (!window.confirm("The product already exist in the chart, do you want to override it?"))
-                    return;
+                { return; }
 
             let ID = Math.floor(Math.random() * 1000);
             let newProductFlow = {
@@ -177,7 +175,7 @@ class TransactionPurchasing
                 productName: null, expiryDate: null, quantity: null, price: null
             });
 
-            this.emptyFormValues();
+            componentUtil.clearFields(null);
         }
 
         this.setActiveField = (id) => {
@@ -233,7 +231,7 @@ class TransactionPurchasing
 
         this.getProductList = (value, id) => {
             if (value == null || value.trim() == "") { return; }
-            this.addFormFieldId(id);
+             
             this.setState({ showDetail: true, productName: value })
             this.props.getProductList({ filterName:'name', filterValue: value }, this.props.app);
             this.setActiveField(id);
@@ -241,7 +239,7 @@ class TransactionPurchasing
 
         this.getProductByCode = (value, id) => {
             const app = this;
-            this.addFormFieldId(id);
+             
             this.setState({ showDetail: true });
             this.props.getProductList({ exacts: true, filterName:'code', filterValue: value, callback: function(response){
                 const product = response.entities[0];
@@ -268,8 +266,7 @@ class TransactionPurchasing
         if (this.props.resetPurchaseTransaction) {
             this.props.resetPurchaseTransaction();
         }
-        document.title = "Purchasing";
-        this.formFieldIds = [];
+        document.title = "Purchasing"; 
         this.props.resetSuppliers();
 
     }
@@ -326,19 +323,19 @@ class TransactionPurchasing
                             <Label text="Price" />,
                             <InputField id={FIELD_IDS.productPrice}
                                 value={this.state.price} onKeyUp={(value, id) => {
-                                    this.setState({ activeField: id, price: value }); this.addFormFieldId(id);
+                                    this.setState({ activeField: id, price: value }); ;
                                 }}
                                 type="number" placeholder="input product price" />,
                             <Label text="Quantity" />,
                             <InputField id={FIELD_IDS.productQuantity}
                                 value={this.state.quantity} onKeyUp={(value, id) => {
-                                    this.setState({ activeField: id, quantity: value });  this.addFormFieldId(id);
+                                    this.setState({ activeField: id, quantity: value }); ;
                                 }}
                                 type="number" placeholder="quantity" />,
                             <Label text="Expiry Date" />,
                             <InputField id={FIELD_IDS.productExpiryDate}
                                 value={this.state.expiryDate} onKeyUp={(value, id) => {
-                                    this.setState({ activeField: id, expiryDate: value });   this.addFormFieldId(id);
+                                    this.setState({ activeField: id, expiryDate: value });
                                 }}
                                 type="date" placeholder="input product exp date" />
                         ]}
@@ -355,16 +352,14 @@ class TransactionPurchasing
             { text: "Reset", status: 'danger', id: "btn-reset-trx", onClick: this.reset }];
 
         if (this.props.successTransaction) {
-            formComponent =
-                <TransactionReceipt status="Success" transactionData={this.props.transactionData} />
+            formComponent = (<TransactionReceipt status="Success" transactionData={this.props.transactionData} />)
         } else {
             buttonsData.push({ id: "btn-submit-trx", status: 'success btn-sm', text: "Submit Transaction", onClick: this.submitTransaction });
         }
 
         return (
             <div className="transaction-container"> 
-                <h2>Purchasing {this.state.supplier && this.state.supplier.name ? <small>{this.state.supplier.name}</small> : null}</h2>
-
+                <h3>Supplier {this.state.supplier && this.state.supplier.name ? <small>{this.state.supplier.name}</small> : null}</h3>
                 {formComponent}
                 <div>
                     <ActionButtons buttonsData={buttonsData} />
