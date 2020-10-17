@@ -29,7 +29,7 @@ class SupplierList extends Component {
             supplierDetail : null
         };
 
-        this.getSupplierList = (_page) => {
+        this.getSupplierCatalogByPage = (_page) => {
             this.props.getSupplierList({
                 page: _page,
                 name: this.state.requestSupplierName,
@@ -83,7 +83,7 @@ class SupplierList extends Component {
             if (supplierPage >= totalPage - 1) { supplierPage = 0; }
             else { supplierPage++; }
 
-            this.getSupplierList(supplierPage);
+            this.getSupplierCatalogByPage(supplierPage);
         }
 
         this.prev = () => {
@@ -92,7 +92,7 @@ class SupplierList extends Component {
             if (supplierPage <= 0) { supplierPage = totalPage - 1; }
             else { supplierPage--; }
 
-            this.getSupplierList(supplierPage);
+            this.getSupplierCatalogByPage(supplierPage);
         }
 
         this.generateNavButtonsData = () => {
@@ -114,7 +114,7 @@ class SupplierList extends Component {
                 navButtonsData.push({
                     id: b.value,
                     active: active,
-                    buttonClick: () => this.getSupplierList(b.value),
+                    buttonClick: () => this.getSupplierCatalogByPage(b.value),
                     text: b.text
                 });
             }
@@ -129,7 +129,7 @@ class SupplierList extends Component {
 
         this.filterBox = () => {
             let actionButtons = [
-                { text: <i className="fas fa-search"></i>, status: "success", onClick: () => this.getSupplierList(0), id: "btn-search" },
+                { text: <i className="fas fa-search"></i>, status: "success", onClick: () => this.getSupplierCatalogByPage(0), id: "btn-search" },
                 { text: "Clear Filter", status: 'warning', onClick: this.clearField, id: "Clear" }
             ];
 
@@ -151,7 +151,7 @@ class SupplierList extends Component {
     componentWillMount() {
 
         document.title = DEFAULT_TITLE;
-        this.getSupplierList(this.state.supplierPage);
+        this.getSupplierCatalogByPage(this.state.supplierPage);
         this.props.setMenuCode(menus.SUPPLIERLIST);
 
     }
@@ -181,7 +181,7 @@ class SupplierList extends Component {
                     <div className="col-2">
                         <InputField type="number" 
                             id="input-page-number" placeholder="page" 
-                            onEnterPress={(val,id)=> this.getSupplierList(val-1)} />
+                            onEnterPress={(val,id)=> this.getSupplierCatalogByPage(val-1)} />
                     </div>
                     <div className="col-10" style={{textAlign:"center"}}> 
                         <NavButtons buttonsData={this.generateNavButtonsData()} />

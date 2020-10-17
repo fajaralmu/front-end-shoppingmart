@@ -26,6 +26,7 @@ import * as url from './constant/Url';
 import Alert from './components/messages/Alert';
 import CartInfo from './components/cart/CartInfo';
 import BaseTransactionPage from './components/pages/transaction/BaseTransactionPage';
+import TransactionReceiptv2 from './components/pages/transaction/TransactionReceiptv2';
 
 const blankFunc = function (e) { };
 
@@ -128,31 +129,31 @@ class App extends Component {
       this.setState({ loadingPercentage: percentage });
     }
 
-    this.mainContent = () => {
+    this.routedContent = () => {
       return (<>
         <Switch>
           <Route  path="/suppliers" render={
-            (renderProps) =>
+            (props) =>
               <SupplierList app={this} setMenuCode={this.setMenuCode} />
           } />
           <Route exact path={ "/" } render={
-            (renderProps) =>
+            (props) =>
               <Home app={this} applicationProfile={this.props.applicationProfile} setMenuCode={this.setMenuCode} />
           }  />
            <Route exact path={ "/home" } render={
-            (renderProps) =>
+            (props) =>
               <Home app={this} applicationProfile={this.props.applicationProfile} setMenuCode={this.setMenuCode} />
           }  />
           <Route  path="/chatroom" render={
-            (renderProps) =>
+            (props) =>
               <ChatRoom app={this} setMenuCode={this.setMenuCode} />
           } />
           <Route  path="/about" render={
-            (renderProps) =>
+            (props) =>
               <About app={this} applicationProfile={this.props.applicationProfile} setMenuCode={this.setMenuCode} />
           }/>
           <Route  path="/catalog" render={
-            (renderProps) =>
+            (props) =>
               <Catalog
                 app={this}
                 enableShopping={this.state.enableShopping}
@@ -161,24 +162,28 @@ class App extends Component {
 
           }/>
           <Route  path="/cart" render={
-            (renderProps) => <CartDetail enableShopping={this.state.enableShopping} app={this} setMenuCode={this.setMenuCode} />
+            (props) => <CartDetail enableShopping={this.state.enableShopping} app={this} setMenuCode={this.setMenuCode} />
 
           }/>
           <Route  path="/login" render={
-            (renderProps) => <Login setMenuCode={this.setMenuCode} app={this} />
+            (props) => <Login setMenuCode={this.setMenuCode} app={this} />
           }/>
           {/* ///////////authenticated//////////// */}
           <Route  path="/dashboard" render={
-            (renderProps) =>
+            (props) =>
               <Dashboard app={this}  setMenuCode={this.setMenuCode} />
             }/>
           <Route  path="/management" render={
-            (renderProps) =>
+            (props) =>
               <Management app={this} setMenuCode={(this.setMenuCode)} />
             }/>
-           <Route exact path="/transaction/" render={()=>{ return <Redirect to="/home" />}} />
-          <Route exact path="/transaction/:type" render={(renderProps)=>{
+          <Route exact path="/transaction/" render={()=>{ return <Redirect to="/home" />}} />
+          <Route exact path="/transaction-receipt/" render={()=>{ return <Redirect to="/home" />}} />
+          <Route exact path="/transaction/:type" render={(props)=>{
              return <BaseTransactionPage app={this} setMenuCode={(this.setMenuCode)} />
+          }}  />
+          <Route exact path="/transaction-receipt/:transactionCode" render={(props)=>{
+             return <TransactionReceiptv2 app={this}  />
           }}  />
         </Switch>
 
@@ -214,24 +219,10 @@ class App extends Component {
     }
 
     if (this.props.applicationProfile) {
-      this.updateIcon(this.props.applicationProfile);
+      updateFavicon(this.props.applicationProfile);
     }
   }
-
-  updateIcon(profile) {
-    if(profile.pageIcon){
-      let link = document.querySelector('link[rel="shortcut icon"]') ||
-        document.querySelector('link[rel="icon"]');
-      if (!link) {
-        link = document.createElement('link');
-        link.id = 'favicon';
-        link.rel = 'shortcut icon';
-        document.head.appendChild(link);
-      }
-
-      link.href = url.baseImageUrl + '/ICON/' + profile.pageIcon;
-    }
-  }
+  
 
   componentDidMount() {
     this.requestAppId();
@@ -290,7 +281,7 @@ class App extends Component {
                 menus={menus} />
             </div>}
 
-          <div id="main-content" className={contentClass}><this.mainContent /></div>
+          <div id="main-content" className={contentClass}><this.routedContent /></div>
         </div>
 
         <SockJsClient url={usedHost + 'realtime-app'} topics={['/wsResp/progress/' + localStorage.getItem("requestId")]}
@@ -334,6 +325,21 @@ function Loading(props) {
     );
   }
   return null;
+}
+
+function updateFavicon(profile) {
+  if(profile.pageIcon){
+    let link = document.querySelector('link[rel="shortcut icon"]') ||
+      document.querySelector('link[rel="icon"]');
+    if (!link) {
+      link = document.createElement('link');
+      link.id = 'favicon';
+      link.rel = 'shortcut icon';
+      document.head.appendChild(link);
+    }
+
+    link.href = url.baseImageUrl + '/ICON/' + profile.pageIcon;
+  }
 }
 
 const mapStateToProps = state => {

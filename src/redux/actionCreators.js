@@ -322,10 +322,10 @@ export const getCustomerList = (request, app) => {
     return ret;
 }
 
-export const resetPurchaseTransaction = () => ({
-    type: types.RESET_TRX_PURCHASE,
+export const resetPurchasingAndSelling = () => ({
+    type: types.RESET_TRX_SELLING_PURCHASING,
     payload: {},
-    meta: { type: types.RESET_TRX_PURCHASE }
+    meta: { type: types.RESET_TRX_SELLING_PURCHASING }
 })
 export const submitPurchaseTransaction = (request, app) => {
     app.startLoading(true);

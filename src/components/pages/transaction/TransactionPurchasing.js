@@ -7,7 +7,6 @@ import Label from '../../container/Label';
 import InputField from '../../inputs/InputField';
 import DetailProductPanel from './DetailProductPanel';
 import StockListTable from './StockListTable' 
-import TransactionReceipt from './TransactionReceipt'
 import * as stringUtil from '../../../utils/StringUtil'
 import ActionButtons from '../../buttons/ActionButtons'
 import * as componentUtil from '../../../utils/ComponentUtil'
@@ -16,6 +15,7 @@ import DynamicDropdown from '../../inputs/DynamicDropdown'
 import AddToCartButton from './AddToCartButton';
 import GridComponent from '../../container/GridComponent';
 import Card from '../../card/Card' 
+import { withRouter } from 'react-router-dom'
 
 const FIELD_IDS = {
     supplierName: "input-supplier-name-purc",
@@ -278,6 +278,10 @@ class TransactionPurchasing extends Component {
 
     }
     componentDidUpdate() {
+        if (this.props.successTransaction) {
+            this.props.history.push("/transaction-receipt/"+this.props.transactionData.code);
+            return;    
+        }
         if (byId(this.state.activeField) != null) {
             byId(this.state.activeField).focus();
         }
@@ -303,6 +307,7 @@ class TransactionPurchasing extends Component {
 
         return productList;
     }
+
     render() {
         let totalPrice = this.calculateTotalPrice();
 
@@ -353,15 +358,9 @@ class TransactionPurchasing extends Component {
             <div className="col-7">{detailStock}</div>
         </div>;
 
-        let buttonsData = [ 
-            { text: "Back", status: "secondary", onClick: () => { this.reset() }, id: "btn-back-reset" },
-            { text: "Reset", status: 'danger', id: "btn-reset-trx", onClick: this.reset }];
-
-        if (this.props.successTransaction) {
-            formComponent = (<TransactionReceipt status="Success" transactionData={this.props.transactionData} />)
-        } else {
-            buttonsData.push({ id: "btn-submit-trx", status: 'success btn-sm', text: "Submit Transaction", onClick: this.submitTransaction });
-        }
+        let buttonsData = [  
+            { text: "Reset", status: 'danger btn-sm', id: "btn-reset-trx", onClick: this.reset },
+            { text: "Submit Transaction", status: 'success btn-sm', id: "btn-submit-trx", onClick: this.submitTransaction }];
 
         return (
             <div className="transaction-container"> 
@@ -392,12 +391,12 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
     getProductList: (request, app) => dispatch(actions.getProductListTrx(request, app)),
     submitSupplyTransaction: (request, app) => dispatch(actions.submitSupplyTrx(request, app)),
-    resetPurchaseTransaction: () => dispatch(actions.resetPurchaseTransaction()),
+    resetPurchaseTransaction: () => dispatch(actions.resetPurchasingAndSelling()),
     resetSuppliers: () => dispatch(actions.resetSuppliers()),
     resetProducts: () => dispatch(actions.resetProducts()),
     getSupplierList: (request, app ) => dispatch(actions.getSupplierList(request, app))
 })
-export default (connect(
+export default withRouter(connect(
     mapStateToProps,
     mapDispatchToProps
 )(TransactionPurchasing));

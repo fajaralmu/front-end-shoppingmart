@@ -293,7 +293,7 @@ const resetSuppliersMiddleware = store => next => action => {
 }
 
 const resetPurchaseTransactionMiddleware = store => next => action => {
-    if (!action.meta || action.meta.type !== types.RESET_TRX_PURCHASE) { return next(action); }
+    if (!action.meta || action.meta.type !== types.RESET_TRX_SELLING_PURCHASING) { return next(action); }
     let newAction = Object.assign({}, action, { payload: null });
     delete newAction.meta;
     store.dispatch(newAction);

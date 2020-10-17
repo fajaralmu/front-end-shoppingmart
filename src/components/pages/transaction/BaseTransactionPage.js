@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Route, Switch, withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import ContentTitle from '../../container/ContentTitle';
 import TransactionSelling from './TransactionSelling';
 import TransactionPurchasing from './TransactionPurchasing';

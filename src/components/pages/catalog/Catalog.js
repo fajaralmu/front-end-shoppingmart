@@ -97,7 +97,7 @@ class Catalog extends Component {
             this.props.updateCart(currentCart, this.props.app);
         }
 
-        this.getProductCatalog = (_page) => {
+        this.getProductCatalogByPage = (_page) => {
             console.log("will go to page: ", _page)
             this.props.getProductCatalog(
                 {
@@ -167,7 +167,7 @@ class Catalog extends Component {
             if (catalogPage >= totalPage - 1) { catalogPage = 0; }
             else { catalogPage++; }
 
-            this.getProductCatalog(catalogPage);
+            this.getProductCatalogByPage(catalogPage);
         }
 
         this.prev = () => {
@@ -176,7 +176,7 @@ class Catalog extends Component {
             if (catalogPage <= 0) { catalogPage = totalPage - 1; }
             else { catalogPage--; }
 
-            this.getProductCatalog(catalogPage);
+            this.getProductCatalogByPage(catalogPage);
         }
 
         this.handleChangeWithStockOption = (id) => {
@@ -210,7 +210,7 @@ class Catalog extends Component {
                 navButtonsData.push({
                     id: b.value,
                     active: active,
-                    buttonClick: () => this.getProductCatalog(b.value),
+                    buttonClick: () => this.getProductCatalogByPage(b.value),
                     text: b.text
                 });
             }
@@ -227,7 +227,7 @@ class Catalog extends Component {
 
     componentWillMount() {
         document.title = "Product Catalog";
-        this.getProductCatalog(this.state.catalogPage);
+        this.getProductCatalogByPage(this.state.catalogPage);
         this.props.setMenuCode(menus.CATALOG);
         this.props.getAllProductCategories();
 
@@ -247,7 +247,7 @@ class Catalog extends Component {
     filterBox() {
         let categories = [{ value: "00", text: "-all category-" }];
         let actionButtons = [
-            { text: <i className="fa fa-search" ></i>, status: "success", onClick: () => this.getProductCatalog(0), id: "btn-search" },
+            { text: <i className="fa fa-search" ></i>, status: "success", onClick: () => this.getProductCatalogByPage(0), id: "btn-search" },
             { text: "Clear Filter", status: 'warning', onClick: this.clearField, id: "Clear-filter" }
         ];
         this.props.productCategories.map(category => {
@@ -264,7 +264,7 @@ class Catalog extends Component {
             <GridComponent cols={3} style={{ width: 'max-content' }} items={[
                 <InputField placeholder="search by product name"
                     value={this.state.requestProductName}
-                    onEnterPress={()=>{this.getProductCatalog(0)}}
+                    onEnterPress={()=>{this.getProductCatalogByPage(0)}}
                     onKeyUp={this.handleInputNameChange}
                     type="search" id={FILTER_IDS.productName} />
                 ,
@@ -304,7 +304,7 @@ class Catalog extends Component {
                     <div className="col-2">
                         <InputField type="number" 
                             id="input-page-number" placeholder="page" 
-                            onEnterPress={(val,id)=> this.getProductCatalog(val-1)} />
+                            onEnterPress={(val,id)=> this.getProductCatalogByPage(val-1)} />
                     </div>
                     <div className="col-10" style={{textAlign:"center"}}>
                         <NavButtons buttonsData={this.generateNavButtonsData()} />

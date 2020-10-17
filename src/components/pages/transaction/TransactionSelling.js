@@ -4,7 +4,7 @@ import * as actions from '../../../redux/actionCreators'
 import Label from '../../container/Label';
 import InputField from '../../inputs/InputField';
 import StockListTable from './StockListTable'
-import TransactionReceipt from './TransactionReceipt'
+import { withRouter } from 'react-router-dom'
 import * as stringUtil from '../../../utils/StringUtil'
 import ActionButtons from '../../buttons/ActionButtons'
 import DynamicDropdown from '../../inputs/DynamicDropdown'
@@ -43,8 +43,7 @@ class TransactionSelling extends Component {
             if(!productCode){ productCode = this.state.productCode; }
             this.props.getStockInfo(productCode, this.props.app);
             this.setState({ productCode: productCode, showDetail: true });
-        }
-
+        } 
 
         this.isExistInTheChart = (productId) => {
             if (this.state.productFlows == null) return false;
@@ -56,26 +55,26 @@ class TransactionSelling extends Component {
                 this.props.app.infoDialog("Please provide valid quantity!"); return;
             }
             let quantity = this.state.quantity;
-            let productFlowStock = this.props.productFlowStock;
-            if (quantity > productFlowStock.count) {
+            let product = this.props.productFlowStock;
+            if (quantity > product.count) {
                 this.props.app.infoDialog("Stock unavailable!"); return;
             }
 
             // let productFlow = productFlowStock.id;
-            if (this.isExistInTheChart(productFlowStock.id))
+            if (this.isExistInTheChart(product.id))
                 if (!window.confirm("The product already exist in the chart, do you want to override it?"))
                     return;
 
-            let ID = Math.floor(Math.random() * 1000);
+            const ID = Math.floor(Math.random() * 1000);
             let newProductFlow = {
                 "id": ID,
-                "product": productFlowStock,
-                "price": productFlowStock.price,
+                "product": product,
+                "price": product.price,
                 "count": quantity,
                 // "expiryDate": productFlow.expiryDate,
                 "flowReferenceId": 0,//productFlow.id,
                 //stock list table identifier
-                "entityId": productFlowStock.id,
+                "entityId": product.id,
             };
 
             //update list in the state
@@ -86,12 +85,15 @@ class TransactionSelling extends Component {
         this.addProductFlow = (productFlow) => {
             let currentFlows = this.state.productFlows;
             //update
-            if (this.getProductFlow(productFlow.flowReferenceId) != null) {
-                for (let index = 0; index < this.state.productFlows.length; index++)
-                    if (this.state.productFlows[index].flowReferenceId == productFlow.flowReferenceId) currentFlows[index] = productFlow;
-
-            } else
+            if (this.getProductFlow(productFlow.product.id) != null) {
+                for (let i = 0; i < this.state.productFlows.length; i++){
+                    if (this.state.productFlows[i].product.id == productFlow.product.id) {
+                        currentFlows[i] = productFlow;
+                    }
+                }
+            } else {
                 currentFlows.push(productFlow); //add new
+            }
 
             this.setState({ productFlows: currentFlows });
             
@@ -265,6 +267,10 @@ class TransactionSelling extends Component {
     }
 
     componentDidUpdate() {
+        if (this.props.successTransaction) {
+            this.props.history.push("/transaction-receipt/"+this.props.transactionData.code);
+            return;    
+        }
         if (byId(this.state.activeField) != null) {
             byId(this.state.activeField).focus();
         }
@@ -323,16 +329,10 @@ class TransactionSelling extends Component {
             /></div><div className="col-7"><this.detailStockComponent /></div>
         </div>
 
-        let buttonsData = [
-            { text: "Back", status: "secondary", onClick: () => { this.reset() }, id: "btn-back-reset" },
-             { text: "Reset", status: 'danger btn-sm', id: "btn-reset-trx", onClick: this.reset }];
-
-        if (this.props.successTransaction) {
-            formComponent = <TransactionReceipt status="Success" transactionData={this.props.transactionData} />
-        } else {
-            buttonsData.push({ id: "btn-submit-trx", status: 'success btn-sm', text: "Submit Transaction", onClick: this.submitTransaction });
-        }
-
+        const buttonsData = [
+             { text: "Reset", status: 'danger btn-sm', id: "btn-reset-trx", onClick: this.reset },
+             { text: "Submit Transaction", status: 'success btn-sm', id: "btn-submit-trx", onClick: this.submitTransaction }];
+ 
         return (
             <div className="transaction-container"> 
 
@@ -341,7 +341,7 @@ class TransactionSelling extends Component {
                 <div>
                     <ActionButtons buttonsData={buttonsData} />
                 </div>
-                {/* ======= product list ======== */}
+                
                 <h3>Product List</h3>
                 <StockListTable disabled={this.props.successTransaction} handleEdit={this.handleEdit} handleDelete={this.handleDelete} productFlows={this.state.productFlows} />
                 <Label className="totalprice-info" text={"Total Price: IDR " + totalPrice} />
@@ -364,12 +364,12 @@ const mapDispatchToProps = dispatch => ({
     resetCustomers: () => dispatch(actions.resetCustomers()),
     getStockInfo: (productCode, app) => dispatch(actions.getStockInfo(productCode, app)),
     submitPurchaseTransaction: (request, app) => dispatch(actions.submitPurchaseTransaction(request, app)),
-    resetPurchaseTransaction: () => dispatch(actions.resetPurchaseTransaction()),
+    resetPurchaseTransaction: () => dispatch(actions.resetPurchasingAndSelling()),
     resetProductStocks: () => (dispatch(actions.resetProductStocks())),
     getCustomerList: (request, app) => dispatch(actions.getCustomerList(request, app)),
     getProductStockList: (name, app) => dispatch(actions.getProductStocks(name, app))
 })
-export default (connect(
+export default withRouter(connect(
     mapStateToProps,
     mapDispatchToProps
 )(TransactionSelling));
