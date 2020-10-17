@@ -135,22 +135,22 @@ export const getEntityProperty = (entityName, app) => {
         meta: {
             type: types.GET_ENTITY_PROPERTY,
             url: apiEntityBaseUrl.concat("config"),
-            app: app, 
+            app: app,
         }
     };
     return requested;
 }
 
 
-export const getManagementMenus = ( app) => {
+export const getManagementMenus = (app) => {
     app.startLoading();
     let requested = {
         type: types.GET_MANAGEMENT_MENUS,
-        payload: {  },
+        payload: {},
         meta: {
             type: types.GET_MANAGEMENT_MENUS,
             url: apiEntityBaseUrl.concat("managementpages"),
-            app: app, 
+            app: app,
         }
     };
     return requested;
@@ -282,12 +282,12 @@ export const getProductListTrx = (request, app) => {
     app.startLoading();
     const callback = request.callback;
     const fieldsFilter = {};
-    fieldsFilter[request.filterName] = request.filterValue; 
-    
+    fieldsFilter[request.filterName] = request.filterValue;
+
     return {
         type: types.FETCH_PRODUCT_LIST_TRX,
         payload: {
-            entity: "product", filter: { page: 0, exacts: (request.exacts==true), limit: 10, fieldsFilter: fieldsFilter }
+            entity: "product", filter: { page: 0, exacts: (request.exacts == true), limit: 10, fieldsFilter: fieldsFilter }
         },
         meta: {
             type: types.FETCH_PRODUCT_LIST_TRX, url: apiEntityBaseUrl.concat("get"), app: app, callback: callback
@@ -295,17 +295,31 @@ export const getProductListTrx = (request, app) => {
     }
 }
 
-export const getCustomerList = (name, app) => {
+export const getCustomerList = (request, app) => {
     app.startLoading();
-    return {
+    const fieldsFilter = {};
+    fieldsFilter[request.key] = request.value;
+   
+    const ret = {
         type: types.FETCH_CUSTOMER_LIST,
         payload: {
-            entity: "customer", filter: { page: 0, limit: 10, fieldsFilter: { name: name } }
+            entity: "customer", 
+            filter: { 
+                page: request.page?request.page:0, 
+                limit: request.limit?request.limit:10, 
+                exacts: request.exacts == true,
+                fieldsFilter: fieldsFilter 
+            }
         },
         meta: {
-            type: types.FETCH_CUSTOMER_LIST, url: apiEntityBaseUrl.concat("get"), app: app
+            type: types.FETCH_CUSTOMER_LIST, 
+            url: apiEntityBaseUrl.concat("get"), 
+            app: app, 
+            callback: request.callback
         }
     }
+    console.debug("getCustomerList ret: ", ret);
+    return ret;
 }
 
 export const resetPurchaseTransaction = () => ({
@@ -388,7 +402,7 @@ export const getLoggedUser = (app) => {
     app.startLoading();
     let request = {
         type: types.GET_LOGGED_USER,
-        payload: { },
+        payload: {},
         meta: { type: types.GET_LOGGED_USER, url: apiAccount.concat("user"), app: app }
     };
     return request;
@@ -424,7 +438,7 @@ export const getAllProductCategories = () => ({
 
 export const getSupplierList = (request, app) => {
     app.startLoading();
-    const fieldsFilter = { }
+    const fieldsFilter = {}
     fieldsFilter[request.key] = request.value;
     let requested = {
         type: types.FETCH_SUPPLIER_LIST,
@@ -432,7 +446,7 @@ export const getSupplierList = (request, app) => {
             entity: "supplier",
             filter: {
                 limit: request.limit ? request.limit : 10,
-                page: request.page,
+                page: request.page ? request.page : 0,
                 exacts: request.exacts == true,
                 fieldsFilter: fieldsFilter,
                 orderBy: request.orderby,
@@ -459,7 +473,7 @@ export const getProductSupplied = (supplierId, app) => {
     app.startLoading();
     return {
         type: types.FETCH_PRODUCT_SUPPLIED,
-        payload: { supplier: {id: supplierId } },
+        payload: { supplier: { id: supplierId } },
         meta: {
             type: types.FETCH_PRODUCT_SUPPLIED,
             url: apiBaseUrl.concat("productssupplied"),
@@ -467,12 +481,12 @@ export const getProductSupplied = (supplierId, app) => {
         }
     };
 }
-export const removeProductSupplied = ( ) => {
-     
+export const removeProductSupplied = () => {
+
     return {
-        type: types.REMOVE_PRODUCT_SUPPLIED, 
+        type: types.REMOVE_PRODUCT_SUPPLIED,
         meta: {
-            type: types.REMOVE_PRODUCT_SUPPLIED, 
+            type: types.REMOVE_PRODUCT_SUPPLIED,
         }
     };
 }

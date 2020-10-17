@@ -108,6 +108,7 @@ export const getSupplierListMiddleware = store => next => action => {
             let newAction = Object.assign({}, action, {  payload: data  });
             delete newAction.meta;
             store.dispatch(newAction);
+            
             if(action.meta.callback){
                 action.meta.callback(data);
             }

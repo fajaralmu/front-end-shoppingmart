@@ -183,7 +183,17 @@ class TransactionSelling extends Component {
         this.getCustomerList = (value, id) => {
             this.setState({ customerName: value });
             this.setActiveField(id);
-            this.props.getCustomerList(value, this.props.app);
+            this.props.getCustomerList({key:'name', value: value}, this.props.app);
+        }
+
+        this.getCustomerByCode = (value, id) => {
+            const app = this;
+            this.setActiveField(id);
+            const callback = function(response){
+                const customer = response.entities[0];
+                app.selectCustomer(customer.id);
+            }
+            this.props.getCustomerList({key:'id', value: value, exacts:true, limit:1, callback:callback}, this.props.app);
         }
 
         this.selectCustomer = (id) => {
@@ -191,12 +201,20 @@ class TransactionSelling extends Component {
                 alert("Data not found!");
                 return;
             }
-            for (let index = 0; index < this.props.customersData.length; index++)
-                if (this.props.customersData[index].id == id)
-                    this.setState({ customerName: this.props.customersData[index].name, customer: this.props.customersData[index] });
+            for (let i = 0; i < this.props.customersData.length; i++){
+                const customer = this.props.customersData[i];
+                if (customer.id == id) {
+                    this.displayCustomerInfo(customer);
+                    this.setState({ customerName:  customer.name, customer: customer });
+                }
+            }
             this.props.resetCustomers();
         }
 
+        this.displayCustomerInfo = (customer) => {
+            byId(FIELD_IDS.customerName).value = customer.name; 
+            byId(FIELD_IDS.customerCode).value = customer.id; 
+        }
 
         this.getProductStockList = (value, id) => {
             this.setState({ productName: value });
@@ -288,6 +306,8 @@ class TransactionSelling extends Component {
                     <Label text="Customer" />,
                     <DynamicDropdown value={this.state.customerName} onSelect={this.selectCustomer} dropdownList={customerList}
                         onKeyUp={this.getCustomerList} id={FIELD_IDS.customerName} placeholder="customer name" />,
+                    <Label text="Or Customer ID" />,
+                    <InputField onEnterPress={this.getCustomerByCode} id={FIELD_IDS.customerCode} placeholder="customer id" />,
                     <Label text="Product Name" />,
                     <DynamicDropdown value={this.state.productName} onSelect={this.selectproduct} dropdownList={productList}
                         onKeyUp={this.getProductStockList} id={FIELD_IDS.productName} placeholder="product name" />,
@@ -348,7 +368,7 @@ const mapDispatchToProps = dispatch => ({
     submitPurchaseTransaction: (request, app) => dispatch(actions.submitPurchaseTransaction(request, app)),
     resetPurchaseTransaction: () => dispatch(actions.resetPurchaseTransaction()),
     resetProductStocks: () => (dispatch(actions.resetProductStocks())),
-    getCustomerList: (name, app) => dispatch(actions.getCustomerList(name, app)),
+    getCustomerList: (request, app) => dispatch(actions.getCustomerList(request, app)),
     getProductStockList: (name, app) => dispatch(actions.getProductStocks(name, app))
 })
 export default (connect(

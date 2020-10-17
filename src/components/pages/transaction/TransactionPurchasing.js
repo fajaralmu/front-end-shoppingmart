@@ -6,8 +6,7 @@ import * as trxCss from './Transaction.css'
 import Label from '../../container/Label';
 import InputField from '../../inputs/InputField';
 import DetailProductPanel from './DetailProductPanel';
-import StockListTable from './StockListTable'
-import Loader from '../../messages/Loader'
+import StockListTable from './StockListTable' 
 import TransactionReceipt from './TransactionReceipt'
 import * as stringUtil from '../../../utils/StringUtil'
 import ActionButtons from '../../buttons/ActionButtons'
@@ -198,7 +197,7 @@ class TransactionPurchasing
         this.getSupplierList = (value, id) => {
             if (value == null || value.trim() == "") { return; }
             this.setState({ supplierName: value });
-            this.props.getSupplierList({ key:'name', value: value, page: 0 }, this.props.app);
+            this.props.getSupplierList({ key:'name', value: value}, this.props.app);
             this.setActiveField(id);
         }
 
@@ -207,11 +206,9 @@ class TransactionPurchasing
             this.setActiveField(id);
             const callback = function(response){
                 const supplier = response.entities[0];
-                
-                byId(FIELD_IDS.supplierName).value = supplier.name; 
                 app.selectSupplier(supplier.id);
             }
-            this.props.getSupplierList({key:'id', value: value, page: 0, limit:1, exacts: true, callback:callback  }, this.props.app);
+            this.props.getSupplierList({key:'id', value: value, limit:1, exacts: true, callback:callback  }, this.props.app);
         }
 
         this.selectSupplier = (id) => {
@@ -219,10 +216,19 @@ class TransactionPurchasing
                 alert("Data not found!");
                 return;
             }
-            for (let i = 0; i < this.props.suppliers.length; i++)
-                if (this.props.suppliers[i].id == id)
-                    this.setState({ supplierName: this.props.suppliers[i].name, supplier: this.props.suppliers[i] });
+            for (let i = 0; i < this.props.suppliers.length; i++) {
+                const supplier = this.props.suppliers[i];
+                if (supplier.id == id) {
+                    this.displaySupplierInfo(supplier); 
+                    this.setState({ supplierName: supplier.name, supplier: supplier });
+                }
+            }
             this.props.resetSuppliers();
+        }
+
+        this.displaySupplierInfo = (supplier) => {
+            byId(FIELD_IDS.supplierName).value = supplier.name; 
+            byId(FIELD_IDS.supplierCode).value = supplier.id; 
         }
 
         this.getProductList = (value, id) => {
