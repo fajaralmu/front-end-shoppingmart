@@ -7,7 +7,7 @@ import Menu from './components/navigation/Menu'
 import Home from './components/pages/index/Home'
 import About from './components/pages/about/About'
 
-import { Route, Switch, withRouter } from 'react-router-dom'
+import { Route, Switch, withRouter, Redirect  } from 'react-router-dom'
 import * as actions from './redux/actionCreators'
 import { connect } from 'react-redux'
 import Catalog from './components/pages/catalog/Catalog'
@@ -176,7 +176,8 @@ class App extends Component {
             (renderProps) =>
               <Management app={this} setMenuCode={(this.setMenuCode)} />
             }/>
-          <Route  path="/transaction/:type" render={(renderProps)=>{
+           <Route exact path="/transaction/" render={()=>{ return <Redirect to="/home" />}} />
+          <Route exact path="/transaction/:type" render={(renderProps)=>{
              return <BaseTransactionPage app={this} setMenuCode={(this.setMenuCode)} />
           }}  />
         </Switch>

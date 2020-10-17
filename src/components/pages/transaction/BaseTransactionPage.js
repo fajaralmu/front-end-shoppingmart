@@ -21,11 +21,15 @@ class BaseTransactionPage extends Component {
         this.gotoLogin = () => {
             this.props.history.push("/login");
         }
+
+        this.setMenuCode = (code) => {
+            this.props.setMenuCode(code);
+        }
     }
 
     componentWillMount() {
         const paramType = this.props.match.params.type;
-        if (!paramType) {
+        if (!paramType || paramType == "") {
             this.gotoLogin();
         }
         if (paramType != "selling" && paramType != "purchasing") {
@@ -35,21 +39,19 @@ class BaseTransactionPage extends Component {
 
     componentDidUpdate() {
         this.validateLoginStatus();
-        const paramType = this.props.match.params.type;
-        if (paramType != this.props.app.state.menuCode) {
-            this.props.setMenuCode(paramType);
-        }
+        
     }
 
     render() {
         const paramType = this.props.match.params.type;
+        const iconClass = paramType == "selling" ? "fas fa-cash-register" : "fas fa-truck-loading";
         return (
             <section className="section-container">
-                <ContentTitle title={"Transaction " + paramType} />
+                <ContentTitle iconClass={iconClass} title={"Transaction " + paramType} />
                 {paramType == "selling" ?
-                    <TransactionSelling app={this.props.app} setFeatureCode={this.setFeatureCode} />
+                    <TransactionSelling app={this.props.app} setMenuCode={this.setMenuCode} />
                     :
-                    <TransactionPurchasing app={this.props.app} setFeatureCode={this.setFeatureCode} />
+                    <TransactionPurchasing app={this.props.app} setMenuCode={this.setMenuCode} />
                 }
             </section>
         )

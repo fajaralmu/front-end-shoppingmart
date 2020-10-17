@@ -261,6 +261,7 @@ class TransactionSelling extends Component {
 
     componentDidMount() {
         document.title = "Selling";
+        this.props.setMenuCode("selling");
     }
 
     componentDidUpdate() {

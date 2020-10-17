@@ -75,17 +75,17 @@ export const menus = [
   }, 
   {
     code:"selling",
-    name:"Transaction Selling",
+    name:"Selling",
     url:"/transaction/selling",
-    menuClass: "fa fa-database",
+    menuClass: "fas fa-cash-register",
     active: false,
     authenticated: true
   }, 
   {
     code:"purchasing",
-    name:"Transaction Purchasing",
+    name:"Purchasing",
     url:"/transaction/purchasing",
-    menuClass: "fa fa-database",
+    menuClass: "fas fa-truck-loading",
     active: false,
     authenticated: true
   }, 

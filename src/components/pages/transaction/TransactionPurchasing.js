@@ -267,6 +267,7 @@ class TransactionPurchasing extends Component {
             this.props.resetPurchaseTransaction();
         }
         document.title = "Purchasing"; 
+        this.props.setMenuCode("purchasing");
         this.props.resetSuppliers();
 
     }
