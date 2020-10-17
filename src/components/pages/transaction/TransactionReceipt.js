@@ -20,7 +20,7 @@ class TransactionReceipt extends Component {
             this.props.transactionData.user) {
             let transaction = this.props.transactionData;
 
-            if (transaction.type == "OUT") {
+            if (transaction.type == "SELLING") {
                 stakeHolder = { id: "trx_customer", values: ["Customer", transaction.customer.name] }
             } else {
                 stakeHolder = { id: "trx_supplier", values: ["Supplier", transaction.supplier.name] }

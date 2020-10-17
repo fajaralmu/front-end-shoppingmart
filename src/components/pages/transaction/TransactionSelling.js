@@ -94,7 +94,7 @@ class TransactionSelling extends Component {
                 currentFlows.push(productFlow); //add new
 
             this.setState({ productFlows: currentFlows });
-            this.showMessage("Success saving to chart", "success");
+            
             componentUtil.clearFields("input-customer-name");
         }
 
@@ -160,13 +160,7 @@ class TransactionSelling extends Component {
                 let request = { productFlows: app.state.productFlows, customer: app.state.customer };
                 app.props.submitPurchaseTransaction(request, app.props.app);
             }, function (e) { });
-        }
-
-        this.endMessage = () => { this.setState({ messageShow: false }) }
-
-        this.showMessage = (text, type) => {
-            this.setState({ messageShow: true, messageText: text, messageType: type });
-        }
+        } 
 
         this.reset = () => {
             componentUtil.clearFields(null);
