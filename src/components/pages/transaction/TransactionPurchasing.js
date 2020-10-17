@@ -346,9 +346,8 @@ class TransactionPurchasing extends Component {
             <div className="col-7">{detailStock}</div>
         </div>;
 
-        let buttonsData = [
-            { text: "Back", status: "secondary", onClick: () => this.props.setFeatureCode(null), id: "btn-back" },
-            { text: "Back And Reset", status: "warning", onClick: () => { this.props.setFeatureCode(null); this.reset() }, id: "btn-back-reset" },
+        let buttonsData = [ 
+            { text: "Back", status: "secondary", onClick: () => { this.reset() }, id: "btn-back-reset" },
             { text: "Reset", status: 'danger', id: "btn-reset-trx", onClick: this.reset }];
 
         if (this.props.successTransaction) {
@@ -359,7 +358,7 @@ class TransactionPurchasing extends Component {
 
         return (
             <div className="transaction-container"> 
-                <h3>Supplier {this.state.supplier && this.state.supplier.name ? <small>{this.state.supplier.name}</small> : null}</h3>
+                {this.state.supplier && this.state.supplier.name ? <h3>Supplier {this.state.supplier.name}</h3> : null}
                 {formComponent}
                 <div>
                     <ActionButtons buttonsData={buttonsData} />

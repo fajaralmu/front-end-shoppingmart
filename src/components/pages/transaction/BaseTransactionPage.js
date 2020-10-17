@@ -4,6 +4,9 @@ import { Route, Switch, withRouter } from 'react-router-dom'
 import ContentTitle from '../../container/ContentTitle';
 import TransactionSelling from './TransactionSelling';
 import TransactionPurchasing from './TransactionPurchasing';
+
+
+
 class BaseTransactionPage extends Component {
 
     constructor(props) {
@@ -28,18 +31,16 @@ class BaseTransactionPage extends Component {
         if (paramType != "selling" && paramType != "purchasing") {
             this.gotoLogin();
         }
-    }
-
+    } 
 
     componentDidUpdate() {
         this.validateLoginStatus();
         const paramType = this.props.match.params.type;
-        if (paramType == "selling" && this.props.app.state.menuCode != "selling") {
-            this.props.setMenuCode("selling");
-        }else  if (paramType == "purchasing" && this.props.app.state.menuCode != "purchasing") {
-            this.props.setMenuCode("purchasing");
+        if (paramType != this.props.app.state.menuCode) {
+            this.props.setMenuCode(paramType);
         }
-    } 
+    }
+
     render() {
         const paramType = this.props.match.params.type;
         return (

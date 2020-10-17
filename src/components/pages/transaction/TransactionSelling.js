@@ -323,9 +323,8 @@ class TransactionSelling extends Component {
         </div>
 
         let buttonsData = [
-            { text: "Back", status: "secondary", onClick: () => this.props.setFeatureCode(null), id: "btn-back" },
-            { text: "Back And Reset", status: "warning btn-sm", onClick: () => { this.props.setFeatureCode(null); this.reset() }, id: "btn-back" },
-            { text: "Reset", status: 'danger btn-sm', id: "btn-reset-trx", onClick: this.reset }];
+            { text: "Back", status: "secondary", onClick: () => { this.reset() }, id: "btn-back-reset" },
+             { text: "Reset", status: 'danger btn-sm', id: "btn-reset-trx", onClick: this.reset }];
 
         if (this.props.successTransaction) {
             formComponent = <TransactionReceipt status="Success" transactionData={this.props.transactionData} />
@@ -336,7 +335,7 @@ class TransactionSelling extends Component {
         return (
             <div className="transaction-container"> 
 
-                <h3>Customer {this.state.customer && this.state.customer.name ? <small>{this.state.customer.name}</small> : ""}</h3>
+                {this.state.customer && this.state.customer.name ?  <h3>Customer{this.state.customer.name}</h3> : ""} 
                 {formComponent}
                 <div>
                     <ActionButtons buttonsData={buttonsData} />

@@ -275,6 +275,7 @@ class App extends Component {
         <CartInfo mainAppUpdated={this.state.mainAppUpdated} enableShopping={this.state.enableShopping} />
 
         <Header showOptionButton={isHideSidebar} hideMenu={() => { this.setState({ hideSidebar: true }) }} showMenu={() => { this.setState({ hideSidebar: false }) }} applicationProfile={applicationProfile} />
+        
         <div className="row" id="main-layout">
           {isHideSidebar ? null :
             <div id="main-menu" className={'col-2'} style={{ backgroundColor: applicationProfile.color }}>
@@ -295,7 +296,7 @@ class App extends Component {
           onMessage={(msg) => { this.handleMessage(msg) }}
           ref={(client) => { this.clientRef = client }} />
         <Footer applicationProfile={this.props.applicationProfile} />
-
+        
       </div>
     )
   }
