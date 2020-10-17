@@ -19,6 +19,7 @@ class TransactionReceiptv2 extends Component {
             transaction: null,
             error: false,
             loading: false,
+            totalPrice: 0
         }
         this.transactionService = TransactionService.instance;
         this.validateLoginStatus = () => {
@@ -35,7 +36,18 @@ class TransactionReceiptv2 extends Component {
             
             const transaction = response.transaction;
             transaction.productFlows = response.entities;
-            this.setState({transaction:transaction, error:false,loading:false});
+            const totalPrice = this.calculateTotalPrice(response.entities);
+            this.setState({transaction:transaction, error:false, loading:false, totalPrice: totalPrice});
+        }
+
+        this.calculateTotalPrice = (productFlows) => {
+            let totalPrice = 0;
+            for (let i = 0; i < productFlows.length; i++) {
+                const productFlow = productFlows[i];
+                totalPrice+=(productFlow.count * productFlow.price);
+            }
+
+            return totalPrice;
         }
 
         this.loadTransactionData = () => {
@@ -100,6 +112,7 @@ class TransactionReceiptv2 extends Component {
                             </tr>
                         )
                     })}
+                    <tr><td colSpan="4">Total Price</td><td >{this.state.totalPrice}</td></tr>
                 </table>
             </div>
         );
