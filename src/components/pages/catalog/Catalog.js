@@ -260,8 +260,6 @@ class Catalog extends Component {
             });
         }
 
-      
-
         return <div className="filter-box">
             <GridComponent cols={3} style={{ width: 'max-content' }} items={[
                 <InputField placeholder="search by product name"

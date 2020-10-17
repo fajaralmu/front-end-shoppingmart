@@ -100,16 +100,17 @@ export const getSupplierListMiddleware = store => next => action => {
     })
         .then(response => response.json())
         .then(data => {
-            //console.debug("Response:", data);
+            console.debug("Response:", data.entities);
             if (data.entities == null || data.entities.length == 0) {
-                alert("Data not found!");
+                alert("Supplier not found!");
                 return;
             }
-            let newAction = Object.assign({}, action, {
-                payload: data
-            });
+            let newAction = Object.assign({}, action, {  payload: data  });
             delete newAction.meta;
             store.dispatch(newAction);
+            if(action.meta.callback){
+                action.meta.callback(data);
+            }
         })
         .catch(err => console.log(err))
         .finally(param => action.meta.app.endLoading());

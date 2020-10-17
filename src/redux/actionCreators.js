@@ -424,16 +424,17 @@ export const getAllProductCategories = () => ({
 
 export const getSupplierList = (request, app) => {
     app.startLoading();
+    const fieldsFilter = { }
+    fieldsFilter[request.key] = request.value;
     let requested = {
         type: types.FETCH_SUPPLIER_LIST,
         payload: {
             entity: "supplier",
             filter: {
-                limit: 10,
+                limit: request.limit ? request.limit : 10,
                 page: request.page,
-                fieldsFilter: {
-                    name: request.name
-                },
+                exacts: request.exacts == true,
+                fieldsFilter: fieldsFilter,
                 orderBy: request.orderby,
                 orderType: request.ordertype
             }
@@ -441,7 +442,8 @@ export const getSupplierList = (request, app) => {
         meta: {
             type: types.FETCH_SUPPLIER_LIST,
             url: apiBaseUrl.concat("get"),
-            app: app
+            app: app,
+            callback: request.callback
         }
     };
 

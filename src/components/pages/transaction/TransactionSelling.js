@@ -18,6 +18,7 @@ import Card from '../../card/Card';
 
 const FIELD_IDS = {
     customerName: "input-customer-name-sell",
+    customerCode: "input-customer-code",
     productName: "input-product-name-sell",
     productCode: "input-product-code-sell", 
     productQuantity: "input-quantity-sell"
@@ -238,14 +239,7 @@ class TransactionSelling extends Component {
                 return <AddToCartButton onClick={this.addToCart} />
             else
                 return <></>
-        }
-
-        this.messageComponent = () => {
-            if (this.state.messageShow == true) {
-                return <Loader withTimer={true} text={this.state.messageText} endMessage={this.endMessage} type={this.state.messageType} />
-            }
-            return <></>
-        }
+        } 
     }
 
     componentDidMount() {
@@ -322,8 +316,7 @@ class TransactionSelling extends Component {
         }
 
         return (
-            <div className="transaction-container">
-                <this.messageComponent />
+            <div className="transaction-container"> 
 
                 <h2>Selling {this.state.customer && this.state.customer.name ? <small>{this.state.customer.name}</small> : ""}</h2>
                 {formComponent}

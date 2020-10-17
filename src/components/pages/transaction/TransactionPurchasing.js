@@ -21,6 +21,7 @@ import BaseTransactionPage from './BaseTransactionPage';
 
 const FIELD_IDS = {
     supplierName: "input-supplier-name-purc",
+    supplierCode: "input-suppluer-code",
     productName: "input-product-name-purc",
     productCode: "input-product-code-purc",
     productPrice: "input-product-price-purc",
@@ -158,9 +159,7 @@ class TransactionPurchasing
                 let request = { productFlows: app.state.productFlows, supplier: app.state.supplier };
                 app.props.submitSupplyTransaction(request, app.props.app);
             }, function (e) { });
-        }
-
-        this.endMessage = () => { this.setState({ messageShow: false }) } 
+        } 
 
         this.reset = () => {
             componentUtil.clearFields(null);
@@ -199,8 +198,20 @@ class TransactionPurchasing
         this.getSupplierList = (value, id) => {
             if (value == null || value.trim() == "") { return; }
             this.setState({ supplierName: value });
-            this.props.getSupplierList(value, this.props.app);
+            this.props.getSupplierList({ key:'name', value: value, page: 0 }, this.props.app);
             this.setActiveField(id);
+        }
+
+        this.getSupplierByCode = (value, id) => {
+            const app = this;
+            this.setActiveField(id);
+            const callback = function(response){
+                const supplier = response.entities[0];
+                
+                byId(FIELD_IDS.supplierName).value = supplier.name; 
+                app.selectSupplier(supplier.id);
+            }
+            this.props.getSupplierList({key:'id', value: value, page: 0, limit:1, exacts: true, callback:callback  }, this.props.app);
         }
 
         this.selectSupplier = (id) => {
@@ -245,14 +256,7 @@ class TransactionPurchasing
                 }
             }
             this.props.resetProducts();
-        }
-
-        this.messageComponent = () => {
-            if (this.state.messageShow == true) {
-                return <Loader withTimer={true} text={this.state.messageText} endMessage={this.endMessage} type={this.state.messageType} />
-            }
-            return <></>
-        }
+        } 
     }
     componentDidMount() {
         if (this.props.resetPurchaseTransaction) {
@@ -305,6 +309,8 @@ class TransactionPurchasing
                             <DynamicDropdown onSelect={this.selectSupplier} dropdownList={supplierList}
                                 value={this.state.supplierName}
                                 onKeyUp={this.getSupplierList} id={FIELD_IDS.supplierName} placeholder="supplier name" />,
+                            <Label text="Or Supplier ID" />,
+                            <InputField onEnterPress={this.getSupplierByCode} id={FIELD_IDS.supplierCode} placeholder="supplier code" />,
                             <Label text="Product Name" />,
                             <DynamicDropdown onSelect={this.selectProduct} id={FIELD_IDS.productName} dropdownList={productList}
                                 value={this.state.productName}
@@ -350,8 +356,7 @@ class TransactionPurchasing
         }
 
         return (
-            <div className="transaction-container">
-                <this.messageComponent />
+            <div className="transaction-container"> 
                 <h2>Purchasing {this.state.supplier && this.state.supplier.name ? <small>{this.state.supplier.name}</small> : null}</h2>
 
                 {formComponent}
@@ -383,7 +388,7 @@ const mapDispatchToProps = dispatch => ({
     resetPurchaseTransaction: () => dispatch(actions.resetPurchaseTransaction()),
     resetSuppliers: () => dispatch(actions.resetSuppliers()),
     resetProducts: () => dispatch(actions.resetProducts()),
-    getSupplierList: (name, app) => dispatch(actions.getSupplierList({ name: name, page: 0 }, app))
+    getSupplierList: (request, app ) => dispatch(actions.getSupplierList(request, app))
 })
 export default (connect(
     mapStateToProps,
