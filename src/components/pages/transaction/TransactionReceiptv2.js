@@ -34,6 +34,7 @@ class TransactionReceiptv2 extends Component {
         this.handleGetTransactionData = (response) => {
             
             const transaction = response.transaction;
+            transaction.productFlows = response.entities;
             this.setState({transaction:transaction, error:false,loading:false});
         }
 
@@ -67,17 +68,39 @@ class TransactionReceiptv2 extends Component {
         if(this.state.loading || null == transaction){
             return <Loader ></Loader>
         } 
-        const date = transaction&& transaction.transactionDate ? new Date(transaction.transactionDate).toLocaleString() : null;
+        const date = transaction.transactionDate ? new Date(transaction.transactionDate).toLocaleString() : null;
         return (
             <div className="section-container">
                 <ContentTitle iconClass="fas fa-file-alt" title={transaction.type + " Transaction Success (" + transaction.mode + ")"}
                     description={<>{date}</>} />
                 <div className="row">
+                    <div className="col-3">Code</div><div className="col-9">{transaction.code}</div>
                     {this.isSelling() ? 
                     <><div className="col-3">Customer</div><div className="col-9">{transaction.customer.name}</div></>
                     :<><div className="col-3">Supplier</div><div className="col-9">{transaction.supplier.name}</div></>}
                     <div className="col-3">Operator</div><div className="col-9">{transaction.user.displayName}</div>
                 </div>
+                <table className="table">
+                    <tr>
+                        <th>No</th>
+                        <th>Product Name</th>
+                        <th>Qty</th>
+                        <th>Price @item</th>
+                        <th>Total Price</th> 
+                    </tr>
+                    {transaction.productFlows.map((productFlow, i)=>{
+                        const product = productFlow.product;
+                        return (
+                            <tr>
+                                <td>{i+1}</td>
+                                <td>{product.name}</td>
+                                <td>{productFlow.count}&nbsp;{product.unit.name}</td>
+                                <td>{productFlow.price}</td>
+                                <td>{productFlow.price * productFlow.count}</td>
+                            </tr>
+                        )
+                    })}
+                </table>
             </div>
         );
     }
