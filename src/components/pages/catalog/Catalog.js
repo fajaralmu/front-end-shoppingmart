@@ -299,7 +299,17 @@ class Catalog extends Component {
         let productCatalog = (
             <div className="section-container">
                 <ContentTitle title="Catalog Page" iconClass="fas fa-store-alt" description="Choose your favourite products" />
-                <NavButtons buttonsData={this.generateNavButtonsData()} />
+                
+                <div className="row">
+                    <div className="col-2">
+                        <InputField type="number" 
+                            id="input-page-number" placeholder="page" 
+                            onEnterPress={(val,id)=> this.getProductCatalog(val-1)} />
+                    </div>
+                    <div className="col-10" style={{textAlign:"center"}}>
+                        <NavButtons buttonsData={this.generateNavButtonsData()} />
+                    </div>
+                </div>
 
                 {this.filterBox()}
                 <div className="row catalog-container" >
@@ -327,29 +337,28 @@ class Catalog extends Component {
     }
 }
 
-function ProductCard(props) {
-    let shoppingInfo = <></>;
+function ProductCard(props) { 
+
     const product = props.product;
+    let cartButtonsData = null;
     if (props.enableShopping) {
 
         const cartItem = props.getProductInCart(product.id);
         const qty = cartItem.count;
 
-        const cartButtonsData = [
+        cartButtonsData = [
             { text: <i className="fas fa-sync"></i>, status: "danger btn-sm", onClick: () => props.addToCart(product, (qty * (-1))), id: "btn-add-cart-" + product.id },
             { text: <i className="fa fa-minus-circle"></i>, status: "warning btn-sm", onClick: () => props.addToCart(product, -1), id: "btn-add-cart-" + product.id },
             { text: qty, id: "info-cart-" + product.id, status: 'light btn-sm' },
             { text: <i className="fa fa-plus-circle"></i>, status: 'success btn-sm', onClick: () => props.addToCart(product, 1), id: "btn-reduce-cart-" + product.id }
-        ];
-
-        shoppingInfo = <div>
-            <ActionButtons buttonsData={cartButtonsData} />
-        </div>
+        ]; 
     }
 
     return (
         <div className="col-md-3" style={{width:'min-content'}} key={stringUtil.uniqueId()}>
-            {shoppingInfo}
+            {props.enableShopping ? <div>
+                <ActionButtons buttonsData={cartButtonsData} />
+            </div> : null }
             <CatalogItem getProductDetail={props.getProductDetail} key={product.id} product={product} />
         </div>
     )

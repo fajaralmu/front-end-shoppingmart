@@ -176,7 +176,17 @@ class SupplierList extends Component {
         } else {
             content = (<div className="section-container">
                 <ContentTitle title="Supplier List Page" iconClass="fas fa-warehouse" description="List of our partners" />
-                <NavButtons buttonsData={this.generateNavButtonsData()} />
+                
+                <div className="row">
+                    <div className="col-2">
+                        <InputField type="number" 
+                            id="input-page-number" placeholder="page" 
+                            onEnterPress={(val,id)=> this.getSupplierList(val-1)} />
+                    </div>
+                    <div className="col-10" style={{textAlign:"center"}}> 
+                        <NavButtons buttonsData={this.generateNavButtonsData()} />
+                    </div>
+                </div>
                 <this.filterBox />
                 <div className="row catalog-container">
                     {suppliers.map(

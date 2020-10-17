@@ -243,7 +243,7 @@ class TransactionPurchasing extends Component {
             this.setState({ showDetail: true });
             this.props.getProductList({ exacts: true, filterName:'code', filterValue: value, callback: function(response){
                 const product = response.entities[0];
-                app.setState({ productName: product.name, product: product });
+                app.selectProduct(product.id); 
             }}, this.props.app);
             this.setActiveField(id);
         }
@@ -257,10 +257,16 @@ class TransactionPurchasing extends Component {
                 const product = this.props.products[i];
                 if (product.id == id) {
                     this.setState({ productName: product.name, product: product });
+                    this.displayProductInfo(product);
                 }
             }
             this.props.resetProducts();
         } 
+
+        this.displayProductInfo = (product) => {
+            byId(FIELD_IDS.productCode).value = product.code;
+            byId(FIELD_IDS.productName).value = product.name;
+        }
     }
     componentDidMount() {
         if (this.props.resetPurchaseTransaction) {

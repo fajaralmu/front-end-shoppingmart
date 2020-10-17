@@ -1,12 +1,11 @@
-import * as types from './types'
-import * as menus from '../utils/HardCodedEntites'
-import * as menuCodes from '../constant/Menus'
+import * as types from './types' 
+import * as menuData from '../constant/Menus'
 
 export const initState = {
     loginKey: null,
     loginStatus: false,
     loginFailed: false,
-    menus: menus.menus,
+    menus: menuData.menus,
     loggedUser: null,
     loginAttempt: false,
     requestId: null,
@@ -21,9 +20,9 @@ export const reducer = (state = initState, action) => {
     if (action.payload) {
 
         let loggedIn = action.payload && action.payload.loginStatus == true;
-        for (let index = 0; index < menus.menus.length; index++) {
-            const menu = menus.menus[index];
-            if (loggedIn && menu.code == menuCodes.LOGIN) { continue; }
+        for (let index = 0; index < menuData.menus.length; index++) {
+            const menu = menuData.menus[index];
+            if (loggedIn && menu.code == menuData.LOGIN) { continue; }
 
             if (menu.authenticated == false) {
                 updatedMenus.push(menu);
