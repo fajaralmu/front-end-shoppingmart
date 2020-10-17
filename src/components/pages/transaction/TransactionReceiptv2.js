@@ -3,6 +3,9 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import ContentTitle from '../../container/ContentTitle';
 import { resetPurchasingAndSelling } from '../../../redux/actionCreators';
+import Loader from '../../messages/Loader';
+import TransactionService from '../../../services/TransactionService';
+import ActionButton from './../../buttons/ActionButton';
 const EMPTY = {
     customer:{},
     supplier:{},
@@ -12,21 +15,59 @@ class TransactionReceiptv2 extends Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            transaction: null,
+            error: false,
+            loading: false,
+        }
+        this.transactionService = TransactionService.instance;
+        this.validateLoginStatus = () => {
+            if (!this.props.loginStatus) {
+                this.props.history.push("/login"); 
+            }
+        }
 
         this.isSelling = () => {
-            return this.props.transactionData && this.props.transactionData.type == "SELLING";
+            return this.state.transaction && this.state.transaction.type == "SELLING";
+        }
+
+        this.handleGetTransactionData = (response) => {
+            
+            const transaction = response.transaction;
+            this.setState({transaction:transaction, error:false,loading:false});
+        }
+
+        this.loadTransactionData = () => {
+            this.setState({transaction:null, loading: true, error:false});
+            const app = this;
+            this.transactionService.getTransactionData(this.props.match.params.transactionCode).
+                then(function(response){
+                    app.handleGetTransactionData(response);
+                }).catch(function(error){
+                    app.setState({error:true,loading:false})
+                });
         }
     }
 
     componentWillMount() {
-        if (!this.props.successTransaction || !this.props.transactionData) {
-            this.props.history.push("/login");
-        }
+        this.validateLoginStatus();
+    }
+
+    componentDidMount(){
+         this.loadTransactionData();
     }
 
     render() {
-        const transaction = this.props.transactionData ? this.props.transactionData : EMPTY;
-        const date = transaction.transactionDate ? new Date(transaction.transactionDate).toLocaleString() : null;
+        const transaction = this.state.transaction;
+        if(this.state.error == true){
+            return (
+                <div><h3>Error Loading Transaction</h3><ActionButton text="Reload" onClick={this.loadTransactionData} ></ActionButton></div>
+            );
+        }
+        if(this.state.loading || null == transaction){
+            return <Loader ></Loader>
+        } 
+        const date = transaction&& transaction.transactionDate ? new Date(transaction.transactionDate).toLocaleString() : null;
         return (
             <div className="section-container">
                 <ContentTitle iconClass="fas fa-file-alt" title={transaction.type + " Transaction Success (" + transaction.mode + ")"}
@@ -43,12 +84,13 @@ class TransactionReceiptv2 extends Component {
 }
 const mapDispatchToProps = function (dispatch) {
     const dippatchs = {
-        resetPurchaseTransaction: () => dispatch(resetPurchasingAndSelling()),
+        resetPurchasingAndSelling: () => dispatch(resetPurchasingAndSelling()),
     }
     return dippatchs;
 }
 const mapStateToProps = state => {
     return {
+        loginStatus: state.userState.loginStatus,
         transactionData: state.transactionState.transactionData,
         successTransaction: state.transactionState.successTransaction,
     }

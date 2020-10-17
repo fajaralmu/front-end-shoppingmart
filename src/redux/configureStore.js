@@ -157,7 +157,7 @@ const getCashflowInfoMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.GET_CASHFLOW_INFO) { return next(action); }
     fetch(action.meta.url, {
         method: POST_METHOD, body: JSON.stringify(action.payload),
-        headers: { 'Content-Type': 'application/json', 'requestId': localStorage.getItem("requestId"), 'loginKey': localStorage.getItem("loginKey") }
+        headers: commonAuthorizedHeader()
     })
     .then(response => response.json())
     .then(data => {
@@ -186,11 +186,8 @@ const getCashflowInfoMiddleware = store => next => action => {
 
 const getProductListTrxMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.FETCH_PRODUCT_LIST_TRX) { return next(action); }
-   
-    const productAndNameIsNull = action.payload.filter.fieldsFilter.code == null && action.payload.filter.fieldsFilter.name == null;
-    const productAndNameIsEmpty= action.payload.filter.fieldsFilter.code == "" && action.payload.filter.fieldsFilter.name == "";
     
-    if (productAndNameIsNull || productAndNameIsEmpty) {
+    if (isEmptyObject(action.payload.filter.fieldsFilter)) {
         let newAction = Object.assign({}, action, {
             payload: { entities: [] }
         });
@@ -240,7 +237,7 @@ const getCustomerListMiddleware = store => next => action => {
         });
         delete newAction.meta;
         store.dispatch(newAction);
-    } else
+    } else {
         fetch(action.meta.url, {
             method: POST_METHOD,
             body: JSON.stringify(action.payload),
@@ -262,6 +259,7 @@ const getCustomerListMiddleware = store => next => action => {
             }
         })
         .catch(err => console.log(err)).finally(param => action.meta.app.endLoading());
+    }
 }
 
 const resetProductStocksMiddleware = store => next => action => {
