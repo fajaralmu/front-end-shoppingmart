@@ -13,8 +13,8 @@ import ContentTitle from '../../container/ContentTitle'
 import * as stringUtil from '../../../utils/StringUtil'
 import NavButtons from '../../navigation/NavButtons'
 import ComboBox from '../../inputs/ComboBox'
-import GridComponent from '../../container/GridComponent'
-import { byId } from './../../../utils/ComponentUtil';
+import GridComponent from '../../container/GridComponent' 
+import CatalogService from './../../../services/CatalogService';
 
 const FILTER_IDS = {
     productName: "input-product-name",
@@ -45,9 +45,12 @@ class Catalog extends Component {
             selectedProduct: null,
             buttonCount: 0,
             enableShopping: false,
-            activeId: null
+            activeId: null,
+            productCode: null
 
         };
+
+        this.catalogService = CatalogService.instance;
 
         this.focusToActiveField = () => {
             if (componentUtil.byId(this.state.activeId)) {
@@ -99,7 +102,7 @@ class Catalog extends Component {
 
         this.getProductCatalogByPage = (_page) => {
             console.log("will go to page: ", _page)
-            this.props.getProductCatalog(
+            this.getProductCatalog(
                 {
                     page: _page,
                     name: this.state.requestProductName,
@@ -107,9 +110,8 @@ class Catalog extends Component {
                     ordertype: this.state.requestOrderType,
                     categoryId: this.state.requestCategoryId,
                     withStock: this.state.requestWithStock
-                }, this.props.app
-            );
-            this.setState({ catalogPage: _page, totalData: this.props.catalogData.totalData });
+                });
+            this.setState({ catalogPage: _page, totalData: this.state.catalogData.totalData });
         }
 
         this.handleOrderChange = (value) => {
@@ -141,13 +143,13 @@ class Catalog extends Component {
             //remove selected product if any
             this.props.removeEntity();
 
-            this.props.getProductDetail(code, this.props.app);
-            this.props.setDetailMode(true);
+            this.getProductDetailv2(code);
+            this.setState({detailMode:true, productCode:code});
         }
 
         this.setDetailMode = (detailMode) => {
             document.title = "Product Catalog";
-            this.props.setDetailMode(detailMode);
+            this.setState({detailMode:detailMode});
             this.props.removeEntity();
         }
 
@@ -163,7 +165,7 @@ class Catalog extends Component {
 
         this.next = () => {
             let catalogPage = this.state.catalogPage;
-            let totalPage = Math.floor(this.props.catalogData.totalData / this.state.limit);
+            let totalPage = Math.floor(this.state.catalogData.totalData / this.state.limit);
             if (catalogPage >= totalPage - 1) { catalogPage = 0; }
             else { catalogPage++; }
 
@@ -172,7 +174,7 @@ class Catalog extends Component {
 
         this.prev = () => {
             let catalogPage = this.state.catalogPage;
-            let totalPage = Math.floor(this.props.catalogData.totalData / this.state.limit);
+            let totalPage = Math.floor(this.state.catalogData.totalData / this.state.limit);
             if (catalogPage <= 0) { catalogPage = totalPage - 1; }
             else { catalogPage--; }
 
@@ -193,10 +195,10 @@ class Catalog extends Component {
         }
 
         this.generateNavButtonsData = () => {
-            let products = this.props.catalogData.entities == null ? [] : this.props.catalogData.entities;
+            let products = this.state.catalogData.entities == null ? [] : this.state.catalogData.entities;
             let buttonData = [];
             if (products.length > 0)
-                buttonData = componentUtil.createNavButtons(this.props.catalogData.totalData / this.state.limit,
+                buttonData = componentUtil.createNavButtons(this.state.catalogData.totalData / this.state.limit,
                     this.state.catalogPage);
 
             const navButtonsData = [{
@@ -223,6 +225,34 @@ class Catalog extends Component {
             return navButtonsData;
         }
 
+        this.getProductCatalog = (request) => {
+            const parentApp = this.props.app;
+            const thisApp = this;
+            parentApp.startLoading(true);
+            this.catalogService.getProductList(request)
+            .then(function(response){
+                thisApp.setState({catalogData:response})
+            })
+            .catch((e)=>{alert("Data not found!")})
+            .finally(function(e){
+                parentApp.endLoading();
+            })
+        }
+
+        this.getProductDetailv2 = (code) => {
+            const parentApp = this.props.app;
+            const thisApp = this;
+            parentApp.startLoading(true);
+            this.catalogService.getProductDetail(code)
+            .then((response)=>{
+
+            })
+            .catch((e)=>{alert("Data not found!")})
+            .finally(function(e){
+                parentApp.endLoading();
+            })
+        }
+
     }
 
     componentWillMount() {
@@ -234,10 +264,10 @@ class Catalog extends Component {
     }
 
     componentDidUpdate() {
-        if (this.state.firstLoad && this.props.catalogData.filter != null) {
+        if (this.state.firstLoad && this.state.catalogData.filter != null) {
             this.setState({
-                limit: this.props.catalogData.filter.limit,
-                totalData: this.props.catalogData.totalData,
+                limit: this.state.catalogData.filter.limit,
+                totalData: this.state.catalogData.totalData,
                 firstLoad: false
             });
         }
@@ -292,45 +322,45 @@ class Catalog extends Component {
         </div>;
     }
 
-    render() {
+    render() { 
+        const products = this.state.catalogData.entities == null ? [] : this.state.catalogData.entities;
 
-        let products = this.props.catalogData.entities == null ? [] : this.props.catalogData.entities;
+        let rendered;
 
-        let productCatalog = (
-            <div className="section-container">
-                <ContentTitle title="Catalog Page" iconClass="fas fa-store-alt" description="Choose your favourite products" />
-                
-                <div className="row">
-                    <div className="col-2">
-                        <InputField type="number" 
-                            id="input-page-number" placeholder="page" 
-                            onEnterPress={(val,id)=> this.getProductCatalogByPage(val-1)} />
+        if (this.state.detailMode) {
+            const productDetail = <ProductDetail productCode={this.state.productCode} app={this.props.app} setDetailMode={this.setDetailMode}   />
+            rendered = productDetail;
+        } else {
+            const productCatalog = (
+                <div className="section-container">
+                    <ContentTitle title="Catalog Page" iconClass="fas fa-store-alt" description="Choose your favourite products" />
+                    
+                    <div className="row">
+                        <div className="col-2">
+                            <InputField type="number" 
+                                id="input-page-number" placeholder="page" 
+                                onEnterPress={(val,id)=> this.getProductCatalogByPage(val-1)} />
+                        </div>
+                        <div className="col-10" style={{textAlign:"center"}}>
+                            <NavButtons buttonsData={this.generateNavButtonsData()} />
+                        </div>
                     </div>
-                    <div className="col-10" style={{textAlign:"center"}}>
-                        <NavButtons buttonsData={this.generateNavButtonsData()} />
-                    </div>
-                </div>
-
-                {this.filterBox()}
-                <div className="row catalog-container" >
-                    {products.map(
-                        (product) =>  
+    
+                    {this.filterBox()}
+                    <div className="row catalog-container" >
+                        {products.map(
+                            (product) =>  
                                 <ProductCard key={product.id}
                                     getProductDetail={this.getProductDetail}
                                     getProductInCart={this.getProductInCart}
                                     enableShopping={this.props.enableShopping}
                                     product={product}
                                     addToCart={this.addToCart} /> 
-                    )}
-                </div>
-            </div>);
-
-        let rendered = productCatalog;
-
-        if (this.props.detailMode) {
-            let productDetail = <ProductDetail app={this.props.app} setDetailMode={this.setDetailMode} product={this.props.selectedProduct} />
-            rendered = productDetail;
-
+                        )}
+                    </div>
+                </div>);
+    
+            rendered = productCatalog;
         }
 
         return (rendered)
@@ -373,17 +403,13 @@ const filterProductOption = [
 ];
 
 const mapStateToProps = state => {
-    return {
-        catalogData: state.shopState.catalogData,
-        selectedProduct: state.shopState.entity,
+    return { 
         productCategories: state.shopState.categories,
         cart: state.shopState.cart
     }
 }
 
-const mapDispatchToProps = dispatch => ({
-    getProductCatalog: (request, app) => dispatch(actions.getProductList(request, app)),
-    getProductDetail: (code, app) => dispatch(actions.getProductDetail(code, app)),
+const mapDispatchToProps = dispatch => ({  
     removeEntity: () => dispatch(actions.removeEntity()),
     getAllProductCategories: () => dispatch(actions.getAllProductCategories()),
     updateCart: (cart, app) => dispatch(actions.updateCart(cart, app))

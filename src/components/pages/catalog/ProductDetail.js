@@ -9,6 +9,7 @@ import InstantTable from '../../container/InstantTable'
 import ImageCarousel from '../../container/ImageCarousel'
 import { beautifyNominal } from '../../../utils/StringUtil'
 import ContentTitle from '../../container/ContentTitle'
+import CatalogService from './../../../services/CatalogService';
 
 
 class ProductDetail extends Component {
@@ -20,6 +21,8 @@ class ProductDetail extends Component {
             product: null,
             updated: new Date()
         }
+
+        this.catalogService = CatalogService.instance;
 
         /**
          * this method is called in shopReducer
@@ -34,22 +37,59 @@ class ProductDetail extends Component {
         }
 
         this.showSupplierList = (mode) => {
-            this.setState({ supplierShown: mode });
-            this.setState({ product: this.props.product });
+            this.setState({ supplierShown: mode }); 
         }
 
-        this.loadMoreSupplier = (page, productId) => {
+        this.getMoreSupplier = (page, productId) => {
+            const parentApp = this.props.app;
+            const thisApp = this;
+            parentApp.startLoading();
 
             page++;
             this.setState({ supplierPage: page });
-            this.props.loadMoreSupplier(this.state.supplierPage, productId, this);
+            this.catalogService.getMoreSupplier(this.state.supplierPage, productId)
+            .then(function(response){
+                thisApp.addSupplier(response.entities);
+            })
+            .catch((e)=>{alert("Data not found")})
+            .finally((e)=>parentApp.endLoading());
         }
+
+        this.addSupplier = (suppliers) => {
+            
+            const product = this.state.product;
+            if(!product){ return }
+
+            for (let i = 0; i < suppliers.length; i++) {
+                const element = suppliers[i];
+                product.suppliers.push(element);
+            }
+            this.setState({product:product});
+        }
+
+        this.getProductDetail = () => {
+            const parentApp = this.props.app;
+            const thisApp = this;
+            parentApp.startLoading(true);
+
+            this.catalogService.getProductDetail(this.props.productCode)
+            .then((response)=>{
+                thisApp.setState({product:response.entities[0]})
+            })
+            .catch((e)=>{alert("Data not found!")})
+            .finally(function(e){
+                parentApp.endLoading();
+            })
+        }
+    }
+
+    componentWillMount(){
+        this.getProductDetail();
     }
 
     componentDidMount() {
         this.setState({ supplierShown: false });
-        document.title = "Product Detail";
-
+        document.title = "Product Detail"; 
     }
 
     componentDidUpdate() {
@@ -57,7 +97,7 @@ class ProductDetail extends Component {
 
     render() {
 
-        let product = this.props.product;
+        const product = this.state.product;
 
         if (product == null) {
             return (
@@ -85,7 +125,7 @@ class ProductDetail extends Component {
                 {/* {this.state.supplierPage} */}
                 <ActionButton
                     id="btn-show-more"
-                    onClick={() => this.loadMoreSupplier(this.state.supplierPage, product.id)}
+                    onClick={() => this.getMoreSupplier(this.state.supplierPage, product.id)}
                     text="Show More" />
             </div>
         }
@@ -133,25 +173,20 @@ function ProductImage(props) {
 
     if (product && product.imageUrl) {
 
-        let imageUrls = new Array();
+        const imageURLs = new Array();
         for (let index = 0; index < product.imageUrl.split("~").length; index++) {
-            imageUrls.push(url.baseImageUrl + product.imageUrl.split("~")[index]);
+            imageURLs.push(url.baseImageUrl + product.imageUrl.split("~")[index]);
         }
-        return <ImageCarousel imageUrls={imageUrls} />
+        return <ImageCarousel imageUrls={imageURLs} />
     }
     return null;
 }
 
-const mapStateToProps = state => {
-    console.log("Catalog State to props: ", state);
-    return {
-        suppliers: state.shopState.suppliers
-    }
+const mapStateToProps = state => { 
 }
 
 const mapDispatchToProps = dispatch => ({
-    loadMoreSupplier: (page, productId, referrer) => dispatch(actions.loadMoreSupplier(page, productId, referrer))
-
+    
 })
 export default (connect(
     mapStateToProps,

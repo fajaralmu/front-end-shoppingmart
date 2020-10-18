@@ -489,85 +489,13 @@ export const removeProductSupplied = () => {
             type: types.REMOVE_PRODUCT_SUPPLIED,
         }
     };
-}
-
-export const getProductList = (request, app) => {
-    // app.startLoading(request.withStock == true);
-    app.startLoading(true);
-
-    let requested = {
-        type: types.FETCH_PRODUCT_LIST,
-        payload: {
-            entity: "product",
-            filter: {
-                exacts: request.exacts == true,
-                limit: 10,
-                page: request.page,
-                fieldsFilter: {
-                    name: request.name,
-                    withStock: request.withStock
-                },
-                orderBy: request.orderby,
-                orderType: request.ordertype
-            }
-        },
-        meta: {
-            type: types.FETCH_PRODUCT_LIST,
-            url: apiBaseUrl.concat("get"),
-            app: app
-        }
-    };
-
-    if (request.categoryId != null) {
-        requested.payload.filter.fieldsFilter["category,id[EXACTS]"] = request.categoryId;
-    }
-
-    return requested;
-}
-
-
-export const getProductDetail = (code, app) => {
-    app.startLoading(true);
-    return {
-        type: types.FETCH_PRODUCT_DETAIL,
-        payload: {
-
-            entity: "product",
-            filter: {
-                limit: 1,
-                exacts: true,
-                contains: false,
-                fieldsFilter: {
-                    code: code,
-                    withStock: true,
-                    withSupplier: true
-                }
-            }
-        },
-        meta: {
-            type: types.FETCH_PRODUCT_DETAIL,
-            url: apiBaseUrl.concat("get"),
-            app: app
-        }
-    }
-}
+} 
+ 
 
 export const removeEntity = () => ({
     type: types.REMOVE_SHOP_ENTITY,
     payload: {},
     meta: { type: types.REMOVE_SHOP_ENTITY }
 })
-
-export const loadMoreSupplier = (page, productId, referrer) => {
-    referrer.props.app.startLoading();
-    return {
-        type: types.LOAD_MORE_SUPPLIER,
-        payload: { filter: { page: page, fieldsFilter: { "productId": productId } } },
-        meta: {
-            type: types.LOAD_MORE_SUPPLIER,
-            url: apiBaseUrl.concat("moresupplier"),
-            referrer: referrer
-        }
-    }
-}
+ 
 

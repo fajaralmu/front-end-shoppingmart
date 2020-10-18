@@ -7,7 +7,7 @@ export default class TransactionService {
        const endpoint = url.contextPath().concat("api/transaction/transactiondata/"+transactionCode)
         return new Promise(function(resolve,reject){
             fetch(endpoint, {
-                method: 'post',
+                method: url.POST,
                 headers: commonAuthorizedHeader()
             })
             .then(response => response.json()).then(function(response){

@@ -56,10 +56,7 @@ class App extends Component {
       onNo: () => { }
     }
 
-    this.setDetailMode = (detailMode) => {
-      this.setState({ detailMode: detailMode });
-    }
-
+    
     this.setMenuCode = (code) => {
       this.setState({ menuCode: code });
     }
@@ -157,8 +154,7 @@ class App extends Component {
               <Catalog
                 app={this}
                 enableShopping={this.state.enableShopping}
-                setMenuCode={this.setMenuCode}
-                setDetailMode={this.setDetailMode} detailMode={this.state.detailMode} />
+                setMenuCode={this.setMenuCode} />
 
           }/>
           <Route  path="/cart" render={

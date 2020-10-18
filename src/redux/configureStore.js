@@ -16,11 +16,8 @@ export const configureStore = () => {
     const store = createStore(
         rootReducer,
         initialState,
-        applyMiddleware(
-            catalogMiddleware.getProductListMiddleware,
-            catalogMiddleware.getProductDetailMiddleWare,
-            catalogMiddleware.removeEntityMiddleware,
-            catalogMiddleware.loadMoreSupplierMiddleware,
+        applyMiddleware(  
+            catalogMiddleware.removeEntityMiddleware, 
             catalogMiddleware.getAllProductCategoriesMiddleware,
             catalogMiddleware.getSupplierListMiddleware,
             catalogMiddleware.updateCartMiddleware,
