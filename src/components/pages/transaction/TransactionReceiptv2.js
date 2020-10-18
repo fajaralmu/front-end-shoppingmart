@@ -7,6 +7,8 @@ import TransactionService from '../../../services/TransactionService';
 import ErrorPage from './../../ErrorPage';
 import { CenterLoading } from '../../messages/SimpleLoader';
 import * as stringUtil from '../../../utils/StringUtil'
+import ActionButton from '../../buttons/ActionButton';
+import { TableHeader } from '../../container/Tables';
 
 class TransactionReceiptv2 extends Component {
 
@@ -23,6 +25,13 @@ class TransactionReceiptv2 extends Component {
             if (!this.props.loginStatus) {
                 this.props.history.push("/login"); 
             }
+        }
+
+        this.back = () => {
+            try{
+                const transaction = this.state.transaction;
+                this.props.history.push("/transaction/"+transaction.type.toLowerCase()); 
+            }catch(e){  }
         }
 
         this.isSelling = () => {
@@ -69,6 +78,7 @@ class TransactionReceiptv2 extends Component {
 
     componentDidMount(){
          this.loadTransactionData();
+         document.title = "Transaction: "+ this.getTransactionCode();
     }
 
     render() {
@@ -93,14 +103,8 @@ class TransactionReceiptv2 extends Component {
                     :<><div className="col-3">Supplier</div><div className="col-9">{transaction.supplier.name}</div></>}
                     <div className="col-3">Operator</div><div className="col-9">{transaction.user.displayName}</div>
                 </div>
-                <table className="table">
-                    <tr>
-                        <th>No</th>
-                        <th>Product Name</th>
-                        <th>Qty</th>
-                        <th>Price @item</th>
-                        <th>Total Price</th> 
-                    </tr>
+                <table className="table"> 
+                    <TableHeader values={["No", "Product Name", "Qty", "Price @item", "Total Price"]} />
                     {transaction.productFlows.map((productFlow, i)=>{
                         const product = productFlow.product;
                         return (
@@ -115,6 +119,7 @@ class TransactionReceiptv2 extends Component {
                     })}
                     <tr><td colSpan="4">Total Price</td><td className="font-weight-bold" >{stringUtil.beautifyNominal(this.state.totalPrice)}</td></tr>
                 </table>
+                <ActionButton status="outline-secondary" text="Back" onClick={this.back} />
             </div>
         );
     }
