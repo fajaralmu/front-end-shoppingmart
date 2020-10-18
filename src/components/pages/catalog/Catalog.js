@@ -29,9 +29,7 @@ class Catalog extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            catalogData: {
-                entities: []
-            },
+            catalogData: {entities:[],productCategories :[]},
             limit: 10,
             totalData: 0,
             products: [],
@@ -109,6 +107,7 @@ class Catalog extends Component {
                 ordertype: this.state.requestOrderType,
                 categoryId: this.state.requestCategoryId,
                 withStock: this.state.requestWithStock,
+                withCategories: this.state.catalogData.productCategories.length == 0,
                 fieldsFilter:{},
             };
             if(this.state.requestCategoryId){
@@ -232,12 +231,25 @@ class Catalog extends Component {
             parentApp.startLoading(true);
             this.catalogService.getProductList(request)
             .then(function(response){
-                thisApp.setState({catalogData:response})
+                thisApp.handleGetProducts(response);
             })
             .catch((e)=>{alert("Data not found!")})
             .finally(function(e){
                 parentApp.endLoading();
             })
+        }
+
+        this.handleGetProducts = (response) => {
+            if(this.state.catalogData){
+                const oldCategories = this.state.catalogData.productCategories;
+                if(oldCategories && oldCategories.length > 0){
+                    response.productCategories = oldCategories;
+                }else{
+                    response.productCategories = response.generalList;
+                }
+            }
+            
+            this.setState({catalogData:response})
         }
 
         this.getProductDetailv2 = (code) => {
@@ -259,8 +271,7 @@ class Catalog extends Component {
     componentWillMount() {
         document.title = "Product Catalog";
         this.getProductCatalogByPage(this.state.catalogPage);
-        this.props.setMenuCode(menus.CATALOG);
-        this.props.getAllProductCategories();
+        this.props.setMenuCode(menus.CATALOG); 
 
     }
 
@@ -281,7 +292,7 @@ class Catalog extends Component {
             { text: <i className="fa fa-search" ></i>, status: "success", onClick: () => this.getProductCatalogByPage(0), id: "btn-search" },
             { text: "Clear Filter", status: 'warning', onClick: this.clearField, id: "Clear-filter" }
         ];
-        this.props.productCategories.map(category => {
+        this.state.catalogData.productCategories.map(category => {
             categories.push({ value: category.id, text: category.name });
         })
 
@@ -404,14 +415,12 @@ const filterProductOption = [
 ];
 
 const mapStateToProps = state => {
-    return { 
-        productCategories: state.shopState.categories,
+    return {  
         cart: state.shopState.cart
     }
 }
 
-const mapDispatchToProps = dispatch => ({   
-    getAllProductCategories: () => dispatch(actions.getAllProductCategories()),
+const mapDispatchToProps = dispatch => ({    
     updateCart: (cart, app) => dispatch(actions.updateCart(cart, app))
 })
 export default withRouter(connect(

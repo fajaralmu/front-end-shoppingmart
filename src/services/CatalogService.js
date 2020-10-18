@@ -8,7 +8,8 @@ export default class CatalogService {
         const fieldsFilter = {
             withStock: raw.withStock == true,
             withSupplier: raw.withSupplier == true,
-            ...raw.fieldsFilter
+            withCategories: raw.withCategories == true,
+            ... raw.fieldsFilter
         }
         if (raw.key) {
             fieldsFilter[raw.key] = raw.value;

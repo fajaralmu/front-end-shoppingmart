@@ -17,8 +17,7 @@ export const configureStore = () => {
         rootReducer,
         initialState,
         applyMiddleware(  
-            catalogMiddleware.removeEntityMiddleware, 
-            catalogMiddleware.getAllProductCategoriesMiddleware,
+            catalogMiddleware.removeEntityMiddleware,  
             catalogMiddleware.getSupplierListMiddleware,
             catalogMiddleware.updateCartMiddleware, 
 

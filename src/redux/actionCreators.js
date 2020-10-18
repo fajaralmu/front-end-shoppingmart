@@ -416,25 +416,7 @@ export const refreshLoginStatus = () => {
         meta: { type: types.REFRESH_LOGIN }
     };
     return loginRequest;
-}
-
-export const getAllProductCategories = () => ({
-    type: types.FETCH_PRODUCT_CATEGORIES_ALL,
-    payload: {
-        entity: "category",
-        filter: {
-            limit: 0,
-            page: 0,
-            orderBy: null,
-            orderType: null,
-            fieldsFilter: {}
-        }
-    },
-    meta: {
-        type: types.FETCH_PRODUCT_CATEGORIES_ALL,
-        url: apiEntityBaseUrl.concat("get")
-    }
-})
+} 
 
 export const getSupplierList = (request, app) => {
     app.startLoading();
