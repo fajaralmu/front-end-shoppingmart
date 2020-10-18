@@ -4,15 +4,17 @@ export default class CatalogService {
     static instance = CatalogService.instance || new CatalogService()
 
     getProductList = (raw) => {
+         
         const fieldsFilter = {
             withStock: raw.withStock == true,
-            withSupplier: raw.withSupplier == true
+            withSupplier: raw.withSupplier == true,
+            ...raw.fieldsFilter
         }
         if (raw.key) {
             fieldsFilter[raw.key] = raw.value;
         } else {
             fieldsFilter['name'] = raw.name;
-        }
+        } 
         const request = {
             entity: "product",
             filter: {

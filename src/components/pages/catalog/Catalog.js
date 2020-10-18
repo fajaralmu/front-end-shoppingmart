@@ -101,16 +101,20 @@ class Catalog extends Component {
         }
 
         this.getProductCatalogByPage = (_page) => {
-            console.log("will go to page: ", _page)
-            this.getProductCatalog(
-                {
-                    page: _page,
-                    name: this.state.requestProductName,
-                    orderby: this.state.requestOrderBy,
-                    ordertype: this.state.requestOrderType,
-                    categoryId: this.state.requestCategoryId,
-                    withStock: this.state.requestWithStock
-                });
+            console.log("will go to page: ", _page);
+            const request = {
+                page: _page,
+                name: this.state.requestProductName,
+                orderby: this.state.requestOrderBy,
+                ordertype: this.state.requestOrderType,
+                categoryId: this.state.requestCategoryId,
+                withStock: this.state.requestWithStock,
+                fieldsFilter:{},
+            };
+            if(this.state.requestCategoryId){
+                request.fieldsFilter["category,id[EXACTS]"] = this.state.requestCategoryId;
+            }
+            this.getProductCatalog( request );
             this.setState({ catalogPage: _page, totalData: this.state.catalogData.totalData });
         }
 
@@ -140,17 +144,14 @@ class Catalog extends Component {
 
         this.getProductDetail = (code) => {
             console.log("Detail of: ", code);
-            //remove selected product if any
-            this.props.removeEntity();
-
+            //remove selected product if any  
             this.getProductDetailv2(code);
             this.setState({detailMode:true, productCode:code});
         }
 
         this.setDetailMode = (detailMode) => {
             document.title = "Product Catalog";
-            this.setState({detailMode:detailMode});
-            this.props.removeEntity();
+            this.setState({detailMode:detailMode}); 
         }
 
         this.handleCategoryChange = (value) => {
@@ -409,8 +410,7 @@ const mapStateToProps = state => {
     }
 }
 
-const mapDispatchToProps = dispatch => ({  
-    removeEntity: () => dispatch(actions.removeEntity()),
+const mapDispatchToProps = dispatch => ({   
     getAllProductCategories: () => dispatch(actions.getAllProductCategories()),
     updateCart: (cart, app) => dispatch(actions.updateCart(cart, app))
 })

@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import './ProductDetail.css'
-import * as url from '../../../constant/Url'
-import * as actions from '../../../redux/actionCreators'
-import { connect } from 'react-redux'
+import * as url from '../../../constant/Url'  
 import ActionButtons from '../../buttons/ActionButtons'
 import ActionButton from '../../buttons/ActionButton'
 import InstantTable from '../../container/InstantTable'
@@ -44,18 +42,17 @@ class ProductDetail extends Component {
             const parentApp = this.props.app;
             const thisApp = this;
             parentApp.startLoading();
-
-            page++;
-            this.setState({ supplierPage: page });
+ 
+            this.setState({ supplierPage: (page+1) });
             this.catalogService.getMoreSupplier(this.state.supplierPage, productId)
             .then(function(response){
-                thisApp.addSupplier(response.entities);
+                thisApp.showMoreSuppliers(response.entities);
             })
             .catch((e)=>{alert("Data not found")})
             .finally((e)=>parentApp.endLoading());
         }
 
-        this.addSupplier = (suppliers) => {
+        this.showMoreSuppliers = (suppliers) => {
             
             const product = this.state.product;
             if(!product){ return }
@@ -181,14 +178,5 @@ function ProductImage(props) {
     }
     return null;
 }
-
-const mapStateToProps = state => { 
-}
-
-const mapDispatchToProps = dispatch => ({
-    
-})
-export default (connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(ProductDetail));
+ 
+export default  (ProductDetail);
