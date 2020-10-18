@@ -15,7 +15,7 @@ class ContentTitle extends Component {
         let iconClass = this.props.iconClass ? this.props.iconClass : "fas fa-home";
 
         return (
-            <div style={{color: this.props.applicationProfile.color}}>
+            <div style={{color: this.props.applicationProfile.color, textAlign:'left'}}>
                 <h2><i className={iconClass}></i>&nbsp;{title}</h2>
                 <p>{description}</p>
                 {this.props.children}

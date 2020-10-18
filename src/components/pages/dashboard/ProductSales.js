@@ -186,7 +186,7 @@ class ProductSales
 
         return (
             <div className="cashflow-container">
-                <h2>Product Sales</h2>
+                <h3>Product Sales</h3>
                 {filterBox}
                 <div> {filterInfo} </div>
                 {productSalesListComponent}

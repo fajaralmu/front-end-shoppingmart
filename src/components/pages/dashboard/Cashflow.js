@@ -160,7 +160,7 @@ class Cashflow
         </div>
         return (
             <div className="cashflow-container">
-                <h2>Cashflow Detail</h2>
+                <h3>Cashflow Detail</h3>
                 {filterBox}
                 {filterInfo}
                 <div><p></p></div>

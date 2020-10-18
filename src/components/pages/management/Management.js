@@ -135,11 +135,10 @@ class Management extends Component {
         if (null == entityList) { entityList = []; }
 
         const buttonsData = this.getTabMenusData();
-
+        const title = "Master Data " + (this.props.entityProperty ? this.props.entityProperty.alias : "");
         return (
             <div className="section-container">
-                <ContentTitle iconClass="fas fa-database" title={"Master Data " + (this.props.entityProperty ?
-                        this.props.entityProperty.alias : "")}  description="master data management" />
+                <ContentTitle iconClass="fas fa-database" title={title} description="master data management" />
                 <div className="management-container">
                     <Tab tabsData={buttonsData} />
                     {this.props.entityProperty? 

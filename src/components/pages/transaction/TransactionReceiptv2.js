@@ -6,11 +6,9 @@ import { resetPurchasingAndSelling } from '../../../redux/actionCreators';
 import Loader from '../../messages/Loader';
 import TransactionService from '../../../services/TransactionService';
 import ActionButton from './../../buttons/ActionButton';
-const EMPTY = {
-    customer:{},
-    supplier:{},
-    user:{}
-}
+import ErrorPage from './../../ErrorPage';
+import { CenterLoading } from '../../messages/SimpleLoader';
+
 class TransactionReceiptv2 extends Component {
 
     constructor(props) {
@@ -50,10 +48,14 @@ class TransactionReceiptv2 extends Component {
             return totalPrice;
         }
 
+        this.getTransactionCode = () => {
+            return this.props.match.params.transactionCode;
+        }
+
         this.loadTransactionData = () => {
             this.setState({transaction:null, loading: true, error:false});
             const app = this;
-            this.transactionService.getTransactionData(this.props.match.params.transactionCode).
+            this.transactionService.getTransactionData(this.getTransactionCode()).
                 then(function(response){
                     app.handleGetTransactionData(response);
                 }).catch(function(error){
@@ -74,16 +76,16 @@ class TransactionReceiptv2 extends Component {
         const transaction = this.state.transaction;
         if(this.state.error == true){
             return (
-                <div><h3>Error Loading Transaction</h3><ActionButton text="Reload" onClick={this.loadTransactionData} ></ActionButton></div>
+                <ErrorPage message={"Error Loading Transaction With code: "+this.getTransactionCode()}/>
             );
         }
         if(this.state.loading || null == transaction){
-            return <Loader ></Loader>
+            return <CenterLoading />
         } 
         const date = transaction.transactionDate ? new Date(transaction.transactionDate).toLocaleString() : null;
         return (
             <div className="section-container">
-                <ContentTitle iconClass="fas fa-file-alt" title={transaction.type + " Transaction Success (" + transaction.mode + ")"}
+                <ContentTitle iconClass="fas fa-file-alt" title={transaction.type + " Transaction (" + transaction.mode + ")"}
                     description={<>{date}</>} />
                 <div className="row">
                     <div className="col-3">Code</div><div className="col-9">{transaction.code}</div>

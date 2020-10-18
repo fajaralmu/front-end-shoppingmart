@@ -3,10 +3,7 @@ import React, { Component } from 'react'
 import '../dashboard/Dashboard.css'
 import * as menus from '../../../constant/Menus'
 import DashboardMenu from './DashboardMenu';
-import TransactionSelling from '../transaction/TransactionSelling';
-import ErrorPage from '../../ErrorPage';
 import { withRouter } from 'react-router';
-import TransactionPurchasing from '../transaction/TransactionPurchasing';
 import Cashflow from './Cashflow';
 import * as componentUtil from '../../../utils/ComponentUtil'
 import ActionButton from '../../buttons/ActionButton';
@@ -19,6 +16,7 @@ import ProductSales from './ProductSales';
 import ContentTitle from '../../container/ContentTitle'; 
 import ComboBoxes from './../../inputs/ComboBoxes';
 import GridComponent from './../../container/GridComponent';
+import InputField from './../../inputs/InputField';
 
 class Dashboard extends Component {
 
@@ -43,6 +41,12 @@ class Dashboard extends Component {
             this.props.getCashflowInfo(month, year, "IN", this.props.app);
 
         }
+        this.showTransactionReceipt = (val, id) => {
+            if(""==val || null==val){
+                return;
+            }
+            this.props.history.push("/transaction-receipt/"+val);
+        }
     }
 
     componentDidMount() {
@@ -60,6 +64,7 @@ class Dashboard extends Component {
 
     render() {
         let minYear, maxYear = new Date().getFullYear();
+        const featureCode = this.state.featureCode;
 
         minYear = this.props.transactionYears[0];
         maxYear = this.props.transactionYears[1];
@@ -98,18 +103,15 @@ class Dashboard extends Component {
                             <CashflowInfoContent type="spend" cashflowInfo={cashflowInfoIn} />
                         ]} />
                 </div>
+                <Label text="See Transaction Detail" />
+                <InputField id="input-transaction-code" placeholder="Transaction Code" onEnterPress={this.showTransactionReceipt} />
             </div>
         </div>;
 
-        if (this.state.featureCode != null) {
+        if (featureCode != null) {
            
-            switch (this.state.featureCode) {
-                // case 'trxOut':
-                //     mainComponent = <TransactionSelling app={this.props.app} setFeatureCode={this.setFeatureCode} />
-                //     break;
-                // case 'trxIn':
-                //     mainComponent = <TransactionPurchasing app={this.props.app} setFeatureCode={this.setFeatureCode} />
-                //     break;
+            switch (featureCode) {
+                 
                 case 'cashflow':
                     mainComponent = <Cashflow app={this.props.app} transactionYears={this.props.transactionYears} setFeatureCode={this.setFeatureCode} />
                     break;
@@ -119,17 +121,14 @@ class Dashboard extends Component {
                 default:
                     break;
             }
-        }
-        if (this.props.loginStatus == true)
-            return (
-                <div className="section-container">
-                    <ContentTitle title="Dashboard" iconClass="fas fa-tachometer-alt" description="Have a Nice Shop Keeping!" />
-                    <DashboardMenu currentMenu={this.state.featureCode} goToMenu={this.setFeatureCode} />
-                    {mainComponent}
-                </div>
-            )
-        else
-            return <ErrorPage message="OOPS! Page not found" />
+        } 
+        return (
+            <div className="section-container">
+                <ContentTitle title="Dashboard" iconClass="fas fa-tachometer-alt" description="Have a Nice Shop Keeping!" />
+                <DashboardMenu currentMenu={this.state.featureCode} goToMenu={this.setFeatureCode} />
+                {mainComponent}
+            </div>
+        ) 
     }
 }
 
