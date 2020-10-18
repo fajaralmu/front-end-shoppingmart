@@ -48,7 +48,7 @@ export default class SupplierService {
             })
             .then(response => response.json())
             .then(function (response) {
-                if (response.code == "00" && response.entities.length > 0) {
+                if (response.code == "00") {
                     resolve(response);
                 } else {
                     reject(response);

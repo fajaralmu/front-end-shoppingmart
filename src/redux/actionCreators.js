@@ -467,17 +467,7 @@ export const getSupplierList = (request, app) => {
 
     return requested;
 }
- 
-export const removeProductSupplied = () => {
-
-    return {
-        type: types.REMOVE_PRODUCT_SUPPLIED,
-        meta: {
-            type: types.REMOVE_PRODUCT_SUPPLIED,
-        }
-    };
-} 
- 
+  
 
 export const removeEntity = () => ({
     type: types.REMOVE_SHOP_ENTITY,

@@ -1,6 +1,4 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import * as actions from '../../../redux/actionCreators'
+import React, { Component } from 'react' 
 import * as url from '../../../constant/Url'
 import ContentTitle from '../../container/ContentTitle'
 import ActionButton from '../../buttons/ActionButton'
@@ -13,6 +11,7 @@ class SupplierDetail extends Component {
     constructor(props) {
         super(props);
         this.supplierService = SupplierService.instance;
+        this.parentApp = props.app;
         this.state = {
             products : [],
         }
@@ -22,17 +21,16 @@ class SupplierDetail extends Component {
         }
 
         this.getProductSupplied = () => {
-            const supplier = this.props.supplier;
-            const parentApp = this.props.app;
+            const supplier = this.props.supplier; 
             const thisApp = this;
-            parentApp.startLoading();
+            this.parentApp.startLoading();
 
             this.supplierService.getProductSupplied(supplier.id)
             .then(function(response){
                 thisApp.setState({products:response.entities});
             })
             .catch((e)=>alert("Product Not Found"))
-            .finally((e)=>parentApp.endLoading());
+            .finally((e)=>thisApp.parentApp.endLoading());
         }
 
     }

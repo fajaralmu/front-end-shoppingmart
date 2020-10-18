@@ -14,6 +14,7 @@ import GridComponent from '../../container/GridComponent'
 import InputField from '../../inputs/InputField'
 import SupplierDetail from './SupplierDetail'
 import SupplierService from './../../../services/SupplierService';
+import { byId } from './../../../utils/ComponentUtil';
 
 const DEFAULT_TITLE =  "Our Suppliers";
 
@@ -31,10 +32,15 @@ class SupplierList extends Component {
         };
         this.supplierService = SupplierService.instance;
 
+        this.getSupplierCatalogCurrentPage = () => {
+            this.getSupplierCatalogByPage(this.state.supplierPage);
+        }
+
         this.getSupplierCatalogByPage = (page) => {
             this.getSupplierList({
                 page: page,
-                name: this.state.requestSupplierName,
+                key: 'name',
+                value: this.state.requestSupplierName,
                 orderby: this.state.requestOrderBy,
                 ordertype: this.state.requestOrderType
             });
@@ -51,7 +57,7 @@ class SupplierList extends Component {
             .then(function(response){
                 thisApp.setState({suppliersData:response})
             })
-            .catch((e)=>{alert("Supplier not found!")})
+            .catch((e )=>{alert("Supplier not found!")})
             .finally(function(e){
                 parentApp.endLoading();
             })
@@ -84,10 +90,10 @@ class SupplierList extends Component {
         }
 
         this.clearField = () => {
-            document.getElementById("input-supplier-name").value = "";
+            byId("input-supplier-name").value = "";
             this.setState({ requestSupplierName: "" });
 
-            document.getElementById("select-order").value = "00";
+            byId("select-order").value = "00";
             this.setState({ requestOrderBy: null, requestOrderType: null });
 
             this.props.app.infoDialog("filter has been cleared, please push the search button to take effect")
@@ -153,7 +159,7 @@ class SupplierList extends Component {
                 <GridComponent cols={2} style={{ width: 'max-content' }} items={
                     [
                         <InputField placeholder="search by supplier name" onKeyUp={this.handleInputNameChange} type="search"
-                            id="input-supplier-name" />,
+                            id="input-supplier-name" onEnterPress={this.getSupplierCatalogCurrentPage} />,
                         <ComboBox defaultValue={this.state.requestOrderBy + "-" + this.state.requestOrderType} onChange={this.handleOrderChange}
                             options={filterSupplierOptions} key="k-select-order" id="select-order" />,
                         <ActionButtons style={{ margin: '5px' }} key="btns" buttonsData={actionButtons} />
