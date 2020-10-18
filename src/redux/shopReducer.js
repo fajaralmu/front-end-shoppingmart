@@ -21,10 +21,7 @@ export const reducer = (state = initState, action) => {
             return { ...state, entity: action.payload  /*null*/ };
         case types.FETCH_SUPPLIER_LIST:
             return { ...state, suppliersData: action.payload };
-        case types.FETCH_PRODUCT_SUPPLIED:
-            return { ...state, productsSupplied: action.payload.entities };
-        case types.REMOVE_PRODUCT_SUPPLIED:
-            return { ...state, productsSupplied: [] };
+        
         case types.RESET_SUPPLIERS:
             return { ...state, suppliersData: {} };
         

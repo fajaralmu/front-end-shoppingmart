@@ -13,6 +13,7 @@ import NavButtons from '../../navigation/NavButtons'
 import GridComponent from '../../container/GridComponent'
 import InputField from '../../inputs/InputField'
 import SupplierDetail from './SupplierDetail'
+import SupplierService from './../../../services/SupplierService';
 
 const DEFAULT_TITLE =  "Our Suppliers";
 
@@ -28,17 +29,32 @@ class SupplierList extends Component {
             requestSupplierName: "",
             supplierDetail : null
         };
+        this.supplierService = SupplierService.instance;
 
-        this.getSupplierCatalogByPage = (_page) => {
-            this.props.getSupplierList({
-                page: _page,
+        this.getSupplierCatalogByPage = (page) => {
+            this.getSupplierList({
+                page: page,
                 name: this.state.requestSupplierName,
                 orderby: this.state.requestOrderBy,
                 ordertype: this.state.requestOrderType
-            }, this.props.app);
+            });
             
-            this.setState({ supplierPage: _page });
-            this.setState({ totalData: this.props.suppliersData.totalData });
+            this.setState({ supplierPage: page });
+            this.setState({ totalData: this.state.suppliersData.totalData });
+        }
+
+        this.getSupplierList = (request) => {
+            const parentApp = this.props.app;
+            const thisApp = this;
+            parentApp.startLoading();
+            this.supplierService.getSupplierList(request)
+            .then(function(response){
+                thisApp.setState({suppliersData:response})
+            })
+            .catch((e)=>{alert("Supplier not found!")})
+            .finally(function(e){
+                parentApp.endLoading();
+            })
         }
 
         this.showSupplierDetail = (supplier) => {
@@ -79,7 +95,7 @@ class SupplierList extends Component {
 
         this.next = () => {
             let supplierPage = this.state.supplierPage;
-            let totalPage = Math.floor(this.props.suppliersData.totalData / this.state.limit);
+            let totalPage = Math.floor(this.state.suppliersData.totalData / this.state.limit);
             if (supplierPage >= totalPage - 1) { supplierPage = 0; }
             else { supplierPage++; }
 
@@ -88,7 +104,7 @@ class SupplierList extends Component {
 
         this.prev = () => {
             let supplierPage = this.state.supplierPage;
-            let totalPage = Math.floor(this.props.suppliersData.totalData / this.state.limit);
+            let totalPage = Math.floor(this.state.suppliersData.totalData / this.state.limit);
             if (supplierPage <= 0) { supplierPage = totalPage - 1; }
             else { supplierPage--; }
 
@@ -96,10 +112,10 @@ class SupplierList extends Component {
         }
 
         this.generateNavButtonsData = () => {
-            let suppliers = this.props.suppliersData.entities == null ? [] : this.props.suppliersData.entities;
+            let suppliers = this.state.suppliersData.entities == null ? [] : this.state.suppliersData.entities;
             let buttonData = [];
             if (suppliers.length > 0) {
-                buttonData = componentUtil.createNavButtons(this.props.suppliersData.totalData / this.state.limit, this.state.supplierPage);
+                buttonData = componentUtil.createNavButtons(this.state.suppliersData.totalData / this.state.limit, this.state.supplierPage);
 
             }
 
@@ -157,10 +173,10 @@ class SupplierList extends Component {
     }
 
     componentDidUpdate() {
-        if (this.state.firstLoad && this.props.suppliersData.filter != null) {
+        if (this.state.firstLoad && this.state.suppliersData.filter != null) {
             this.setState({
-                //limit: this.props.suppliersData.filter.limit,
-                totalData: this.props.suppliersData.totalData,
+                //limit: this.state.suppliersData.filter.limit,
+                totalData: this.state.suppliersData.totalData,
                 firstLoad: false
             });
         }
@@ -168,13 +184,13 @@ class SupplierList extends Component {
 
     render() {
 
-        let suppliers = this.props.suppliersData.entities == null ? [] : this.props.suppliersData.entities;
+        let suppliers = this.state.suppliersData.entities == null ? [] : this.state.suppliersData.entities;
 
-        let content;
+       
         if(this.state.supplierDetail){
-            content = <SupplierDetail app={this.props.app} hideDetail={this.hideSupplierDetail} supplier={this.state.supplierDetail} />
+           return <SupplierDetail app={this.props.app} hideDetail={this.hideSupplierDetail} supplier={this.state.supplierDetail} />
         } else {
-            content = (<div className="section-container">
+           return (<div className="section-container">
                 <ContentTitle title="Supplier List Page" iconClass="fas fa-warehouse" description="List of our partners" />
                 
                 <div className="row">
@@ -197,8 +213,6 @@ class SupplierList extends Component {
                 </div>
             </div>);
         }
-
-        return (content)
     }
 }
 
@@ -223,18 +237,6 @@ const filterSupplierOptions = [
     { value: "name-asc", text: "Name [A-Z]" },
     { value: "name-desc", text: "Name [Z-A]" }
 ];
-
-const mapStateToProps = state => {
-    return {
-        suppliersData: state.shopState.suppliersData
-    }
-}
-
-const mapDispatchToProps = dispatch => ({
-    getSupplierList: (request, app) => dispatch(actions.getSupplierList(request, app))
-
-})
-export default withRouter(connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(SupplierList));
+ 
+ 
+export default withRouter(SupplierList);

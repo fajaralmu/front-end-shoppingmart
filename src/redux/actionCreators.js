@@ -467,20 +467,7 @@ export const getSupplierList = (request, app) => {
 
     return requested;
 }
-
-
-export const getProductSupplied = (supplierId, app) => {
-    app.startLoading();
-    return {
-        type: types.FETCH_PRODUCT_SUPPLIED,
-        payload: { supplier: { id: supplierId } },
-        meta: {
-            type: types.FETCH_PRODUCT_SUPPLIED,
-            url: apiBaseUrl.concat("productssupplied"),
-            app: app
-        }
-    };
-}
+ 
 export const removeProductSupplied = () => {
 
     return {

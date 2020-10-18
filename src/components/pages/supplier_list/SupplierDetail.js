@@ -1,20 +1,38 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux' 
+import { connect } from 'react-redux'
 import * as actions from '../../../redux/actionCreators'
 import * as url from '../../../constant/Url'
 import ContentTitle from '../../container/ContentTitle'
 import ActionButton from '../../buttons/ActionButton'
 import ImageCarousel from './../../container/ImageCarousel';
 import { groupArray } from './../../../utils/CollectionUtil';
+import SupplierService from './../../../services/SupplierService';
 
 class SupplierDetail extends Component {
 
     constructor(props) {
         super(props);
+        this.supplierService = SupplierService.instance;
+        this.state = {
+            products : [],
+        }
 
         this.close = () => {
-            this.props.removeProductSupplied();
             this.props.hideDetail();
+        }
+
+        this.getProductSupplied = () => {
+            const supplier = this.props.supplier;
+            const parentApp = this.props.app;
+            const thisApp = this;
+            parentApp.startLoading();
+
+            this.supplierService.getProductSupplied(supplier.id)
+            .then(function(response){
+                thisApp.setState({products:response.entities});
+            })
+            .catch((e)=>alert("Product Not Found"))
+            .finally((e)=>parentApp.endLoading());
         }
 
     }
@@ -22,7 +40,7 @@ class SupplierDetail extends Component {
     componentWillMount() {
         const supplier = this.props.supplier;
         if (supplier != null) {
-            this.props.getProductSupplied(supplier.id, this.props.app);
+            this.getProductSupplied();
         }
     }
 
@@ -32,7 +50,7 @@ class SupplierDetail extends Component {
             return <h2>No Data</h2>
         }
 
-        const groupedProducts = groupArray(this.props.productsSupplied, 4);
+        const groupedProducts = groupArray(this.state.products, 4);
 
         return (
             <section className="section-container">
@@ -56,7 +74,7 @@ class SupplierDetail extends Component {
     }
 }
 
-const SupplierInfo = function (props){
+const SupplierInfo = function (props) {
     const supplier = props.supplier;
     return (
         <div>
@@ -71,9 +89,7 @@ const OrderedListOfProduct = function (props) {
     if (null == products) { return <></> }
     return <div className={props.wrapperClassName}>
         <ol start={props.starts}>
-            {products.map(function (product) {
-                return <li>{product.name} ({product.unit ? product.unit.name : null})</li>
-            })}
+            {products.map((product) => <li>{product.name} ({product.unit ? product.unit.name : null})</li>)}
         </ol>
     </div>
 }
@@ -82,18 +98,5 @@ function SupplierLink(prop) {
     const supplier = prop.supplier;
     return <a target="_blank" href={supplier.website}>{supplier.website}</a>
 }
-
-const mapStateToProps = state => {
-    return {
-        productsSupplied: state.shopState.productsSupplied
-    }
-}
-
-const mapDispatchToProps = dispatch => ({
-    getProductSupplied: (supplierId, app) => dispatch(actions.getProductSupplied(supplierId, app)),
-    removeProductSupplied: () => dispatch(actions.removeProductSupplied())
-})
-export default (connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(SupplierDetail)); 
+ 
+export default SupplierDetail;

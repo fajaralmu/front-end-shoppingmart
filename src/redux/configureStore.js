@@ -20,9 +20,7 @@ export const configureStore = () => {
             catalogMiddleware.removeEntityMiddleware, 
             catalogMiddleware.getAllProductCategoriesMiddleware,
             catalogMiddleware.getSupplierListMiddleware,
-            catalogMiddleware.updateCartMiddleware,
-            catalogMiddleware.getProductSuppliedMiddleware,
-            catalogMiddleware.removeProductSuppliedMiddleware,
+            catalogMiddleware.updateCartMiddleware, 
 
             //user related
             userMiddleware.performLoginMiddleware,
