@@ -2,12 +2,11 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import ContentTitle from '../../container/ContentTitle';
-import { resetPurchasingAndSelling } from '../../../redux/actionCreators';
-import Loader from '../../messages/Loader';
+import { resetPurchasingAndSelling } from '../../../redux/actionCreators'; 
 import TransactionService from '../../../services/TransactionService';
-import ActionButton from './../../buttons/ActionButton';
 import ErrorPage from './../../ErrorPage';
 import { CenterLoading } from '../../messages/SimpleLoader';
+import * as stringUtil from '../../../utils/StringUtil'
 
 class TransactionReceiptv2 extends Component {
 
@@ -108,13 +107,13 @@ class TransactionReceiptv2 extends Component {
                             <tr>
                                 <td>{i+1}</td>
                                 <td>{product.name}</td>
-                                <td>{productFlow.count}&nbsp;{product.unit.name}</td>
-                                <td>{productFlow.price}</td>
-                                <td>{productFlow.price * productFlow.count}</td>
+                                <td><b>{productFlow.count}</b>&nbsp;{product.unit.name}</td>
+                                <td>{stringUtil.beautifyNominal(productFlow.price)}</td>
+                                <td>{stringUtil.beautifyNominal(productFlow.price * productFlow.count)}</td>
                             </tr>
                         )
                     })}
-                    <tr><td colSpan="4">Total Price</td><td >{this.state.totalPrice}</td></tr>
+                    <tr><td colSpan="4">Total Price</td><td className="font-weight-bold" >{stringUtil.beautifyNominal(this.state.totalPrice)}</td></tr>
                 </table>
             </div>
         );
