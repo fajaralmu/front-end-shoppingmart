@@ -10,7 +10,7 @@ import ActionButtons from '../../buttons/ActionButtons'
 import DynamicDropdown from '../../inputs/DynamicDropdown'
 import { byId } from '../../../utils/ComponentUtil'
 import * as componentUtil from '../../../utils/ComponentUtil'
-import AddToCartButton from './AddToCartButton';
+import {AddToCartButton} from './BaseTransactionPage';
 import DetailProductPanel from './DetailProductPanel';
 import GridComponent from '../../container/GridComponent'
 import Card from '../../card/Card';
@@ -126,7 +126,7 @@ class TransactionSelling extends Component {
             byId(FIELD_IDS.productName).value = product.name;
             byId(FIELD_IDS.productQuantity).value = productFlow.count; 
 
-           // this.setState({ stockId: productId, quantity: productFlow.count });
+            this.setState({ stockId: productId, quantity: productFlow.count });
         }
 
         this.handleDelete = (productId) => {

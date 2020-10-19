@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom'
 import ContentTitle from '../../container/ContentTitle';
 import TransactionSelling from './TransactionSelling';
 import TransactionPurchasing from './TransactionPurchasing';
+import ActionButton from './../../buttons/ActionButton';
 
 
 
@@ -71,6 +72,10 @@ const mapStateToProps = state => {
 //     refreshLogin: () => dispatch(actions.refreshLoginStatus()),
 //     // getProductCatalog: (page) => dispatch(actions.getProductList(page))
 //   })
+
+export const AddToCartButton = (props) => {
+    return <ActionButton status="info btn-lg" text={<i className="fa fa-cart-plus"></i>} onClick={props.onClick} />;
+}
 
 export default withRouter(connect(
     mapStateToProps

@@ -7,7 +7,7 @@ import ActionButton from '../../buttons/ActionButton';
 import SockJsClient from 'react-stomp'; 
 import ContentTitle from '../../container/ContentTitle'; 
 import GridComponent from '../../container/GridComponent'
-import ChatList from './CharList';
+import ChatList from './ChatList';
 
 class ChatRoom extends Component {
     constructor(props) {

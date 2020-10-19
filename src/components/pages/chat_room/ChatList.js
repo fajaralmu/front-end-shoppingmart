@@ -14,12 +14,9 @@ class ChatList extends Component {
         let chatRows = [];
         for (let i = 0; i < chats.length; i++) {
             const chat = chats[i];
-            chatRows.push(
-                <ChatItem message={chat} username={this.props.username} />
-            )
+            chatRows.push(<ChatItem message={chat} username={this.props.username} />)
         }
-        return (
-            <GridComponent cols={1} items={chatRows} />)
+        return (<GridComponent cols={1} items={chatRows} />)
     }
 }
 

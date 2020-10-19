@@ -12,10 +12,11 @@ import ActionButtons from '../../buttons/ActionButtons'
 import * as componentUtil from '../../../utils/ComponentUtil'
 import { byId } from '../../../utils/ComponentUtil'
 import DynamicDropdown from '../../inputs/DynamicDropdown'
-import AddToCartButton from './AddToCartButton';
+import {AddToCartButton} from './BaseTransactionPage';
 import GridComponent from '../../container/GridComponent';
 import Card from '../../card/Card' 
 import { withRouter } from 'react-router-dom'
+import BaseComponent from './../../BaseComponent';
 
 const FIELD_IDS = {
     supplierName: "input-supplier-name-purc",
@@ -27,7 +28,7 @@ const FIELD_IDS = {
     productExpiryDate: "input-exp-date-purc"
 }
 
-class TransactionPurchasing extends Component {
+class TransactionPurchasing extends BaseComponent {
 
     constructor(props) {
         super(props);
@@ -35,7 +36,10 @@ class TransactionPurchasing extends Component {
             productName: "", supplierName: "", product: null, supplier: {}, showDetail: false, productFlows: [],
             messageShow: false, messageType: "",
             quantity: 0, price: 0, expiryDate: "2020-01-01",
-            activeField: ""
+            activeField: "",
+            
+            // products: [], //for product dropdown
+            // suppliers: [] //for supplier dropdown
         }
 
         this.isExistInTheChart = (productId) => {
@@ -47,18 +51,18 @@ class TransactionPurchasing extends Component {
             if (this.state.quantity <= 0) {
                 this.props.app.infoDialog("Please provide valid quantity!"); return;
             }
-            let quantity = this.state.quantity;
-            let price = this.state.price;
-            let expDate = this.state.expiryDate;
-            let product = this.state.product;
+            const quantity = this.state.quantity;
+            const price = this.state.price;
+            const expDate = this.state.expiryDate;
+            const product = this.state.product;
 
             if (this.isExistInTheChart(product.id))
                 if (!window.confirm("The product already exist in the chart, do you want to override it?"))
                 { return; }
 
-            let ID = Math.floor(Math.random() * 1000);
-            let newProductFlow = {
-                "id": ID,
+            const id = Math.floor(Math.random() * 1000);
+            const newProductFlow = {
+                "id": id,
                 "product": product,
                 "price": price,
                 "count": quantity,
@@ -73,12 +77,12 @@ class TransactionPurchasing extends Component {
         }
 
         this.addProductFlow = (productFlow) => {
-            let currentFlows = this.state.productFlows;
+            const currentFlows = this.state.productFlows;
             //update
             if (this.getProductFlow(productFlow.product.id) != null) {
-                for (let index = 0; index < this.state.productFlows.length; index++) {
-                    if (this.state.productFlows[index].product.id == productFlow.product.id) {
-                        currentFlows[index] = productFlow;
+                for (let i = 0; i < currentFlows.length; i++) {
+                    if (currentFlows[i].product.id == productFlow.product.id) {
+                        currentFlows[i] = productFlow;
                     }
                 }
             } else{
@@ -89,20 +93,13 @@ class TransactionPurchasing extends Component {
         }
 
         this.getProductFlow = (productId) => {
-            if (this.state.productFlows == null) return null;
-            for (let i = 0; i < this.state.productFlows.length; i++) {
-                if (this.state.productFlows[i].product.id == productId) return this.state.productFlows[i];
+            const currentFlows = this.state.productFlows;
+            if (currentFlows == null) return null;
+            for (let i = 0; i < currentFlows.length; i++) {
+                if (currentFlows[i].product.id == productId) return currentFlows[i];
             }
             return null;
-        }
-
-        this.getProduct = (id) => {
-            if (this.state.products == null) return null;
-            for (let index = 0; index < this.state.products.length; index++) {
-                if (this.state.products[index].id == id) { return this.state.products[id]; }
-            }
-            return null;
-        }
+        } 
 
         this.handleEdit = (productId) => {
             alert("will Edit: " + productId);
@@ -117,11 +114,11 @@ class TransactionPurchasing extends Component {
             byId(FIELD_IDS.productQuantity).value = productFlow.count ;
             byId(FIELD_IDS.productExpiryDate).value = productFlow.expiryDate;
             byId(FIELD_IDS.productPrice).value = productFlow.price ;
-            // this.setState({ quantity: productFlow.count });
-            // this.setState({ price: productFlow.price });
-            // this.setState({ productName: productFlow.product.name });
-            // this.setState({ expiryDate: productFlow.expiryDate });
-            this.setState({ product: product })
+            this.setState({ quantity: productFlow.count,
+                price: productFlow.price,
+                productName: productFlow.product.name,
+                expiryDate: productFlow.expiryDate,
+                product: product });
         }
 
         this.handleDelete = (id) => {
