@@ -173,6 +173,7 @@ class Cashflow
 }
 const mapStateToProps = state => {
     return {
+        transactionYears: state.transactionState.transactionYears,
         cashflowDetail: state.transactionState.cashflowDetail
     }
 }

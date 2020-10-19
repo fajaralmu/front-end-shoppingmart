@@ -199,6 +199,7 @@ class ProductSales
 
 const mapStateToProps = state => {
     return {
+        transactionYears: state.transactionState.transactionYears,
         productSalesData: state.transactionState.productSalesData,
         productSalesDetails: state.transactionState.productSalesDetails
     }
