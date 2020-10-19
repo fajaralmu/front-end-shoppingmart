@@ -1,12 +1,13 @@
-import React, { Component } from 'react' 
+import React from 'react' 
 import * as url from '../../../constant/Url'
 import ContentTitle from '../../container/ContentTitle'
 import ActionButton from '../../buttons/ActionButton'
 import ImageCarousel from './../../container/ImageCarousel';
 import { groupArray } from './../../../utils/CollectionUtil';
 import SupplierService from './../../../services/SupplierService';
+import BaseComponent from './../../BaseComponent';
 
-class SupplierDetail extends Component {
+class SupplierDetail extends BaseComponent {
 
     constructor(props) {
         super(props);
@@ -23,14 +24,14 @@ class SupplierDetail extends Component {
         this.getProductSupplied = () => {
             const supplier = this.props.supplier; 
             const thisApp = this;
-            this.parentApp.startLoading();
+            this.startLoading();
 
             this.supplierService.getProductSupplied(supplier.id)
             .then(function(response){
                 thisApp.setState({products:response.entities});
             })
             .catch((e)=>alert("Product Not Found"))
-            .finally((e)=>thisApp.parentApp.endLoading());
+            .finally((e)=>thisApp.endLoading());
         }
 
     }

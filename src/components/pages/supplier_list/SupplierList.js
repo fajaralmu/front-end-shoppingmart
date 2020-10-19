@@ -1,7 +1,5 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { BrowserRouter as Router, Route, Link, Switch, withRouter } from 'react-router-dom'
-import * as actions from '../../../redux/actionCreators'
+import React from 'react' 
+import { withRouter } from 'react-router-dom' 
 import * as menus from '../../../constant/Menus'
 import ActionButtons from '../../buttons/ActionButtons'
 import ComboBox from '../../inputs/ComboBox'
@@ -15,10 +13,11 @@ import InputField from '../../inputs/InputField'
 import SupplierDetail from './SupplierDetail'
 import SupplierService from './../../../services/SupplierService';
 import { byId } from './../../../utils/ComponentUtil';
+import BaseComponent from './../../BaseComponent';
 
 const DEFAULT_TITLE =  "Our Suppliers";
 
-class SupplierList extends Component {
+class SupplierList extends BaseComponent {
 
     constructor(props) {
         super(props);
@@ -50,16 +49,15 @@ class SupplierList extends Component {
         }
 
         this.getSupplierList = (request) => {
-            const parentApp = this.props.app;
             const thisApp = this;
-            parentApp.startLoading();
+            this.startLoading();
             this.supplierService.getSupplierList(request)
             .then(function(response){
                 thisApp.setState({suppliersData:response})
             })
             .catch((e )=>{alert("Supplier not found!")})
             .finally(function(e){
-                parentApp.endLoading();
+                thisApp.endLoading();
             })
         }
 
@@ -81,7 +79,6 @@ class SupplierList extends Component {
                 this.setState({ requestOrderBy: rawOrderRequest[0] });
                 this.setState({ requestOrderType: rawOrderRequest[1] });
             }
-
         }
 
         this.handleInputNameChange = (value) => {

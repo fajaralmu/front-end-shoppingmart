@@ -14,6 +14,4 @@ export default class BaseComponent extends Component {
             this.parentApp.endLoading();
         }
     }
-
-
 }
