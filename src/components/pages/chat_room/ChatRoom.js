@@ -8,6 +8,7 @@ import SockJsClient from 'react-stomp';
 import ContentTitle from '../../container/ContentTitle'; 
 import GridComponent from '../../container/GridComponent'
 import ChatList from './ChatList';
+import { contextPath } from './../../../constant/Url';
 
 class ChatRoom extends Component {
     constructor(props) {
@@ -55,9 +56,7 @@ class ChatRoom extends Component {
 
     render() {
         let userAlias = this.props.userAlias ? this.props.userAlias : "";
-        let cloudHost = "https://nuswantoroshop.herokuapp.com/";
-        let localHost = "http://localhost:8080/universal-good-shop/";
-        const usedHost = localHost;
+        const usedHost = contextPath();
         return (
             <div className="section-container">
                 <ContentTitle title="What Do You Feel?" description=

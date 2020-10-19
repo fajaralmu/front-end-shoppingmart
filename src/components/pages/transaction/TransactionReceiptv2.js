@@ -140,9 +140,7 @@ class TransactionReceiptv2 extends BaseComponent {
     }
 }
 const mapDispatchToProps = function (dispatch) {
-    const dippatchs = {
-        
-    }
+    const dippatchs = {  }
     return dippatchs;
 }
 const mapStateToProps = state => {

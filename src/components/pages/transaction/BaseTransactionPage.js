@@ -61,7 +61,6 @@ class BaseTransactionPage extends Component {
 const mapStateToProps = state => {
     //console.log(state);
     return {
-
         loginStatus: state.userState.loginStatus,
     }
 }

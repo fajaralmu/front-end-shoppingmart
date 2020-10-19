@@ -61,12 +61,17 @@ class DetailProductPanel extends Component {
 
         return (
            <Card title="Product Detail" content={
-                <table><tbody><tr valign="top">
-                    <td>
-                        <InstantTable disabled={true} rows={this.getRowData()} />
-                    </td>
-                    <td><div className="img-panel rounded box-shadow"><img src={imageUrl} width="300" height="200" /></div>
-                    </td></tr></tbody></table>
+                <table>
+                    <tbody>
+                        <tr valign="top">
+                            <td>
+                                <InstantTable disabled={true} rows={this.getRowData()} />
+                            </td>
+                            <td><div className="img-panel rounded box-shadow"><img src={imageUrl} width="300" height="200" /></div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
            } /> 
         )
     }
