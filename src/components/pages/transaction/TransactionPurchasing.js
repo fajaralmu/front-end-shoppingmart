@@ -18,6 +18,7 @@ import Card from '../../card/Card'
 import { withRouter } from 'react-router-dom'
 import BaseComponent from './../../BaseComponent';
 import SupplierService from './../../../services/SupplierService';
+import TransactionPurchasingService from './../../../services/TransactionPurchasingService';
 
 const FIELD_IDS = {
     supplierName: "input-supplier-name-purc",
@@ -43,6 +44,7 @@ class TransactionPurchasing extends BaseComponent {
             suppliers: [] //for supplier dropdown
         }
         this.supplierService = SupplierService.instance;
+        this.purchasingService = TransactionPurchasingService.instance;
 
         this.isExistInTheChart = (productId) => {
             if (this.state.productFlows == null) return false;
@@ -145,13 +147,13 @@ class TransactionPurchasing extends BaseComponent {
             /**
              * check mandatory fields
              */
-            if (this.state.supplier.id == null || this.state.productFlows == null || this.state.productFlows.length == 0) {
-                this.props.app.infoDialog("Mandatory fields must not be empty!")
+            if (this.state.supplier == null || this.state.supplier.id == null || this.state.productFlows == null || this.state.productFlows.length == 0) {
+                this.parentApp.infoDialog("Mandatory fields must not be empty!")
                 return;
             }
 
             const app = this;
-            this.props.app.confirmDialog("Are you sure want to proceed?", function (e) {
+            this.parentApp.confirmDialog("Are you sure want to proceed?", function (e) {
                 let request = { productFlows: app.state.productFlows, supplier: app.state.supplier };
                 app.props.submitSupplyTransaction(request, app.props.app);
             }, function (e) { });
@@ -210,11 +212,11 @@ class TransactionPurchasing extends BaseComponent {
 
         this.handleGetSuppliersByCode = (response) => {
             this.handleGetSuppliers(response);
+            this.selectSupplier(response.entities[0].id);
         }
 
         this.handleGetSuppliers = (response) => {
             this.setState({suppliers: response.entities});
-            this.selectSupplier(response.entities[0].id);
         }
 
         this.selectSupplier = (id) => {
@@ -243,41 +245,59 @@ class TransactionPurchasing extends BaseComponent {
 
         this.getProductList = (value, id) => {
             if (value == null || value.trim() == "") { return; }
-             
+
+            this.setActiveField(id); 
             this.setState({ showDetail: true, productName: value })
-            this.props.getProductList({ filterName:'name', filterValue: value }, this.props.app);
-            this.setActiveField(id);
+            this.fetchProducts({ key:'name', value: value }); 
         }
 
         this.getProductByCode = (value, id) => {
             const app = this;
              
-            this.setState({ showDetail: true });
-            this.props.getProductList({ exacts: true, filterName:'code', filterValue: value, callback: function(response){
-                const product = response.entities[0];
-                app.selectProduct(product.id); 
-            }}, this.props.app);
+            this.setState({ showDetail: true }); 
             this.setActiveField(id);
+            const request = { exacts: true, key:'code', value: value};
+            this.commonAjax(this.purchasingService.getProductList, request, this.handleProductListByCode);
+        }
+
+        this.fetchProducts = (request) => {
+             
+            this.commonAjax(this.purchasingService.getProductList, request, this.handleGetProducts);
+        }
+
+        this.handleProductListByCode = (response) => {
+            this.handleGetProducts(response);
+            const product = response.entities[0];
+            this.selectProduct(product.id);
+        }
+
+        this.handleGetProducts = (response) => {
+            this.setState({products: response.entities});
         }
 
         this.selectProduct = (id) => {
-            if (this.props.products == null) {
+            if (this.state.products == null) {
                 alert("Data not found!");
                 return;
             }
-            for (let i = 0; i < this.props.products.length; i++) {
-                const product = this.props.products[i];
+            const products = this.state.products;
+            for (let i = 0; i < products.length; i++) {
+                const product = products[i];
                 if (product.id == id) {
                     this.setState({ productName: product.name, product: product });
                     this.displayProductInfo(product);
                 }
             }
-            this.props.resetProducts();
+            this.resetProducts();
         } 
 
         this.displayProductInfo = (product) => {
             byId(FIELD_IDS.productCode).value = product.code;
             byId(FIELD_IDS.productName).value = product.name;
+        }
+
+        this.resetProducts = () => {
+            this.setState({products:[]});
         }
     }
     componentDidMount() {
@@ -311,9 +331,9 @@ class TransactionPurchasing extends BaseComponent {
 
     getProductDropdownData() {
         const productList = [];
-        if (this.props.products != null)
-            for (let index = 0; index < this.props.products.length; index++) {
-                const product = this.props.products[index];
+        if (this.state.products != null)
+            for (let index = 0; index < this.state.products.length; index++) {
+                const product = this.state.products[index];
                 productList.push({ value: product.id, text: product.name });
             }
 
@@ -391,19 +411,15 @@ class TransactionPurchasing extends BaseComponent {
     }
 }
 const mapStateToProps = state => {
-    return {
-        selectedProduct: state.transactionState.selectedProduct,
+    return { 
         transactionData: state.transactionState.transactionData,
-        successTransaction: state.transactionState.successTransaction, 
-        products: state.transactionState.productsData
+        successTransaction: state.transactionState.successTransaction
     }
 }
 
-const mapDispatchToProps = dispatch => ({
-    getProductList: (request, app) => dispatch(actions.getProductListTrx(request, app)),
+const mapDispatchToProps = dispatch => ({ 
     submitSupplyTransaction: (request, app) => dispatch(actions.submitSupplyTrx(request, app)),
-    resetPurchaseTransaction: () => dispatch(actions.resetPurchasingAndSelling()), 
-    resetProducts: () => dispatch(actions.resetProducts()), 
+    resetPurchaseTransaction: () => dispatch(actions.resetPurchasingAndSelling()),  
 })
 export default withRouter(connect(
     mapStateToProps,

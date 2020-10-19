@@ -26,7 +26,7 @@ export default class BaseComponent extends Component {
          * @param {Function} errorCallback 
          */
         this.doAjax = (method, params, withProgress, successCallback, errorCallback) => {
-            if(!method) {return}
+            if(!method) {console.warn("Method Not Found! ");return}
             this.startLoading(withProgress);
 
             method(params).then(function(response){

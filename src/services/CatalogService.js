@@ -41,11 +41,10 @@ export default class CatalogService {
             })
             .then(response => response.json())
             .then(function (response) {
-                if (response.code == "00" && response.entities.length > 0) {
-                    resolve(response);
-                } else {
-                    reject(response);
-                }
+                if (response.code == "00" && response.entities.length > 0) 
+                { resolve(response); }
+                else 
+                { reject(response); }
             })
             .catch((e) => { console.error(e); reject(e); });
         })

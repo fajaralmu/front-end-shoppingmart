@@ -11,12 +11,10 @@ export default class TransactionHistoryService {
                 headers: commonAuthorizedHeader()
             })
                 .then(response => response.json()).then(function (response) {
-                    if (response.code == "00") {
-                        resolve(response);
-                    } else {
-                        reject(response)
-                    }
-
+                    if (response.code == "00") 
+                    { resolve(response);  } 
+                    else 
+                    { reject(response) }
                 }).
                 catch((e) => reject(e));
         })

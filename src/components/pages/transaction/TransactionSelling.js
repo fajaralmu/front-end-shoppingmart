@@ -157,7 +157,7 @@ class TransactionSelling extends BaseComponent {
             /**
              * check mandatory fields
              */
-            if (this.state.customer.id == null || this.state.productFlows == null || this.state.productFlows.length == 0) {
+            if (this.state.customer == null || this.state.customer.id == null || this.state.productFlows == null || this.state.productFlows.length == 0) {
                 this.props.app.infoDialog("Mandatory fields must not be empty!");
                 return;
             }

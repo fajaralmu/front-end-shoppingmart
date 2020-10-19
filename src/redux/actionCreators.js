@@ -271,25 +271,7 @@ export const getCashflowInfo = (month, year, type, app) => {
         }
     };
 }
-
-export const getProductListTrx = (request, app) => {
-    app.startLoading();
-    const callback = request.callback;
-    const fieldsFilter = {};
-    fieldsFilter[request.filterName] = request.filterValue;
-
-    return {
-        type: types.FETCH_PRODUCT_LIST_TRX,
-        payload: {
-            entity: "product", filter: { page: 0, exacts: (request.exacts == true), limit: 10, fieldsFilter: fieldsFilter }
-        },
-        meta: {
-            type: types.FETCH_PRODUCT_LIST_TRX, url: apiEntityBaseUrl.concat("get"), app: app, callback: callback
-        }
-    }
-}
- 
-
+  
 export const resetPurchasingAndSelling = () => ({
     type: types.RESET_TRX_SELLING_PURCHASING,
     payload: {},

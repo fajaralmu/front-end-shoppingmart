@@ -31,8 +31,7 @@ export const configureStore = () => {
             getStockInfoMiddleware,
             submitPurchaseTransactionMiddleware,
             submitSupplyTransactionMiddleware,
-            resetPurchaseTransactionMiddleware, 
-            getProductListTrxMiddleware,
+            resetPurchaseTransactionMiddleware,  
             getCashflowInfoMiddleware,
             getCashflowDetailMiddleware,
             getProductSalesMiddleware,
@@ -173,50 +172,7 @@ const getCashflowInfoMiddleware = store => next => action => {
     })
     .catch(err => console.log(err)).finally(param => action.meta.app.endLoading());
 }
-
-const getProductListTrxMiddleware = store => next => action => {
-    if (!action.meta || action.meta.type !== types.FETCH_PRODUCT_LIST_TRX) { return next(action); }
-    
-    if (isEmptyObject(action.payload.filter.fieldsFilter)) {
-        let newAction = Object.assign({}, action, {
-            payload: { entities: [] }
-        });
-        delete newAction.meta;
-        store.dispatch(newAction);
-    } else
-        fetch(action.meta.url, {
-            method: POST_METHOD, body: JSON.stringify(action.payload), headers: commonAuthorizedHeader()
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.debug("getProductListTrxMiddleware Response:", data);
-                if (data.entities == null || data.entities.length == 0) {
-                    alert("Data not found!");
-                    return;
-                }
-                 
-                if(action.meta.callback) {
-                    action.meta.callback(data);
-                }
-
-                let newAction = Object.assign({}, action, { payload: data });
-                delete newAction.meta;
-                store.dispatch(newAction);
-            })
-            .catch(err => console.log(err)).finally(param => action.meta.app.endLoading());
-}
-
-const isEmptyObject = (object) => {
-    for (const key in object) {
-        if (object.hasOwnProperty(key)) {
-            const element = object[key];
-            if(element!=null || element.toString().trim() != ""){
-                return false;
-            }
-        }
-    }
-    return true;
-}
+  
  
 const resetProductStocksMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.RESET_PRODUCT_STOCKS) { return next(action); }
