@@ -44,7 +44,6 @@ export const configureStore = () => {
             managementMiddleware.getManagementMenusMiddleware,
 
             /*realtime chat*/
-            realtimeChatMiddleware.sendChatMessageMiddleware,
             realtimeChatMiddleware.storeChatMessageLocallyMiddleware,
             realtimeChatMiddleware.getMessagesMiddleware,
 

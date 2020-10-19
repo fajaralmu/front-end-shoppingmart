@@ -19,8 +19,8 @@ export const reducer = (state = initState, action) => {
         // case types.REQUEST_ID:
 
         //     return { ...state, requestId: action.payload.message };
-        case types.SEND_MESSAGE:
-            return { ...state, messages: action.payload.entities, userAlias: action.payload.username };
+        // case types.SEND_MESSAGE:
+        //     return { ...state, messages: action.payload.entities, userAlias: action.payload.username };
         case types.STORE_MESSAGE:
             return { ...state, messages: action.payload.entities };
         case types.GET_MESSAGE:

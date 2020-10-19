@@ -30,7 +30,9 @@ export default class BaseComponent extends Component {
             this.startLoading(withProgress);
 
             method(params).then(function(response){
-                successCallback(response);
+                if(successCallback){ 
+                    successCallback(response);
+                }
             }).catch(function(e){
                 if(errorCallback){
                     errorCallback(e);

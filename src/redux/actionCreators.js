@@ -182,23 +182,7 @@ export const storeMessageLocally = (messages) => {
         }
     };
 }
-
-export const sendChatMessage = (message, username, app) => {
-    app.startLoading();
-    return {
-        type: types.SEND_MESSAGE,
-        payload: {
-            value: message,
-            username: username
-        },
-        meta: {
-            app: app,
-            type: types.SEND_MESSAGE,
-            url: apiAdmin.concat("sendmessage")
-        }
-    };
-}
-
+ 
 export const getProductSalesDetail = (request, app) => {
     app.startLoading(true);
     return {

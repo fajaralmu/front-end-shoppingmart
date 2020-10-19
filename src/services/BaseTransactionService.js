@@ -1,12 +1,6 @@
 import * as url from '../constant/Url'
 import { commonAuthorizedHeader } from '../middlewares/Common';
-
-const errorPromise = new Promise(function(res, rej){
-    rej("Invalid value");
-}); 
-const emptyPromise =  (defaultResponse) => new Promise(function(res, rej){
-    res(defaultResponse);
-});
+import { emptyPromise } from './Promises'; 
 
 export default class BaseTransactionService {
 

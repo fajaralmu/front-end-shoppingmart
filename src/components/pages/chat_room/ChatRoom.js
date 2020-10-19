@@ -9,23 +9,31 @@ import ContentTitle from '../../container/ContentTitle';
 import GridComponent from '../../container/GridComponent'
 import ChatList from './ChatList';
 import { contextPath } from './../../../constant/Url';
+import BaseComponent from './../../BaseComponent';
+import MessageService from './../../../services/MessageService';
 
-class ChatRoom extends Component {
+class ChatRoom extends BaseComponent {
     constructor(props) {
         super(props);
         this.state = { messages: null, username: null, activeId: null }
+        this.messageService = MessageService.instance;
+        
         this.sendChatMessage = () => {
-            if (!byId("input-msg").value) {
-                this.props.app.infoDialog("Message must not be null");
+            if (!byId("input-msg").value || byId("input-msg").value.toString().trim() == "") {
+                this.parentApp.infoDialog("Message must not be null");
                 return;
             }
-            this.props.sendChatMessage(byId("input-msg").value, this.state.username, this.props.app);
+           
+            const request = {
+                message:byId("input-msg").value,
+                username:this.state.username
+            }
             byId("input-msg").value = "";
+            this.commonAjax(this.messageService.sendChatMessage, request, this.handleMessage);
+            
         }
 
         this.handleMessage = (response) => {
-            console.log("Responses handleMessage: ", response.code);
-            console.log("LOCAL STORAGE:", localStorage.getItem("requestId"))
             if (response.code != localStorage.getItem("requestId")) {
                 return;
             }
@@ -96,7 +104,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
-    sendChatMessage: (message, username, app) => dispatch(actions.sendChatMessage(message, username, app)),
+    
     storeChatMessageLocally: (messages) => dispatch(actions.storeMessageLocally(messages)),
     getMessages: (app) => dispatch(actions.getMessageList(app))
 
