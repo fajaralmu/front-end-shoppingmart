@@ -18,10 +18,7 @@ export const updateCart = (cart, app) => {
 
 export const resetProducts = () => {
     return { type: types.RESET_PRODUCTS, payload: {}, meta: { type: types.RESET_PRODUCTS } };
-}
-export const resetCustomers = () => {
-    return { type: types.RESET_CUSTOMERS, payload: {}, meta: { type: types.RESET_CUSTOMERS } };
-}
+} 
 
 export const removeManagedEntity = () => {
     return {
@@ -291,33 +288,7 @@ export const getProductListTrx = (request, app) => {
         }
     }
 }
-
-export const getCustomerList = (request, app) => {
-    app.startLoading();
-    const fieldsFilter = {};
-    fieldsFilter[request.key] = request.value;
-   
-    const ret = {
-        type: types.FETCH_CUSTOMER_LIST,
-        payload: {
-            entity: "customer", 
-            filter: { 
-                page: request.page?request.page:0, 
-                limit: request.limit?request.limit:10, 
-                exacts: request.exacts == true,
-                fieldsFilter: fieldsFilter 
-            }
-        },
-        meta: {
-            type: types.FETCH_CUSTOMER_LIST, 
-            url: apiEntityBaseUrl.concat("get"), 
-            app: app, 
-            callback: request.callback
-        }
-    }
-    console.debug("getCustomerList ret: ", ret);
-    return ret;
-}
+ 
 
 export const resetPurchasingAndSelling = () => ({
     type: types.RESET_TRX_SELLING_PURCHASING,

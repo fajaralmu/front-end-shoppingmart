@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import * as actions from '../../../redux/actionCreators'
 import Label from '../../container/Label';
@@ -10,20 +10,22 @@ import ActionButtons from '../../buttons/ActionButtons'
 import DynamicDropdown from '../../inputs/DynamicDropdown'
 import { byId } from '../../../utils/ComponentUtil'
 import * as componentUtil from '../../../utils/ComponentUtil'
-import {AddToCartButton} from './BaseTransactionPage';
+import { AddToCartButton } from './BaseTransactionPage';
 import DetailProductPanel from './DetailProductPanel';
 import GridComponent from '../../container/GridComponent'
-import Card from '../../card/Card';
+import Card from '../../card/Card'; 
+import BaseComponent from './../../BaseComponent';
+import TransactionSellingService from './../../../services/TransactionSellingService';
 
 const FIELD_IDS = {
     customerName: "input-customer-name-sell",
     customerCode: "input-customer-code",
     productName: "input-product-name-sell",
-    productCode: "input-product-code-sell", 
+    productCode: "input-product-code-sell",
     productQuantity: "input-quantity-sell"
 }
 
-class TransactionSelling extends Component {
+class TransactionSelling extends BaseComponent {
 
     constructor(props) {
         super(props);
@@ -32,18 +34,22 @@ class TransactionSelling extends Component {
             customerName: "", productFlowStock: {},
             customer: {}, showDetail: false, productFlows: [], messageShow: false, messageType: "",
             stockId: 0, quantity: 0,
-            activeField: ""
+            activeField: "",
+
+            //for dropdown
+            customers: []
         }
+        this.sellingService = TransactionSellingService.instance;
 
         this.setActiveField = (id) => {
             this.setState({ activeField: id });
         }
 
         this.getStockInfo = (productCode) => {
-            if(!productCode){ productCode = this.state.productCode; }
+            if (!productCode) { productCode = this.state.productCode; }
             this.props.getStockInfo(productCode, this.props.app);
             this.setState({ productCode: productCode, showDetail: true });
-        } 
+        }
 
         this.isExistInTheChart = (productId) => {
             if (this.state.productFlows == null) return false;
@@ -86,7 +92,7 @@ class TransactionSelling extends Component {
             let currentFlows = this.state.productFlows;
             //update
             if (this.getProductFlow(productFlow.product.id) != null) {
-                for (let i = 0; i < this.state.productFlows.length; i++){
+                for (let i = 0; i < this.state.productFlows.length; i++) {
                     if (this.state.productFlows[i].product.id == productFlow.product.id) {
                         currentFlows[i] = productFlow;
                     }
@@ -96,7 +102,7 @@ class TransactionSelling extends Component {
             }
 
             this.setState({ productFlows: currentFlows });
-            
+
             componentUtil.clearFields("input-customer-name");
         }
 
@@ -115,7 +121,7 @@ class TransactionSelling extends Component {
         this.handleEdit = (productId) => {
             alert("will Edit: " + productId);
             const productFlow = this.getProductFlow(productId);
-            if(null == productFlow) {
+            if (null == productFlow) {
                 alert("Will modify data that is not found");
                 return;
             }
@@ -124,7 +130,7 @@ class TransactionSelling extends Component {
             const product = productFlow.product;
             byId(FIELD_IDS.productCode).value = product.code;
             byId(FIELD_IDS.productName).value = product.name;
-            byId(FIELD_IDS.productQuantity).value = productFlow.count; 
+            byId(FIELD_IDS.productQuantity).value = productFlow.count;
 
             this.setState({ stockId: productId, quantity: productFlow.count });
         }
@@ -162,7 +168,7 @@ class TransactionSelling extends Component {
                 let request = { productFlows: app.state.productFlows, customer: app.state.customer };
                 app.props.submitPurchaseTransaction(request, app.props.app);
             }, function (e) { });
-        } 
+        }
 
         this.reset = () => {
             componentUtil.clearFields(null);
@@ -184,37 +190,51 @@ class TransactionSelling extends Component {
         this.getCustomerList = (value, id) => {
             this.setState({ customerName: value });
             this.setActiveField(id);
-            this.props.getCustomerList({key:'name', value: value}, this.props.app);
+            this.fetchCustomerList({ key: 'name', value: value });
         }
 
         this.getCustomerByCode = (value, id) => {
-            const app = this;
             this.setActiveField(id);
-            const callback = function(response){
-                const customer = response.entities[0];
-                app.selectCustomer(customer.id);
-            }
-            this.props.getCustomerList({key:'id', value: value, exacts:true, limit:1, callback:callback}, this.props.app);
+            const request = { key: 'id', value: value, exacts: true, limit: 1};
+            this.commonAjax(this.sellingService.getCustomerList, request, this.handleGetCustomerListByCode);
+        }
+
+        this.fetchCustomerList = (request) => { 
+            this.commonAjax(this.sellingService.getCustomerList, request, this.handleGetCustomerList);
+        }
+
+        this.handleGetCustomerListByCode = (response) => {
+            this.handleGetCustomerList(response);
+            const customer = response.entities[0];
+            this.selectCustomer(customer.id);
+        }
+
+        this.handleGetCustomerList = (response) => {
+            this.setState({ customers: response.entities });
         }
 
         this.selectCustomer = (id) => {
-            if (this.props.customersData == null) {
+            if (this.state.customers == null) {
                 alert("Data not found!");
                 return;
             }
-            for (let i = 0; i < this.props.customersData.length; i++){
-                const customer = this.props.customersData[i];
+            for (let i = 0; i < this.state.customers.length; i++) {
+                const customer = this.state.customers[i];
                 if (customer.id == id) {
                     this.displayCustomerInfo(customer);
-                    this.setState({ customerName:  customer.name, customer: customer });
+                    this.setState({ customerName: customer.name, customer: customer });
                 }
             }
-            this.props.resetCustomers();
+            this.resetCustomers();
+        }
+
+        this.resetCustomers = () => {
+            this.setState({customers:[]});
         }
 
         this.displayCustomerInfo = (customer) => {
-            byId(FIELD_IDS.customerName).value = customer.name; 
-            byId(FIELD_IDS.customerCode).value = customer.id; 
+            byId(FIELD_IDS.customerName).value = customer.name;
+            byId(FIELD_IDS.customerCode).value = customer.id;
         }
 
         this.getProductStockList = (value, id) => {
@@ -258,7 +278,7 @@ class TransactionSelling extends Component {
                 return <AddToCartButton onClick={this.addToCart} />
             else
                 return <></>
-        } 
+        }
     }
 
     componentDidMount() {
@@ -268,8 +288,8 @@ class TransactionSelling extends Component {
 
     componentDidUpdate() {
         if (this.props.successTransaction) {
-            this.props.history.push("/transaction-receipt/"+this.props.transactionData.code);
-            return;    
+            this.props.history.push("/transaction-receipt/" + this.props.transactionData.code);
+            return;
         }
         if (byId(this.state.activeField) != null) {
             byId(this.state.activeField).focus();
@@ -290,9 +310,9 @@ class TransactionSelling extends Component {
     getCustomerDropdownData() {
         const customerList = [];
 
-        if (this.props.customersData != null) {
-            for (let i = 0; i < this.props.customersData.length; i++) {
-                const customer = this.props.customersData[i];
+        if (this.state.customers != null) {
+            for (let i = 0; i < this.state.customers.length; i++) {
+                const customer = this.state.customers[i];
                 customerList.push({ value: customer.id, text: customer.name });
             }
         }
@@ -307,7 +327,7 @@ class TransactionSelling extends Component {
 
         let formComponent = <div className="row"><div className="col-5">
             <Card title="Transaction Detail" content={<>
-                <GridComponent style={{gridRowGap:'5px'}} cols={2} items={[
+                <GridComponent style={{ gridRowGap: '5px' }} cols={2} items={[
                     <Label text="Customer" />,
                     <DynamicDropdown value={this.state.customerName} onSelect={this.selectCustomer} dropdownList={customerList}
                         onKeyUp={this.getCustomerList} id={FIELD_IDS.customerName} placeholder="customer name" />,
@@ -330,18 +350,18 @@ class TransactionSelling extends Component {
         </div>
 
         const buttonsData = [
-             { text: "Reset", status: 'danger btn-sm', id: "btn-reset-trx", onClick: this.reset },
-             { text: "Submit Transaction", status: 'success btn-sm', id: "btn-submit-trx", onClick: this.submitTransaction }];
- 
-        return (
-            <div className="transaction-container"> 
+            { text: "Reset", status: 'danger btn-sm', id: "btn-reset-trx", onClick: this.reset },
+            { text: "Submit Transaction", status: 'success btn-sm', id: "btn-submit-trx", onClick: this.submitTransaction }];
 
-                {this.state.customer && this.state.customer.name ?  <h3>Customer{this.state.customer.name}</h3> : ""} 
+        return (
+            <div className="transaction-container">
+
+                {this.state.customer && this.state.customer.name ? <h3>Customer{this.state.customer.name}</h3> : ""}
                 {formComponent}
                 <div>
                     <ActionButtons buttonsData={buttonsData} />
                 </div>
-                
+
                 <h3>Product List</h3>
                 <StockListTable disabled={this.props.successTransaction} handleEdit={this.handleEdit} handleDelete={this.handleDelete} productFlows={this.state.productFlows} />
                 <Label className="totalprice-info" text={"Total Price: IDR " + totalPrice} />
@@ -355,18 +375,16 @@ const mapStateToProps = state => {
         productFlowStock: state.transactionState.productFlowStock,
         transactionData: state.transactionState.transactionData,
         successTransaction: state.transactionState.successTransaction,
-        customersData: state.transactionState.customersData,
         products: state.transactionState.products
     }
 }
 
 const mapDispatchToProps = dispatch => ({
-    resetCustomers: () => dispatch(actions.resetCustomers()),
+    
     getStockInfo: (productCode, app) => dispatch(actions.getStockInfo(productCode, app)),
     submitPurchaseTransaction: (request, app) => dispatch(actions.submitPurchaseTransaction(request, app)),
     resetPurchaseTransaction: () => dispatch(actions.resetPurchasingAndSelling()),
     resetProductStocks: () => (dispatch(actions.resetProductStocks())),
-    getCustomerList: (request, app) => dispatch(actions.getCustomerList(request, app)),
     getProductStockList: (name, app) => dispatch(actions.getProductStocks(name, app))
 })
 export default withRouter(connect(

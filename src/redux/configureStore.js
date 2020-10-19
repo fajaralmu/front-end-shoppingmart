@@ -31,14 +31,12 @@ export const configureStore = () => {
             getStockInfoMiddleware,
             submitPurchaseTransactionMiddleware,
             submitSupplyTransactionMiddleware,
-            resetPurchaseTransactionMiddleware,
-            getCustomerListMiddleware,
+            resetPurchaseTransactionMiddleware, 
             getProductListTrxMiddleware,
             getCashflowInfoMiddleware,
             getCashflowDetailMiddleware,
             getProductSalesMiddleware,
-            resetProductsMiddleware, 
-            resetCustomersMiddleware,
+            resetProductsMiddleware,  
             getProductStocksMiddleware,
             resetProductStocksMiddleware,
             getProductSalesDetailMiddleware,  
@@ -219,55 +217,14 @@ const isEmptyObject = (object) => {
     }
     return true;
 }
-
-const getCustomerListMiddleware = store => next => action => {
-    if (!action.meta || action.meta.type !== types.FETCH_CUSTOMER_LIST) { return next(action); }
-
-    if (isEmptyObject(action.payload.filter.fieldsFilter)) {
-        let newAction = Object.assign({}, action, {
-            payload: { entities: [] }
-        });
-        delete newAction.meta;
-        store.dispatch(newAction);
-    } else {
-        fetch(action.meta.url, {
-            method: POST_METHOD,
-            body: JSON.stringify(action.payload),
-            headers: commonAuthorizedHeader()
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.debug("Response:", data);
-            if (data.entities == null || data.entities.length == 0) {
-                alert("Data not found!");
-                return;
-            }
-            let newAction = Object.assign({}, action, { payload: data });
-            delete newAction.meta;
-            store.dispatch(newAction);
-            
-            if(action.meta.callback){
-                action.meta.callback(data);
-            }
-        })
-        .catch(err => console.log(err)).finally(param => action.meta.app.endLoading());
-    }
-}
-
+ 
 const resetProductStocksMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.RESET_PRODUCT_STOCKS) { return next(action); }
     let newAction = Object.assign({}, action, { payload: null });
     delete newAction.meta;
     store.dispatch(newAction);
 }
-
-const resetCustomersMiddleware = store => next => action => {
-    if (!action.meta || action.meta.type !== types.RESET_CUSTOMERS) { return next(action); }
-    let newAction = Object.assign({}, action, { payload: null });
-    delete newAction.meta;
-    store.dispatch(newAction);
-}
-
+ 
 const resetProductsMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.RESET_PRODUCTS) { return next(action); }
     let newAction = Object.assign({}, action, { payload: null });

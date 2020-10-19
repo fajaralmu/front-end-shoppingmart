@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import ContentTitle from '../../container/ContentTitle';
 import { resetPurchasingAndSelling } from '../../../redux/actionCreators';
-import TransactionService from '../../../services/TransactionService';
+import TransactionHistoryService from '../../../services/TransactionHistoryService';
 import ErrorPage from './../../ErrorPage';
 import { CenterLoading } from '../../messages/SimpleLoader';
 import * as str from '../../../utils/StringUtil'
@@ -22,7 +22,7 @@ class TransactionReceiptv2 extends BaseComponent {
             totalPrice: 0,
             totalQuantity: 0
         }
-        this.transactionService = TransactionService.instance;
+        this.transactionHistoryService = TransactionHistoryService.instance;
         this.validateLoginStatus = () => {
             if (!this.props.loginStatus) {
                 this.props.history.push("/login");
@@ -75,7 +75,7 @@ class TransactionReceiptv2 extends BaseComponent {
         this.loadTransactionData = () => {
             this.setState({ transaction: null, loading: true, error: false });
             const app = this;
-            this.transactionService.getTransactionData(this.getTransactionCode()).
+            this.transactionHistoryService.getTransactionData(this.getTransactionCode()).
                 then(app.handleGetTransactionData).
                 catch(function (error) {
                     app.setState({ error: true, loading: false })
