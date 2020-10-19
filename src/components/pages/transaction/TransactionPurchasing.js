@@ -1,6 +1,4 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import * as actions from '../../../redux/actionCreators'
+import React  from 'react' 
 
 import * as trxCss from './Transaction.css'
 import Label from '../../container/Label';
@@ -154,10 +152,24 @@ class TransactionPurchasing extends BaseComponent {
 
             const app = this;
             this.parentApp.confirmDialog("Are you sure want to proceed?", function (e) {
-                let request = { productFlows: app.state.productFlows, supplier: app.state.supplier };
-                app.props.submitSupplyTransaction(request, app.props.app);
+                const request = { productFlows: app.state.productFlows, supplier: app.state.supplier };
+                app.applyTransaction(request);
             }, function (e) { });
         } 
+
+        this.applyTransaction = (request) => {
+            console.debug("applyTransaction: ", request);
+            this.commonAjaxWithProgress(
+                this.purchasingService.submitTransactionPurchasing,
+                request,
+                this.handleSuccessTransaction
+            )
+        }
+
+        this.handleSuccessTransaction = (response) => {
+            const transaction = response.transaction;
+            this.props.history.push("/transaction-receipt/"+transaction.code);
+        }
 
         this.reset = () => {
             componentUtil.clearFields(null);
@@ -165,9 +177,7 @@ class TransactionPurchasing extends BaseComponent {
                 supplier: null,
                 productFlows: [], showDetail: false, product: null,
                 supplierName: null, productName: null, expiryDate: null, quantity: null, price: null
-            });
-
-            this.props.resetPurchaseTransaction();
+            }); 
         }
 
         this.emptyForm = () => {
@@ -221,7 +231,7 @@ class TransactionPurchasing extends BaseComponent {
 
         this.selectSupplier = (id) => {
             if (this.state.suppliers == null || this.state.suppliers.length == 0) {
-                alert("Data not found!");
+                alert("Supplier not found!");
                 return;
             }
             for (let i = 0; i < this.state.suppliers.length; i++) {
@@ -277,7 +287,7 @@ class TransactionPurchasing extends BaseComponent {
 
         this.selectProduct = (id) => {
             if (this.state.products == null) {
-                alert("Data not found!");
+                alert("Product not found!");
                 return;
             }
             const products = this.state.products;
@@ -301,19 +311,12 @@ class TransactionPurchasing extends BaseComponent {
         }
     }
     componentDidMount() {
-        if (this.props.resetPurchaseTransaction) {
-            this.props.resetPurchaseTransaction();
-        }
         document.title = "Purchasing"; 
         this.props.setMenuCode("purchasing");
         this.resetSuppliers();
 
     }
-    componentDidUpdate() {
-        if (this.props.successTransaction) {
-            this.props.history.push("/transaction-receipt/"+this.props.transactionData.code);
-            return;    
-        }
+    componentDidUpdate() { 
         if (byId(this.state.activeField) != null) {
             byId(this.state.activeField).focus();
         }
@@ -410,18 +413,5 @@ class TransactionPurchasing extends BaseComponent {
         )
     }
 }
-const mapStateToProps = state => {
-    return { 
-        transactionData: state.transactionState.transactionData,
-        successTransaction: state.transactionState.successTransaction
-    }
-}
-
-const mapDispatchToProps = dispatch => ({ 
-    submitSupplyTransaction: (request, app) => dispatch(actions.submitSupplyTrx(request, app)),
-    resetPurchaseTransaction: () => dispatch(actions.resetPurchasingAndSelling()),  
-})
-export default withRouter(connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(TransactionPurchasing));
+ 
+export default withRouter(TransactionPurchasing);

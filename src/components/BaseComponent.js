@@ -35,6 +35,9 @@ export default class BaseComponent extends Component {
                 if(errorCallback){
                     errorCallback(e);
                 } else {
+                    if (typeof(e) == 'string'){
+                        alert("Operation Failed: "+e);
+                    }
                     alert("resource not found");
                 }
             }).finally((e)=>{

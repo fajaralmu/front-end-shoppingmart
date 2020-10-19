@@ -168,22 +168,34 @@ class TransactionSelling extends BaseComponent {
              * check mandatory fields
              */
             if (this.state.customer == null || this.state.customer.id == null || this.state.productFlows == null || this.state.productFlows.length == 0) {
-                this.props.app.infoDialog("Mandatory fields must not be empty!");
+                this.parentApp.infoDialog("Mandatory fields must not be empty!");
                 return;
             }
             
             const app = this;
-            this.props.app.confirmDialog("Are you sure want to proceed?", function (e) {
-                let request = { productFlows: app.state.productFlows, customer: app.state.customer };
-                app.props.submitPurchaseTransaction(request, app.props.app);
+            this.parentApp.confirmDialog("Are you sure want to proceed?", function (e) {
+                const request = { productFlows: app.state.productFlows, customer: app.state.customer };
+                app.applyTransaction(request);
             }, function (e) { });
         }
 
+        this.applyTransaction = (request) => {
+            console.debug("applyTransaction: ", request);
+            this.commonAjaxWithProgress(
+                this.sellingService.submitTransactionSelling,
+                request,
+                this.handleSuccessTransaction
+            )
+        }
+ 
+        this.handleSuccessTransaction = (response) => {
+            const transaction = response.transaction;
+            this.props.history.push("/transaction-receipt/"+transaction.code);
+        }
         this.reset = () => {
             componentUtil.clearFields(null);
             this.setState({ customerName: null, customer: null, productName: null, product: null, productFlows: [], showDetail: false });
-            this.emptyForm();
-            this.props.resetPurchaseTransaction();
+            this.emptyForm(); 
         }
 
         this.calculateTotalPrice = () => {
@@ -308,11 +320,7 @@ class TransactionSelling extends BaseComponent {
         this.props.setMenuCode("selling");
     }
 
-    componentDidUpdate() {
-        if (this.props.successTransaction) {
-            this.props.history.push("/transaction-receipt/" + this.props.transactionData.code);
-            return;
-        }
+    componentDidUpdate() { 
         if (byId(this.state.activeField) != null) {
             byId(this.state.activeField).focus();
         }
@@ -391,21 +399,5 @@ class TransactionSelling extends BaseComponent {
             </div >
         )
     }
-}
-const mapStateToProps = state => {
-    return {
-        productFlowStock: state.transactionState.productFlowStock,
-        transactionData: state.transactionState.transactionData,
-        successTransaction: state.transactionState.successTransaction, 
-    }
-}
-
-const mapDispatchToProps = dispatch => ({
-     
-    submitPurchaseTransaction: (request, app) => dispatch(actions.submitPurchaseTransaction(request, app)),
-    resetPurchaseTransaction: () => dispatch(actions.resetPurchasingAndSelling()), 
-})
-export default withRouter(connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(TransactionSelling));
+} 
+export default withRouter( TransactionSelling);

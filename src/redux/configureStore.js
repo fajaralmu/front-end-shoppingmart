@@ -27,10 +27,7 @@ export const configureStore = () => {
             userMiddleware.requestAppIdMiddleware, 
             userMiddleware.getLoggedUserMiddleware, 
 
-            //transaction 
-            submitPurchaseTransactionMiddleware,
-            submitSupplyTransactionMiddleware,
-            resetPurchaseTransactionMiddleware,  
+            //transaction   
             getCashflowInfoMiddleware,
             getCashflowDetailMiddleware,
             getProductSalesMiddleware,
@@ -157,64 +154,5 @@ const resetProductsMiddleware = store => next => action => {
     delete newAction.meta;
     store.dispatch(newAction);
 }
- 
-
-const resetPurchaseTransactionMiddleware = store => next => action => {
-    if (!action.meta || action.meta.type !== types.RESET_TRX_SELLING_PURCHASING) { return next(action); }
-    let newAction = Object.assign({}, action, { payload: null });
-    delete newAction.meta;
-    store.dispatch(newAction);
-
-}
-
-const submitSupplyTransactionMiddleware = store => next => action => {
-    if (!action.meta || action.meta.type !== types.SUBMIT_TRX_SUPPLY) {
-        return next(action);
-    }
-
-    fetch(action.meta.url, {
-        method: POST_METHOD, body: JSON.stringify(action.payload),
-        headers: { 'Content-Type': 'application/json', 'requestId': localStorage.getItem("requestId"), 'loginKey': localStorage.getItem("loginKey") }
-    })
-        .then(response => response.json())
-        .then(data => {
-            console.debug("Response:", data);
-            if (data.code != "00") {
-                alert("Transaction Failed!");
-                return;
-            }
-            alert("Transaction Success!")
-            data.transaction.productFlows = action.payload.productFlows;
-            let newAction = Object.assign({}, action, { payload: data });
-            delete newAction.meta;
-            store.dispatch(newAction);
-        })
-        .catch(err => console.log(err)).finally(param => action.meta.app.endLoading());
-}
-
-const submitPurchaseTransactionMiddleware = store => next => action => {
-    if (!action.meta || action.meta.type !== types.SUBMIT_TRX_PURCHASE) {
-        return next(action);
-    }
-
-    fetch(action.meta.url, {
-        method: POST_METHOD, body: JSON.stringify(action.payload),
-        headers: { 'Content-Type': 'application/json', 'requestId': localStorage.getItem("requestId"), 'loginKey': localStorage.getItem("loginKey") }
-    })
-        .then(response => response.json())
-        .then(data => {
-            console.debug("Response:", data);
-            if (data.code != "00") {
-                alert("Transaction Failed!");
-                return;
-            }
-            alert("Transaction Success!")
-            data.transaction.productFlows = action.payload.productFlows;
-            let newAction = Object.assign({}, action, { payload: data });
-            delete newAction.meta;
-            store.dispatch(newAction);
-        })
-        .catch(err => console.log(err)).finally(param => action.meta.app.endLoading());
-} 
 
 export default configureStore;

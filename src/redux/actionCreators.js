@@ -248,42 +248,6 @@ export const getCashflowInfo = (month, year, type, app) => {
             app: app, type: types.GET_CASHFLOW_INFO, url: apiTransaction.concat("cashflowinfo")
         }
     };
-}
-  
-export const resetPurchasingAndSelling = () => ({
-    type: types.RESET_TRX_SELLING_PURCHASING,
-    payload: {},
-    meta: { type: types.RESET_TRX_SELLING_PURCHASING }
-})
-export const submitPurchaseTransaction = (request, app) => {
-    app.startLoading(true);
-    console.log("Submit Supply Purchase...")
-    let requested = {
-        type: types.SUBMIT_TRX_PURCHASE,
-        payload: {
-            customer: request.customer,
-            productFlows: request.productFlows
-        },
-        meta: {
-            app: app, type: types.SUBMIT_TRX_PURCHASE, url: apiTransaction.concat("selling")
-        }
-    };
-    return requested;
-}
-export const submitSupplyTrx = (request, app) => {
-    console.log("Submit Supply Trx...")
-    app.startLoading(true);
-    let requested = {
-        type: types.SUBMIT_TRX_SUPPLY,
-        payload: {
-            supplier: request.supplier,
-            productFlows: request.productFlows
-        },
-        meta: {
-            app: app, type: types.SUBMIT_TRX_SUPPLY, url: apiTransaction.concat("purchasing")
-        }
-    };
-    return requested;
 } 
 
 export const performLogout = (app) => {

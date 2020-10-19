@@ -23,19 +23,7 @@ export const reducer = (state = initState, action) => {
     let result = state;
     switch (action.type) {
        
-
-        case types.SUBMIT_TRX_PURCHASE:
-            return { ...state, transactionData: action.payload.transaction, successTransaction: true };
-
-        case types.SUBMIT_TRX_SUPPLY:
-            return { ...state, transactionData: action.payload.transaction, successTransaction: true };
-
-        case types.RESET_TRX_SELLING_PURCHASING:
-            return {
-                ...state, productFlowStock: null,
-                transactionData: null, successTransaction: false,
-                customersData: null, productsData: null
-            }; 
+ 
         case types.RESET_PRODUCTS:
             return { ...state, productsData: null };
 

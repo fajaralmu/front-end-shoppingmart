@@ -141,15 +141,13 @@ class TransactionReceiptv2 extends BaseComponent {
 }
 const mapDispatchToProps = function (dispatch) {
     const dippatchs = {
-        resetPurchasingAndSelling: () => dispatch(resetPurchasingAndSelling()),
+        
     }
     return dippatchs;
 }
 const mapStateToProps = state => {
     return {
-        loginStatus: state.userState.loginStatus,
-        transactionData: state.transactionState.transactionData,
-        successTransaction: state.transactionState.successTransaction,
+        loginStatus: state.userState.loginStatus, 
     }
 }
 
