@@ -31,8 +31,8 @@ class TransactionSelling extends BaseComponent {
         super(props);
         this.state = {
             productName: "",
-            customerName: "", productFlowStock: {},
-            customer: {}, showDetail: false, productFlows: [], messageShow: false, messageType: "",
+            customerName: "", product: null,
+            customer: null, showDetail: false, productFlows: [], messageShow: false, messageType: "",
             stockId: 0, quantity: 0,
             activeField: "",
 
@@ -47,9 +47,17 @@ class TransactionSelling extends BaseComponent {
         }
 
         this.getStockInfo = (productCode) => {
-            if (!productCode) { productCode = this.state.productCode; }
-            this.props.getStockInfo(productCode, this.props.app);
-            this.setState({ productCode: productCode, showDetail: true });
+            if (!productCode) { productCode = this.state.productCode; }  
+            this.fetchProductInfo(productCode); 
+        }
+
+        this.fetchProductInfo = (productCode) => {
+            this.commonAjax(this.sellingService.getStockInfo, productCode, this.handleGetStockInfo);
+        }
+
+        this.handleGetStockInfo = (response) => {
+            const product = response.entities[0];
+            this.setState({product:product, productCode: product.code, showDetail: true});
         }
 
         this.isExistInTheChart = (productId) => {
@@ -62,7 +70,7 @@ class TransactionSelling extends BaseComponent {
                 this.props.app.infoDialog("Please provide valid quantity!"); return;
             }
             let quantity = this.state.quantity;
-            let product = this.props.productFlowStock;
+            let product = this.state.product;
             if (quantity > product.count) {
                 this.props.app.infoDialog("Stock unavailable!"); return;
             }
@@ -72,9 +80,9 @@ class TransactionSelling extends BaseComponent {
                 if (!window.confirm("The product already exist in the chart, do you want to override it?"))
                     return;
 
-            const ID = Math.floor(Math.random() * 1000);
+            const id = Math.floor(Math.random() * 1000);
             let newProductFlow = {
-                "id": ID,
+                "id": id,
                 "product": product,
                 "price": product.price,
                 "count": quantity,
@@ -281,14 +289,14 @@ class TransactionSelling extends BaseComponent {
         }
 
         this.detailStockComponent = () => {
-            if (this.props.productFlowStock) {
-                return (<DetailProductPanel stockView={true} product={this.props.productFlowStock} />);
+            if (this.state.product) {
+                return (<DetailProductPanel stockView={true} product={this.state.product} />);
             }
             return <></>
         }
 
         this.buttonAddToCart = () => {
-            if (this.props.productFlowStock != null)
+            if (this.state.product != null)
                 return <AddToCartButton onClick={this.addToCart} />
             else
                 return <></>
@@ -393,8 +401,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
-    
-    getStockInfo: (productCode, app) => dispatch(actions.getStockInfo(productCode, app)),
+     
     submitPurchaseTransaction: (request, app) => dispatch(actions.submitPurchaseTransaction(request, app)),
     resetPurchaseTransaction: () => dispatch(actions.resetPurchasingAndSelling()), 
 })

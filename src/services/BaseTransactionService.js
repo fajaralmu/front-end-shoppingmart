@@ -1,10 +1,20 @@
 import * as url from '../constant/Url'
 import { commonAuthorizedHeader } from '../middlewares/Common';
 
+const errorPromise = new Promise(function(res, reject){
+    reject("Invalid value");
+}); 
+const emptyPromise =  (defaultResponse) => new Promise(function(res, rej){
+    res(defaultResponse);
+});
 export default class BaseTransactionService {
 
+   
+
     getProductList = (raw) => {
-        
+        if( raw.value == null || raw.value.toString().trim() == ""){
+            return emptyPromise({entities:[]});
+        }
         const fieldsFilter = {};
         fieldsFilter[raw.key] = raw.value;
         const request = {

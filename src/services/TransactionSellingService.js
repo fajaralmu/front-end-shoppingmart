@@ -35,4 +35,30 @@ export default class TransactionSellingService extends BaseTransactionService{
         })
     }
 
+    getStockInfo = (productCode) => {
+        const request = {
+            entity: "product",
+            filter: {
+                limit: 1,
+                exacts: true,
+                fieldsFilter: { "code": productCode, withStock: true }
+            }
+        }
+        const endpoint = url.contextPath().concat("api/public/get")
+        return new Promise(function (resolve, reject) {
+            fetch(endpoint, {
+                method: url.POST,
+                headers: commonAuthorizedHeader(),
+                body: JSON.stringify(request),
+            })
+                .then(response => response.json()).then(function (response) {
+                    if (response.code == "00" && response.entities.length > 0) 
+                    { resolve(response) } 
+                    else 
+                    { reject(response) }
+                }).
+                catch((e) => reject(e));
+        })
+    }
+
 }

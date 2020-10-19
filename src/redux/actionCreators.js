@@ -284,25 +284,7 @@ export const submitSupplyTrx = (request, app) => {
         }
     };
     return requested;
-}
-
-export const getStockInfo = (productCode, app) => {
-    app.startLoading();
-    return {
-        type: types.GET_STOCK_INFO,
-        payload: {
-            entity: "product",
-            filter: {
-                limit: 1,
-                exacts: true,
-                fieldsFilter: { "code": productCode, withStock: true }
-            }
-        },
-        meta: {
-            app: app, type: types.GET_STOCK_INFO, url: apiBaseUrl.concat("get")
-        }
-    }
-}
+} 
 
 export const performLogout = (app) => {
     app.startLoading();

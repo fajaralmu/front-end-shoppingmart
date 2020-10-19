@@ -1,5 +1,4 @@
-import * as types from './types'
-import { nullLiteral } from '@babel/types';
+import * as types from './types' 
 
 export const initState = {
     productFlowStock: null,
@@ -21,12 +20,9 @@ export const reducer = (state = initState, action) => {
     if (action != null && action.payload != null && action.payload.transactionYears != null) {
         state.transactionYears = action.payload.transactionYears;
     }
-
+    let result = state;
     switch (action.type) {
-
-        case types.GET_STOCK_INFO:
-            let result = { ...state, productFlowStock: action.payload.entities[0] };
-            return result;
+       
 
         case types.SUBMIT_TRX_PURCHASE:
             return { ...state, transactionData: action.payload.transaction, successTransaction: true };

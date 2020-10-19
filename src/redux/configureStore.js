@@ -27,8 +27,7 @@ export const configureStore = () => {
             userMiddleware.requestAppIdMiddleware, 
             userMiddleware.getLoggedUserMiddleware, 
 
-            //transaction
-            getStockInfoMiddleware,
+            //transaction 
             submitPurchaseTransactionMiddleware,
             submitSupplyTransactionMiddleware,
             resetPurchaseTransactionMiddleware,  
@@ -216,32 +215,6 @@ const submitPurchaseTransactionMiddleware = store => next => action => {
             store.dispatch(newAction);
         })
         .catch(err => console.log(err)).finally(param => action.meta.app.endLoading());
-}
-
-const getStockInfoMiddleware = store => next => action => {
-    if (!action.meta || action.meta.type !== types.GET_STOCK_INFO) {
-        return next(action);
-    }
-
-    fetch(action.meta.url, {
-        method: POST_METHOD, body: JSON.stringify(action.payload),
-        headers: { 'Content-Type': 'application/json', 'requestId': localStorage.getItem("requestId"), 'loginKey': localStorage.getItem("loginKey") }
-    })
-        .then(response => response.json())
-        .then(data => {
-            console.debug("Response:", data);
-            if (data.entities == null || data.entities.length == 0) {
-                alert("Data not found!");
-                return;
-            }
-            let newAction = Object.assign({}, action, {
-                payload: data
-            });
-            delete newAction.meta;
-            store.dispatch(newAction);
-        })
-        .catch(err => console.log(err)).finally(param => action.meta.app.endLoading());
-}
- 
+} 
 
 export default configureStore;
