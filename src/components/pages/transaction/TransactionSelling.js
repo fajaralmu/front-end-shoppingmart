@@ -37,7 +37,8 @@ class TransactionSelling extends BaseComponent {
             activeField: "",
 
             //for dropdown
-            customers: []
+            customers: [],
+            products: []
         }
         this.sellingService = TransactionSellingService.instance;
 
@@ -128,6 +129,7 @@ class TransactionSelling extends BaseComponent {
             //validate latest stock
             this.getStockInfo(productFlow.product.code);
             const product = productFlow.product;
+
             byId(FIELD_IDS.productCode).value = product.code;
             byId(FIELD_IDS.productName).value = product.name;
             byId(FIELD_IDS.productQuantity).value = productFlow.count;
@@ -161,9 +163,8 @@ class TransactionSelling extends BaseComponent {
                 this.props.app.infoDialog("Mandatory fields must not be empty!");
                 return;
             }
-
+            
             const app = this;
-
             this.props.app.confirmDialog("Are you sure want to proceed?", function (e) {
                 let request = { productFlows: app.state.productFlows, customer: app.state.customer };
                 app.props.submitPurchaseTransaction(request, app.props.app);
@@ -237,33 +238,46 @@ class TransactionSelling extends BaseComponent {
             byId(FIELD_IDS.customerCode).value = customer.id;
         }
 
-        this.getProductStockList = (value, id) => {
+        this.getProductList = (value, id) => {
             this.setState({ productName: value });
             this.setActiveField(id);
-            this.props.getProductStockList(value, this.props.app);
+            this.fetchProducts({key:'name', value:value});
         }
 
-        this.getProductStockListByCode = (value, id) => {
+        this.getProductListByCode = (value, id) => {
             const productCode = value;
             this.setActiveField(id);
             this.setState({ stockId: productCode });
             this.getStockInfo(productCode);
+        } 
+
+        this.fetchProducts = (request) => {
+            this.commonAjax(this.sellingService.getProductList, request, this.handleGetProducts);
+        }
+
+        this.handleGetProducts = (response) => {
+            this.setState({products: response.entities});
         }
 
         this.selectproduct = (productCode) => {
-            if (this.props.products == null) {
+            if (this.state.products == null) {
                 alert("Data not found!");
                 return;
             }
-            for (let i = 0; i < this.props.products.length; i++) {
-                if (this.props.products[i].code == productCode) {
-                    this.setState({ productName: this.props.products[i].name });
+            const products = this.state.products;
+            for (let i = 0; i <products.length; i++) {
+                if (products[i].code == productCode) {
+                    this.setState({ productName: products[i].name });
                 }
             }
 
             this.setState({ stockId: productCode });
             this.getStockInfo(productCode);
-            this.props.resetProductStocks();
+            this.resetProducts();
+        }
+
+        this.resetProducts = () => {
+            this.setState({products:[]});
         }
 
         this.detailStockComponent = () => {
@@ -298,9 +312,9 @@ class TransactionSelling extends BaseComponent {
 
     getProductDropdownData() {
         const productList = [];
-        if (this.props.products != null) {
-            for (let i = 0; i < this.props.products.length; i++) {
-                const product = this.props.products[i];
+        if (this.state.products != null) {
+            for (let i = 0; i < this.state.products.length; i++) {
+                const product = this.state.products[i];
                 productList.push({ value: product.code, text: product.name });
             }
         }
@@ -335,9 +349,9 @@ class TransactionSelling extends BaseComponent {
                     <InputField onEnterPress={this.getCustomerByCode} id={FIELD_IDS.customerCode} placeholder="customer id" />,
                     <Label text="Product Name" />,
                     <DynamicDropdown value={this.state.productName} onSelect={this.selectproduct} dropdownList={productList}
-                        onKeyUp={this.getProductStockList} id={FIELD_IDS.productName} placeholder="product name" />,
+                        onKeyUp={this.getProductList} id={FIELD_IDS.productName} placeholder="product name" />,
                     <Label text="Or Product Code" />,
-                    <InputField onEnterPress={this.getProductStockListByCode} id={FIELD_IDS.productCode} placeholder="product code" />,
+                    <InputField onEnterPress={this.getProductListByCode} id={FIELD_IDS.productCode} placeholder="product code" />,
                     <Label text="Quantity" />,
                     <InputField id={FIELD_IDS.productQuantity}
                         value={this.state.quantity} onKeyUp={(value, id) => this.setState({ activeField: id, quantity: value })}
@@ -374,8 +388,7 @@ const mapStateToProps = state => {
     return {
         productFlowStock: state.transactionState.productFlowStock,
         transactionData: state.transactionState.transactionData,
-        successTransaction: state.transactionState.successTransaction,
-        products: state.transactionState.products
+        successTransaction: state.transactionState.successTransaction, 
     }
 }
 
@@ -383,9 +396,7 @@ const mapDispatchToProps = dispatch => ({
     
     getStockInfo: (productCode, app) => dispatch(actions.getStockInfo(productCode, app)),
     submitPurchaseTransaction: (request, app) => dispatch(actions.submitPurchaseTransaction(request, app)),
-    resetPurchaseTransaction: () => dispatch(actions.resetPurchasingAndSelling()),
-    resetProductStocks: () => (dispatch(actions.resetProductStocks())),
-    getProductStockList: (name, app) => dispatch(actions.getProductStocks(name, app))
+    resetPurchaseTransaction: () => dispatch(actions.resetPurchasingAndSelling()), 
 })
 export default withRouter(connect(
     mapStateToProps,

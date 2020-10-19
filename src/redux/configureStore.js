@@ -35,9 +35,7 @@ export const configureStore = () => {
             getCashflowInfoMiddleware,
             getCashflowDetailMiddleware,
             getProductSalesMiddleware,
-            resetProductsMiddleware,  
-            getProductStocksMiddleware,
-            resetProductStocksMiddleware,
+            resetProductsMiddleware,   
             getProductSalesDetailMiddleware,  
 
             /*enntity management*/
@@ -60,26 +58,7 @@ export const configureStore = () => {
     return store;
 }
   
- 
-const getProductStocksMiddleware = store => next => action => {
-    if (!action.meta || action.meta.type !== types.GET_PRODUCT_STOCKS) { return next(action); }
-    fetch(action.meta.url, {
-        method: POST_METHOD, body: JSON.stringify(action.payload),
-        headers: commonAuthorizedHeader(),
-    }).then(response => response.json())
-        .then(data => {
-            console.debug("getProductStocksMiddleware Response:", data, "load more:", action.meta.loadMore);
-            if (data.code != "00") {
-                alert("Data not found");
-                return;
-            }
-
-            let newAction = Object.assign({}, action, { payload: data });
-            delete newAction.meta;
-            store.dispatch(newAction);
-        })
-        .catch(err => console.log(err)).finally(param => action.meta.app.endLoading());
-}
+  
 
 const getProductSalesDetailMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.GET_PRODUCT_SALES_DETAIL) { return next(action); }
@@ -172,15 +151,7 @@ const getCashflowInfoMiddleware = store => next => action => {
     })
     .catch(err => console.log(err)).finally(param => action.meta.app.endLoading());
 }
-  
- 
-const resetProductStocksMiddleware = store => next => action => {
-    if (!action.meta || action.meta.type !== types.RESET_PRODUCT_STOCKS) { return next(action); }
-    let newAction = Object.assign({}, action, { payload: null });
-    delete newAction.meta;
-    store.dispatch(newAction);
-}
- 
+   
 const resetProductsMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.RESET_PRODUCTS) { return next(action); }
     let newAction = Object.assign({}, action, { payload: null });

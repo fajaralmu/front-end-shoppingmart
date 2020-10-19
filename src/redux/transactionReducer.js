@@ -69,11 +69,7 @@ export const reducer = (state = initState, action) => {
             console.log("will update currentProductSalesData: ", currentProductSalesData.entities.length);
             result = { ...state, productSalesData: currentProductSalesData };
             action.referrer.refresh();
-            return result;
-        case types.GET_PRODUCT_STOCKS:
-            return { ...state, products: action.payload.entities };
-        case types.RESET_PRODUCT_STOCKS:
-            return { ...state, products: null };
+            return result; 
         case types.GET_PRODUCT_SALES_DETAIL:
             return { ...state, productSalesDetails: action.payload };
         default:

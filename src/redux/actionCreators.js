@@ -7,11 +7,7 @@ const apiEntityBaseUrl = usedHost + "api/entity/"
 const apiAccount = usedHost + "api/account/"
 const apiAdmin = usedHost + "api/admin/"
 const apiTransaction = usedHost + "api/transaction/";
-
-export const resetProductStocks = () => {
-    return { type: types.RESET_PRODUCT_STOCKS, payload: {}, meta: { type: types.RESET_PRODUCT_STOCKS } };
-}
-
+ 
 export const updateCart = (cart, app) => {
     return { type: types.UPDATE_CART, payload: { cart: cart, app: app }, meta: { type: types.UPDATE_CART } };
 }
@@ -148,25 +144,7 @@ export const getManagementMenus = (app) => {
         }
     };
     return requested;
-}
-
-export const getProductStocks = (name, app) => {
-    app.startLoading(true);
-    return {
-        type: types.GET_PRODUCT_STOCKS,
-        payload: {
-            entity: 'product',
-            filter: {
-                limit: 20,
-                fieldsFilter: { name: name }
-            }
-        },
-        meta: {
-            app: app, type: types.GET_PRODUCT_STOCKS,
-            url: apiEntityBaseUrl.concat("get")
-        }
-    };
-}
+} 
 
 export const requestAppId = (app) => {
     app.startLoading();
@@ -316,8 +294,8 @@ export const getStockInfo = (productCode, app) => {
             entity: "product",
             filter: {
                 limit: 1,
-                fieldsFilter:
-                    { "code[EXACTS]": productCode, withStock: true }
+                exacts: true,
+                fieldsFilter: { "code": productCode, withStock: true }
             }
         },
         meta: {
