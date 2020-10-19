@@ -2,8 +2,7 @@
  * 
  */
  
-export const REMOVE_SHOP_ENTITY= "remove_shop_entity";
-export const FETCH_SUPPLIER_LIST = "fetch_supplier_list";
+export const REMOVE_SHOP_ENTITY= "remove_shop_entity"; 
 export const FETCH_PRODUCT_CATEGORIES_ALL = "all_product_categories";
 export const DO_LOGIN = "do_login";
 export const DO_LOGOUT = "do_logout";
@@ -15,8 +14,7 @@ export const FETCH_CUSTOMER_LIST = "fetch_cust_list";
 export const FETCH_PRODUCT_LIST_TRX = "fetch_product_list_trx";
 export const GET_CASHFLOW_INFO = "get_cashflow";
 export const GET_CASHFLOW_DETAIL = "get_cashflow_detail";
-export const GET_PRODUCT_SALES = "get_product_sales";
-export const RESET_SUPPLIERS = "reset_suppliers";
+export const GET_PRODUCT_SALES = "get_product_sales"; 
 export const RESET_PRODUCTS = "reset_products";
 export const RESET_PRODUCT_STOCKS = "RESET_PRODUCT_STOCKS";
 export const RESET_CUSTOMERS = "RESET_CUSTOMERS";

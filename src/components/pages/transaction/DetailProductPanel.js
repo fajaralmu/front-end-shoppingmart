@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import * as url from '../../../constant/Url'
-import * as stringUtil from '../../../utils/StringUtil'
+import * as str from '../../../utils/StringUtil'
 import InstantTable from '../../container/InstantTable';
 import Card from '../../card/Card'; 
 
@@ -16,7 +16,7 @@ class DetailProductPanel extends Component {
                     { values: ["Code", product.code] },
                     { values: ["Name", product.name] },
                     { values: ["Remaining", product.count + " " + product.unit.name] },
-                    { values: ["Price", stringUtil.beautifyNominal(product.price) + ",00"] },
+                    { values: ["Price", str.beautifyNominal(product.price) + ",00"] },
                     { values: ["Exp Date", '-'] }
                 ]
             } else {
@@ -25,7 +25,7 @@ class DetailProductPanel extends Component {
                     { values: ["Name", product.name + "-" + product.id] },
                     { values: ["Unit", product.unit.name] },
                     { values: ["Category", product.category.name] },
-                    { values: ["Price", stringUtil.beautifyNominal(product.price) + ",00"] },
+                    { values: ["Price", str.beautifyNominal(product.price) + ",00"] },
                 ];
             }
 

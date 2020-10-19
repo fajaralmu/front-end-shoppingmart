@@ -19,9 +19,6 @@ export const updateCart = (cart, app) => {
 export const resetProducts = () => {
     return { type: types.RESET_PRODUCTS, payload: {}, meta: { type: types.RESET_PRODUCTS } };
 }
-export const resetSuppliers = () => {
-    return { type: types.RESET_SUPPLIERS, payload: {}, meta: { type: types.RESET_SUPPLIERS } };
-}
 export const resetCustomers = () => {
     return { type: types.RESET_CUSTOMERS, payload: {}, meta: { type: types.RESET_CUSTOMERS } };
 }
@@ -417,40 +414,7 @@ export const refreshLoginStatus = () => {
     };
     return loginRequest;
 } 
-
-export const getSupplierList = (request, app) => {
-    app.startLoading();
-    const fieldsFilter = {}
-    fieldsFilter[request.key] = request.value;
-    let requested = {
-        type: types.FETCH_SUPPLIER_LIST,
-        payload: {
-            entity: "supplier",
-            filter: {
-                limit: request.limit ? request.limit : 10,
-                page: request.page ? request.page : 0,
-                exacts: request.exacts == true,
-                fieldsFilter: fieldsFilter,
-                orderBy: request.orderby,
-                orderType: request.ordertype
-            }
-        },
-        meta: {
-            type: types.FETCH_SUPPLIER_LIST,
-            url: apiBaseUrl.concat("get"),
-            app: app,
-            callback: request.callback
-        }
-    };
-
-    if (request.categoryId != null) {
-        requested.payload.filter.fieldsFilter["category,id[EXACTS]"] = request.categoryId;
-    }
-
-    return requested;
-}
   
-
 export const removeEntity = () => ({
     type: types.REMOVE_SHOP_ENTITY,
     payload: {},

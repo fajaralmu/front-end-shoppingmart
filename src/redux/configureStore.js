@@ -17,8 +17,7 @@ export const configureStore = () => {
         rootReducer,
         initialState,
         applyMiddleware(  
-            catalogMiddleware.removeEntityMiddleware,  
-            catalogMiddleware.getSupplierListMiddleware,
+            catalogMiddleware.removeEntityMiddleware,   
             catalogMiddleware.updateCartMiddleware, 
 
             //user related
@@ -38,8 +37,7 @@ export const configureStore = () => {
             getCashflowInfoMiddleware,
             getCashflowDetailMiddleware,
             getProductSalesMiddleware,
-            resetProductsMiddleware,
-            resetSuppliersMiddleware,
+            resetProductsMiddleware, 
             resetCustomersMiddleware,
             getProductStocksMiddleware,
             resetProductStocksMiddleware,
@@ -276,13 +274,7 @@ const resetProductsMiddleware = store => next => action => {
     delete newAction.meta;
     store.dispatch(newAction);
 }
-
-const resetSuppliersMiddleware = store => next => action => {
-    if (!action.meta || action.meta.type !== types.RESET_SUPPLIERS) { return next(action); }
-    let newAction = Object.assign({}, action, { payload: null });
-    delete newAction.meta;
-    store.dispatch(newAction);
-}
+ 
 
 const resetPurchaseTransactionMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.RESET_TRX_SELLING_PURCHASING) { return next(action); }

@@ -17,6 +17,7 @@ import GridComponent from '../../container/GridComponent';
 import Card from '../../card/Card' 
 import { withRouter } from 'react-router-dom'
 import BaseComponent from './../../BaseComponent';
+import SupplierService from './../../../services/SupplierService';
 
 const FIELD_IDS = {
     supplierName: "input-supplier-name-purc",
@@ -38,9 +39,10 @@ class TransactionPurchasing extends BaseComponent {
             quantity: 0, price: 0, expiryDate: "2020-01-01",
             activeField: "",
             
-            // products: [], //for product dropdown
-            // suppliers: [] //for supplier dropdown
+            products: [], //for product dropdown
+            suppliers: [] //for supplier dropdown
         }
+        this.supplierService = SupplierService.instance;
 
         this.isExistInTheChart = (productId) => {
             if (this.state.productFlows == null) return false;
@@ -192,33 +194,46 @@ class TransactionPurchasing extends BaseComponent {
         this.getSupplierList = (value, id) => {
             if (value == null || value.trim() == "") { return; }
             this.setState({ supplierName: value });
-            this.props.getSupplierList({ key:'name', value: value}, this.props.app);
             this.setActiveField(id);
+            this.fetchSuppliers({ key:'name', value: value});
         }
 
         this.getSupplierByCode = (value, id) => {
-            const app = this;
-            this.setActiveField(id);
-            const callback = function(response){
-                const supplier = response.entities[0];
-                app.selectSupplier(supplier.id);
-            }
-            this.props.getSupplierList({key:'id', value: value, limit:1, exacts: true, callback:callback  }, this.props.app);
+            this.setActiveField(id); 
+            const request = {key:'id', value: value, limit:1, exacts: true };
+            this.commonAjax(this.supplierService.getSupplierList, request, this.handleGetSuppliersByCode);
+        }
+
+        this.fetchSuppliers = (request) => {
+            this.commonAjax(this.supplierService.getSupplierList, request, this.handleGetSuppliers);
+        }
+
+        this.handleGetSuppliersByCode = (response) => {
+            this.handleGetSuppliers(response);
+        }
+
+        this.handleGetSuppliers = (response) => {
+            this.setState({suppliers: response.entities});
+            this.selectSupplier(response.entities[0].id);
         }
 
         this.selectSupplier = (id) => {
-            if (this.props.suppliers == null) {
+            if (this.state.suppliers == null || this.state.suppliers.length == 0) {
                 alert("Data not found!");
                 return;
             }
-            for (let i = 0; i < this.props.suppliers.length; i++) {
-                const supplier = this.props.suppliers[i];
+            for (let i = 0; i < this.state.suppliers.length; i++) {
+                const supplier = this.state.suppliers[i];
                 if (supplier.id == id) {
                     this.displaySupplierInfo(supplier); 
                     this.setState({ supplierName: supplier.name, supplier: supplier });
                 }
             }
-            this.props.resetSuppliers();
+            this.resetSuppliers();
+        }
+
+        this.resetSuppliers = () => {
+            this.setState({suppliers:[]});
         }
 
         this.displaySupplierInfo = (supplier) => {
@@ -271,7 +286,7 @@ class TransactionPurchasing extends BaseComponent {
         }
         document.title = "Purchasing"; 
         this.props.setMenuCode("purchasing");
-        this.props.resetSuppliers();
+        this.resetSuppliers();
 
     }
     componentDidUpdate() {
@@ -286,9 +301,9 @@ class TransactionPurchasing extends BaseComponent {
 
     getSupplierDropdownData() {
         const supplierList = [];
-        if (this.props.suppliers != null)
-            for (let index = 0; index < this.props.suppliers.length; index++) {
-                const supplier = this.props.suppliers[index];
+        if (this.state.suppliers != null)
+            for (let index = 0; index < this.state.suppliers.length; index++) {
+                const supplier = this.state.suppliers[index];
                 supplierList.push({ value: supplier.id, text: supplier.name });
             }
         return supplierList;
@@ -379,8 +394,7 @@ const mapStateToProps = state => {
     return {
         selectedProduct: state.transactionState.selectedProduct,
         transactionData: state.transactionState.transactionData,
-        successTransaction: state.transactionState.successTransaction,
-        suppliers: state.shopState.suppliersData.entities,
+        successTransaction: state.transactionState.successTransaction, 
         products: state.transactionState.productsData
     }
 }
@@ -388,10 +402,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
     getProductList: (request, app) => dispatch(actions.getProductListTrx(request, app)),
     submitSupplyTransaction: (request, app) => dispatch(actions.submitSupplyTrx(request, app)),
-    resetPurchaseTransaction: () => dispatch(actions.resetPurchasingAndSelling()),
-    resetSuppliers: () => dispatch(actions.resetSuppliers()),
-    resetProducts: () => dispatch(actions.resetProducts()),
-    getSupplierList: (request, app ) => dispatch(actions.getSupplierList(request, app))
+    resetPurchaseTransaction: () => dispatch(actions.resetPurchasingAndSelling()), 
+    resetProducts: () => dispatch(actions.resetProducts()), 
 })
 export default withRouter(connect(
     mapStateToProps,

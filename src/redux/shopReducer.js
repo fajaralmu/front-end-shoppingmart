@@ -2,13 +2,11 @@ import * as types from './types'
 
 export const initState = { 
     entities: [],
-    entity: {}, 
-    suppliersData: [],
+    entity: {},  
     requestId: null,
     messages: null,
     userAlias: "anonymous_" + new Date().getTime(),
-    cart: [],
-    productsSupplied: []
+    cart: [], 
 
 };
 
@@ -17,11 +15,7 @@ export const reducer = (state = initState, action) => {
          
       
         case types.REMOVE_SHOP_ENTITY:
-            return { ...state, entity: action.payload  /*null*/ };
-        case types.FETCH_SUPPLIER_LIST:
-            return { ...state, suppliersData: action.payload };
-        case types.RESET_SUPPLIERS:
-            return { ...state, suppliersData: {} }; 
+            return { ...state, entity: action.payload  /*null*/ }; 
         // case types.REQUEST_ID:
 
         //     return { ...state, requestId: action.payload.message };
