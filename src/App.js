@@ -78,16 +78,7 @@ class App extends Component {
     }
 
     this.handleMenuCLick = (menu) => {
-
-      switch (menu.code) {
-
-        case menus.LOGOUT:
-          this.logout();
-          break;
-        default:
-          break;
-      }
-
+      if(menu.code == menus.LOGOUT) { this.logout(); }
     }
 
     this.requestAppId = () => {
@@ -340,9 +331,7 @@ function updateFavicon(profile) {
 
 const mapStateToProps = state => {
   //console.log(state);
-  return {
-    //
-    entities: state.shopState.entities,
+  return { 
 
     //user
     loginStatus: state.userState.loginStatus,

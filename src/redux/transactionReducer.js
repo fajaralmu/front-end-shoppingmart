@@ -1,10 +1,7 @@
 import * as types from './types' 
 
 export const initState = {
-    productFlowStock: null,
-    products: null,
-    transactionData: null,
-    successTransaction: false,
+    productFlowStock: null, 
     productsData: null,
     cashflowInfoOut: null,
     cashflowInfoIn: null,
