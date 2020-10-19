@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import CatalogItem from './CatalogItem'
 import '../catalog/Catalog.css'
@@ -15,6 +15,7 @@ import NavButtons from '../../navigation/NavButtons'
 import ComboBox from '../../inputs/ComboBox'
 import GridComponent from '../../container/GridComponent' 
 import CatalogService from './../../../services/CatalogService';
+import BaseComponent from './../../BaseComponent';
 
 const FILTER_IDS = {
     productName: "input-product-name",
@@ -24,7 +25,7 @@ const FILTER_IDS = {
     checkBoxEnableCart: "checkbox-enable-cart"
 }
 
-class Catalog extends Component {
+class Catalog extends BaseComponent {
 
     constructor(props) {
         super(props);
@@ -143,8 +144,7 @@ class Catalog extends Component {
 
         this.getProductDetail = (code) => {
             console.log("Detail of: ", code);
-            //remove selected product if any  
-            this.getProductDetailv2(code);
+            //remove selected product if any   
             this.setState({detailMode:true, productCode:code});
         }
 
@@ -225,17 +225,16 @@ class Catalog extends Component {
             return navButtonsData;
         }
 
-        this.getProductCatalog = (request) => {
-            const parentApp = this.props.app;
+        this.getProductCatalog = (request) => { 
             const thisApp = this;
-            parentApp.startLoading(true);
+            this.startLoading(true);
             this.catalogService.getProductList(request)
             .then(function(response){
                 thisApp.handleGetProducts(response);
             })
             .catch((e)=>{alert("Data not found!")})
             .finally(function(e){
-                parentApp.endLoading();
+                thisApp.endLoading();
             })
         }
 
@@ -250,22 +249,7 @@ class Catalog extends Component {
             }
             
             this.setState({catalogData:response})
-        }
-
-        this.getProductDetailv2 = (code) => {
-            const parentApp = this.props.app;
-            const thisApp = this;
-            parentApp.startLoading(true);
-            this.catalogService.getProductDetail(code)
-            .then((response)=>{
-
-            })
-            .catch((e)=>{alert("Data not found!")})
-            .finally(function(e){
-                parentApp.endLoading();
-            })
-        }
-
+        } 
     }
 
     componentWillMount() {

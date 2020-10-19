@@ -8,9 +8,10 @@ import ImageCarousel from '../../container/ImageCarousel'
 import { beautifyNominal } from '../../../utils/StringUtil'
 import ContentTitle from '../../container/ContentTitle'
 import CatalogService from './../../../services/CatalogService';
+import BaseComponent from './../../BaseComponent';
 
 
-class ProductDetail extends Component {
+class ProductDetail extends BaseComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -39,17 +40,16 @@ class ProductDetail extends Component {
         }
 
         this.getMoreSupplier = (page, productId) => {
-            const parentApp = this.props.app;
+            
             const thisApp = this;
-            parentApp.startLoading();
- 
+            this.startLoading(); 
             this.setState({ supplierPage: (page+1) });
             this.catalogService.getMoreSupplier(this.state.supplierPage, productId)
             .then(function(response){
                 thisApp.showMoreSuppliers(response.entities);
             })
             .catch((e)=>{alert("Data not found")})
-            .finally((e)=>parentApp.endLoading());
+            .finally((e)=>thisApp.endLoading());
         }
 
         this.showMoreSuppliers = (suppliers) => {
@@ -64,10 +64,9 @@ class ProductDetail extends Component {
             this.setState({product:product});
         }
 
-        this.getProductDetail = () => {
-            const parentApp = this.props.app;
+        this.getProductDetail = () => { 
             const thisApp = this;
-            parentApp.startLoading(true);
+            this.startLoading(true);
 
             this.catalogService.getProductDetail(this.props.productCode)
             .then((response)=>{
@@ -75,7 +74,7 @@ class ProductDetail extends Component {
             })
             .catch((e)=>{alert("Data not found!")})
             .finally(function(e){
-                parentApp.endLoading();
+                thisApp.endLoading();
             })
         }
     }
