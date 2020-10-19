@@ -3,6 +3,10 @@ import { commonAuthorizedHeader } from './../middlewares/Common';
 export default class CatalogService {
     static instance = CatalogService.instance || new CatalogService()
 
+    /**
+     * 
+     * @param {JSON} raw 
+     */
     getProductList = (raw) => {
          
         const fieldsFilter = {
@@ -47,6 +51,10 @@ export default class CatalogService {
         })
     }
 
+    /**
+     * 
+     * @param {String} code 
+     */
     getProductDetail = (code) => this.getProductList({
         key: 'code',
         value: code,
@@ -56,12 +64,16 @@ export default class CatalogService {
         withSupplier: true
     })
 
-    getMoreSupplier = (page, productId) => { 
+    /**
+     * 
+     * @param {JSON} req 
+     */
+    getMoreSupplier = (req) => { 
 
         const request = {
             filter: {
-                page: page,
-                fieldsFilter: { productId: productId }
+                page: req.page,
+                fieldsFilter: { productId: req.productId }
             }
         }
         const endpoint = url.contextPath().concat("api/public/moresupplier");

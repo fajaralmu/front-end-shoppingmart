@@ -1,4 +1,4 @@
-import React from 'react' 
+import React from 'react'
 import * as url from '../../../constant/Url'
 import ContentTitle from '../../container/ContentTitle'
 import ActionButton from '../../buttons/ActionButton'
@@ -14,7 +14,7 @@ class SupplierDetail extends BaseComponent {
         this.supplierService = SupplierService.instance;
         this.parentApp = props.app;
         this.state = {
-            products : [],
+            products: [],
         }
 
         this.close = () => {
@@ -22,16 +22,15 @@ class SupplierDetail extends BaseComponent {
         }
 
         this.getProductSupplied = () => {
-            const supplier = this.props.supplier; 
-            const thisApp = this;
-            this.startLoading();
 
-            this.supplierService.getProductSupplied(supplier.id)
-            .then(function(response){
-                thisApp.setState({products:response.entities});
-            })
-            .catch((e)=>alert("Product Not Found"))
-            .finally((e)=>thisApp.endLoading());
+            const supplier = this.props.supplier;
+            if (!supplier) { return; }
+            this.commonAjax(this.supplierService.getProductSupplied, supplier.id, this.handleProductsSupplied)
+
+        }
+
+        this.handleProductsSupplied = (response) => {
+            this.setState({ products: response.entities });
         }
 
     }
@@ -97,5 +96,5 @@ function SupplierLink(prop) {
     const supplier = prop.supplier;
     return <a target="_blank" href={supplier.website}>{supplier.website}</a>
 }
- 
+
 export default SupplierDetail;

@@ -58,8 +58,9 @@ class Catalog extends BaseComponent {
         }
 
         this.getProductInCart = (id) => {
-            for (let i = 0; i < this.props.cart.length; i++) {
-                let cartItem = this.props.cart[i];
+            const cart = this.props.cart;
+            for (let i = 0; i < cart.length; i++) {
+                const cartItem = cart[i];
                 if (cartItem.product.id == id) {
                     cartItem.index = i;
                     return cartItem;
@@ -70,7 +71,7 @@ class Catalog extends BaseComponent {
 
         this.clearCart = () => {
             const props = this.props;
-            this.props.app.confirmDialog("Are you sure clear shopping list?", function (e) {
+            this.parentApp.confirmDialog("Are you sure clear shopping list?", function (e) {
                 props.updateCart([], props.app);
             }, null);
 
@@ -99,23 +100,23 @@ class Catalog extends BaseComponent {
             this.props.updateCart(currentCart, this.props.app);
         }
 
-        this.getProductCatalogByPage = (_page) => {
-            console.log("will go to page: ", _page);
+        this.getProductCatalogByPage = (p) => {
+            const s = this.state;
             const request = {
-                page: _page,
-                name: this.state.requestProductName,
-                orderby: this.state.requestOrderBy,
-                ordertype: this.state.requestOrderType,
-                categoryId: this.state.requestCategoryId,
-                withStock: this.state.requestWithStock,
-                withCategories: this.state.catalogData.productCategories.length == 0,
+                page: p,
+                name: s.requestProductName,
+                orderby: s.requestOrderBy,
+                ordertype: s.requestOrderType,
+                categoryId: s.requestCategoryId,
+                withStock: s.requestWithStock,
+                withCategories: s.catalogData.productCategories.length == 0,
                 fieldsFilter:{},
             };
-            if(this.state.requestCategoryId){
-                request.fieldsFilter["category,id[EXACTS]"] = this.state.requestCategoryId;
+            if(s.requestCategoryId){
+                request.fieldsFilter["category,id[EXACTS]"] = s.requestCategoryId;
             }
             this.getProductCatalog( request );
-            this.setState({ catalogPage: _page, totalData: this.state.catalogData.totalData });
+            this.setState({ catalogPage: p, totalData: s.catalogData.totalData });
         }
 
         this.handleOrderChange = (value) => {
@@ -226,16 +227,9 @@ class Catalog extends BaseComponent {
         }
 
         this.getProductCatalog = (request) => { 
-            const thisApp = this;
-            this.startLoading(true);
-            this.catalogService.getProductList(request)
-            .then(function(response){
-                thisApp.handleGetProducts(response);
-            })
-            .catch((e)=>{alert("Data not found!")})
-            .finally(function(e){
-                thisApp.endLoading();
-            })
+            this.commonAjaxWithProgress(
+                this.catalogService.getProductList, request, this.handleGetProducts
+            )
         }
 
         this.handleGetProducts = (response) => {

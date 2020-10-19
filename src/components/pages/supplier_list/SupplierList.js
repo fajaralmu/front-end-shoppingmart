@@ -49,16 +49,12 @@ class SupplierList extends BaseComponent {
         }
 
         this.getSupplierList = (request) => {
-            const thisApp = this;
-            this.startLoading();
-            this.supplierService.getSupplierList(request)
-            .then(function(response){
-                thisApp.setState({suppliersData:response})
-            })
-            .catch((e )=>{alert("Supplier not found!")})
-            .finally(function(e){
-                thisApp.endLoading();
-            })
+
+            this.commonAjax(this.supplierService.getSupplierList, request,this.handleSupplierList);
+        }
+
+        this.handleSupplierList = (response) => {
+            this.setState({suppliersData:response});
         }
 
         this.showSupplierDetail = (supplier) => {

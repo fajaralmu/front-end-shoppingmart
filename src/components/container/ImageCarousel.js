@@ -4,6 +4,8 @@ import InstantTable from './InstantTable';
 import Label from './Label';
 import ActionButton from '../buttons/ActionButton';
 
+const BACKGROUND_COLOR = 'rgba(150,150,150,0.5';
+
 class ImageCarousel extends Component {
     constructor(props) {
         super(props);
@@ -38,7 +40,7 @@ class ImageCarousel extends Component {
            
             for (let i = 0; i < this.props.imageUrls.length; i++) {
                 const imageUrl = this.props.imageUrls[i];
-                console.debug(i, "this.state.index: ",this.state.index, "Image carousel URL", imageUrl);
+                //console.debug(i, "this.state.index: ",this.state.index, "Image carousel URL", imageUrl);
                 if (i == this.state.index) {
                     image = <img src={imageUrl} className="carousel-item" />
                     bgUrl = imageUrl;
@@ -48,7 +50,7 @@ class ImageCarousel extends Component {
         return (
             <div className="carousel rounded" style={carouselStyle(bgUrl)}> 
                  
-                <InstantTable style={{backgroundColor:'rgba(150,150,150,0.5'}} className="carousel-navigation" rows={[{
+                <InstantTable style={{backgroundColor:BACKGROUND_COLOR}} className="carousel-navigation" rows={[{
                     values: [
                         <ActionButton text={<i className="fas fa-chevron-left"></i>} id="btn-prev-img" onClick={this.prev} />,
                         <Label text={this.state.index + 1 + "/" + (this.props.imageUrls ? this.props.imageUrls.length : 1)} />,

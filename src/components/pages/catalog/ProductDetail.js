@@ -40,20 +40,18 @@ class ProductDetail extends BaseComponent {
         }
 
         this.getMoreSupplier = (page, productId) => {
-            
-            const thisApp = this;
-            this.startLoading(); 
             this.setState({ supplierPage: (page+1) });
-            this.catalogService.getMoreSupplier(this.state.supplierPage, productId)
-            .then(function(response){
-                thisApp.showMoreSuppliers(response.entities);
-            })
-            .catch((e)=>{alert("Data not found")})
-            .finally((e)=>thisApp.endLoading());
+            const request = {
+                page:this.state.supplierPage,productId: productId
+            }
+            this.commonAjax(
+                this.catalogService.getMoreSupplier, request,
+                this.handleGetMoreSuppliers
+            );
         }
 
-        this.showMoreSuppliers = (suppliers) => {
-            
+        this.handleGetMoreSuppliers = (response) => {
+            const suppliers = response.entities;
             const product = this.state.product;
             if(!product){ return }
 
@@ -64,18 +62,16 @@ class ProductDetail extends BaseComponent {
             this.setState({product:product});
         }
 
-        this.getProductDetail = () => { 
-            const thisApp = this;
-            this.startLoading(true);
+        this.handleGetProduct = (response) => {
+            this.setState({product:response.entities[0]});
+        }
 
-            this.catalogService.getProductDetail(this.props.productCode)
-            .then((response)=>{
-                thisApp.setState({product:response.entities[0]})
-            })
-            .catch((e)=>{alert("Data not found!")})
-            .finally(function(e){
-                thisApp.endLoading();
-            })
+        this.getProductDetail = () => { 
+
+            this.commonAjaxWithProgress(
+                this.catalogService.getProductDetail,
+                this.props.productCode,  this.handleGetProduct
+            );
         }
     }
 
