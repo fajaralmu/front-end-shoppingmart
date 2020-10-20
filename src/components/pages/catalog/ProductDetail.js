@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import './ProductDetail.css'
 import * as url from '../../../constant/Url'  
 import ActionButtons from '../../buttons/ActionButtons'
@@ -93,7 +93,9 @@ class ProductDetail extends BaseComponent {
 
         if (product == null) {
             return (
+                <div className="section-container" >
                 <ContentTitle title="Please wait.." iconClass="fas fa-info-circle" />
+                </div>
             )
         }
 

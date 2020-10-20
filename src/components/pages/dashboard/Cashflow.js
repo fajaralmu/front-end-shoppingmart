@@ -89,10 +89,24 @@ class Cashflow
                 {stringUtil.monthYearString(this.state.toMonth, this.state.toYear)}
             </div>);
         }
+        this.updateFilterPeriod = (filter) => {
+            if(null == filter) return;
+            this.setState({
+                fromMonth: filter.month,
+                fromYear: filter.year,
+                toMonth: filter.monthTo,
+                toYear: filter.yearTo
+            })
+        }
     }
     componentDidMount() {
         document.title = "Cashflow";
-        this.getCashflowDetail();
+        if(this.props.cashflowDetail == null){
+            this.getCashflowDetail();
+        } else {
+            this.updateFilterPeriod(this.props.cashflowDetail.filter);
+        }
+        
     }
     componentDidUpdate() {
     }

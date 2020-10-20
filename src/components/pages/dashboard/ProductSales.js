@@ -26,14 +26,19 @@ class ProductSales
             toMonth: date.getMonth() + 1, toYear: date.getFullYear(),
             productName: null
         }
-        this.getProductSales = (loadMore, _page) => {
-            this.setState({ page: _page, productDetailId: null });
+        /**
+         * 
+         * @param {Boolean} loadMore 
+         * @param {Number} p  page
+         */
+        this.getProductSales = (loadMore, p) => {
+            this.setState({ page: p, productDetailId: null });
             if (!componentUtil.checkExistance("select-month-from", "select-month-to",
                 "select-year-from", "select-year-to")) {
                 return;
             }
             let request = {
-                page: _page,
+                page: p,
                 fromMonth: this.state.fromMonth,//byId("select-month-from").value,
                 fromYear: this.state.fromYear,// byId("select-year-from").value,
                 toMonth: this.state.toMonth,//byId("select-month-to").value,
@@ -124,10 +129,25 @@ class ProductSales
              </div>)
         }
 
+        this.updateFilterPeriod = (filter) => {
+            if(null == filter) return;
+            this.setState({
+                fromMonth: filter.month,
+                fromYear: filter.year,
+                toMonth: filter.monthTo,
+                toYear: filter.yearTo
+            })
+        }
+
     }
     componentDidMount() {
         document.title = "ProductSales";
-        // this.getProductSales();
+        if(this.props.productSalesData== null){
+            this.getProductSales(false, 0);
+        } else {
+            this.updateFilterPeriod(this.props.productSalesData.filter);
+        }
+       
     }
     componentDidUpdate() {
         console.log("updated", this.state.fromMonth, this.state.fromYear, " to ", this.state.toMonth, this.state.toYear);
