@@ -101,6 +101,7 @@ class Catalog extends BaseComponent {
         }
 
         this.getProductCatalogByPage = (p) => {
+           
             const s = this.state;
             const request = {
                 page: p,
@@ -113,7 +114,7 @@ class Catalog extends BaseComponent {
                 fieldsFilter:{},
             };
             if(s.requestCategoryId){
-                request.fieldsFilter["category,id[EXACTS]"] = s.requestCategoryId;
+                request.fieldsFilter["category,id[EXACTS]"] = parseInt(s.requestCategoryId);
             }
             this.getProductCatalog( request );
             this.setState({ catalogPage: p, totalData: s.catalogData.totalData });
@@ -281,6 +282,7 @@ class Catalog extends BaseComponent {
         }
 
         return <div className="filter-box">
+            <h3>{this.state.catalogPage}</h3>
             <GridComponent cols={3} style={{ width: 'max-content' }} items={[
                 <InputField placeholder="search by product name"
                     value={this.state.requestProductName}

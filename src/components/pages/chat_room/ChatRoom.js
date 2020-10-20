@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import './ChatRoom.css'
 import { connect } from 'react-redux'
 import * as actions from '../../../redux/actionCreators'
 import { byId } from '../../../utils/ComponentUtil'
@@ -6,7 +7,6 @@ import InputField from '../../inputs/InputField';
 import ActionButton from '../../buttons/ActionButton';
 import SockJsClient from 'react-stomp'; 
 import ContentTitle from '../../container/ContentTitle'; 
-import GridComponent from '../../container/GridComponent'
 import ChatList from './ChatList';
 import { contextPath } from './../../../constant/Url';
 import BaseComponent from './../../BaseComponent';
@@ -65,9 +65,10 @@ class ChatRoom extends BaseComponent {
     render() {
         let userAlias = this.props.userAlias ? this.props.userAlias : "";
         const usedHost = contextPath();
+        
         return (
             <div className="section-container">
-                <ContentTitle title="What Do You Feel?" description=
+                <ContentTitle title="Chat With Us!" description=
                     {"Identified as [" + this.state.username + "]"}  iconClass="fas fa-comments"/>
                 <InputField
                     value={userAlias}
@@ -75,24 +76,32 @@ class ChatRoom extends BaseComponent {
                     id="input-username"
                     placeholder="identify your name" />
                 <div style={{ textAlign: 'left' }} id="chat-room">
-
                     <div className="chat-container"  >
                         <ChatList username={this.state.username} messages={this.props.messages} />
                     </div>
-
-                    <GridComponent style={{ width: '50%', textAlign: 'right' }} items={[
-                        <InputField style={{ width: '130%' }} type="textarea" placeholder="input message" id="input-msg" />,
-                        <ActionButton style={{ margin: '5px' }} status="success" onClick={this.sendChatMessage} text={<i className="fas fa-paper-plane"></i>} />
-
-                    ]} />
-
-                    <SockJsClient url={usedHost+'realtime-app'} topics={['/wsResp/messages']}
+                </div>
+                <MessageField sendChatMessage={this.sendChatMessage} />
+                 
+                <SockJsClient url={usedHost+'realtime-app'} topics={['/wsResp/messages']}
                         onMessage={(msg) => { this.handleMessage(msg) }}
                         ref={(client) => { this.clientRef = client }} />
-                </div>
             </div>
         )
     }
+}
+
+const MessageField = (props) => {
+    return (
+        <div className="row">
+            <div className="col-9">
+                <textarea style={{width:'100%'}} rows="3" id="input-msg" className="form-control" /> 
+            </div>
+            <div className="col-3">
+                <ActionButton style={{ margin: '5px' }} status="success" onClick={props.sendChatMessage} 
+                text={<div><i className="fas fa-paper-plane"></i>&nbsp;Send Message</div>} />
+            </div>
+        </div>
+    )
 }
 
 const mapStateToProps = state => {

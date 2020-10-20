@@ -1,6 +1,4 @@
-import React, { Component } from 'react'  
-import './Chat.css'
-import GridComponent from '../../container/GridComponent';
+import React, { Component } from 'react'
 import Label from '../../container/Label';
 
 class ChatList extends Component {
@@ -16,26 +14,28 @@ class ChatList extends Component {
             const chat = chats[i];
             chatRows.push(<ChatItem message={chat} username={this.props.username} />)
         }
-        return (<GridComponent cols={1} items={chatRows} />)
+        return (<div className="row">
+            {chatRows.map(chatItem => chatItem)}
+        </div>)
     }
 }
 
 const ChatItem = props => {
-    let className = "chat-item rounded paper-shadow  " + (props.message.admin == 1 ? " admin " : "user");
+    const isAdmin = props.message.admin == 1;
+    const className = "chat-item rounded paper-shadow  " + (props.message.admin == 1 ? " admin " : "user");
     let username = "";
-    if (props.username) {
-        username = " [" + props.username + "]";
-    }
-    let sender = props.message.admin == 1 ? "Admin" : "You" + username;
-    let senderComponent = <span>
-        {sender}<span style={{ marginLeft: '11px', fontSize: '0.7em', float: 'right' }} >{props.message.date}</span>
-    </span>
-    return (
-        <div className={className}>
-            <Label style={{ fontSize: '0.8em', color: 'black' }} text={senderComponent} />
-            <Label text={props.message.text} />
-        </div>
-    )
+    if (props.username) { username = " [" + props.username + "]"; }
+    const sender = props.message.admin == 1 ? "Admin" : "You" + username;
+    const senderComponent = <p>{sender}<span>&nbsp;{props.message.date}</span></p>
+    const chatBody = <div className="col-10"><div className={className}>
+                        <Label style={{ fontSize: '0.8em', color: 'black' }} text={senderComponent} />
+                        <Label text={props.message.text} />
+                    </div></div>;
+    return  isAdmin ?
+                <>{chatBody}<div className="col-2"/></> :
+                <><div className="col-2"/>{chatBody} </>
+             
+     
 }
 
 export default ChatList;
