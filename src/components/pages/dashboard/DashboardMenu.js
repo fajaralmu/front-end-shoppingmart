@@ -29,7 +29,8 @@ class DashboardMenu extends Component {
                     // { onClick: () => this.goToMenu('trxIn'), active: this.isActive('trxIn'), text: "Purchasing" },
                     // { onClick: () => this.goToMenu('trxOut'), active: this.isActive('trxOut'), text: "Selling" },
                     { onClick: () => this.goToMenu('cashflow'), active: this.isActive('cashflow'), text: "Cashflow" },
-                    { onClick: () => this.goToMenu('productSales'), active: this.isActive('productSales'), text: "Product Sales" }]}
+                    { onClick: () => this.goToMenu('productSales'), active: this.isActive('productSales'), text: "Product Sales" },
+                    { onClick: () => this.goToMenu('balance'), active: this.isActive('balance'), text: "Balance Info" }]}
                 />
             </div >
         )

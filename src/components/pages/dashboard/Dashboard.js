@@ -10,6 +10,7 @@ import { connect } from 'react-redux'
 import ProductSales from './ProductSales';
 import ContentTitle from '../../container/ContentTitle';  
 import MainDashboard from './MainDashboard';
+import CashBalance from './CashBalance';
 
 class Dashboard extends Component {
 
@@ -60,6 +61,9 @@ class Dashboard extends Component {
                     break;
                 case 'main':
                     mainComponent = <MainDashboard  app={this.props.app} setFeatureCode={this.setFeatureCode} />
+                    break;
+                case 'balance':
+                    mainComponent = <CashBalance app={this.props.app} setFeatureCode={this.setFeatureCode} />
                     break;
                 default:
                     break;
