@@ -195,7 +195,7 @@ class EntityList extends Component {
                         }
 
                         //validate length..
-                        if (entityValue.constructor == String) {
+                        if (entityValue && entityValue.constructor == String) {
                             const str = entityValue.toString();
                             if (str.length > 50) {
                                 entityValue = str.substr(0, 50) + "....";
