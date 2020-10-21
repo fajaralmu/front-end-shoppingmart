@@ -27,6 +27,7 @@ class CashBalance extends BaseComponent {
             
             const request = {
                 filter: {
+                    day: this.state.filterDay,
                     month: this.state.filterMonth,
                     year: this.state.filterYear
                 }
@@ -69,11 +70,11 @@ class CashBalance extends BaseComponent {
                     <div className="col-6">
                         <h5>Period Filter</h5>
                         <InputField type="number" id="inout-day" placeholder="day" 
-                            onKeyup={(val,id)=>this.updatePeriod('d', val)} />
+                            onKeyUp={(val,id)=>this.updatePeriod('d', val)} />
                         <InputField type="number" id="input-month" placeholder="month" 
-                            onKeyup={(val,id)=>this.updatePeriod('m', val)} />
+                            onKeyUp={(val,id)=>this.updatePeriod('m', val)} />
                         <InputField type="number" id="input-year" placeholder="year" 
-                            onKeyup={(val,id)=>this.updatePeriod('y', val)} />
+                            onKeyUp={(val,id)=>this.updatePeriod('y', val)} />
                     </div>
                     <div className="col-6">
                         <h5>Balance Data</h5>
