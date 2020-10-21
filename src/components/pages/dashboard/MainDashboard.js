@@ -103,11 +103,22 @@ class MainDashboard extends Component {
 function CashflowInfoContent(props) {
     const cashflowInfo = props.cashflowInfo;
     const title = props.type == "earn" ? "Total Earning" : "Total Spending";
-    const value = <><i className="fas fa-comments-dollar"></i>&nbsp;{stringUtil.beautifyNominal(cashflowInfo.amount) + ",00"}</>;
+    let value;
+    let items;
+    if(cashflowInfo.amount && cashflowInfo.amount.constructor == String){
+        value = <span>Loading</span>
+    }else{
+        value = <><i className="fas fa-comments-dollar"></i>&nbsp;{stringUtil.beautifyNominal(cashflowInfo.amount) + ",00"}</>;
+    }
+    if(cashflowInfo.count && cashflowInfo.count.constructor == String){
+        items = 0;
+    }else{
+        items = stringUtil.beautifyNominal(cashflowInfo.count);
+    }
     const content = <div>
         <Label style={{ fontFamily: "TNR" }} text={value} />
         <Label text="Item" />
-        <Label text={<>{stringUtil.beautifyNominal(cashflowInfo.count)}</>} />
+        <Label text={<>{items}</>} />
     </div>
     return (<Card style={{ marginTop: '3px' }} title={title + " " + stringUtil.monthYearString(cashflowInfo.month, cashflowInfo.year)} content={content} />);
 }
