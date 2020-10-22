@@ -11,6 +11,7 @@ import ProductSales from './ProductSales';
 import ContentTitle from '../../container/ContentTitle';  
 import MainDashboard from './MainDashboard';
 import CashBalance from './CashBalance';
+import './Dashboard.css'
 
 class Dashboard extends Component {
 

@@ -21,10 +21,11 @@ class CashBalance extends BaseComponent {
             filterDay: 1,
             filterYear: getCurrentMMYY()[1],
             filterMonth: getCurrentMMYY()[0],
+            inventoriesQuantity: 0
         }
 
         this.getBalanceInfo = () => {
-            
+
             const request = {
                 filter: {
                     day: this.state.filterDay,
@@ -33,6 +34,14 @@ class CashBalance extends BaseComponent {
                 }
             }
             this.commonAjax(this.transactionHistoryService.getBalanceInfo, request, this.showBalanceInfo);
+        }
+
+        this.getInventoriesQuantity = () => {
+            this.commonAjax(this.transactionHistoryService.getInventoriesQuantity, {}, this.updateInventoryQuantity);
+        }
+
+        this.updateInventoryQuantity = (response) => {
+            this.setState({ inventoriesQuantity: response.quantity });
         }
 
         this.showBalanceInfo = (response) => {
@@ -60,30 +69,43 @@ class CashBalance extends BaseComponent {
         this.props.setFeatureCode('balance');
     }
 
-    render() {  
+    render() {
         const balanceInfo = this.state.balanceInfo;
 
         return (
             <div className="cashflow-container">
-                <h3>Cash Balance</h3>
-                <div className="row">
-                    <div className="col-6">
-                        <h5><i className="fas fa-history"></i>&nbsp;Period Filter</h5>
-                        <InputField type="number" id="inout-day" placeholder="day" 
-                            onKeyUp={(val,id)=>this.updatePeriod('d', val)} />
-                        <InputField type="number" id="input-month" placeholder="month" 
-                            onKeyUp={(val,id)=>this.updatePeriod('m', val)} />
-                        <InputField type="number" id="input-year" placeholder="year" 
-                            onKeyUp={(val,id)=>this.updatePeriod('y', val)} />
+
+                <div className="info-item">
+                    <div className="row">
+                        <div className="col-6">
+                            <h5><i className="fas fa-history"></i>&nbsp;Period Filter</h5>
+                            <InputField type="number" id="inout-day" placeholder="day"
+                                onKeyUp={(val, id) => this.updatePeriod('d', val)} />
+                            <InputField type="number" id="input-month" placeholder="month"
+                                onKeyUp={(val, id) => this.updatePeriod('m', val)} />
+                            <InputField type="number" id="input-year" placeholder="year"
+                                onKeyUp={(val, id) => this.updatePeriod('y', val)} />
+                        </div>
+                        <div className="col-6">
+                            <h5><i className="fas fa-wallet"></i>&nbsp;Balance Data</h5>
+                            <p>Incoming: {beautifyNominal(balanceInfo.debitAmt)}</p>
+                            <p>Spending: {beautifyNominal(balanceInfo.creditAmt)}</p>
+                            <p>Balance: {beautifyNominal(balanceInfo.actualBalance)}</p>
+                        </div>
                     </div>
-                    <div className="col-6">
-                        <h5><i className="fas fa-wallet"></i>&nbsp;Balance Data</h5>
-                        <p>Incoming: {beautifyNominal(balanceInfo.debitAmt)}</p>
-                        <p>Spending: {beautifyNominal(balanceInfo.creditAmt)}</p>
-                        <p>Balance: {beautifyNominal(balanceInfo.actualBalance)}</p>
+                    <ActionButton status="info" text="Load Cash Balance" onClick={this.getBalanceInfo} />
+                </div>
+                {/* ============ Inventory Info ============ */}
+                <div className="info-item">
+                    <div className="row">
+
+                        <h5 className="col-3"><i className="fas fa-cube"></i>&nbsp;Inventory Quantity</h5>
+                        <div className="col-9">{beautifyNominal(this.state.inventoriesQuantity)}</div>
+                        <div className="col-12">
+                            <ActionButton status="info" onClick={this.getInventoriesQuantity} text="Load Latest Quantity" />
+                        </div>
                     </div>
                 </div>
-                <ActionButton status="info" text="Submit" onClick={this.getBalanceInfo} />
             </div>
         )
     }
