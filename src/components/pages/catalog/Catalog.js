@@ -281,8 +281,7 @@ class Catalog extends BaseComponent {
             });
         }
 
-        return <div className="filter-box">
-            <h3>{this.state.catalogPage}</h3>
+        return <div className="filter-box"> 
             <GridComponent cols={3} style={{ width: 'max-content' }} items={[
                 <InputField placeholder="search by product name"
                     value={this.state.requestProductName}
