@@ -206,7 +206,7 @@ export const getProductSales = (request) => {
         payload: {
             product: { name: request.productName },
             filter:
-                { page: request.page, limit: 10, month: request.fromMonth, year: request.fromYear, monthTo: request.toMonth, yearTo: request.toYear }
+                { page: request.page, limit: request.limit, month: request.fromMonth, year: request.fromYear, monthTo: request.toMonth, yearTo: request.toYear }
         },
         meta: {
             referrer: request.referrer, type: types.GET_PRODUCT_SALES, loadMore: request.loadMore == true, url: apiTransaction.concat("productsales")

@@ -12,9 +12,10 @@ import InputField from '../../inputs/InputField'
 import Label from '../../container/Label'
 import ProductSalesDetail from './ProductSalesDetail'
 import GraphChart from './GraphChart'
+import BaseComponent from './../../BaseComponent';
 
 class ProductSales
-    extends Component {
+    extends BaseComponent {
 
     constructor(props) {
         super(props);
@@ -24,6 +25,7 @@ class ProductSales
             chartOrientation: "horizontal", page: 0, updated: new Date(),
             fromMonth: date.getMonth() + 1, fromYear: date.getFullYear(),
             toMonth: date.getMonth() + 1, toYear: date.getFullYear(),
+            fetchLimit: 10,
             productName: null
         }
         /**
@@ -46,10 +48,15 @@ class ProductSales
                 productName: this.state.productName,
                 //special fro laod more case
                 loadMore: loadMore,
-                referrer: this
+                referrer: this,
+                limit: this.state.fetchLimit
             }
 
             this.props.getProductSales(request);
+        }
+
+        this.setRequestLimit = (value, id) => {
+            this.setState({ fetchLimit: value, activeField: id })
         }
 
         this.getProductSalesDetail = (productId) => {
@@ -100,24 +107,36 @@ class ProductSales
 
         this.constructFilterBox = () => {
 
-            return (<creator.FilterBox rows={[{
-                values: [
+            return (<div className="row cashflow-filter-box">
+
+                <div className="col-4">
                     <creator.DateSelectionFrom years={this.props.transactionYears}
-                        monthVal={this.state.fromMonth} yearVal={this.state.fromYear}
-                        handleOnChangeMfrom={(value) => this.setState({ fromMonth: value })}
-                        handleOnChangeYfrom={(value) => this.setState({ fromYear: value })}
-                    />,
+                            monthVal={this.state.fromMonth} yearVal={this.state.fromYear}
+                            handleOnChangeMfrom={(value) => this.setState({ fromMonth: value })}
+                            handleOnChangeYfrom={(value) => this.setState({ fromYear: value })}/>
+                </div>
+                <div className="col-4">
                     <creator.DateSelectionTo years={this.props.transactionYears}
-                        monthVal={this.state.toMonth} yearVal={this.state.toYear}
-                        handleOnChangeMto={(value) => this.setState({ toMonth: value })}
-                        handleOnChangeYto={(value) => this.setState({ toYear: value })} />,
-                    <InputField value={this.state.productName} onKeyUp={this.setRequestProductName} id="input-product-name" placeholder="Product Name" />,
-                    <ActionButtons buttonsData={[
+                            monthVal={this.state.toMonth} yearVal={this.state.toYear}
+                            handleOnChangeMto={(value) => this.setState({ toMonth: value })}
+                            handleOnChangeYto={(value) => this.setState({ toYear: value })} />
+                </div>
+                <div className="col-4"></div>
+                <div className="col-4">
+                <InputField  onKeyUp={this.setRequestProductName} id="input-product-name" placeholder="Product Name" />
+                    
+                </div>
+                <div className="col-4">
+                <InputField type="number"  onKeyUp={this.setRequestLimit} id="input-fetch-limit" placeholder="Fetch Limit(default 10 items)" />
+                    
+                </div>
+                <div className="col-4">
+                <ActionButtons buttonsData={[
                         { text: "Back", onClick: () => this.props.setFeatureCode(null), id: "btn-back" },
                         { text: <i className="fas fa-search"></i>, onClick: () => this.getProductSales(null, 0), id: "btn-get-product-sales", status: "success" }]}
                     />
-                ]
-            }]} />);
+                </div>
+            </div> );
         }
 
         this.constructFilterInfo = () => {
@@ -146,8 +165,7 @@ class ProductSales
             this.getProductSales(false, 0);
         } else {
             this.updateFilterPeriod(this.props.productSalesData.filter);
-        }
-       
+        } 
     }
     componentDidUpdate() {
         console.log("updated", this.state.fromMonth, this.state.fromYear, " to ", this.state.toMonth, this.state.toYear);
@@ -172,7 +190,7 @@ class ProductSales
             const entity = productSalesData.entities[i];
             const sales = stringUtil.beautifyNominal(entity.sales);
             chartGroups.push({
-                value: i, label: <Label key={'lbl-e-' + entity.product.id} text={(i + 1), entity.product.name}
+                value: i, label: <Label key={'lbl-e-' + entity.product.id} text={(i + 1), (i + 1)+" "+ entity.product.name}
                     onClick={() => this.getProductSalesDetail(entity.product.id)} />
             });
             productDetailRows.push({
