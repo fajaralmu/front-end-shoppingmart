@@ -89,7 +89,7 @@ class Cashflow
         }
 
         this.constructFilterInfo = () => {
-            return (<div>
+            return (<div class="alert alert-success" role="alert" style={{textAlign:"center"}}>
                 {"From "}
                 {stringUtil.monthYearString(this.state.fromMonth, this.state.fromYear)}
                 {" to "}

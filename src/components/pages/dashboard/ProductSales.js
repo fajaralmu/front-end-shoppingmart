@@ -140,12 +140,12 @@ class ProductSales
         }
 
         this.constructFilterInfo = () => {
-            return (<div>
+            return (<div class="alert alert-success" role="alert" style={{textAlign:"center"}}>
                 {"From "}
                 {stringUtil.monthYearString(this.state.fromMonth, this.state.fromYear)}
                 {" to "}
                 {stringUtil.monthYearString(this.state.toMonth, this.state.toYear)}
-             </div>)
+            </div>);
         }
 
         this.updateFilterPeriod = (filter) => {
@@ -219,7 +219,7 @@ class ProductSales
                     <GraphChart chartGroups={chartGroups} maxValue={maxValue} chartData={productDetailRows} orientation={"horizontal"} />
                 </div>)
         } else {
-            productSalesListComponent = <h2>No Data</h2>
+            productSalesListComponent = <h5 align="center"><i className="fas fa-exclamation-circle"></i>&nbsp;No data, please wait or search though filter box</h5>
         }
 
         return (
