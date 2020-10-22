@@ -342,6 +342,7 @@ class Catalog extends BaseComponent {
                         {products.map(
                             (product) =>  
                                 <ProductCard key={product.id}
+                                    withQuantity={this.state.requestWithStock}
                                     getProductDetail={this.getProductDetail}
                                     getProductInCart={this.getProductInCart}
                                     enableShopping={this.props.enableShopping}
@@ -380,7 +381,7 @@ function ProductCard(props) {
             {props.enableShopping ? <div>
                 <ActionButtons buttonsData={cartButtonsData} />
             </div> : null }
-            <CatalogItem getProductDetail={props.getProductDetail} key={product.id} product={product} />
+            <CatalogItem withQuantity={props.withQuantity} getProductDetail={props.getProductDetail} key={product.id} product={product} />
         </div>
     )
 }
