@@ -5,6 +5,7 @@ export default class BaseComponent extends Component {
     constructor(props){
         super(props);
         this.parentApp = props.app; 
+    
 
         /**
          * 
