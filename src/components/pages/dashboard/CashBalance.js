@@ -68,7 +68,7 @@ class CashBalance extends BaseComponent {
                 <h3>Cash Balance</h3>
                 <div className="row">
                     <div className="col-6">
-                        <h5>Period Filter</h5>
+                        <h5><i className="fas fa-history"></i>&nbsp;Period Filter</h5>
                         <InputField type="number" id="inout-day" placeholder="day" 
                             onKeyUp={(val,id)=>this.updatePeriod('d', val)} />
                         <InputField type="number" id="input-month" placeholder="month" 
@@ -77,7 +77,7 @@ class CashBalance extends BaseComponent {
                             onKeyUp={(val,id)=>this.updatePeriod('y', val)} />
                     </div>
                     <div className="col-6">
-                        <h5>Balance Data</h5>
+                        <h5><i className="fas fa-wallet"></i>&nbsp;Balance Data</h5>
                         <p>Incoming: {beautifyNominal(balanceInfo.debitAmt)}</p>
                         <p>Spending: {beautifyNominal(balanceInfo.creditAmt)}</p>
                         <p>Balance: {beautifyNominal(balanceInfo.actualBalance)}</p>
