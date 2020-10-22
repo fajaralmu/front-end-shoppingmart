@@ -45,22 +45,14 @@ class Cashflow
                 this.setState({ chartOrientation: 'horizontal' })
             if (value == 'v')
                 this.setState({ chartOrientation: 'vertical' })
-            console.log("Selected?", byId("radio-orientation-" + value).checked);
+            console.debug("chartOrientation: ", this.state.chartOrientation);
 
         }
 
         this.constructFilterBox = () => {
 
             let isChartHorizontal = this.state.chartOrientation == "horizontal";
-            let isChartVertical = this.state.chartOrientation == "vertical";
-
-            let inputRadio = 
-            (<div className="row">
-                <InputField key="radio-o-h" checked={isChartHorizontal} name="orientation" onChange={() => this.onChangeChartOrientation('h')} type="radio"
-                    id="radio-orientation-h" text="Horizontal orientation" />
-                <InputField key="radio-o-v" checked={isChartVertical} name="orientation" onChange={() => this.onChangeChartOrientation('v')} type="radio"
-                    id="radio-orientation-v" text="Vertical orientation" />
-            </div>);
+            let isChartVertical = this.state.chartOrientation == "vertical"; 
 
             let filterButtons = <ActionButtons buttonsData={[
                 { text: "Back", onClick: () => this.props.setFeatureCode(null), id: "btn-back" },
@@ -68,17 +60,32 @@ class Cashflow
             />;
 
             return (
-                <creator.FilterBox rows={[{
-                    values: [<creator.DateSelectionFrom years={this.props.transactionYears}
+               <div className="row cashflow-filter-box">
+                    <div className="col-4"><creator.DateSelectionFrom years={this.props.transactionYears}
                         monthVal={this.state.fromMonth} yearVal={this.state.fromYear}
                         handleOnChangeMfrom={(value) => this.setState({ fromMonth: value })}
                         handleOnChangeYfrom={(value) => this.setState({ fromYear: value })}
-                    />,
+                    /></div>
+                     <div className="col-4">
                     <creator.DateSelectionTo years={this.props.transactionYears}
                         monthVal={this.state.toMonth} yearVal={this.state.toYear}
                         handleOnChangeMto={(value) => this.setState({ toMonth: value })}
-                        handleOnChangeYto={(value) => this.setState({ toYear: value })} />, filterButtons, inputRadio]
-                }]} />)
+                        handleOnChangeYto={(value) => this.setState({ toYear: value })} />
+                    </div>
+                    <div className="col-4"></div>
+                    <div className="col-4">
+                        <div className="btn-group btn-group-toggle" data-toggle="buttons">
+                            <label className="btn btn-outline-secondary active" onClick={() => this.onChangeChartOrientation('h')}>
+                                <input type="radio"  name="chart-orientation"  autocomplete="off" />Horizontal View
+                            </label>
+                            <label className="btn btn-outline-secondary"  onClick={() => this.onChangeChartOrientation('v')}>
+                                <input type="radio"  name="chart-orientation"  autocomplete="off"/>Vertical View
+                            </label> 
+                        </div>
+                    </div>
+                    <div className="col-4">{ filterButtons}</div>
+                
+                </div>)
         }
 
         this.constructFilterInfo = () => {

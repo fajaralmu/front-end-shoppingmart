@@ -89,7 +89,7 @@ class InputField extends Component {
         }
 
         return (
-            <div className={"input-field "+this.props.className}>
+            <div className={"input-field "+(this.props.className?this.props.className:'')}>
                 {inputField}
                 {this.props.type == "radio" || this.props.type == "checkbox" ?
                  <span style={{ fontSize: '0.9em', margin:'4px' }}>{this.props.text} </span> : ""}
