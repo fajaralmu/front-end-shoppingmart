@@ -20,7 +20,7 @@ class CatalogItem extends Component {
         }
 
         const productImageUrl = product.imageUrl;
-        const imageUrl = url.baseImageUrl + productImageUrl.split("~")[0];
+        const imageUrl = url.baseImageUrl + (productImageUrl!=null?productImageUrl.split("~")[0]:"");
         const content = <CardContent withQuantity={withQuantity} product={product} />
         const title = <Label className=" clickable " text={product.name} onClick={() => this.props.getProductDetail(product.code)} />;
 
