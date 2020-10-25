@@ -5,10 +5,11 @@ export const uniqueId = function () {
 	index++;
 	return index + "-" + string;
 }
-
+ 
 export function beautifyNominal(val) {
 	if (val == "" || val == null) return "0";
-	let nominal = "" + val;
+	const rawVal = parseInt(val);
+	let nominal =  Math.abs(val).toString();
 	let result = "";
 	if (nominal.length > 3) {
 		let zero = 0;
@@ -24,6 +25,9 @@ export function beautifyNominal(val) {
 		result = nominal[0] + result;
 	} else {
 		result = val;
+	}
+	if(rawVal < 0){
+		result = "-"+result;
 	}
 	return result;
 }
