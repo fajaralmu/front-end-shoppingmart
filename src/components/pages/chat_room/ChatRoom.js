@@ -34,9 +34,9 @@ class ChatRoom extends BaseComponent {
         }
 
         this.handleMessage = (response) => {
-            if (response.code != localStorage.getItem("requestId")) {
-                return;
-            }
+            // if (response.code != localStorage.getItem("requestId")) {
+            //     return;
+            // }
             this.props.storeChatMessageLocally(response.entities);
             // this.setState({ messages: response.entities });
         }
@@ -82,7 +82,7 @@ class ChatRoom extends BaseComponent {
                 </div>
                 <MessageField sendChatMessage={this.sendChatMessage} />
                  
-                <SockJsClient url={usedHost+'realtime-app'} topics={['/wsResp/messages']}
+                <SockJsClient url={usedHost+'realtime-app'} topics={['/wsResp/messages/'+ localStorage.getItem("requestId")]}
                         onMessage={(msg) => { this.handleMessage(msg) }}
                         ref={(client) => { this.clientRef = client }} />
             </div>

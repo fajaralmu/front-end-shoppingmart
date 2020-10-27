@@ -6,8 +6,7 @@ import TransactionHistoryService from './../../../services/TransactionHistorySer
 import { getCurrentMMYY } from '../../../utils/ComponentUtil';
 import ActionButton from '../../buttons/ActionButton';
 import InputField from '../../inputs/InputField';
-import { beautifyNominal } from '../../../utils/StringUtil'; 
-import { CenterLoading } from '../../messages/SimpleLoader';
+import { beautifyNominal } from '../../../utils/StringUtil';
 
 class CashBalance extends BaseComponent {
     constructor(props) {
