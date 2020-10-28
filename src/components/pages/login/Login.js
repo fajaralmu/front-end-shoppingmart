@@ -91,8 +91,12 @@ class Login extends Component {
                         <InputField id="username-field" onKeyUp={this.handleUsername} />
                         <Label text="Password" />
                         <InputField id="password-field" type="password" onKeyUp={this.handlePassword} />
-                        <ActionButton style={{ margin: '5px' }} id="btn-login" status="primary" onClick={this.doLogin} text="Login" />
-                    </div></div>
+                        
+                    </div>
+                    <div className="card-footer">
+                    <ActionButton style={{ margin: '5px' }} id="btn-login" status="primary" onClick={this.doLogin} text="Login" />
+                    </div>
+                </div>
             </div>
         )
     }
