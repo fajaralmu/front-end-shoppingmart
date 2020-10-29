@@ -11,6 +11,7 @@ import Card from '../../card/Card'
 import * as stringUtil from '../../../utils/StringUtil'
 import * as componentUtil from '../../../utils/ComponentUtil' 
 import * as actions from '../../../redux/actionCreators' 
+import { getCurrentMMYY } from './../../../utils/DateUtil';
 
 class MainDashboard extends Component {
 
@@ -18,8 +19,8 @@ class MainDashboard extends Component {
         super(props);
         this.state = {
             featureCode: 'main',
-            cashflowYear: componentUtil.getCurrentMMYY()[1],
-            cashflowMonth: componentUtil.getCurrentMMYY()[0], 
+            cashflowYear: getCurrentMMYY()[1],
+            cashflowMonth: getCurrentMMYY()[0], 
         }
         this.getCashflowInfo = () => {
             let month = this.state.cashflowMonth;
@@ -68,14 +69,14 @@ class MainDashboard extends Component {
                             {
                                 id: "select-month",
                                 label: "Month",
-                                defaultValue: this.state.cashflowMonth ? this.state.cashflowMonth : componentUtil.getCurrentMMYY()[0],
+                                defaultValue: this.state.cashflowMonth ? this.state.cashflowMonth : getCurrentMMYY()[0],
                                 options: componentUtil.getDropdownOptionsMonth(),
                                 handleOnChange: (value) => this.setState({ cashflowMonth: value })
                             },
                             {
                                 id: "select-year",
                                 label: "Year",
-                                defaultValue: this.state.cashflowYear ? this.state.cashflowYear : componentUtil.getCurrentMMYY()[1],
+                                defaultValue: this.state.cashflowYear ? this.state.cashflowYear : getCurrentMMYY()[1],
                                 options: componentUtil.getDropdownOptionsYear(minYear, maxYear),
                                 handleOnChange: (value) => this.setState({ cashflowYear: value })
                             }

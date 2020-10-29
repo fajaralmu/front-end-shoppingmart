@@ -1,5 +1,6 @@
 export const byId = (id) => { return document.getElementById(id) }
 
+
 /**
  * 
  * @param  {...string} ignoredIds 
@@ -72,9 +73,6 @@ export const createNavButtons = (totalButton, currentPage) => {
     return buttonData;
 }
 
-export const getCurrentMMYY = () => {
-    return [new Date().getMonth() + 1, new Date().getFullYear()];
-}
 
 export const getDropdownOptionsMonth = () => {
     let options = [];

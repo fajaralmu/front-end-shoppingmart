@@ -12,6 +12,7 @@ import ContentTitle from '../../container/ContentTitle';
 import MainDashboard from './MainDashboard';
 import CashBalance from './CashBalance';
 import './Dashboard.css'
+import { getCurrentMMYY } from './../../../utils/DateUtil';
 
 class Dashboard extends Component {
 
@@ -19,8 +20,8 @@ class Dashboard extends Component {
         super(props);
         this.state = {
             featureCode: 'main',
-            cashflowYear: componentUtil.getCurrentMMYY()[1],
-            cashflowMonth: componentUtil.getCurrentMMYY()[0], 
+            cashflowYear:  getCurrentMMYY()[1],
+            cashflowMonth: getCurrentMMYY()[0], 
         }
 
         this.setFeatureCode = (code) => {

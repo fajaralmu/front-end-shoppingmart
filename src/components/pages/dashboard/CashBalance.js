@@ -3,24 +3,29 @@ import React from 'react'
 import '../dashboard/Dashboard.css'
 import BaseComponent from './../../BaseComponent';
 import TransactionHistoryService from './../../../services/TransactionHistoryService';
-import { getCurrentMMYY } from '../../../utils/ComponentUtil';
+import { getCurrentMMYY, getMonthDays } from '../../../utils/DateUtil';
 import ActionButton from '../../buttons/ActionButton';
 import InputField from '../../inputs/InputField';
 import { beautifyNominal } from '../../../utils/StringUtil';
+import { MONTHS } from './../../../utils/DateUtil';
 
 class CashBalance extends BaseComponent {
     constructor(props) {
         super(props);
         this.transactionHistoryService = TransactionHistoryService.instance;
+
+        let defaultMonth = getCurrentMMYY()[0];
+        let defaultYear = getCurrentMMYY()[1];
+
         this.state = {
             balanceInfo: {
                 creditAmt: 0,
                 debitAmt: 0,
                 actualBalance: 0
             },
-            filterDay: 1,
-            filterYear: getCurrentMMYY()[1],
-            filterMonth: getCurrentMMYY()[0],
+            filterDay: getMonthDays(defaultMonth),
+            filterYear: defaultYear,
+            filterMonth: defaultMonth,
             inventoriesQuantity: 0
         }
 
@@ -49,12 +54,15 @@ class CashBalance extends BaseComponent {
         }
 
         this.updatePeriod = (key, value) => {
+            if(isNaN(value) || parseInt(value) < 1) { return; }
             switch (key) {
                 case "d":
                     this.setState({ filterDay: value })
                     break;
                 case "m":
-                    this.setState({ filterMonth: value })
+                    if(parseInt(value) <= 12){ 
+                        this.setState({ filterMonth: value })
+                    }
                     break;
                 case "y":
                     this.setState({ filterYear: value })
@@ -62,6 +70,11 @@ class CashBalance extends BaseComponent {
                 default:
                     break;
             }
+        }
+
+        this.getBalanceDateString = () => {
+            const month = MONTHS[this.state.filterMonth-1];
+            return this.state.filterDay +" "+month+" "+this.state.filterYear;
         }
     }
 
@@ -86,7 +99,7 @@ class CashBalance extends BaseComponent {
                                 onKeyUp={(val, id) => this.updatePeriod('y', val)} />
                         </div>
                         <div className="col-6">
-                            <h5><i className="fas fa-wallet"></i>&nbsp;Balance Data</h5>
+                            <h5><i className="fas fa-wallet"></i>&nbsp;Balance Data { this.getBalanceDateString()}</h5>
                             <p>Incoming: {beautifyNominal(balanceInfo.debitAmt)}</p>
                             <p>Spending: {beautifyNominal(balanceInfo.creditAmt)}</p>
                             <p>Balance: {beautifyNominal(balanceInfo.actualBalance)}</p>
