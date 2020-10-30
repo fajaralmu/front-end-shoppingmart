@@ -63,6 +63,9 @@ h1{
     color:yellow;
     border-radius:5px;
 }
+.custom-input-number {
+    -moz-appearance: textfield;
+}
 
 body{
     background-color: lightgrey

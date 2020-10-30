@@ -41,6 +41,11 @@ export const checkExistance = function (...ids) {
     return true;
 }
 
+/**
+ * 
+ * @param {Number} totalButton 
+ * @param {Number} currentPage 
+ */
 export const createNavButtons = (totalButton, currentPage) => {
     totalButton = Math.ceil(totalButton);
     if (!currentPage) { currentPage = 0 }

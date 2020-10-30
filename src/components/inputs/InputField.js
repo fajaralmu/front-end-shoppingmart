@@ -8,6 +8,10 @@ class InputField extends Component {
     constructor(props) {
         super(props);
         this.handleKeyup = (e) => {
+            if(!this.validateNumber(e.target.value)){
+                e.target.value = null;
+                return;
+            }
             if( this.props.id){
                 var value = byId(this.props.id).value;
 
@@ -22,6 +26,7 @@ class InputField extends Component {
                 }
             }
         }
+        
 
         this.onChange = () => {
             if (this.props.type == "date") {
@@ -37,6 +42,14 @@ class InputField extends Component {
 
     }
 
+    validateNumber(value) {
+        if(this.props.type != "number"){
+            return true;
+        }
+        console.log("value:", value, " isNaN(value): ",  isNaN(value));
+        return value != "" && isNaN(value) == false;
+    }
+
     componentDidMount() { 
         if (this.props.value && this.props.id) { 
             byId(this.props.id).value = this.props.value;
@@ -44,13 +57,16 @@ class InputField extends Component {
     }
 
     render() {
-        let type = this.props.type ? this.props.type : "text";
-        let placeholder = this.props.placeholder ? this.props.placeholder : "";
-        let name = this.props.name ? this.props.name : "";
-        let style = this.props.style ? this.props.style : {};
-
+        const type = this.props.type ? this.props.type : "text";
+        const placeholder = this.props.placeholder ? this.props.placeholder : "";
+        const name = this.props.name ? this.props.name : "";
+        const style = this.props.style ? this.props.style : {};
+        let className = type == 'checkbox'? '':"form-control";
+        if(type == "number"){
+            className = "form-control custom-input-number";
+        }
         let inputField = <input style={style}
-            className= {type == 'checkbox'?'':"form-control"}
+            className= {className}
             name={name}
             key={"KEY-input-" + this.props.id}
             id={this.props.id}
@@ -88,11 +104,12 @@ class InputField extends Component {
                 checked={this.props.checked} />
         }
 
+       
         return (
             <div className={"input-field "+(this.props.className?this.props.className:'')}>
                 {inputField}
                 {this.props.type == "radio" || this.props.type == "checkbox" ?
-                 <span style={{ fontSize: '0.9em', margin:'4px' }}>{this.props.text} </span> : ""}
+                 <span style={{ fontSize: '0.9em', margin:'4px'}}>{this.props.text} </span> : ""}
             </div>
         )
     }
