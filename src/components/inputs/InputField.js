@@ -65,18 +65,10 @@ class InputField extends Component {
         if(type == "number"){
             className = "form-control custom-input-number";
         }
-        let inputField = <input style={style}
-            className= {className}
-            name={name}
-            key={"KEY-input-" + this.props.id}
-            id={this.props.id}
-            type={type}
-            onKeyUp={this.handleKeyup}
-            placeholder={placeholder}
-            checked={this.props.checked}
-            onChange={this.onChange}
-
-        />;
+        if(type == "submit"){
+            className = this.props.inputCassName ? this.props.inputCassName:"btn btn-primary";
+        }
+        let inputField;
 
         if (this.props.disabled == true) {
             inputField = <input style={style}
@@ -89,8 +81,7 @@ class InputField extends Component {
                 placeholder={placeholder}
 
                 disabled />
-        }
-
+        } else
         if (type == "textarea") {
             inputField = <textarea style={style}
                 className="form-control"
@@ -102,6 +93,30 @@ class InputField extends Component {
                 placeholder={placeholder}
                 onChange={this.onChange}
                 checked={this.props.checked} />
+        } else if(type=="submit"){
+            inputField = <input style={style}
+            className= {className}
+            name={name}
+            key={"KEY-input-" + this.props.id}
+            id={this.props.id}
+            type={type}
+            value={this.props.value}
+            onChange={this.onChange}
+
+        />;
+        } else {
+            inputField = <input style={style}
+            className= {className}
+            name={name}
+            key={"KEY-input-" + this.props.id}
+            id={this.props.id}
+            type={type}
+            onKeyUp={this.handleKeyup}
+            placeholder={placeholder}
+            checked={this.props.checked}
+            onChange={this.onChange}
+
+        />;
         }
 
        

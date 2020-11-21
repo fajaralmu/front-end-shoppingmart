@@ -28,6 +28,11 @@ class Login extends Component {
             this.setState({ password: value });
         }
 
+        this.onSubmitLoginForm = (e) => {
+            e.preventDefault();
+            this.doLogin();
+        }
+
         this.doLogin = () => {
 
             console.log("u:", this.state.username, ",p:", this.state.password);
@@ -84,6 +89,7 @@ class Login extends Component {
             <div className="section-container">
                 < ContentTitle title="Login Page" iconClass="fas fa-sign-in-alt" />
                 <this.message />
+                <form onSubmit={this.onSubmitLoginForm}>
                 <div className="login-container card">
                     <div className="card-header">Login</div>
                     <div className="card-body">
@@ -94,9 +100,11 @@ class Login extends Component {
                         
                     </div>
                     <div className="card-footer">
-                    <ActionButton style={{ margin: '5px' }} id="btn-login" status="primary" onClick={this.doLogin} text="Login" />
+                    <InputField type="submit" value="Login" />
+
                     </div>
                 </div>
+                </form>
             </div>
         )
     }
