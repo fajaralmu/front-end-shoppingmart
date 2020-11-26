@@ -1,5 +1,6 @@
 import * as types from './types' 
 import * as menuData from '../constant/Menus'
+import { setCookie } from '../middlewares/Common';
 
 export const initState = {
     loginKey: null,
@@ -35,8 +36,9 @@ export const reducer = (state = initState, action) => {
     switch (action.type) {
         case types.REQUEST_ID:
             result = { ...state, requestId: action.payload.message, applicationProfile: action.payload.applicationProfile };
-             
-            localStorage.setItem('requestId', result.requestId);
+            
+            setCookie("requestId", result.requestId);
+            
             if (action.payload.loggedIn != true) {
 
                 result.loginStatus = false;
@@ -54,7 +56,7 @@ export const reducer = (state = initState, action) => {
                 }else {
                     result.loginStatus = false;
                     result.loggedUser = null;
-                    localStorage.removeItem("loginKey");
+
                     localStorage.removeItem("loggedUser");
                 }
             } 
@@ -75,7 +77,7 @@ export const reducer = (state = initState, action) => {
             };
 
             if (result.loginStatus == true) {
-                localStorage.setItem("loginKey", result.loginKey);
+                setCookie("loginKey", result.loginKey);
                 // localStorage.setItem("loggedUser", JSON.stringify(result.loggedUser));
             }
 
@@ -87,7 +89,7 @@ export const reducer = (state = initState, action) => {
                 menus: updatedMenus,
                 loggedUser: null
             };
-            localStorage.removeItem("loginKey");
+            
             localStorage.removeItem("loggedUser");
             return result;
         case types.REFRESH_LOGIN:

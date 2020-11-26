@@ -6,10 +6,8 @@ import * as managementMiddleware from '../middlewares/ManagementMiddleware'
 import * as realtimeChatMiddleware from '../middlewares/RealtimeChatMiddleware'
 import * as catalogMiddleware from '../middlewares/CatalogMiddleware'
 import * as common from '../middlewares/Common';
+import { commonAuthorizedHeader } from './../middlewares/Common';
 
-const commonAuthorizedHeader = () => {
-   return common.commonAuthorizedHeader(); 
-};
 const POST_METHOD = "POST";
 
 export const configureStore = () => {
@@ -59,7 +57,7 @@ const getProductSalesDetailMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.GET_PRODUCT_SALES_DETAIL) { return next(action); }
     fetch(action.meta.url, {
         method: POST_METHOD, body: JSON.stringify(action.payload),
-        headers: { 'Content-Type': 'application/json', 'requestId': localStorage.getItem("requestId"), 'loginKey': localStorage.getItem("loginKey") }
+        headers: commonAuthorizedHeader()
     })
     .then(response => response.json())
     .then(data => {
@@ -80,7 +78,7 @@ const getProductSalesMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.GET_PRODUCT_SALES) { return next(action); }
     fetch(action.meta.url, {
         method: POST_METHOD, body: JSON.stringify(action.payload),
-        headers: { 'Content-Type': 'application/json', 'requestId': localStorage.getItem("requestId"), 'loginKey': localStorage.getItem("loginKey") }
+        headers: commonAuthorizedHeader()
     }).then(response => response.json())
         .then(data => {
             console.debug("getProductSalesMiddleware Response:", data, "load more:", action.meta.loadMore);
@@ -100,7 +98,7 @@ const getCashflowDetailMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.GET_CASHFLOW_DETAIL) { return next(action); }
     fetch(action.meta.url, {
         method: POST_METHOD, body: JSON.stringify(action.payload),
-        headers: { 'Content-Type': 'application/json', 'requestId': localStorage.getItem("requestId"), 'loginKey': localStorage.getItem("loginKey") }
+        headers: commonAuthorizedHeader()
     }).then(response => response.json())
         .then(data => {
             console.debug("getCashflowDetailMiddleware Response:", data);
